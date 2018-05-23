@@ -21,7 +21,7 @@ MainComponent::MainComponent()
 
 MainComponent::~MainComponent()
 {
-    // This shuts down the GL system and stops the rendering calls.
+    shutdownAudio();
     //shutdownOpenGL();
 }
 
@@ -54,32 +54,9 @@ void MainComponent::prepareToPlay(int samplesPerBlockExpected, double sampleRate
 
 void MainComponent::getNextAudioBlock(const AudioSourceChannelInfo& bufferToFill)
 {
-    auto numInputChannels = videoReader_->getVideoChannels();
-
-    AudioSourceChannelInfo info(&readBuffer_,
-        bufferToFill.startSample,
-        bufferToFill.numSamples);
+    AudioSourceChannelInfo info = { &readBuffer_, bufferToFill.startSample, bufferToFill.numSamples };
     // the AudioTransportSource takes care of start, stop and resample
     transportSource_->getNextAudioBlock(info);
-
-    if (numInputChannels > 0)
-    {
-        for (int i = 0; i < bufferToFill.buffer->getNumChannels(); ++i) {
-            bufferToFill.buffer->copyFrom(i, bufferToFill.startSample,
-                readBuffer_.getReadPointer(i % numInputChannels),
-                bufferToFill.numSamples);
-            if (bufferToFill.buffer->getNumChannels() == 2 &&
-                readBuffer_.getNumChannels() > 2) {
-                // add center to left and right
-                bufferToFill.buffer->addFrom(i, bufferToFill.startSample,
-                    readBuffer_.getReadPointer(2),
-                    bufferToFill.numSamples, 0.7);
-            }
-        }
-    }
-    else {
-        bufferToFill.clearActiveBufferRegion();
-    }
 }
 
 void MainComponent::releaseResources()
@@ -90,14 +67,7 @@ void MainComponent::releaseResources()
 
 void MainComponent::paint (Graphics& g)
 {
-    if (videoReader_ && videoReader_->getVideoDuration() > 0) {
-        g.setColour(Colours::white);
-        g.setFont(24);
-        String dim = String(videoReader_->getVideoWidth()) + " x " + String(videoReader_->getVideoHeight());
-        g.drawFittedText(dim, getLocalBounds(), Justification::topLeft, 1);
-        g.drawFittedText(FFmpegVideoReader::formatTimeCode(videoReader_->getCurrentTimeStamp()),
-            getLocalBounds(), Justification::topRight, 1);
-    }
+
 }
 
 void MainComponent::resized()
@@ -121,6 +91,7 @@ bool MainComponent::keyPressed(const KeyPress &key)
         readBuffer_.setSize(videoReader_->getVideoChannels(), readBuffer_.getNumSamples());
 
         videoReader_->setNextReadPosition(0);
+        videoReader_->setLooping(true);
         
         if (AudioIODevice* device = deviceManager.getCurrentAudioDevice()) {
             videoReader_->prepareToPlay(device->getCurrentBufferSizeSamples(), device->getCurrentSampleRate());
