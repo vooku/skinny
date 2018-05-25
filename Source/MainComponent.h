@@ -1,20 +1,7 @@
-/*
-  ==============================================================================
-
-    This file was auto-generated!
-
-  ==============================================================================
-*/
-
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
 
-//==============================================================================
-/*
-    This component lives inside our window, and this is where you should put all
-    your controls and content.
-*/
 class MainComponent   : public OpenGLAppComponent
 {
 public:
@@ -32,8 +19,17 @@ public:
     void resized() override;
 
 private:
-    //==============================================================================
-    // Your private member variables go here...
+    bool initShaders();
+    void initBuffers();
+    bool initAttributes();
+    void enableAttributes();
+
+    std::unique_ptr<OpenGLShaderProgram> shader;
+    const char* vertexShader;
+    const char* fragmentShader;
+    GLuint vertexBuffer, indexBuffer;
+    int nVertices, attsPerVertex;
+    std::unique_ptr<OpenGLShaderProgram::Attribute> position, texCoordIn;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
