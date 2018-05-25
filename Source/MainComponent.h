@@ -22,6 +22,7 @@ private:
     bool initShaders();
     void initBuffers();
     bool initAttributes();
+    bool initUniforms();
     void enableAttributes();
 
     std::unique_ptr<OpenGLShaderProgram> shader;
@@ -30,7 +31,7 @@ private:
     GLuint vertexBuffer, indexBuffer;
     int nVertices, attsPerVertex;
     std::unique_ptr<OpenGLShaderProgram::Attribute> position, texCoordIn;
-
+    OpenGLTexture texture;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

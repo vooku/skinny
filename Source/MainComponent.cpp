@@ -2,7 +2,7 @@
 
 MainComponent::MainComponent()
 {
-    setSize (800, 600);
+    setSize (1280, 720);
 }
 
 MainComponent::~MainComponent()
@@ -13,15 +13,20 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::initialise()
 {
+    Image image = ImageFileFormat::loadFrom(File::getCurrentWorkingDirectory().getChildFile("./nge.jpg").getFullPathName());
+    texture.loadImage(image);
+
     initShaders();
     initBuffers();
     initAttributes();
+    initUniforms();
 }
 
 void MainComponent::shutdown()
 {
     openGLContext.extensions.glDeleteBuffers(1, &vertexBuffer);
     openGLContext.extensions.glDeleteBuffers(1, &indexBuffer);
+    texture.release();
 }
 
 void MainComponent::render()
@@ -32,6 +37,8 @@ void MainComponent::render()
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    openGLContext.extensions.glActiveTexture(GL_TEXTURE0);
+    glEnable(GL_TEXTURE_2D);
 
     auto desktopScale = (float)openGLContext.getRenderingScale();
     glViewport(0, 0, roundToInt(desktopScale * getWidth()), roundToInt(desktopScale * getHeight()));
@@ -40,6 +47,10 @@ void MainComponent::render()
     openGLContext.extensions.glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
     openGLContext.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     enableAttributes();
+
+    texture.bind();
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
@@ -74,9 +85,13 @@ bool MainComponent::initShaders()
 
     fragmentShader =
         "varying vec2 texCoordOut;\n"
+
+        "uniform sampler2D texture;"
+
         "void main()\n"
         "{\n"
-        "    gl_FragColor = vec4(texCoordOut, 0.0, 1.0);\n"
+        "    vec4 tex = texture2D(texture, texCoordOut);"
+        "    gl_FragColor = vec4(mix(vec3(texCoordOut, 0.0), tex.rgb, tex.a), 1.0);\n"
         "}\n";
 
     bool success = true;
@@ -126,6 +141,11 @@ bool MainComponent::initAttributes()
 {
     position = std::make_unique<OpenGLShaderProgram::Attribute>(*shader.get(), "position");
     texCoordIn = std::make_unique<OpenGLShaderProgram::Attribute>(*shader.get(), "texCoordIn");
+    return true;
+}
+
+bool MainComponent::initUniforms()
+{   
     return true;
 }
 
