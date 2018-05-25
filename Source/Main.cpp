@@ -12,11 +12,11 @@
 #include "MainComponent.h"
 
 //==============================================================================
-class TriggeredvideomixerApplication  : public JUCEApplication
+class TVAEMApplication  : public JUCEApplication
 {
 public:
     //==============================================================================
-    TriggeredvideomixerApplication() {}
+    TVAEMApplication() {}
 
     const String getApplicationName() override       { return ProjectInfo::projectName; }
     const String getApplicationVersion() override    { return ProjectInfo::versionString; }
@@ -57,11 +57,13 @@ public:
         This class implements the desktop window that contains an instance of
         our MainComponent class.
     */
-    class MainWindow : public DocumentWindow
+    class MainWindow    : public DocumentWindow
     {
     public:
-        MainWindow (String name) 
-            : DocumentWindow(name, Colours::pink, DocumentWindow::allButtons)
+        MainWindow (String name)  : DocumentWindow (name,
+                                                    Desktop::getInstance().getDefaultLookAndFeel()
+                                                                          .findColour (ResizableWindow::backgroundColourId),
+                                                    DocumentWindow::allButtons)
         {
             setUsingNativeTitleBar (true);
             setContentOwned (new MainComponent(), true);
@@ -73,6 +75,9 @@ public:
 
         void closeButtonPressed() override
         {
+            // This is called when the user tries to close this window. Here, we'll just
+            // ask the app to quit when this happens, but you can change this to do
+            // whatever you need.
             JUCEApplication::getInstance()->systemRequestedQuit();
         }
 
@@ -93,4 +98,4 @@ private:
 
 //==============================================================================
 // This macro generates the main() routine that launches the app.
-START_JUCE_APPLICATION (TriggeredvideomixerApplication)
+START_JUCE_APPLICATION (TVAEMApplication)
