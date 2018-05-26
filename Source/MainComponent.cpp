@@ -25,8 +25,11 @@ void MainComponent::shutdown()
     openGLContext.extensions.glDeleteBuffers(1, &vertexBuffer);
     openGLContext.extensions.glDeleteBuffers(1, &indexBuffer);
     texture.release();
-    player->terminate = true;
-    playThread->join();
+
+    if (player)
+        player->terminate = true;
+    if (playThread)
+        playThread->join();
 }
 
 void MainComponent::render()
@@ -48,7 +51,7 @@ void MainComponent::render()
     openGLContext.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     enableAttributes();
 
-    if (player->newTex) {
+    if (player && player->newTex) {
         texture.loadARGBFlipped(player->pixels.data(), player->w, player->h);
         player->newTex = false;
     }

@@ -118,13 +118,15 @@ void Player::decode_video() {
 
 					std::unique_ptr<AVFrame, std::function<void(AVFrame*)>> frame_converted {
 							av_frame_alloc(),
-							[](AVFrame* f){ av_free(f->data[0]); }
+							[](AVFrame* f){ av_free(f->data[0]); av_frame_free(&f); }
                     };
 					if (av_frame_copy_props(frame_converted.get(), frame_decoded.get()) < 0) {
 						throw std::runtime_error("Copying frame properties");
 					}
                     frame_converted->width = video_decoder_->width();
                     frame_converted->height = video_decoder_->height();
+                    w = frame_converted->width;
+                    h = frame_converted->height;
 					if (av_image_alloc(
 						    frame_converted->data, frame_converted->linesize,
                             frame_converted->width, frame_converted->height,
@@ -149,7 +151,7 @@ void Player::decode_video() {
 }
 
 void Player::video() {
-	try {
+    try {
 		int64_t last_pts = 0;
         []() {};
 		for (uint64_t frame_number = 0;; ++frame_number) {
@@ -177,8 +179,6 @@ void Player::video() {
 					timer_->update();
 				}
                 
-                w = frame->width;
-                h = frame->height;
                 pixels.resize(w * h);
                 for (int y = 0; y < h; y++) {
                     auto srcln = y * frame->linesize[0];
@@ -193,12 +193,6 @@ void Player::video() {
                     }
                 }
                 newTex = true;
-
-				//display_->refresh(
-				//	{ frame->data[0], frame->data[1], frame->data[2] },
-				//	{ static_cast<size_t>(frame->linesize[0]),
-				//	  static_cast<size_t>(frame->linesize[1]),
-				//	  static_cast<size_t>(frame->linesize[2]) });
 
 			} else {
 				std::chrono::milliseconds sleep(10);
