@@ -44,6 +44,7 @@ private:
 
     std::unique_ptr<Player> player;
     std::unique_ptr<std::thread> playThread;
+    bool dieAlready;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

@@ -41,6 +41,7 @@ public:
     std::vector<PixelARGB> pixels;
     int w, h;
     bool newTex = false;
+    bool terminate = false;
 private:
 	void demultiplex();
 	void decode_video();

@@ -1,6 +1,7 @@
 #include "MainComponent.h"
 
 MainComponent::MainComponent()
+    : dieAlready(false)
 {
     setSize (1280, 720);
 }
@@ -24,6 +25,7 @@ void MainComponent::shutdown()
     openGLContext.extensions.glDeleteBuffers(1, &vertexBuffer);
     openGLContext.extensions.glDeleteBuffers(1, &indexBuffer);
     texture.release();
+    player->terminate = true;
     playThread->join();
 }
 

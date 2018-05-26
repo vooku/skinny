@@ -156,9 +156,8 @@ void Player::video() {
 
 			//display_->input();
 
-			if (/*display_->get_quit()*/ false) {
+			if (terminate) {
 				break;
-
 			} else if (/*display_->get_play()*/ true) {
 				std::unique_ptr<AVFrame, std::function<void(AVFrame*)>> frame {
 					nullptr,
