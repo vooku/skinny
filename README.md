@@ -2,6 +2,6 @@
 
 Mix video loops and apply simple effects triggered by MIDI events or isolated drum tracks.
 
-Using [JUCE](https://juce.com) and [FFmpeg](https://ffmpeg.org).
+Using [JUCE](https://juce.com), [pockethook/player](https://github.com/pockethook/player) and [FFmpeg](https://ffmpeg.org).
 
 Originally prototyped at [FEL CTU](https://www.fel.cvut.cz/en).

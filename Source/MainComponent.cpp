@@ -1,7 +1,6 @@
 #include "MainComponent.h"
 
 MainComponent::MainComponent()
-    : dieAlready(false)
 {
     setSize (1280, 720);
 }
@@ -40,7 +39,6 @@ void MainComponent::render()
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    openGLContext.extensions.glActiveTexture(GL_TEXTURE0);
     glEnable(GL_TEXTURE_2D);
 
     auto desktopScale = (float)openGLContext.getRenderingScale();
@@ -51,17 +49,7 @@ void MainComponent::render()
     openGLContext.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     enableAttributes();
 
-    if (player && player->newTex) {
-        texture.loadARGBFlipped(player->pixels.data(), player->w, player->h);
-        player->newTex = false;
-    }
-
-    texture.bind();
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    //openGLContext.extensions.glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, textureID);
-    //shader->setUniform("texture", (int)textureID);
+    sendUniforms();
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
@@ -88,8 +76,7 @@ bool MainComponent::initShaders()
 
         "varying vec2 texCoordOut;\n"
 
-        "void main()\n"
-        "{\n"
+        "void main() {\n"
         "    texCoordOut = texCoordIn;\n"
         "    gl_Position = vec4(position, 1.0);\n"
         "}\n";
@@ -97,13 +84,13 @@ bool MainComponent::initShaders()
     fragmentShader =
         "varying vec2 texCoordOut;\n"
 
-        "uniform sampler2D texture;"
+        "uniform sampler2D tex;\n"
+        "uniform vec2 texCoordsDeform;\n"
 
-        "void main()\n"
-        "{\n"
-        //"    vec4 tex = texture2D(texture, texCoordOut)\n;"
-        //"    gl_FragColor = vec4(mix(vec3(texCoordOut, 0.0), tex.rgb, tex.a), 1.0);\n"
-        "    gl_FragColor = vec4(texture2D(texture, texCoordOut).rgb, 1.0);\n"
+        "void main() {\n"
+        "    vec2 nCoords = vec2(texCoordOut.x, 1.0 - texCoordOut.y) * texCoordsDeform;\n"
+        "    gl_FragColor = vec4(nCoords, 0.0, 1.0);\n"
+        "    gl_FragColor = vec4(texture2D(tex, nCoords).rgb, 1.0);\n"
         "}\n";
 
     bool success = true;
@@ -161,11 +148,16 @@ bool MainComponent::initUniforms()
     player = std::make_unique<Player>("./videos/Britney_Spears_-_Toxic_Official_Video.mp4");
     playThread = std::make_unique<std::thread>(&Player::play, player.get());
 
+    texCoordsDeform = std::make_unique<OpenGLShaderProgram::Uniform>(*shader.get(), "texCoordsDeform");
+
     //glGenTextures(1, &textureID);
     //glBindTexture(GL_TEXTURE_2D, textureID);
 
-    
-    //pixels.resize(w * h);
+    //float pixels[] = {
+    //    1.0f, 0.0f, 0.0f,   1.0f, 1.0f, 1.0f,
+    //    1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 0.0f
+    //};
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels);
     
     
 
@@ -191,4 +183,44 @@ void MainComponent::enableAttributes()
         openGLContext.extensions.glVertexAttribPointer(texCoordIn->attributeID, 2, GL_FLOAT, GL_FALSE, attsPerVertex * sizeof(float), (GLvoid*)(sizeof(float) * 3));
         openGLContext.extensions.glEnableVertexAttribArray(texCoordIn->attributeID);
     }
+}
+
+void MainComponent::sendUniforms()
+{
+//#define DBG_TEXTURE
+#ifdef DBG_TEXTURE
+    int w = 640, h = 360;
+    const auto r = sqrt(w * w + h * h);
+    auto pixels = std::vector<PixelARGB>(w * h);
+    for (int y = 0; y < h; y++)
+    {
+        int line = y * w;
+        for (int x = 0; x < w; x++)
+        {
+            auto rtmp = sqrt((x - 0.5 * w) * (x - 0.5 * w) + (y - 0.5 * h) * (y - 0.5 * h));
+            juce::uint8 red = (
+                    (x > 0.5 * w - 2 && x < 0.5 * w + 2) ||
+                    (y > 0.5 * h - 2 && y < 0.5 * h + 2) ||
+                    (x < 4) || (x > w - 4) ||
+                    (y < 4) || (y > h - 4) ||
+                    (rtmp > 0.07 * r && rtmp < 0.0725 * r)
+                ) && (rtmp > 0.07 * r) 
+                ? 255 : 0;
+            pixels[line + x] = { 255, red, 0, 64 };
+        }
+    }
+    texture.loadARGB(pixels.data(), w, h);
+    texCoordsDeform->set(w / (float)texture.getWidth(), h / (float)texture.getHeight());
+#else
+    if (player && player->newTex) {
+        texture.loadARGB(player->pixels.data(), player->w, player->h);
+        player->newTex = false;
+        texCoordsDeform->set(player->w / (float)texture.getWidth(), player->h / (float)texture.getHeight());
+    }
+#endif
+    texture.bind();
+
+    //shader->setUniform("tex", 0);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 }
