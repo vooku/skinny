@@ -13,9 +13,6 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::initialise()
 {
-    Image image = ImageFileFormat::loadFrom(File::getCurrentWorkingDirectory().getChildFile("./nge.jpg").getFullPathName());
-    texture.loadImage(image);
-
     initShaders();
     initBuffers();
     initAttributes();
@@ -27,6 +24,7 @@ void MainComponent::shutdown()
     openGLContext.extensions.glDeleteBuffers(1, &vertexBuffer);
     openGLContext.extensions.glDeleteBuffers(1, &indexBuffer);
     texture.release();
+    playThread->join();
 }
 
 void MainComponent::render()
@@ -48,9 +46,17 @@ void MainComponent::render()
     openGLContext.extensions.glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
     enableAttributes();
 
+    if (player->newTex) {
+        texture.loadARGBFlipped(player->pixels.data(), player->w, player->h);
+        player->newTex = false;
+    }
+
     texture.bind();
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    //openGLContext.extensions.glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, textureID);
+    //shader->setUniform("texture", (int)textureID);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
@@ -90,8 +96,9 @@ bool MainComponent::initShaders()
 
         "void main()\n"
         "{\n"
-        "    vec4 tex = texture2D(texture, texCoordOut);"
-        "    gl_FragColor = vec4(mix(vec3(texCoordOut, 0.0), tex.rgb, tex.a), 1.0);\n"
+        //"    vec4 tex = texture2D(texture, texCoordOut)\n;"
+        //"    gl_FragColor = vec4(mix(vec3(texCoordOut, 0.0), tex.rgb, tex.a), 1.0);\n"
+        "    gl_FragColor = vec4(texture2D(texture, texCoordOut).rgb, 1.0);\n"
         "}\n";
 
     bool success = true;
@@ -146,6 +153,25 @@ bool MainComponent::initAttributes()
 
 bool MainComponent::initUniforms()
 {   
+    player = std::make_unique<Player>("./videos/Britney_Spears_-_Toxic_Official_Video.mp4");
+    playThread = std::make_unique<std::thread>(&Player::play, player.get());
+
+    //glGenTextures(1, &textureID);
+    //glBindTexture(GL_TEXTURE_2D, textureID);
+
+    
+    //pixels.resize(w * h);
+    
+    
+
+    
+    //Image image = ImageFileFormat::loadFrom(File::getCurrentWorkingDirectory().getChildFile("./nge.jpg").getFullPathName());
+    
+    //texture.loadImage(image);
+    //Image::BitmapData srcData(image, Image::BitmapData::readOnly);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image.getWidth(), image.getHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, srcData.data);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
     return true;
 }
 

@@ -1,10 +1,14 @@
 #pragma once
 
 #include "../JuceLibraryCode/JuceHeader.h"
+#include "player.h"
+#include <thread>
 
-class MainComponent   : public OpenGLAppComponent
+class MainComponent : public OpenGLAppComponent
 {
 public:
+    friend class Player;
+
     //==============================================================================
     MainComponent();
     ~MainComponent();
@@ -32,6 +36,14 @@ private:
     int nVertices, attsPerVertex;
     std::unique_ptr<OpenGLShaderProgram::Attribute> position, texCoordIn;
     OpenGLTexture texture;
+    int textureID;
+
+    //int w = 1920, h = 1080;
+    //bool tx = false;
+    //std::vector<PixelARGB> pixels;
+
+    std::unique_ptr<Player> player;
+    std::unique_ptr<std::thread> playThread;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

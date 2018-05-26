@@ -21,6 +21,8 @@
 #include <cstdint>
 #include <chrono>
 
+namespace player {
+
 class Timer {
 private:
 	std::chrono::time_point<std::chrono::high_resolution_clock> target_time_;
@@ -41,3 +43,5 @@ public:
 private:
 	int64_t adjust() const;
 };
+
+} // namespace player

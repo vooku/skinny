@@ -23,6 +23,7 @@
 #include "queue.h"
 #include "timer.h"
 #include "video_decoder.h"
+#include "../JuceLibraryCode/JuceHeader.h"
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -35,17 +36,21 @@ extern "C" {
 class Player {
 public:
 	Player(const std::string &file_name);
-	void operator()();
+	void play();
+
+    std::vector<PixelARGB> pixels;
+    int w, h;
+    bool newTex = false;
 private:
 	void demultiplex();
 	void decode_video();
 	void video();
-private:
-	std::unique_ptr<Demuxer> demuxer_;
+
+    std::unique_ptr<Demuxer> demuxer_;
 	std::unique_ptr<VideoDecoder> video_decoder_;
 	std::unique_ptr<FormatConverter> format_converter_;
 	//std::unique_ptr<Display> display_;
-	std::unique_ptr<Timer> timer_;
+	std::unique_ptr<player::Timer> timer_;
 	std::unique_ptr<PacketQueue> packet_queue_;
 	std::unique_ptr<FrameQueue> frame_queue_;
 	std::vector<std::thread> stages_;

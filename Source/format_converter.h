@@ -28,6 +28,7 @@ public:
 	FormatConverter(
 		size_t width, size_t height,
 		AVPixelFormat input_pixel_format, AVPixelFormat output_pixel_format);
+    ~FormatConverter();
 	void operator()(AVFrame* src, AVFrame* dst);
 private:
 	size_t width_;

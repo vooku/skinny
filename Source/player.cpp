@@ -33,15 +33,14 @@ Player::Player(const std::string &file_name) :
 	video_decoder_{ std::make_unique<VideoDecoder>(demuxer_->video_codec_parameters()) },
 	format_converter_{ std::make_unique<FormatConverter>(
 		video_decoder_->width(), video_decoder_->height(),
-		video_decoder_->pixel_format(), AV_PIX_FMT_YUV420P) },
-	//display_{ std::make_unique<Display>(
-	//	video_decoder_->width(), video_decoder_->height())},
-	timer_{std::make_unique<Timer>() },
-	packet_queue_{std::make_unique<PacketQueue>(queue_size_)},
-	frame_queue_{std::make_unique<FrameQueue>(queue_size_)} {
+		video_decoder_->pixel_format(), AV_PIX_FMT_RGB24) },
+	timer_{ std::make_unique<player::Timer>() },
+	packet_queue_{ std::make_unique<PacketQueue>(queue_size_) },
+	frame_queue_{ std::make_unique<FrameQueue>(queue_size_) }
+{
 }
 
-void Player::operator()() {
+void Player::play() {
 	stages_.emplace_back(&Player::demultiplex, this);
 	stages_.emplace_back(&Player::decode_video, this);
 	video();
@@ -114,24 +113,27 @@ void Player::decode_video() {
 					frame_decoded->pts = av_rescale_q(
 						frame_decoded->pkt_dts,
 						demuxer_->time_base(),
-						microseconds);
+						microseconds
+                    );
 
-					std::unique_ptr<AVFrame, std::function<void(AVFrame*)>>
-						frame_converted{
+					std::unique_ptr<AVFrame, std::function<void(AVFrame*)>> frame_converted {
 							av_frame_alloc(),
-							[](AVFrame* f){ av_free(f->data[0]); }};
-					if (av_frame_copy_props(frame_converted.get(),
-						frame_decoded.get()) < 0) {
+							[](AVFrame* f){ av_free(f->data[0]); }
+                    };
+					if (av_frame_copy_props(frame_converted.get(), frame_decoded.get()) < 0) {
 						throw std::runtime_error("Copying frame properties");
 					}
+                    frame_converted->width = video_decoder_->width();
+                    frame_converted->height = video_decoder_->height();
 					if (av_image_alloc(
-						frame_converted->data, frame_converted->linesize,
-						video_decoder_->width(), video_decoder_->height(),
-						video_decoder_->pixel_format(), 1) < 0) {
+						    frame_converted->data, frame_converted->linesize,
+                            frame_converted->width, frame_converted->height,
+                            AV_PIX_FMT_RGB24, 1
+                        ) < 0) {
 						throw std::runtime_error("Allocating picture");
 					}
-					(*format_converter_)(
-						frame_decoded.get(), frame_converted.get());
+
+					(*format_converter_)(frame_decoded.get(), frame_converted.get());
 
 					if (!frame_queue_->push(move(frame_converted))) {
 						break;
@@ -158,8 +160,10 @@ void Player::video() {
 				break;
 
 			} else if (/*display_->get_play()*/ true) {
-				std::unique_ptr<AVFrame, std::function<void(AVFrame*)>> frame{
-					nullptr, [](AVFrame* f){ av_frame_free(&f); }};
+				std::unique_ptr<AVFrame, std::function<void(AVFrame*)>> frame {
+					nullptr,
+                    [](AVFrame* f){ av_frame_free(&f); }
+                };
 				if (!frame_queue_->pop(frame)) {
 					break;
 				}
@@ -173,6 +177,23 @@ void Player::video() {
 					last_pts = frame->pts;
 					timer_->update();
 				}
+                
+                w = frame->width;
+                h = frame->height;
+                pixels.resize(w * h);
+                for (int y = 0; y < h; y++) {
+                    auto srcln = y * frame->linesize[0];
+                    auto dstln = y * w;
+                    for (int x = 0; x < w; x++) {
+                        pixels[dstln + x] = {
+                            255,
+                            frame->data[0][srcln + 3 * x + 0], 
+                            frame->data[0][srcln + 3 * x + 1],
+                            frame->data[0][srcln + 3 * x + 2]
+                        };
+                    }
+                }
+                newTex = true;
 
 				//display_->refresh(
 				//	{ frame->data[0], frame->data[1], frame->data[2] },

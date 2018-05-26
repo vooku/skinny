@@ -21,6 +21,8 @@
 #include <algorithm>
 #include <thread>
 
+namespace player {
+
 Timer::Timer() :
 	target_time_{std::chrono::high_resolution_clock::now()} {
 }
@@ -51,3 +53,5 @@ void Timer::update() {
 int64_t Timer::adjust() const {
 	return P_ * proportional_ + I_ * integral_ + D_ * derivative_;
 }
+
+} // namespace player
