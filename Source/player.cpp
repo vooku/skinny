@@ -156,11 +156,9 @@ void Player::video() {
         []() {};
 		for (uint64_t frame_number = 0;; ++frame_number) {
 
-			//display_->input();
-
 			if (terminate) {
 				break;
-			} else if (/*display_->get_play()*/ true) {
+			} else if (playing) {
 				std::unique_ptr<AVFrame, std::function<void(AVFrame*)>> frame {
 					nullptr,
                     [](AVFrame* f){ av_frame_free(&f); }

@@ -2,6 +2,7 @@
 
 MainComponent::MainComponent()
 {
+    setWantsKeyboardFocus(true);
     setSize (1280, 720);
 }
 
@@ -68,6 +69,15 @@ void MainComponent::resized()
     // update their positions.
 }
 
+bool MainComponent::keyPressed(const KeyPress & key)
+{
+    if (key.getTextCharacter() == ' ') {
+        player->playing = !player->playing;
+        return true;
+    }
+    return false;
+}
+
 bool MainComponent::initShaders()
 {
     vertexShader =
@@ -89,7 +99,6 @@ bool MainComponent::initShaders()
 
         "void main() {\n"
         "    vec2 nCoords = vec2(texCoordOut.x, 1.0 - texCoordOut.y) * texCoordsDeform;\n"
-        "    gl_FragColor = vec4(nCoords, 0.0, 1.0);\n"
         "    gl_FragColor = vec4(texture2D(tex, nCoords).rgb, 1.0);\n"
         "}\n";
 
@@ -145,7 +154,7 @@ bool MainComponent::initAttributes()
 
 bool MainComponent::initUniforms()
 {   
-    player = std::make_unique<Player>("./videos/Britney_Spears_-_Toxic_Official_Video.mp4");
+    player = std::make_unique<Player>("./videos/simpleRGB.mp4");
     playThread = std::make_unique<std::thread>(&Player::play, player.get());
 
     texCoordsDeform = std::make_unique<OpenGLShaderProgram::Uniform>(*shader.get(), "texCoordsDeform");

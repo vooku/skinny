@@ -21,6 +21,7 @@ public:
     //==============================================================================
     void paint (Graphics& g) override;
     void resized() override;
+    bool keyPressed(const KeyPress &key) override;
 
 private:
     bool initShaders();

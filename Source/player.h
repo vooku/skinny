@@ -42,6 +42,7 @@ public:
     int w, h;
     bool newTex = false;
     bool terminate = false;
+    bool playing = true;
 private:
 	void demultiplex();
 	void decode_video();
