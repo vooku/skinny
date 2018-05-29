@@ -32,6 +32,27 @@ bool Layer::reload(const char * filename)
     return true;
 }
 
+void Layer::play()
+{
+    paused_ = false;
+    player_.setPaused(paused_);
+    globalAlpha_ = 1.0f;
+}
+
+void Layer::pause()
+{
+    paused_ = true;
+    player_.setPaused(paused_);
+    globalAlpha_ = 0.0f;
+}
+
+void Layer::playPause()
+{
+    paused_ = !paused_;
+    player_.setPaused(paused_);
+    globalAlpha_ = 1.0f - globalAlpha_;
+}
+
 bool Layer::update()
 {
     player_.update();

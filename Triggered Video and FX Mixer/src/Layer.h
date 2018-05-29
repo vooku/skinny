@@ -8,17 +8,19 @@ public:
     Layer(int id, const char * filename);
     ~Layer();
 
-    float getWidth() { return player_.getWidth(); }
-    float getHeight() { return player_.getHeight(); }
-
     bool reload(const char * filename);
-    void play() { player_.setPaused(paused_ = false); }
-    void pause() { player_.setPaused(paused_ = true); }
-    void playPause() { player_.setPaused(paused_ = !paused_); }
+    void play();
+    void pause();
+    void playPause();
     bool update();
     
+    float getWidth() const { return player_.getWidth(); }
+    float getHeight() const { return player_.getHeight(); }
+    float getAlpha() const { return globalAlpha_; }
+
 private:
     ofVideoPlayer player_;
     bool paused_;
     const int id_;
+    float globalAlpha_;
 };

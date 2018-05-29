@@ -42,7 +42,9 @@ void ofApp::update(){
     for (auto& layer : layers_)
         newFrame |= layer->update();
     if (newFrame) {
+        auto alphas = { layers_[0]->getAlpha(), layers_[1]->getAlpha() };
         shader_.begin();
+        shader_.setUniform1fv("alphas", alphas.begin(), alphas.size());
         shader_.dispatchCompute(width_ / 32, height_ / 32, 1);
         shader_.end();
     }
