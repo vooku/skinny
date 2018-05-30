@@ -1,6 +1,9 @@
 #include "ofApp.h"
 
-//--------------------------------------------------------------
+ofApp::ofApp(ofxArgs * args) {
+    args->printArgs();
+}
+
 void ofApp::setup() {   
     ofLogToConsole(); // TODO decide
     ofSetLogLevel(OF_LOG_VERBOSE);

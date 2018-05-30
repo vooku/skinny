@@ -64,6 +64,9 @@
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi\RtMidi.cpp">
       <Filter>addons\ofxMidi\libs\rtmidi</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.cpp">
+      <Filter>addons\ofxArgs\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -98,6 +101,12 @@
     </Filter>
     <Filter Include="addons\ofxMidi\libs\rtmidi">
       <UniqueIdentifier>{34802ddd-4183-4b3b-bdd6-a6070bc595fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxArgs">
+      <UniqueIdentifier>{7203d4f1-8595-4dfe-91aa-2a66f717a715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxArgs\src">
+      <UniqueIdentifier>{4f94b7de-848b-425f-9fea-2945a82ad949}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -199,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi\RtMidi.h">
       <Filter>addons\ofxMidi\libs\rtmidi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.h">
+      <Filter>addons\ofxArgs\src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

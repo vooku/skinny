@@ -2,10 +2,13 @@
 
 #include "ofMain.h"
 #include "ofxMidi.h"
+#include "ofxArgs.h"
 #include "Layer.h"
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
+    ofApp(ofxArgs* args);
+
     void setup();
     void update();
     void draw();
