@@ -1,9 +1,10 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxMidi.h"
 #include "Layer.h"
 
-class ofApp : public ofBaseApp{
+class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
     void setup();
     void update();
@@ -20,10 +21,15 @@ public:
     void windowResized(int w, int h);
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
+    void newMidiMessage(ofxMidiMessage& msg);
 
 private:
     std::vector<std::unique_ptr<Layer>> layers_;
     ofShader shader_;
     ofTexture dst_;
     int width_, height_;
+    bool shouldRedraw_;
+    
+    ofxMidiIn midiIn_;
+    ofxMidiMessage midiMessage_;
 };

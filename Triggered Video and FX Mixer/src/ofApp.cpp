@@ -21,6 +21,13 @@ void ofApp::setup() {
 
     width_ = ofGetCurrentWindow()->getWidth();
     height_ = ofGetCurrentWindow()->getHeight();
+    shouldRedraw_ = false;
+
+    midiIn_.listPorts();
+    midiIn_.openPort(1);
+    midiIn_.addListener(this);
+    midiIn_.setVerbose(true);
+
 
     if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/computeShader.glsl"))
         ofExit();
@@ -29,8 +36,11 @@ void ofApp::setup() {
 
     layers_.push_back(std::make_unique<Layer>(0, "numbers.mp4"));
     layers_.push_back(std::make_unique<Layer>(1, "simpleRGB.mp4"));
-    for (auto& layer : layers_)
-        layer->play();
+    layers_[0]->addMidiNote(40);
+    layers_[1]->addMidiNote(36);
+    
+    //for (auto& layer : layers_)
+    //    layer->play();
    
     dst_.allocate(width_, height_, GL_RGBA8);
     dst_.bindAsImage(2, GL_WRITE_ONLY);
@@ -41,12 +51,13 @@ void ofApp::update(){
     bool newFrame = false;
     for (auto& layer : layers_)
         newFrame |= layer->update();
-    if (newFrame) {
+    if (newFrame || shouldRedraw_) {
         auto alphas = { layers_[0]->getAlpha(), layers_[1]->getAlpha() };
         shader_.begin();
         shader_.setUniform1fv("alphas", alphas.begin(), alphas.size());
         shader_.dispatchCompute(width_ / 32, height_ / 32, 1);
         shader_.end();
+        shouldRedraw_ = false;
     }
 }
 
@@ -115,6 +126,26 @@ void ofApp::windowResized(int w, int h){
 //--------------------------------------------------------------
 void ofApp::gotMessage(ofMessage msg){
 
+}
+
+void ofApp::newMidiMessage(ofxMidiMessage & msg) {
+    auto noteOn = msg.status == MIDI_NOTE_ON;
+    auto noteOff = msg.status == MIDI_NOTE_OFF;
+    int note = msg.pitch;
+
+    if (!noteOn && !noteOff)
+        return;
+
+    for (auto& layer : layers_) {
+        if (layer->containsMidiNote(note)) {
+            if (noteOn)
+                layer->play();
+            else if (noteOff)
+                layer->pause();
+        }
+    }
+
+    shouldRedraw_ = true;
 }
 
 //--------------------------------------------------------------

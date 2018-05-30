@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include <set>
 
 class Layer {
 public:
@@ -13,6 +14,11 @@ public:
     void pause();
     void playPause();
     bool update();
+
+    void addMidiNote(int note) { midiMap_.insert(note); }
+    void removeMidiNote(int note) { midiMap_.erase(note); }
+    void clearMidiNotes() { midiMap_.clear(); }
+    bool containsMidiNote(int note) const { return midiMap_.count(note); }
     
     float getWidth() const { return player_.getWidth(); }
     float getHeight() const { return player_.getHeight(); }
@@ -23,4 +29,6 @@ private:
     bool paused_;
     const int id_;
     float globalAlpha_;
+
+    std::set<int> midiMap_;
 };

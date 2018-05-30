@@ -97,15 +97,18 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>
-C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -118,8 +121,12 @@ C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)<
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>
-C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -127,7 +134,6 @@ C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)<
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\vooku\openFrameworks\libs\boost\lib\vs\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -139,8 +145,12 @@ C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)<
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>
-C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -151,7 +161,6 @@ C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)<
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -163,8 +172,12 @@ C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)<
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>
-C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;
+C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -174,7 +187,6 @@ C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)<
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Users\vooku\openFrameworks\libs\boost\lib\vs\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -191,6 +203,14 @@ C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)<
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxSlider.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxSliderGroup.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxToggle.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi\RtMidi.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiIn.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiOut.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxBaseMidi.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidi.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiIn.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiMessage.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiOut.cpp" />
     <ClCompile Include="src\Layer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -207,6 +227,26 @@ C:\Users\vooku\openFrameworks\addons\ofxGui\src;%(AdditionalIncludeDirectories)<
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxSlider.h" />
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxSliderGroup.h" />
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxToggle.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\pgmidi\iOSVersionDetection.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\pgmidi\PGArc.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\pgmidi\PGMidi.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\pgmidi\PGMidiAllSources.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\pgmidi\PGMidiFind.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi\RtMidi.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiIn.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiOut.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ios\ofxPGMidiContext.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ios\ofxPGMidiDelegate.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ios\ofxPGMidiIn.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ios\ofxPGMidiOut.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ios\ofxPGMidiSourceDelegate.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxBaseMidi.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidi.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiConstants.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiIn.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiMessage.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiOut.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiTypes.h" />
     <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\ofApp.h" />
   </ItemGroup>
