@@ -215,23 +215,18 @@ void ofApp::setupMidi() {
 }
 
 bool ofApp::loadConfig() {
-    saveConfig();
+    ofxXmlSettings config;
+    if (!config.loadFile(settings_.configFileName))
+        return false;
+
+    config.pushTag("config");
+    show_.fromXml(config);
+    config.popTag(); // config
+
     return true;
 }
 
 bool ofApp::saveConfig() {
-    LayerDescription layer00 = { 0, "00.mp4", { 36, 37 }, Layer::BlendMode::Normal };
-    LayerDescription layer01 = { 1, "01.mp4", { 40 }, Layer::BlendMode::Multiply };
-    
-    SceneDescription scene0 = { { layer00, layer01 } };
-
-    LayerDescription layer10 = { 0, "10.mp4", { 38, 39 }, Layer::BlendMode::Normal };
-    LayerDescription layer11 = { 1, "11.mp4", { 41 }, Layer::BlendMode::Multiply };
-
-    SceneDescription scene1 = { { layer10, layer11 } };
-
-    show_ = { { scene0, scene1 } };
-
     ofxXmlSettings config;
     config.addTag("config");
     config.pushTag("config");

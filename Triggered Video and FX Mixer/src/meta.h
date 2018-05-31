@@ -6,24 +6,28 @@
 #include "Layer.h"
 
 struct LayerDescription {
-    //void fromXml();
+    static const int invalid_id;
+    static const std::string invalid_video;
+    static const uint8_t invalid_midi;
+    
+    bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
     int id;
     std::string video;
-    std::set<int> midiMap;
+    std::set<uint8_t> midiMap;
     Layer::BlendMode blendMode;
 };
 
 struct SceneDescription {
-    //void fromXml();
+    void fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
     std::vector<LayerDescription> layers;
 };
 
 struct ShowDescription {
-    void fromXml(const ofxXmlSettings& config);
+    void fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
     std::vector<SceneDescription> scenes;

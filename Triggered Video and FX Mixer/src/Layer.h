@@ -6,6 +6,7 @@
 class Layer {
 public:
     enum class BlendMode {
+        Invalid = -1,
         Normal = 0,      // s
         Multiply = 1,    // b * s
         Screen = 2,      // 1 - ((1 - b) * (1 - s))
