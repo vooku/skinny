@@ -18,7 +18,7 @@ public:
 private:
     struct Uniforms {
         int nLayers;
-        float alphas[maxLayers];
+        int active[maxLayers];
         glm::ivec2 dimensions[maxLayers];
         int blendingModes[maxLayers];
     } mutable uniforms;

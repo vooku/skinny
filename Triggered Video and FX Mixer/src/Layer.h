@@ -37,7 +37,7 @@ public:
     
     float getWidth() const { return player_.getWidth(); }
     float getHeight() const { return player_.getHeight(); }
-    float getAlpha() const { return globalAlpha_; }
+    float isPlaying() const { return !paused_; }
     BlendMode getBlendMode() const { return blendMode_; }
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
@@ -46,7 +46,6 @@ private:
     ofVideoPlayer player_;
     bool paused_;
     const int id_;
-    float globalAlpha_;
     BlendMode blendMode_;
     MidiMap midiMap_;
 };

@@ -56,7 +56,7 @@ void ofApp::setup() {
     }
 
     dst_.allocate(width_, height_, GL_RGBA8);
-    dst_.bindAsImage(2, GL_WRITE_ONLY);
+    dst_.bindAsImage(7, GL_WRITE_ONLY);
 }
 
 //--------------------------------------------------------------
@@ -194,7 +194,7 @@ void ofApp::setupMidi() {
         midiInputs_.push_back(std::make_unique<ofxMidiIn>());
         midiInputs_.back()->openPort(portNumber);
         midiInputs_.back()->addListener(this);
-        midiInputs_.back()->setVerbose(settings_.verbose);
+        midiInputs_.back()->setVerbose(/*settings_.verbose*/false);
     }
 }
 

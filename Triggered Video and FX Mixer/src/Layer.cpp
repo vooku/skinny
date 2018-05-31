@@ -1,7 +1,7 @@
 #include "Layer.h"
 
 Layer::Layer(int id)
-    : id_(id), paused_(true), globalAlpha_(0)
+    : id_(id), paused_(true)
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
@@ -36,21 +36,18 @@ void Layer::play()
 {
     paused_ = false;
     player_.setPaused(paused_);
-    globalAlpha_ = 1.0f;
 }
 
 void Layer::pause()
 {
     paused_ = true;
     player_.setPaused(paused_);
-    globalAlpha_ = 0.0f;
 }
 
 void Layer::playPause()
 {
     paused_ = !paused_;
     player_.setPaused(paused_);
-    globalAlpha_ = 1.0f - globalAlpha_;
 }
 
 bool Layer::isFrameNew()

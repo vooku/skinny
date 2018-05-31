@@ -42,13 +42,13 @@ void Scene::playPauseLayer(int idx) {
 void Scene::setupUniforms(ofShader& shader) const {
     uniforms.nLayers = layers_.size();
     for (int i = 0; i < layers_.size() && i < maxLayers; ++i) {
-        uniforms.alphas[i] = layers_[i]->getAlpha();
+        uniforms.active[i] = layers_[i]->isPlaying();
         uniforms.dimensions[i] = { layers_[i]->getWidth(), layers_[i]->getHeight() };
         uniforms.blendingModes[i] = static_cast<int>(layers_[i]->getBlendMode());
     }
 
     shader.setUniform1i("nLayers", uniforms.nLayers);
-    shader.setUniform1fv("alphas", uniforms.alphas, uniforms.nLayers);
+    shader.setUniform1iv("active", uniforms.active, uniforms.nLayers);
     shader.setUniform2iv("dimensions", reinterpret_cast<int*>(uniforms.dimensions), uniforms.nLayers);
     shader.setUniform1iv("blendingModes", uniforms.blendingModes, uniforms.nLayers);
 }
