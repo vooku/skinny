@@ -3,11 +3,13 @@
 #include "ofMain.h"
 #include "ofxMidi.h"
 #include "ofxArgs.h"
-#include "Layer.h"
+#include "Scene.h"
 #include "meta.h"
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
+    static constexpr const char * version = "0.1";
+
     ofApp(ofxArgs* args);
 
     void setup();
@@ -46,12 +48,12 @@ private:
 
     ShowDescription show_;
 
-    std::vector<std::unique_ptr<Layer>> layers_;
+    std::unique_ptr<Scene> currentScene_, nextScene_;
+
     ofShader shader_;
     ofTexture dst_;
     int width_, height_;
     bool shouldRedraw_;
     
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
-    //ofxMidiMessage midiMessage_;
 };

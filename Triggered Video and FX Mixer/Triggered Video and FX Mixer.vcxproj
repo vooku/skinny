@@ -208,6 +208,7 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\meta.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.h" />
@@ -247,6 +248,7 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
     <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\meta.h" />
+    <ClInclude Include="src\Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

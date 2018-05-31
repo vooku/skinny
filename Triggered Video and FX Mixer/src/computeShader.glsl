@@ -5,7 +5,10 @@ layout(rgba8, binding = 1) uniform readonly image2D layer1;
 layout(rgba8, binding = 2) uniform writeonly image2D dst;
 layout(local_size_x = 32, local_size_y = 32, local_size_z = 1) in;
 
-uniform float[2] alphas;
+uniform int nLayers;
+uniform float[5] alphas;
+uniform ivec2[5] dimensions;
+uniform int[5] blendingModes;
 
 void main(){
 	const ivec2 xy = ivec2(gl_GlobalInvocationID.xy);

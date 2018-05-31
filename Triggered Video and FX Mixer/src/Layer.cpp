@@ -1,13 +1,13 @@
 #include "Layer.h"
 
 Layer::Layer(int id)
-    : id_(id), paused_(true)
+    : id_(id), paused_(true), globalAlpha_(0)
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
 }
 
-Layer::Layer(int id, const char * filename)
+Layer::Layer(int id, const std::string& filename)
     : Layer(id)
 {
     reload(filename);
@@ -18,7 +18,7 @@ Layer::~Layer()
     player_.closeMovie();
 }
 
-bool Layer::reload(const char * filename)
+bool Layer::reload(const std::string& filename)
 {
     player_.closeMovie();
 
@@ -53,7 +53,7 @@ void Layer::playPause()
     globalAlpha_ = 1.0f - globalAlpha_;
 }
 
-bool Layer::update()
+bool Layer::isFrameNew()
 {
     player_.update();
     return player_.isFrameNew(); 

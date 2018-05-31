@@ -82,6 +82,9 @@
     <ClCompile Include="src\meta.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Scene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -243,6 +246,9 @@
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClInclude>
     <ClInclude Include="src\meta.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

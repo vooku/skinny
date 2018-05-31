@@ -46,27 +46,24 @@ void ofApp::setup() {
         }
     }
 
-    layers_.push_back(std::make_unique<Layer>(0, "numbers.mp4"));
-    layers_.push_back(std::make_unique<Layer>(1, "simpleRGB.mp4"));
-    layers_[0]->addMidiNote(40);
-    layers_[1]->addMidiNote(36);
-    
-    //for (auto& layer : layers_)
-    //    layer->play();
-   
+    if (show_.scenes.size() >= 1) {
+        currentScene_ = std::make_unique<Scene>(show_.scenes[0]);
+    }
+    else {
+        ofLog(OF_LOG_FATAL_ERROR, "Configuration file %s contains no scenes.", settings_.configFileName);
+        ofExit();
+        return;
+    }
+
     dst_.allocate(width_, height_, GL_RGBA8);
     dst_.bindAsImage(2, GL_WRITE_ONLY);
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    bool newFrame = false;
-    for (auto& layer : layers_)
-        newFrame |= layer->update();
-    if (newFrame || shouldRedraw_) {
-        auto alphas = { layers_[0]->getAlpha(), layers_[1]->getAlpha() };
+    if (currentScene_->isFrameNew() || shouldRedraw_) {
         shader_.begin();
-        shader_.setUniform1fv("alphas", alphas.begin(), alphas.size());
+        currentScene_->setupUniforms(shader_);
         shader_.dispatchCompute(width_ / 32, height_ / 32, 1);
         shader_.end();
         shouldRedraw_ = false;
@@ -86,14 +83,14 @@ void ofApp::exit() {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+    // 0-9 in ascii
+    if (key >= 0x30 && key < 0x3A) {
+        // key to index 1->0, 0->9
+        currentScene_->playPauseLayer((key - 0x30 + 9) % 10);
+    }
+    
     switch (key)
     {
-    case '1':
-        layers_[0]->playPause();
-        break;
-    case '2':
-        layers_[1]->playPause();
-        break;
     case OF_KEY_F11:
         ofGetCurrentWindow()->toggleFullscreen();
         break;
@@ -147,23 +144,10 @@ void ofApp::gotMessage(ofMessage msg){
 }
 
 void ofApp::newMidiMessage(ofxMidiMessage & msg) {
-    auto noteOn = msg.status == MIDI_NOTE_ON;
-    auto noteOff = msg.status == MIDI_NOTE_OFF;
-    int note = msg.pitch;
-
-    if (!noteOn && !noteOff)
-        return;
-
-    for (auto& layer : layers_) {
-        if (layer->containsMidiNote(note)) {
-            if (noteOn)
-                layer->play();
-            else if (noteOff)
-                layer->pause();
-        }
+    if (currentScene_) {
+        currentScene_->newMidiMessage(msg);
+        shouldRedraw_ = true;
     }
-
-    shouldRedraw_ = true;
 }
 
 void ofApp::usage() const {
@@ -226,8 +210,29 @@ bool ofApp::loadConfig() {
     return true;
 }
 
-bool ofApp::saveConfig() {
+bool ofApp::saveConfig() {  
+    //SceneDescription scenes[3];
+    //scenes[0] = { {
+    //    { 0, "numbers.mp4",{ 36 }, Layer::BlendMode::Normal },
+    //    { 1, "simpleRGB.mp4",{ 40 }, Layer::BlendMode::Multiply }
+    //} };
+    //scenes[1] = { {
+    //    { 0, "White Broken Shards.mp4",{ 36 }, Layer::BlendMode::Normal },
+    //    { 1, "White Half Strobes.mp4",{ 40 }, Layer::BlendMode::Multiply }
+    //} };
+    //scenes[2] = { {
+    //    { 0, "White Stripes Horizontal 1.mp4",{ 36 }, Layer::BlendMode::Normal },
+    //    { 1, "Noise Diagonals 1.mp4",{ 40 }, Layer::BlendMode::Multiply }
+    //} };
+
+    //show_ = { { scenes[0], scenes[1], scenes[2] } };
+
     ofxXmlSettings config;
+    config.addTag("head");
+    config.pushTag("head");
+    config.setValue("version", version);
+    config.popTag(); // head
+
     config.addTag("config");
     config.pushTag("config");
     show_.toXml(config);

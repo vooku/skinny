@@ -15,7 +15,7 @@ struct LayerDescription {
 
     int id;
     std::string video;
-    std::set<uint8_t> midiMap;
+    Layer::MidiMap midiMap;
     Layer::BlendMode blendMode;
 };
 

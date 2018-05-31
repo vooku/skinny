@@ -34,7 +34,7 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
         LayerDescription layer;
         if (layer.fromXml(config))
             layers.push_back(std::move(layer));
-        config.popTag(); // scene
+        config.popTag(); // layer
     }
 }
 
