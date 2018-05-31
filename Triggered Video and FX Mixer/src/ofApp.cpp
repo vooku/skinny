@@ -1,12 +1,17 @@
 #include "ofApp.h"
 
-ofApp::ofApp(ofxArgs * args) {
-    args->printArgs();
+ofApp::ofApp(ofxArgs* args) {
+    parseArgs(args);
 }
 
-void ofApp::setup() {   
-    ofLogToConsole(); // TODO decide
-    ofSetLogLevel(OF_LOG_VERBOSE);
+void ofApp::setup() {
+    if (settings_.cancelSetup) {
+        ofExit();
+        return;
+    }
+
+    ofLogToConsole(); // TODO log file
+    ofSetLogLevel(settings_.verbose ? OF_LOG_VERBOSE : OF_LOG_NOTICE);
     ofSetFrameRate(30);
     ofBackground(ofColor::black);
     ofSetVerticalSync(true);
@@ -26,10 +31,14 @@ void ofApp::setup() {
     height_ = ofGetCurrentWindow()->getHeight();
     shouldRedraw_ = false;
 
-    midiIn_.listPorts();
-    midiIn_.openPort(1);
-    midiIn_.addListener(this);
-    midiIn_.setVerbose(true);
+    if (settings_.verbose)
+        ofxMidiIn::listPorts();
+    for (auto portNumber : settings_.midiPorts) {
+        midiInputs_.push_back(std::make_unique<ofxMidiIn>());
+        midiInputs_.back()->openPort(portNumber);
+        midiInputs_.back()->addListener(this);
+        midiInputs_.back()->setVerbose(settings_.verbose);
+    }    
 
 
     if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/computeShader.glsl"))
@@ -67,6 +76,12 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw(){
     dst_.draw(0, 0);
+}
+
+void ofApp::exit() {
+    for (auto& midiInput : midiInputs_) {
+        midiInput->closePort();
+    }
 }
 
 //--------------------------------------------------------------
@@ -149,6 +164,42 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg) {
     }
 
     shouldRedraw_ = true;
+}
+
+void ofApp::usage() const {
+    std::cout <<
+        "Usage:\n"
+        "    -h, --help, --usage Print this message.\n"
+        "    --list-midiports List available MIDI ports.\n"
+        "    --midiport <number> Try to open up a MIDI port <number> for input as listed by --list-midiports\n"
+        "    --midiports-all Open all available MIDI ports for input.\n"
+        "    --config <file>  Load configuration from <file>.\n"
+        "    -v, --verbose Use verbose mode"
+        << std::endl;
+}
+
+void ofApp::parseArgs(ofxArgs* args) {
+    if (args->contains("-h") || args->contains("-help") || args->contains("-usage")) {
+        usage();
+        settings_.cancelSetup = true;
+        return;
+    }
+
+    if (args->contains("--list-midiports")) {
+        ofxMidiIn::listPorts();
+        settings_.cancelSetup = true;
+        return;
+    }
+
+    if (args->contains("--midiports-all")) {
+        for (int i = 0; i < ofxMidiIn::getNumPorts(); ++i)
+            settings_.midiPorts.push_back(i);
+    }
+    else {
+        settings_.midiPorts.push_back(args->getInt("--midiport", 0));
+    }
+
+    settings_.verbose = args->contains("-v") || args->contains("--verbose");
 }
 
 //--------------------------------------------------------------
