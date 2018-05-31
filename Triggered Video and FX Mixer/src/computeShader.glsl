@@ -11,21 +11,23 @@ layout(rgba8, binding = 7) uniform writeonly image2D dst;
 layout(local_size_x = 32, local_size_y = 32, local_size_z = 1) in;
 
 uniform int nLayers;
-uniform bool[5] active;
-uniform ivec2[5] dimensions;
-uniform int[5] blendingModes;
+uniform bool[7] active;
+uniform ivec2[7] dimensions;
+uniform int[7] blendingModes;
 
 void main(){
 	const ivec2 xy = ivec2(gl_GlobalInvocationID.xy);
+	const vec2 globalDims = gl_WorkGroupSize.xy * gl_NumWorkGroups.xy;
 	vec3 colors[7];
-	colors[0] = imageLoad(layer0, xy).rgb;
-	colors[1] = imageLoad(layer1, xy).rgb;
-	colors[2] = imageLoad(layer2, xy).rgb;
-	colors[3] = imageLoad(layer3, xy).rgb;
-	colors[4] = imageLoad(layer4, xy).rgb;
-	colors[5] = imageLoad(layer5, xy).rgb;
-	colors[6] = imageLoad(layer6, xy).rgb;
+	colors[0] = imageLoad(layer0, ivec2(xy / globalDims * dimensions[0])).rgb;
+	colors[1] = imageLoad(layer1, ivec2(xy / globalDims * dimensions[1])).rgb;
+	colors[2] = imageLoad(layer2, ivec2(xy / globalDims * dimensions[2])).rgb;
+	colors[3] = imageLoad(layer3, ivec2(xy / globalDims * dimensions[3])).rgb;
+	colors[4] = imageLoad(layer4, ivec2(xy / globalDims * dimensions[4])).rgb;
+	colors[5] = imageLoad(layer5, ivec2(xy / globalDims * dimensions[5])).rgb;
+	colors[6] = imageLoad(layer6, ivec2(xy / globalDims * dimensions[6])).rgb;
 	vec3 blended = vec3(0.0);
+
 	for (int i = 0; i < nLayers; i++) {
 		if (active[i]) {
 			switch(blendingModes[i]) {
