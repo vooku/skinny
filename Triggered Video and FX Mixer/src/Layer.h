@@ -5,6 +5,17 @@
 
 class Layer {
 public:
+    enum class BlendMode {
+        Normal = 0,      // s
+        Multiply = 1,    // b * s
+        Screen = 2,      // 1 - ((1 - b) * (1 - s))
+        Darken = 3,      // min(b, s)
+        Lighten = 4,     // max(b, s)
+        LinearDodge = 5, // s + b
+        Difference = 6,  // |b - s|
+        Exclusion = 7    // b + s + 2 * b * s
+    };
+
     Layer(int id);
     Layer(int id, const char * filename);
     ~Layer();
@@ -29,6 +40,6 @@ private:
     bool paused_;
     const int id_;
     float globalAlpha_;
-
+    BlendMode blendMode_;
     std::set<int> midiMap_;
 };

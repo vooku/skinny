@@ -4,6 +4,7 @@
 #include "ofxMidi.h"
 #include "ofxArgs.h"
 #include "Layer.h"
+#include "meta.h"
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
@@ -33,11 +34,17 @@ private:
 
         std::vector<unsigned int> midiPorts;
         bool cancelSetup, verbose;
+        std::string configFileName;
 
     } settings_;
 
     void usage() const;
     void parseArgs(ofxArgs* args);
+    void setupMidi();
+    bool loadConfig();
+    bool saveConfig();
+
+    ShowDescription show_;
 
     std::vector<std::unique_ptr<Layer>> layers_;
     ofShader shader_;
@@ -46,5 +53,5 @@ private:
     bool shouldRedraw_;
     
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
-    ofxMidiMessage midiMessage_;
+    //ofxMidiMessage midiMessage_;
 };

@@ -1,4 +1,5 @@
 #include "ofApp.h"
+#include "ofxXmlSettings.h"
 
 ofApp::ofApp(ofxArgs* args) {
     parseArgs(args);
@@ -31,20 +32,19 @@ void ofApp::setup() {
     height_ = ofGetCurrentWindow()->getHeight();
     shouldRedraw_ = false;
 
-    if (settings_.verbose)
-        ofxMidiIn::listPorts();
-    for (auto portNumber : settings_.midiPorts) {
-        midiInputs_.push_back(std::make_unique<ofxMidiIn>());
-        midiInputs_.back()->openPort(portNumber);
-        midiInputs_.back()->addListener(this);
-        midiInputs_.back()->setVerbose(settings_.verbose);
-    }    
-
+    setupMidi();
 
     if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/computeShader.glsl"))
         ofExit();
     if (!shader_.linkProgram())
         ofExit();
+
+    if (settings_.configFileName != "") {
+        if (!loadConfig()) {
+            ofExit();
+            return;
+        }
+    }
 
     layers_.push_back(std::make_unique<Layer>(0, "numbers.mp4"));
     layers_.push_back(std::make_unique<Layer>(1, "simpleRGB.mp4"));
@@ -200,6 +200,44 @@ void ofApp::parseArgs(ofxArgs* args) {
     }
 
     settings_.verbose = args->contains("-v") || args->contains("--verbose");
+    settings_.configFileName = args->getString("--config", "");
+}
+
+void ofApp::setupMidi() {
+    if (settings_.verbose)
+        ofxMidiIn::listPorts();
+    for (auto portNumber : settings_.midiPorts) {
+        midiInputs_.push_back(std::make_unique<ofxMidiIn>());
+        midiInputs_.back()->openPort(portNumber);
+        midiInputs_.back()->addListener(this);
+        midiInputs_.back()->setVerbose(settings_.verbose);
+    }
+}
+
+bool ofApp::loadConfig() {
+    saveConfig();
+    return true;
+}
+
+bool ofApp::saveConfig() {
+    LayerDescription layer00 = { 0, "00.mp4", { 36, 37 }, Layer::BlendMode::Normal };
+    LayerDescription layer01 = { 1, "01.mp4", { 40 }, Layer::BlendMode::Multiply };
+    
+    SceneDescription scene0 = { { layer00, layer01 } };
+
+    LayerDescription layer10 = { 0, "10.mp4", { 38, 39 }, Layer::BlendMode::Normal };
+    LayerDescription layer11 = { 1, "11.mp4", { 41 }, Layer::BlendMode::Multiply };
+
+    SceneDescription scene1 = { { layer10, layer11 } };
+
+    show_ = { { scene0, scene1 } };
+
+    ofxXmlSettings config;
+    config.addTag("config");
+    config.pushTag("config");
+    show_.toXml(config);
+    config.popTag(); // config
+    return config.saveFile(settings_.configFileName);
 }
 
 //--------------------------------------------------------------

@@ -67,6 +67,21 @@
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.cpp">
       <Filter>addons\ofxArgs\src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+      <Filter>addons\ofxXmlSettings\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxml.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\meta.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -107,6 +122,15 @@
     </Filter>
     <Filter Include="addons\ofxArgs\src">
       <UniqueIdentifier>{4f94b7de-848b-425f-9fea-2945a82ad949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxXmlSettings">
+      <UniqueIdentifier>{cd94dbff-0c15-4077-8cb2-c1860a240ac2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxXmlSettings\src">
+      <UniqueIdentifier>{598cd2d0-8548-4d4c-9ce1-c6d8ab4a2f49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxXmlSettings\libs">
+      <UniqueIdentifier>{a731abcb-ab54-42af-bd98-978bdaee447d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -211,6 +235,15 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.h">
       <Filter>addons\ofxArgs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.h">
+      <Filter>addons\ofxXmlSettings\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxml.h">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\meta.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

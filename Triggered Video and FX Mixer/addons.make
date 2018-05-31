@@ -1,3 +1,4 @@
 ofxGui
+ofxXmlSettings
 ofxArgs
 ofxMidi
