@@ -1,7 +1,8 @@
 #include "ofApp.h"
 #include "ofxXmlSettings.h"
 
-ofApp::ofApp(ofxArgs* args) {
+ofApp::ofApp(ofxArgs* args) 
+    : switchNote_(43), shouldRedraw_(false), shouldReload_(false) {
     parseArgs(args);
 }
 
@@ -30,7 +31,6 @@ void ofApp::setup() {
 
     width_ = ofGetCurrentWindow()->getWidth();
     height_ = ofGetCurrentWindow()->getHeight();
-    shouldRedraw_ = false;
 
     setupMidi();
 
@@ -58,6 +58,10 @@ void ofApp::setupGui() {
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    if (shouldReload_) {
+        loadNext();
+        shouldReload_ = false;
+    }
     if (currentScene_->isFrameNew() || shouldRedraw_) {
         shader_.begin();
         currentScene_->setupUniforms(shader_);
@@ -104,7 +108,7 @@ void ofApp::keyPressed(int key){
         ofGetCurrentWindow()->toggleFullscreen();
         break;
     case 'n':
-        loadNext();
+        shouldReload_ = true;
         break;
     }    
 }
@@ -161,7 +165,9 @@ void ofApp::dragEvent(ofDragInfo dragInfo) {
 
 
 void ofApp::newMidiMessage(ofxMidiMessage & msg) {
-    if (currentScene_) {
+    if (msg.status == MIDI_NOTE_ON && msg.pitch == switchNote_)
+        shouldReload_ = true;
+    else if (currentScene_) {
         currentScene_->newMidiMessage(msg);
         shouldRedraw_ = true;
     }
@@ -243,10 +249,10 @@ bool ofApp::loadConfig() {
     if (!config.loadFile(settings_.configFileName))
         return false;
 
-    config.pushTag("config");
+    config.pushTag("show");
     show_.fromXml(config);
-    config.popTag(); // config
-
+    config.popTag(); // show
+    
     return true;
 }
 
@@ -255,12 +261,13 @@ bool ofApp::saveConfig() {
     config.addTag("head");
     config.pushTag("head");
     config.setValue("version", version);
+    config.setValue("switchNote", switchNote_);
     config.popTag(); // head
 
-    config.addTag("config");
-    config.pushTag("config");
+    config.addTag("show");
+    config.pushTag("show");
     show_.toXml(config);
-    config.popTag(); // config
+    config.popTag(); // show
     return config.saveFile(settings_.configFileName);
 }
 

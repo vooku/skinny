@@ -59,9 +59,11 @@ private:
     ofShader shader_;
     ofTexture dst_;
     int width_, height_;
-    bool shouldRedraw_;
+
+    bool shouldRedraw_, shouldReload_;
     
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
+    uint8_t switchNote_;
 
     ofxPanel gui_;
     ofDirectory dir_;
