@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxMidi.h"
 #include "ofxArgs.h"
+#include "ofxGui.h"
 #include "Scene.h"
 #include "meta.h"
 
@@ -13,9 +14,12 @@ public:
     ofApp(ofxArgs* args);
 
     void setup();
+    void setupGui();
     void update();
     void draw();
+    void drawGui(ofEventArgs& args);
     void exit();
+    void exitGui(ofEventArgs& args);
     
     void keyPressed(int key);
     void keyReleased(int key);
@@ -58,4 +62,7 @@ private:
     bool shouldRedraw_;
     
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
+
+    ofxPanel gui_;
+    ofDirectory dir_;
 };

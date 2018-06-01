@@ -48,6 +48,14 @@ void ofApp::setup() {
     dst_.bindAsImage(7, GL_WRITE_ONLY);
 }
 
+void ofApp::setupGui() {
+    auto cwd = ".";
+    dir_.open(cwd);
+    dir_.allowExt("mp4");
+    dir_.allowExt("avi");
+    dir_.listDir();
+}
+
 //--------------------------------------------------------------
 void ofApp::update(){
     if (currentScene_->isFrameNew() || shouldRedraw_) {
@@ -64,10 +72,22 @@ void ofApp::draw(){
     dst_.draw(0, 0);
 }
 
+void ofApp::drawGui(ofEventArgs& args) {
+    ofBackground(ofColor(45, 45, 48));
+    
+    for (int i = 0; i < dir_.size(); i++) {
+        ofDrawBitmapString(dir_.getPath(i), 20, 20 + i * 20);
+    }
+}
+
 void ofApp::exit() {
     for (auto& midiInput : midiInputs_) {
         midiInput->closePort();
     }
+}
+
+void ofApp::exitGui(ofEventArgs& args) {
+    ofExit();
 }
 
 //--------------------------------------------------------------
