@@ -39,20 +39,9 @@ void ofApp::setup() {
     if (!shader_.linkProgram())
         ofExit();
 
-    if (settings_.configFileName != "") {
-        if (!loadConfig()) {
-            ofExit();
-            return;
-        }
-    }
-
-    if (show_.scenes.size() >= 1) {
-        currentScene_ = std::make_unique<Scene>(show_.scenes[0]);
-    }
-    else {
-        ofLog(OF_LOG_FATAL_ERROR, "Configuration file %s contains no scenes.", settings_.configFileName);
+    if (!setupShow()) {
+        ofLog(OF_LOG_FATAL_ERROR, "Could not setup show from configuration file.");
         ofExit();
-        return;
     }
 
     dst_.allocate(width_, height_, GL_RGBA8);
@@ -94,8 +83,10 @@ void ofApp::keyPressed(int key){
     case OF_KEY_F11:
         ofGetCurrentWindow()->toggleFullscreen();
         break;
-    }
-    
+    case 'n':
+        loadNext();
+        break;
+    }    
 }
 
 //--------------------------------------------------------------
@@ -142,6 +133,12 @@ void ofApp::windowResized(int w, int h){
 void ofApp::gotMessage(ofMessage msg){
 
 }
+
+//--------------------------------------------------------------
+void ofApp::dragEvent(ofDragInfo dragInfo) {
+
+}
+
 
 void ofApp::newMidiMessage(ofxMidiMessage & msg) {
     if (currentScene_) {
@@ -198,6 +195,29 @@ void ofApp::setupMidi() {
     }
 }
 
+bool ofApp::setupShow() {
+    if (settings_.configFileName != "") {
+        if (!loadConfig()) {
+            return false;
+        }
+    }
+
+    if (show_.getSize() >= 1) {
+        currentScene_ = std::make_unique<Scene>(show_.currentScene());
+        currentScene_->bindTextures();
+    }
+    else {
+        ofLog(OF_LOG_FATAL_ERROR, "Configuration file %s contains no scenes.", settings_.configFileName);
+        return false;
+    }
+
+    if (show_.getSize() >= 2) {
+        nextScene_ = std::make_unique<Scene>(show_.nextScene());
+    }
+
+    return true;
+}
+
 bool ofApp::loadConfig() {
     ofxXmlSettings config;
     if (!config.loadFile(settings_.configFileName))
@@ -211,22 +231,6 @@ bool ofApp::loadConfig() {
 }
 
 bool ofApp::saveConfig() {  
-    //SceneDescription scenes[3];
-    //scenes[0] = { {
-    //    { 0, "numbers.mp4",{ 36 }, Layer::BlendMode::Normal },
-    //    { 1, "simpleRGB.mp4",{ 40 }, Layer::BlendMode::Multiply }
-    //} };
-    //scenes[1] = { {
-    //    { 0, "White Broken Shards.mp4",{ 36 }, Layer::BlendMode::Normal },
-    //    { 1, "White Half Strobes.mp4",{ 40 }, Layer::BlendMode::Multiply }
-    //} };
-    //scenes[2] = { {
-    //    { 0, "White Stripes Horizontal 1.mp4",{ 36 }, Layer::BlendMode::Normal },
-    //    { 1, "Noise Diagonals 1.mp4",{ 40 }, Layer::BlendMode::Multiply }
-    //} };
-
-    //show_ = { { scenes[0], scenes[1], scenes[2] } };
-
     ofxXmlSettings config;
     config.addTag("head");
     config.pushTag("head");
@@ -240,7 +244,23 @@ bool ofApp::saveConfig() {
     return config.saveFile(settings_.configFileName);
 }
 
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo){ 
+void ofApp::loadNext() {
+    if (show_.getSize() <= 1) {
+        ofLog(OF_LOG_ERROR, "Cannot load next scene, %d is too few.", show_.getSize());
+        return;
+    }
 
+    shader_.begin();
+    if (nextScene_) {
+        ++show_;
+        currentScene_.reset(nextScene_.release());
+        nextScene_ = std::make_unique<Scene>(show_.nextScene());
+    }
+    else {
+        ++show_;
+        currentScene_.reset(new Scene(show_.currentScene()));
+        nextScene_ = std::make_unique<Scene>(show_.nextScene());
+    }
+    currentScene_->bindTextures();
+    shader_.end();
 }

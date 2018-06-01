@@ -9,6 +9,7 @@ public:
 
     Scene(const SceneDescription& description);
 
+    void bindTextures();
     bool isFrameNew();
     void newMidiMessage(ofxMidiMessage & msg);
     void playPauseLayer(int idx);

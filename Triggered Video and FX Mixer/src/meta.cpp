@@ -52,16 +52,24 @@ void ShowDescription::fromXml(ofxXmlSettings & config) {
         config.pushTag("scene", i);
         SceneDescription scene;
         scene.fromXml(config);
-        scenes.push_back(std::move(scene));
+        scenes_.push_back(std::move(scene));
+        config.popTag(); // scene
+    }
+    currentIdx_ = 0;
+    nextIdx_ = (currentIdx_ + 1) % scenes_.size();
+}
+
+void ShowDescription::toXml(ofxXmlSettings & config) const {
+    for (int i = 0; i < scenes_.size(); i++) {
+        config.addTag("scene");
+        config.pushTag("scene", i);
+        scenes_[i].toXml(config);
         config.popTag(); // scene
     }
 }
 
-void ShowDescription::toXml(ofxXmlSettings & config) const {
-    for (int i = 0; i < scenes.size(); i++) {
-        config.addTag("scene");
-        config.pushTag("scene", i);
-        scenes[i].toXml(config);
-        config.popTag(); // scene
-    }
+ShowDescription & ShowDescription::operator++() {
+    currentIdx_ = ++currentIdx_ % scenes_.size();
+    nextIdx_ = ++nextIdx_ % scenes_.size();
+    return *this;
 }

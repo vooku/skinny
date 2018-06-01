@@ -26,9 +26,19 @@ struct SceneDescription {
     std::vector<LayerDescription> layers;
 };
 
-struct ShowDescription {
+class ShowDescription {
+public:
+    ShowDescription() : currentIdx_(0), nextIdx_(0) { }
+
     void fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
+    ShowDescription& operator++();
 
-    std::vector<SceneDescription> scenes;
+    const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }
+    const SceneDescription& nextScene() const { return scenes_[nextIdx_]; }
+    size_t getSize() { return scenes_.size(); }
+
+private:
+    std::vector<SceneDescription> scenes_;
+    int currentIdx_, nextIdx_;
 };

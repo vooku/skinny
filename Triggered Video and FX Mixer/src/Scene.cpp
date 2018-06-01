@@ -9,6 +9,11 @@ Scene::Scene(const SceneDescription & description) {
     }
 }
 
+void Scene::bindTextures() {
+    for (auto& layer : layers_)
+        layer->bind();
+}
+
 bool Scene::isFrameNew() {
     bool newFrame = false;
     for (auto& layer : layers_)

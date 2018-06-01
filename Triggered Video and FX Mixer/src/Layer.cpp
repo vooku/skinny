@@ -15,6 +15,7 @@ Layer::Layer(int id, const std::string& filename)
 
 Layer::~Layer()
 {
+    player_.getTexture().unbind(id_);
     player_.closeMovie();
 }
 
@@ -27,9 +28,11 @@ bool Layer::reload(const std::string& filename)
         return false;
     }
 
-    player_.getTexture().bindAsImage(id_, GL_READ_ONLY);
-
     return true;
+}
+
+void Layer::bind() {
+    player_.getTexture().bindAsImage(id_, GL_READ_ONLY);
 }
 
 void Layer::play()

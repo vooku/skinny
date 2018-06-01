@@ -24,6 +24,7 @@ public:
     ~Layer();
 
     bool reload(const std::string& filename);
+    void bind();
     void play();
     void pause();
     void playPause();

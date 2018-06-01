@@ -43,8 +43,10 @@ private:
     void usage() const;
     void parseArgs(ofxArgs* args);
     void setupMidi();
+    bool setupShow();
     bool loadConfig();
     bool saveConfig();
+    void loadNext();
 
     ShowDescription show_;
 
