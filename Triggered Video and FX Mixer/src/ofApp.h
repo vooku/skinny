@@ -39,7 +39,7 @@ private:
         Settings() : cancelSetup(false) { }
 
         std::vector<unsigned int> midiPorts;
-        bool cancelSetup, verbose;
+        bool cancelSetup, verbose, console;
         std::string configFileName;
 
     } settings_;

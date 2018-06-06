@@ -1,3 +1,4 @@
+#include <ctime>
 #include "ofApp.h"
 #include "ofxXmlSettings.h"
 
@@ -12,7 +13,10 @@ void ofApp::setup() {
         return;
     }
 
-    ofLogToConsole(); // TODO log file
+    if (settings_.console)
+        ofLogToConsole();
+    else 
+        ofLogToFile("tvaem.log", true);
     ofSetLogLevel(settings_.verbose ? OF_LOG_VERBOSE : OF_LOG_NOTICE);
     ofSetFrameRate(30);
     ofBackground(ofColor::black);
@@ -127,10 +131,11 @@ void ofApp::usage() const {
         "Usage:\n"
         "    -h, --help, --usage Print this message.\n"
         "    --list-midiports List available MIDI ports.\n"
-        "    --midiport <number> Try to open up a MIDI port <number> for input as listed by --list-midiports\n"
+        "    --midiport <number> Try to open up a MIDI port <number> for input as listed by --list-midiports.\n"
         "    --midiports-all Open all available MIDI ports for input.\n"
         "    --config <file>  Load configuration from <file>.\n"
-        "    -v, --verbose Use verbose mode"
+        "    --console Log to console."
+        "    -v, --verbose Use verbose mode."
         << std::endl;
 }
 
@@ -156,6 +161,7 @@ void ofApp::parseArgs(ofxArgs* args) {
     }
 
     settings_.verbose = args->contains("-v") || args->contains("--verbose");
+    settings_.console = args->contains("--console");
     settings_.configFileName = args->getString("--config", "");
 }
 
