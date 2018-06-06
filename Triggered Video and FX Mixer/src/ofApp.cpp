@@ -95,13 +95,13 @@ void ofApp::exitGui(ofEventArgs& args) {
 }
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key){
+void ofApp::keyReleased(int key){
     // 0-9 in ascii
     if (key >= 0x30 && key < 0x3A) {
         // key to index 1->0, 0->9
         currentScene_->playPauseLayer((key - 0x30 + 9) % 10);
     }
-    
+
     switch (key)
     {
     case OF_KEY_F11:
@@ -110,59 +110,8 @@ void ofApp::keyPressed(int key){
     case 'n':
         shouldReload_ = true;
         break;
-    }    
+    }
 }
-
-//--------------------------------------------------------------
-void ofApp::keyReleased(int key){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseMoved(int x, int y ){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseDragged(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseReleased(int x, int y, int button){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseEntered(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::mouseExited(int x, int y){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::windowResized(int w, int h){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::gotMessage(ofMessage msg){
-
-}
-
-//--------------------------------------------------------------
-void ofApp::dragEvent(ofDragInfo dragInfo) {
-
-}
-
 
 void ofApp::newMidiMessage(ofxMidiMessage & msg) {
     if (msg.status == MIDI_NOTE_ON && msg.pitch == switchNote_)
