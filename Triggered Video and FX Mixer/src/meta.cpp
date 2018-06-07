@@ -1,8 +1,8 @@
 #include "meta.h"
 
+const uint8_t MappableDescription::invalid_midi = 255;
 const int LayerDescription::invalid_id = -1;
 const std::string LayerDescription::invalid_video = "";
-const uint8_t LayerDescription::invalid_midi = 255;
 
 bool LayerDescription::fromXml(ofxXmlSettings & config) {
     id = config.getValue("id", invalid_id);
@@ -28,6 +28,27 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
         config.addValue("midi", midiNote);
 }
 
+bool EffectDescription::fromXml(ofxXmlSettings & config) {
+    type = static_cast<Effect::Type>(config.getValue("type", static_cast<int>(Effect::Type::Invalid)));
+    for (int i = 0; i < config.getNumTags("midi"); i++) {
+        midiMap.insert(config.getValue("midi", invalid_midi, i));
+    }
+
+    if (type == Effect::Type::Invalid || midiMap.count(invalid_midi)) {
+        ofLog(OF_LOG_ERROR, "Effect description contains invalid values and will be skipped.");
+        return false;
+    }
+
+    return true;
+}
+
+void EffectDescription::toXml(ofxXmlSettings & config) const {
+    config.setValue("type", static_cast<int>(type));
+    for (auto midiNote : midiMap)
+        config.addValue("midi", midiNote);
+}
+
+
 void SceneDescription::fromXml(ofxXmlSettings & config) {
     for (int i = 0; i < config.getNumTags("layer"); i++) {
         config.pushTag("layer", i);
@@ -35,6 +56,14 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
         if (layer.fromXml(config))
             layers.push_back(std::move(layer));
         config.popTag(); // layer
+    }
+
+    for (int i = 0; i < config.getNumTags("effect"); i++) {
+        config.pushTag("effect", i);
+        EffectDescription effect;
+        if (effect.fromXml(config))
+            effects.push_back(std::move(effect));
+        config.popTag(); // effect
     }
 }
 
@@ -44,6 +73,13 @@ void SceneDescription::toXml(ofxXmlSettings & config) const {
         config.pushTag("layer", i);
         layers[i].toXml(config);
         config.popTag(); // layer
+    }
+
+    for (int i = 0; i < effects.size(); i++) {
+        config.addTag("effect");
+        config.pushTag("effect", i);
+        effects[i].toXml(config);
+        config.popTag(); // effect
     }
 }
 

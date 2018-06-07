@@ -4,19 +4,31 @@
 #include <vector>
 #include "ofxXmlSettings.h"
 #include "Layer.h"
+#include "Effect.h"
 
-struct LayerDescription {
+struct MappableDescription {
+    static const uint8_t invalid_midi;
+};
+
+struct LayerDescription : public MappableDescription {
     static const int invalid_id;
     static const std::string invalid_video;
-    static const uint8_t invalid_midi;
     
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
     int id;
     std::string video;
-    Layer::MidiMap midiMap;
+    Mappable::MidiMap midiMap;
     Layer::BlendMode blendMode;
+};
+
+struct EffectDescription : public MappableDescription {
+    bool fromXml(ofxXmlSettings& config);
+    void toXml(ofxXmlSettings& config) const;
+
+    Effect::Type type;
+    Mappable::MidiMap midiMap;
 };
 
 struct SceneDescription {
@@ -24,6 +36,7 @@ struct SceneDescription {
     void toXml(ofxXmlSettings& config) const;
 
     std::vector<LayerDescription> layers;
+    std::vector<EffectDescription> effects;
 };
 
 class ShowDescription {

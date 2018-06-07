@@ -3,7 +3,7 @@
 #include "ofxXmlSettings.h"
 
 ofApp::ofApp(ofxArgs* args) 
-    : switchNote_(43), shouldRedraw_(false), shouldReload_(false) {
+    : switchNote_(MappableDescription::invalid_midi), shouldRedraw_(false), shouldReload_(false) {
     parseArgs(args);
 }
 
@@ -66,12 +66,13 @@ void ofApp::update(){
         loadNext();
         shouldReload_ = false;
     }
+
     if (currentScene_->isFrameNew() || shouldRedraw_) {
         shader_.begin();
         currentScene_->setupUniforms(shader_);
         shader_.dispatchCompute(width_ / 32, height_ / 32, 1);
         shader_.end();
-        shouldRedraw_ = false;
+        shouldRedraw_ = currentScene_->hasActiveFX();
     }
 }
 
@@ -92,6 +93,7 @@ void ofApp::exit() {
     for (auto& midiInput : midiInputs_) {
         midiInput->closePort();
     }
+    ofExit(); // call to exit also the gui window
 }
 
 void ofApp::exitGui(ofEventArgs& args) {
@@ -106,8 +108,7 @@ void ofApp::keyReleased(int key){
         currentScene_->playPauseLayer((key - 0x30 + 9) % 10);
     }
 
-    switch (key)
-    {
+    switch (key) {
     case OF_KEY_F11:
         ofGetCurrentWindow()->toggleFullscreen();
         break;
@@ -204,6 +205,10 @@ bool ofApp::loadConfig() {
     if (!config.loadFile(settings_.configFileName))
         return false;
 
+    config.pushTag("head");
+    switchNote_ = config.getValue("switchNote", MappableDescription::invalid_midi);
+    config.popTag(); // head
+    
     config.pushTag("show");
     show_.fromXml(config);
     config.popTag(); // show

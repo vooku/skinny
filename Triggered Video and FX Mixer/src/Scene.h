@@ -2,6 +2,7 @@
 
 #include "OfxMidi.h"
 #include "meta.h"
+#include <unordered_map>
 
 class Scene {
 public:
@@ -11,6 +12,7 @@ public:
 
     void bindTextures();
     bool isFrameNew();
+    bool hasActiveFX() const;
     void newMidiMessage(ofxMidiMessage & msg);
     void playPauseLayer(int idx);
 
@@ -22,9 +24,13 @@ private:
         int active[maxLayers];
         glm::ivec2 dimensions[maxLayers];
         int blendingModes[maxLayers];
-    } mutable uniforms;
+        bool inverse;
+        bool reducePalette;
+        int colorShift;
+    } mutable uniforms_;
 
     std::vector<std::unique_ptr<Layer>> layers_;
+    std::unordered_map<Effect::Type, Effect> effects_;
 
 };
 

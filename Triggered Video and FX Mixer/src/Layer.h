@@ -1,12 +1,10 @@
 #pragma once
 
 #include "ofMain.h"
-#include <set>
+#include "Mappable.h"
 
-class Layer {
+class Layer : public Mappable {
 public:
-    typedef std::set<uint8_t> MidiMap;
-
     enum class BlendMode {
         Invalid = -1,
         Normal = 0,      // s
@@ -21,32 +19,25 @@ public:
 
     Layer(int id);
     Layer(int id, const std::string& filename);
+    Layer(int id, const std::string& filename, const MidiMap& map);
     ~Layer();
 
     bool reload(const std::string& filename);
     void bind();
-    void play();
-    void pause();
-    void playPause();
     bool isFrameNew();
 
-    void addMidiNote(int note) { midiMap_.insert(note); }
-    void removeMidiNote(int note) { midiMap_.erase(note); }
-    void clearMidiNotes() { midiMap_.clear(); }
-    bool containsMidiNote(int note) const { return midiMap_.count(note); }
-    void replaceMidiMap(const MidiMap& newMap) { midiMap_ = { newMap }; }
-    
+    void play() override;
+    void pause() override;
+    void playPause() override;
+
     float getWidth() const { return player_.getWidth(); }
     float getHeight() const { return player_.getHeight(); }
-    float isPlaying() const { return !paused_; }
     BlendMode getBlendMode() const { return blendMode_; }
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
 
 private:
     ofVideoPlayer player_;
-    bool paused_;
     const int id_;
     BlendMode blendMode_;
-    MidiMap midiMap_;
 };

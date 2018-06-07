@@ -1,7 +1,7 @@
 #include "Layer.h"
 
 Layer::Layer(int id)
-    : id_(id), paused_(true)
+    : id_(id), Mappable()
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
@@ -11,6 +11,14 @@ Layer::Layer(int id, const std::string& filename)
     : Layer(id)
 {
     reload(filename);
+}
+
+Layer::Layer(int id, const std::string & filename, const MidiMap & map)
+    : id_(id), Mappable(map)
+{
+    player_.setPixelFormat(OF_PIXELS_BGRA);
+    player_.setLoopState(OF_LOOP_NORMAL);
+    reload(filename);    
 }
 
 Layer::~Layer()
@@ -37,20 +45,20 @@ void Layer::bind() {
 
 void Layer::play()
 {
-    paused_ = false;
-    player_.setPaused(paused_);
+    active_ = true;
+    player_.setPaused(!active_);
 }
 
 void Layer::pause()
 {
-    paused_ = true;
-    player_.setPaused(paused_);
+    active_ = false;
+    player_.setPaused(!active_);
 }
 
 void Layer::playPause()
 {
-    paused_ = !paused_;
-    player_.setPaused(paused_);
+    active_ = !active_;
+    player_.setPaused(!active_);
 }
 
 bool Layer::isFrameNew()

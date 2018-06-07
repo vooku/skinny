@@ -204,8 +204,10 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+    <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\Layer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mappable.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\meta.cpp" />
     <ClCompile Include="src\Scene.cpp" />
@@ -245,7 +247,9 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiTypes.h" />
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxml.h" />
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
+    <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\Layer.h" />
+    <ClInclude Include="src\Mappable.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\meta.h" />
     <ClInclude Include="src\Scene.h" />
