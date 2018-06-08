@@ -18,6 +18,8 @@ public:
 
     void setupUniforms(ofShader& shader) const;
 
+    const std::string& getName() const { return name_; }
+
 private:
     struct Uniforms {
         int nLayers;

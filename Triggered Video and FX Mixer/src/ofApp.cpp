@@ -37,11 +37,11 @@ void ofApp::setup() {
     height_ = ofGetCurrentWindow()->getHeight();
 
     setupMidi();
-//#ifdef _DEBUG
+#ifdef _DEBUG
     if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/computeShader.glsl"))
-//#else
-//    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "./computeShader.glsl"))
-//#endif
+#else
+    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "./computeShader.glsl"))
+#endif
         ofExit();
     if (!shader_.linkProgram())
         ofExit();
@@ -253,4 +253,6 @@ void ofApp::loadNext() {
     }
     currentScene_->bindTextures();
     shader_.end();
+
+    ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());
 }
