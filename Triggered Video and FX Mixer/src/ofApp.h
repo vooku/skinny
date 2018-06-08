@@ -9,7 +9,7 @@
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
-    static constexpr const char * version = "0.1";
+    static constexpr const char * version = "0.1.0-alpha";
 
     ofApp(ofxArgs* args);
 
