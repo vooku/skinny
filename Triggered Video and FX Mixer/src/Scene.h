@@ -6,7 +6,7 @@
 
 class Scene {
 public:
-    static const int maxLayers = 5;
+    static const int maxLayers = 7;
 
     Scene(const SceneDescription& description);
 
@@ -30,6 +30,7 @@ private:
         bool colorShift2;
     } mutable uniforms_;
 
+    const std::string name_;
     std::vector<std::unique_ptr<Layer>> layers_;
     std::unordered_map<Effect::Type, Effect> effects_;
 

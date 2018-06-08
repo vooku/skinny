@@ -37,8 +37,11 @@ void ofApp::setup() {
     height_ = ofGetCurrentWindow()->getHeight();
 
     setupMidi();
-
+//#ifdef _DEBUG
     if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/computeShader.glsl"))
+//#else
+//    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "./computeShader.glsl"))
+//#endif
         ofExit();
     if (!shader_.linkProgram())
         ofExit();

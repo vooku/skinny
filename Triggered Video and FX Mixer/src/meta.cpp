@@ -50,6 +50,8 @@ void EffectDescription::toXml(ofxXmlSettings & config) const {
 
 
 void SceneDescription::fromXml(ofxXmlSettings & config) {
+    name = config.getValue("name", "");
+
     for (int i = 0; i < config.getNumTags("layer"); i++) {
         config.pushTag("layer", i);
         LayerDescription layer;
@@ -68,6 +70,8 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
 }
 
 void SceneDescription::toXml(ofxXmlSettings & config) const {
+    config.addValue("name", name);
+
     for (int i = 0; i < layers.size(); i++) {
         config.addTag("layer");
         config.pushTag("layer", i);

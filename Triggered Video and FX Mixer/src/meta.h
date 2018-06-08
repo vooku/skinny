@@ -35,6 +35,7 @@ struct SceneDescription {
     void fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
+    std::string name;
     std::vector<LayerDescription> layers;
     std::vector<EffectDescription> effects;
 };
