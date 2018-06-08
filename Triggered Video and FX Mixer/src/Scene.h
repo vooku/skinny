@@ -26,7 +26,8 @@ private:
         int blendingModes[maxLayers];
         bool inverse;
         bool reducePalette;
-        int colorShift;
+        bool colorShift;
+        bool colorShift2;
     } mutable uniforms_;
 
     std::vector<std::unique_ptr<Layer>> layers_;

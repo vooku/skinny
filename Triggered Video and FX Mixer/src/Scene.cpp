@@ -86,8 +86,12 @@ void Scene::setupUniforms(ofShader& shader) const {
     it = effects_.find(Effect::Type::ColorShift);
     if (it != effects_.end())
         uniforms_.colorShift = it->second.isPlaying();
+    it = effects_.find(Effect::Type::ColorShift2);
+    if (it != effects_.end())
+        uniforms_.colorShift2 = it->second.isPlaying();
 
     shader.setUniform1i("inverse", uniforms_.inverse);
     shader.setUniform1i("reducePalette", uniforms_.reducePalette);
     shader.setUniform1i("colorShift", uniforms_.colorShift);
+    shader.setUniform1i("colorShift2", uniforms_.colorShift2);
 }

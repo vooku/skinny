@@ -10,7 +10,8 @@ public:
         Invalid = -1,
         Inverse = 0,
         ReducePalette = 1,
-        ColorShift = 2
+        ColorShift = 2,
+        ColorShift2 = 3
     };
 
     Effect() : Mappable() { }

@@ -16,7 +16,8 @@ uniform ivec2[7] dimensions;
 uniform int[7] blendingModes;
 uniform bool inverse;
 uniform bool reducePalette;
-uniform int colorShift;
+uniform bool colorShift;
+uniform bool colorShift2;
 
 void main(){
 	const ivec2 xy = ivec2(gl_GlobalInvocationID.xy);
@@ -68,6 +69,7 @@ void main(){
 		blended = mix(blended, vec3(1.0) - blended, inverse);
 		blended = mix(blended, round(blended), reducePalette);
 		blended = mix(blended, blended.brg, colorShift);
+		blended = mix(blended, blended.gbr, colorShift2);
 	}
 
 	imageStore(dst, xy, vec4(blended, 1.0));
