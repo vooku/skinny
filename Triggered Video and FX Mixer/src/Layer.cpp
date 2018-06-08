@@ -23,7 +23,7 @@ Layer::Layer(int id, const std::string & filename, const MidiMap & map)
 
 Layer::~Layer()
 {   
-    player_.getTexture().unbind(id_); // throws exception renderer being null
+    //player_.getTexture().unbind(id_); // throws exception renderer being null
     player_.closeMovie();
 }
 
