@@ -11,7 +11,7 @@ layout(rgba8, binding = 7) uniform writeonly image2D dst;
 layout(local_size_x = 32, local_size_y = 32, local_size_z = 1) in;
 
 uniform int nLayers;
-uniform bool[7] active;
+uniform bool[7] playing;
 uniform ivec2[7] dimensions;
 uniform int[7] blendingModes;
 uniform bool inverse;
@@ -31,11 +31,11 @@ void main(){
 	colors[5] = imageLoad(layer5, ivec2(xy / globalDims * dimensions[5])).rgb;
 	colors[6] = imageLoad(layer6, ivec2(xy / globalDims * dimensions[6])).rgb;
 	vec3 blended = vec3(0.0);
-	bool anyActive = false;
+	bool anyPlaying = false;
 
 	for (int i = 0; i < nLayers; i++) {
-		if (active[i]) {
-			anyActive = true;
+		if (playing[i]) {
+			anyPlaying = true;
 			switch(blendingModes[i]) {
 				case 1: // Multiply
 					blended = blended * colors[i];
@@ -65,7 +65,7 @@ void main(){
 			blended = clamp(vec3(0.0), vec3(1.0), blended);
 		}
 	}
-	if (anyActive) {
+	if (anyPlaying) {
 		blended = mix(blended, vec3(1.0) - blended, inverse);
 		blended = mix(blended, round(blended), reducePalette);
 		blended = mix(blended, blended.brg, colorShift);

@@ -68,13 +68,13 @@ void Scene::playPauseLayer(int idx) {
 void Scene::setupUniforms(ofShader& shader) const {
     uniforms_.nLayers = layers_.size();
     for (int i = 0; i < layers_.size() && i < maxLayers; ++i) {
-        uniforms_.active[i] = layers_[i]->isPlaying();
+        uniforms_.playing[i] = layers_[i]->isPlaying();
         uniforms_.dimensions[i] = { layers_[i]->getWidth(), layers_[i]->getHeight() };
         uniforms_.blendingModes[i] = static_cast<int>(layers_[i]->getBlendMode());
     }
 
     shader.setUniform1i("nLayers", uniforms_.nLayers);
-    shader.setUniform1iv("active", uniforms_.active, uniforms_.nLayers);
+    shader.setUniform1iv("playing", uniforms_.playing, uniforms_.nLayers);
     shader.setUniform2iv("dimensions", reinterpret_cast<int*>(uniforms_.dimensions), uniforms_.nLayers);
     shader.setUniform1iv("blendingModes", uniforms_.blendingModes, uniforms_.nLayers);
 

@@ -23,7 +23,7 @@ public:
 private:
     struct Uniforms {
         int nLayers;
-        int active[maxLayers];
+        int playing[maxLayers];
         glm::ivec2 dimensions[maxLayers];
         int blendingModes[maxLayers];
         bool inverse;

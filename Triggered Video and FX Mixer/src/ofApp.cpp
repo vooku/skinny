@@ -189,7 +189,9 @@ bool ofApp::setupShow() {
 
     if (show_.getSize() >= 1) {
         currentScene_ = std::make_unique<Scene>(show_.currentScene());
+        shader_.begin();
         currentScene_->bindTextures();
+        shader_.end();
     }
     else {
         ofLog(OF_LOG_FATAL_ERROR, "Configuration file %s contains no scenes.", settings_.configFileName);
