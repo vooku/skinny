@@ -17,9 +17,7 @@ public:
         Exclusion = 7    // b + s + 2 * b * s
     };
 
-    Layer(int id);
-    Layer(int id, const std::string& filename);
-    Layer(int id, const std::string& filename, const MidiMap& map);
+    Layer(int id, const std::string& filename = "", const MidiMap& map = {});
     ~Layer() override;
 
     bool reload(const std::string& filename);
@@ -32,6 +30,7 @@ public:
 
     float getWidth() const { return player_.getWidth(); }
     float getHeight() const { return player_.getHeight(); }
+    bool isValid() const { return valid_; }
     BlendMode getBlendMode() const { return blendMode_; }
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
@@ -39,5 +38,6 @@ public:
 private:
     ofVideoPlayer player_;
     const int id_;
+    bool valid_;
     BlendMode blendMode_;
 };

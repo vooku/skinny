@@ -1,20 +1,9 @@
 #include "Layer.h"
 
-Layer::Layer(int id)
-    : id_(id), Mappable()
-{
-    player_.setPixelFormat(OF_PIXELS_BGRA);
-    player_.setLoopState(OF_LOOP_NORMAL);
-}
-
-Layer::Layer(int id, const std::string& filename)
-    : Layer(id)
-{
-    reload(filename);
-}
-
-Layer::Layer(int id, const std::string & filename, const MidiMap & map)
-    : id_(id), Mappable(map)
+Layer::Layer(int id, const std::string & filename, const MidiMap & map) :
+    id_(id),
+    Mappable(map),
+    valid_(false)
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
@@ -30,16 +19,20 @@ Layer::~Layer()
 bool Layer::reload(const std::string& filename)
 {
     player_.closeMovie();
-
-    if (!player_.load(filename)) {
-        ofLog(OF_LOG_ERROR, "Cannot load %s.", filename);
-        return false;
+    valid_ = player_.load(filename);
+    
+    if (!valid_) {
+        ofLog(OF_LOG_ERROR, "Cannot load %s.", filename.c_str());
     }
+    else 
+        ofLog(OF_LOG_VERBOSE, "Loaded %s.", filename.c_str());
 
-    return true;
+    return valid_;
 }
 
 void Layer::bind() {
+    if (!valid_)
+        return;
     player_.getTexture().bindAsImage(id_, GL_READ_ONLY);
 }
 

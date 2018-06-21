@@ -1,11 +1,13 @@
 #include "Scene.h"
 
-Scene::Scene(const SceneDescription & description) 
-    : name_(description.name) {
+Scene::Scene(const SceneDescription & description) : 
+    name_(description.name)
+{
     for (const auto& layer : description.layers) {
         auto newLayer = std::make_unique<Layer>(layer.id, layer.video, layer.midiMap);
         newLayer->setBlendMode(layer.blendMode);
-        layers_.push_back(std::move(newLayer));
+        //if (newLayer->isValid())
+            layers_.push_back(std::move(newLayer));
     }
 
     for (const auto& effect : description.effects) {
