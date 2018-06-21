@@ -4,9 +4,12 @@ Scene::Scene(const SceneDescription & description) :
     name_(description.name)
 {
     for (const auto& layer : description.layers) {
-        auto newLayer = std::make_unique<Layer>(layer.id, layer.video, layer.midiMap);
+        if (layers_.size() >= maxLayers)
+            break;
+
+        auto newLayer = std::make_unique<Layer>(layers_.size(), layer.video, layer.midiMap);
         newLayer->setBlendMode(layer.blendMode);
-        //if (newLayer->isValid())
+        if (newLayer->isValid())
             layers_.push_back(std::move(newLayer));
     }
 

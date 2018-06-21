@@ -11,13 +11,11 @@ struct MappableDescription {
 };
 
 struct LayerDescription : public MappableDescription {
-    static const int invalid_id;
     static const std::string invalid_video;
     
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
-    int id;
     std::string video;
     Mappable::MidiMap midiMap;
     Layer::BlendMode blendMode;
