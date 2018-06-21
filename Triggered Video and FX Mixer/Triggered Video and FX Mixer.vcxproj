@@ -251,6 +251,7 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\meta.h" />
     <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

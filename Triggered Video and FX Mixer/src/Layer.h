@@ -20,7 +20,7 @@ public:
     Layer(int id);
     Layer(int id, const std::string& filename);
     Layer(int id, const std::string& filename, const MidiMap& map);
-    ~Layer();
+    ~Layer() override;
 
     bool reload(const std::string& filename);
     void bind();

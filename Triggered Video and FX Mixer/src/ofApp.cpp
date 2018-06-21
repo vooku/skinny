@@ -1,15 +1,19 @@
 #include <ctime>
 #include "ofApp.h"
 #include "ofxXmlSettings.h"
+#include "shader.h"
 
-ofApp::ofApp(ofxArgs* args) 
-    : switchNote_(MappableDescription::invalid_midi), shouldRedraw_(false), shouldReload_(false) {
+ofApp::ofApp(ofxArgs* args) : 
+    switchNote_(MappableDescription::invalid_midi),
+    shouldRedraw_(false),
+    shouldReload_(false),
+    shouldExit_(false) {
     parseArgs(args);
 }
 
 void ofApp::setup() {
     if (settings_.cancelSetup) {
-        ofExit();
+        shouldExit_ = true;
         return;
     }
 
@@ -29,7 +33,7 @@ void ofApp::setup() {
     ofLog(OF_LOG_NOTICE, "Using OpenGL v%d.%d, GPU: %s %s.", major, minor, vendor, renderer);
     if (major < 4 && minor < 3) {
         ofLog(OF_LOG_FATAL_ERROR, "OpenGL version too old!", major, minor);
-        ofExit();
+        shouldExit_ = true;
         return;
     }
 
@@ -37,18 +41,22 @@ void ofApp::setup() {
     height_ = ofGetCurrentWindow()->getHeight();
 
     setupMidi();
-#ifdef _DEBUG
-    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/computeShader.glsl"))
-#else
-    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "./computeShader.glsl"))
-#endif
-        ofExit();
-    if (!shader_.linkProgram())
-        ofExit();
+
+    if (!shader_.setupShaderFromSource(GL_COMPUTE_SHADER, computeShader)) {
+        ofLog(OF_LOG_FATAL_ERROR, "Could not load shader.");
+        shouldExit_ = true;
+        return;
+    }
+    if (!shader_.linkProgram()) {
+        ofLog(OF_LOG_FATAL_ERROR, "Could not link shader.");
+        shouldExit_ = true;
+        return;
+    }
 
     if (!setupShow()) {
         ofLog(OF_LOG_FATAL_ERROR, "Could not setup show from configuration file.");
-        ofExit();
+        shouldExit_ = true;
+        return;
     }
 
     dst_.allocate(width_, height_, GL_RGBA8);
@@ -65,10 +73,18 @@ void ofApp::setupGui() {
 
 //--------------------------------------------------------------
 void ofApp::update(){
+    if (shouldExit_) {
+        ofExit();
+        //return;
+    }
+
     if (shouldReload_) {
         loadNext();
         shouldReload_ = false;
     }
+
+    if (!currentScene_)
+        return;
 
     if (currentScene_->isFrameNew() || shouldRedraw_) {
         shader_.begin();
@@ -96,11 +112,10 @@ void ofApp::exit() {
     for (auto& midiInput : midiInputs_) {
         midiInput->closePort();
     }
-    ofExit(); // call to exit also the gui window
 }
 
 void ofApp::exitGui(ofEventArgs& args) {
-    ofExit();
+    shouldExit_ = true;
 }
 
 //--------------------------------------------------------------
@@ -166,7 +181,7 @@ void ofApp::parseArgs(ofxArgs* args) {
 
     settings_.verbose = args->contains("-v") || args->contains("--verbose");
     settings_.console = args->contains("--console");
-    settings_.configFileName = args->getString("--config", "");
+    settings_.cfgFile = args->getString("--config", "");
 }
 
 void ofApp::setupMidi() {
@@ -181,7 +196,7 @@ void ofApp::setupMidi() {
 }
 
 bool ofApp::setupShow() {
-    if (settings_.configFileName != "") {
+    if (settings_.cfgFile != "") {
         if (!loadConfig()) {
             return false;
         }
@@ -194,7 +209,7 @@ bool ofApp::setupShow() {
         shader_.end();
     }
     else {
-        ofLog(OF_LOG_FATAL_ERROR, "Configuration file %s contains no scenes.", settings_.configFileName);
+        ofLog(OF_LOG_FATAL_ERROR, "Configuration file %s contains no scenes.", settings_.cfgFile);
         return false;
     }
 
@@ -207,7 +222,7 @@ bool ofApp::setupShow() {
 
 bool ofApp::loadConfig() {
     ofxXmlSettings config;
-    if (!config.loadFile(settings_.configFileName))
+    if (!config.loadFile(settings_.cfgFile))
         return false;
 
     config.pushTag("head");
@@ -233,7 +248,7 @@ bool ofApp::saveConfig() {
     config.pushTag("show");
     show_.toXml(config);
     config.popTag(); // show
-    return config.saveFile(settings_.configFileName);
+    return config.saveFile(settings_.cfgFile);
 }
 
 void ofApp::loadNext() {

@@ -40,8 +40,7 @@ private:
 
         std::vector<unsigned int> midiPorts;
         bool cancelSetup, verbose, console;
-        std::string configFileName;
-
+        std::string cfgFile;
     } settings_;
 
     void usage() const;
@@ -60,7 +59,7 @@ private:
     ofTexture dst_;
     int width_, height_;
 
-    bool shouldRedraw_, shouldReload_;
+    bool shouldRedraw_, shouldReload_, shouldExit_;
     
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
     uint8_t switchNote_;

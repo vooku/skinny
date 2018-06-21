@@ -257,6 +257,9 @@
     <ClInclude Include="src\Effect.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\shader.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
