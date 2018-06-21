@@ -49,11 +49,11 @@ private:
     bool setupShow();
     bool loadConfig();
     bool saveConfig();
-    void loadNext();
+    bool loadNext();
 
     ShowDescription show_;
 
-    std::unique_ptr<Scene> currentScene_, nextScene_;
+    std::unique_ptr<Scene> currentScene_;
 
     ofShader shader_;
     ofTexture dst_;

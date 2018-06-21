@@ -202,19 +202,9 @@ bool ofApp::setupShow() {
         }
     }
 
-    if (show_.getSize() >= 1) {
-        currentScene_ = std::make_unique<Scene>(show_.currentScene());
-        shader_.begin();
-        currentScene_->bindTextures();
-        shader_.end();
-    }
-    else {
-        ofLog(OF_LOG_FATAL_ERROR, "Configuration file %s contains no scenes.", settings_.cfgFile);
+    if (!loadNext()) {
+        ofLog(OF_LOG_FATAL_ERROR, "Configuration file \"%s\" contains no scenes.", settings_.cfgFile.c_str());
         return false;
-    }
-
-    if (show_.getSize() >= 2) {
-        nextScene_ = std::make_unique<Scene>(show_.nextScene());
     }
 
     return true;
@@ -251,25 +241,18 @@ bool ofApp::saveConfig() {
     return config.saveFile(settings_.cfgFile);
 }
 
-void ofApp::loadNext() {
+bool ofApp::loadNext() {
     if (show_.getSize() <= 1) {
         ofLog(OF_LOG_ERROR, "Cannot load next scene, %d is too few.", show_.getSize());
-        return;
+        return false;
     }
 
     shader_.begin();
-    if (nextScene_) {
-        ++show_;
-        currentScene_.reset(nextScene_.release());
-        nextScene_ = std::make_unique<Scene>(show_.nextScene());
-    }
-    else {
-        ++show_;
-        currentScene_.reset(new Scene(show_.currentScene()));
-        nextScene_ = std::make_unique<Scene>(show_.nextScene());
-    }
+    currentScene_.reset(new Scene(show_.currentScene()));
     currentScene_->bindTextures();
     shader_.end();
+    ++show_;
 
     ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());
+    return true;
 }
