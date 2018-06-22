@@ -4,9 +4,23 @@
 #include "meta.h"
 #include <unordered_map>
 
+
+
 class Scene {
 public:
     static const int maxLayers = 7;
+
+    class LayerNames {
+    public:
+        LayerNames(const SceneDescription& description);
+
+        auto size() const { return names.size(); }
+        const std::string& operator[] (int i) const { return names[i]; }
+
+    private:
+        std::vector<std::string> names;
+
+    } const layerNames;
 
     Scene(const SceneDescription& description);
 

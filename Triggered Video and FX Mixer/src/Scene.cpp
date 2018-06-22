@@ -1,7 +1,8 @@
 #include "Scene.h"
 
 Scene::Scene(const SceneDescription & description) : 
-    name_(description.name)
+    name_(description.name),
+    layerNames(description)
 {
     for (const auto& layer : description.layers) {
         if (layers_.size() >= maxLayers)
@@ -22,19 +23,22 @@ Scene::Scene(const SceneDescription & description) :
     uniforms_.colorShift = 0;
 }
 
-void Scene::bindTextures() {
+void Scene::bindTextures()
+{
     for (auto& layer : layers_)
         layer->bind();
 }
 
-bool Scene::isFrameNew() {
+bool Scene::isFrameNew()
+{
     bool newFrame = false;
     for (auto& layer : layers_)
         newFrame |= layer->isFrameNew();
     return newFrame;
 }
 
-bool Scene::hasActiveFX() const {
+bool Scene::hasActiveFX() const
+{
     return uniforms_.inverse || uniforms_.reducePalette || uniforms_.colorShift;
 }
 
@@ -65,12 +69,14 @@ void Scene::newMidiMessage(ofxMidiMessage & msg) {
     }
 }
 
-void Scene::playPauseLayer(int idx) {
+void Scene::playPauseLayer(int idx) 
+{
     if (idx < layers_.size())
         layers_[idx]->playPause();
 }
 
-void Scene::setupUniforms(ofShader& shader) const {
+void Scene::setupUniforms(ofShader& shader) const 
+{
     uniforms_.nLayers = layers_.size();
     for (int i = 0; i < layers_.size() && i < maxLayers; ++i) {
         uniforms_.playing[i] = layers_[i]->isPlaying();
@@ -100,4 +106,11 @@ void Scene::setupUniforms(ofShader& shader) const {
     shader.setUniform1i("reducePalette", uniforms_.reducePalette);
     shader.setUniform1i("colorShift", uniforms_.colorShift);
     shader.setUniform1i("colorShift2", uniforms_.colorShift2);
+}
+
+Scene::LayerNames::LayerNames(const SceneDescription & description)
+{
+    for (const auto& layer : description.layers) {
+        names.push_back(layer.video);
+    }
 }

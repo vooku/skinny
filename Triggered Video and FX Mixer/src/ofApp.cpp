@@ -103,8 +103,14 @@ void ofApp::draw(){
 void ofApp::drawGui(ofEventArgs& args) {
     ofBackground(ofColor(45, 45, 48));
     
-    for (int i = 0; i < dir_.size(); i++) {
-        ofDrawBitmapString(dir_.getPath(i), 20, 20 + i * 20);
+    int xOffset = 20;
+    int yOffset = 20;
+    const int delta = 20;
+    ofDrawBitmapString(currentScene_->getName(), xOffset, yOffset);
+    yOffset += 2 * delta;
+    for (int i = 0; i < currentScene_->layerNames.size(); i++) {
+        ofDrawBitmapString(currentScene_->layerNames[i], xOffset, yOffset);
+        yOffset += delta;
     }
 }
 
