@@ -19,6 +19,8 @@ void ofApp::setup()
         return;
     }
 
+    ofSetWindowTitle(name);
+
     if (settings_.console)
         ofLogToConsole();
     else 
@@ -67,6 +69,8 @@ void ofApp::setup()
 
 void ofApp::setupGui()
 {
+    ofSetWindowTitle(name);
+
     auto cwd = ".";
     dir_.open(cwd);
     dir_.allowExt("mp4");
@@ -88,6 +92,7 @@ void ofApp::update()
     }
 
     if (shouldReload_) {
+        drawGui(ofEventArgs{ });
         loadNext();
         shouldReload_ = false;
     }
@@ -117,12 +122,20 @@ void ofApp::drawGui(ofEventArgs& args) {
     int xOffset = 20;
     int yOffset = 20;
     const int delta = 20;
-    ofDrawBitmapStringHighlight(currentScene_->getName(), xOffset, yOffset);
-    yOffset += 2 * delta;
-    for (int i = 0; i < currentScene_->layerNames.size(); i++) {
-        ofDrawBitmapString(currentScene_->layerNames[i], xOffset, yOffset);
-        yOffset += delta;
+
+    if (shouldReload_) {
+        ofDrawBitmapStringHighlight("Loading...", xOffset, yOffset);
     }
+    else {
+        ofDrawBitmapStringHighlight(currentScene_->getName(), xOffset, yOffset);
+        yOffset += 2 * delta;
+        for (int i = 0; i < currentScene_->layerNames.size(); i++) {
+            ofDrawBitmapString(currentScene_->layerNames[i], xOffset, yOffset);
+            yOffset += delta;
+        }
+    }
+
+    ofDrawBitmapStringHighlight("fps: " + std::to_string(ofGetFrameRate()), xOffset, ofGetHeight() - delta);
 
     gui_->draw();
 }

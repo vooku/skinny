@@ -10,6 +10,7 @@
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
     static constexpr const char * version = "0.1.0-alpha";
+    static constexpr const char * name = "Triggered Video & FX Mixer";
 
     ofApp(ofxArgs* args);
 
