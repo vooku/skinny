@@ -7,11 +7,13 @@ ofApp::ofApp(ofxArgs* args) :
     switchNote_(MappableDescription::invalid_midi),
     shouldRedraw_(false),
     shouldReload_(false),
-    shouldExit_(false) {
+    shouldExit_(false)
+{
     parseArgs(args);
 }
 
-void ofApp::setup() {
+void ofApp::setup()
+{
     if (settings_.cancelSetup) {
         shouldExit_ = true;
         return;
@@ -63,7 +65,8 @@ void ofApp::setup() {
     dst_.bindAsImage(7, GL_WRITE_ONLY);
 }
 
-void ofApp::setupGui() {
+void ofApp::setupGui()
+{
     auto cwd = ".";
     dir_.open(cwd);
     dir_.allowExt("mp4");
@@ -72,7 +75,8 @@ void ofApp::setupGui() {
 }
 
 //--------------------------------------------------------------
-void ofApp::update(){
+void ofApp::update()
+{
     if (shouldExit_) {
         ofExit();
         //return;
@@ -96,9 +100,11 @@ void ofApp::update(){
 }
 
 //--------------------------------------------------------------
-void ofApp::draw(){
+void ofApp::draw()
+{
     dst_.draw(0, 0);
 }
+
 
 void ofApp::drawGui(ofEventArgs& args) {
     ofBackground(ofColor(45, 45, 48));
@@ -114,7 +120,8 @@ void ofApp::drawGui(ofEventArgs& args) {
     }
 }
 
-void ofApp::exit() {
+void ofApp::exit() 
+{
     for (auto& midiInput : midiInputs_) {
         midiInput->closePort();
     }
@@ -125,7 +132,8 @@ void ofApp::exitGui(ofEventArgs& args) {
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key){
+void ofApp::keyReleased(int key)
+{
     // 0-9 in ascii
     if (key >= 0x30 && key < 0x3A) {
         // key to index 1->0, 0->9
@@ -142,7 +150,13 @@ void ofApp::keyReleased(int key){
     }
 }
 
-void ofApp::newMidiMessage(ofxMidiMessage & msg) {
+void ofApp::keyReleasedGui(ofKeyEventArgs & args)
+{
+    keyReleased(args.codepoint);
+}
+
+void ofApp::newMidiMessage(ofxMidiMessage & msg)
+{
     if (msg.status == MIDI_NOTE_ON && msg.pitch == switchNote_)
         shouldReload_ = true;
     else if (currentScene_) {
@@ -151,7 +165,8 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg) {
     }
 }
 
-void ofApp::usage() const {
+void ofApp::usage() const
+{
     std::cout <<
         "Usage:\n"
         "    -h, --help, --usage Print this message.\n"
@@ -164,7 +179,8 @@ void ofApp::usage() const {
         << std::endl;
 }
 
-void ofApp::parseArgs(ofxArgs* args) {
+void ofApp::parseArgs(ofxArgs* args)
+{
     if (args->contains("-h") || args->contains("-help") || args->contains("-usage")) {
         usage();
         settings_.cancelSetup = true;
@@ -190,7 +206,8 @@ void ofApp::parseArgs(ofxArgs* args) {
     settings_.cfgFile = args->getString("--config", "");
 }
 
-void ofApp::setupMidi() {
+void ofApp::setupMidi() 
+{
     if (settings_.verbose)
         ofxMidiIn::listPorts();
     for (auto portNumber : settings_.midiPorts) {
@@ -201,7 +218,8 @@ void ofApp::setupMidi() {
     }
 }
 
-bool ofApp::setupShow() {
+bool ofApp::setupShow()
+{
     if (settings_.cfgFile != "") {
         if (!loadConfig()) {
             return false;
@@ -216,7 +234,8 @@ bool ofApp::setupShow() {
     return true;
 }
 
-bool ofApp::loadConfig() {
+bool ofApp::loadConfig()
+{
     ofxXmlSettings config;
     if (!config.loadFile(settings_.cfgFile))
         return false;
@@ -232,7 +251,8 @@ bool ofApp::loadConfig() {
     return true;
 }
 
-bool ofApp::saveConfig() {  
+bool ofApp::saveConfig()
+{  
     ofxXmlSettings config;
     config.addTag("head");
     config.pushTag("head");
@@ -247,7 +267,8 @@ bool ofApp::saveConfig() {
     return config.saveFile(settings_.cfgFile);
 }
 
-bool ofApp::loadNext() {
+bool ofApp::loadNext() 
+{
     if (show_.getSize() <= 1) {
         ofLog(OF_LOG_ERROR, "Cannot load next scene, %d is too few.", show_.getSize());
         return false;

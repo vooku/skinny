@@ -21,6 +21,7 @@ int main(int argc, char *argv[]) {
     mainApp->setupGui();
     ofAddListener(guiWindow->events().draw, mainApp.get(), &ofApp::drawGui);
     ofAddListener(guiWindow->events().exit, mainApp.get(), &ofApp::exitGui);
+    ofAddListener(guiWindow->events().keyReleased, mainApp.get(), &ofApp::keyReleasedGui);
 
     ofRunApp(mainWindow, mainApp);
     ofRunMainLoop();
