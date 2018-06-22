@@ -72,6 +72,11 @@ void ofApp::setupGui()
     dir_.allowExt("mp4");
     dir_.allowExt("avi");
     dir_.listDir();
+
+    gui_ = std::make_unique<ofxDatGui>(ofxDatGuiAnchor::BOTTOM_RIGHT);
+    gui_->onButtonEvent(this, &ofApp::onButtonEvent);
+    //gui_->addButton("Previous scene");
+    gui_->addButton("Next scene");
 }
 
 //--------------------------------------------------------------
@@ -112,12 +117,14 @@ void ofApp::drawGui(ofEventArgs& args) {
     int xOffset = 20;
     int yOffset = 20;
     const int delta = 20;
-    ofDrawBitmapString(currentScene_->getName(), xOffset, yOffset);
+    ofDrawBitmapStringHighlight(currentScene_->getName(), xOffset, yOffset);
     yOffset += 2 * delta;
     for (int i = 0; i < currentScene_->layerNames.size(); i++) {
         ofDrawBitmapString(currentScene_->layerNames[i], xOffset, yOffset);
         yOffset += delta;
     }
+
+    gui_->draw();
 }
 
 void ofApp::exit() 
@@ -162,6 +169,16 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
     else if (currentScene_) {
         currentScene_->newMidiMessage(msg);
         shouldRedraw_ = true;
+    }
+}
+
+void ofApp::onButtonEvent(ofxDatGuiButtonEvent e)
+{
+    if (e.target->getName() == "Next scene") {
+        shouldReload_ = true;
+    }
+    else {
+        ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", e.target->getName().c_str());
     }
 }
 

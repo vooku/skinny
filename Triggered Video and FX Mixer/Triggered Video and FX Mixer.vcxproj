@@ -97,9 +97,13 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;C:\Users\vooku\openFrameworks\addons\ofxArgs\src;
-C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\src;
-C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;C:\Users\vooku\openFrameworks\addons\ofxArgs\src;C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\src;C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\components;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\core;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\libs;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\themes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -118,9 +122,13 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;C:\Users\vooku\openFrameworks\addons\ofxArgs\src;
-C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\src;
-C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;C:\Users\vooku\openFrameworks\addons\ofxArgs\src;C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\src;C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\components;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\core;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\libs;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\themes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -139,9 +147,13 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;C:\Users\vooku\openFrameworks\addons\ofxArgs\src;
-C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\src;
-C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;C:\Users\vooku\openFrameworks\addons\ofxArgs\src;C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\src;C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\components;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\core;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\libs;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\themes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -163,9 +175,13 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;C:\Users\vooku\openFrameworks\addons\ofxArgs\src;
-C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\src;
-C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vooku\openFrameworks\addons\ofxGui\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\desktop;C:\Users\vooku\openFrameworks\addons\ofxMidi\src\ios;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\pgmidi;C:\Users\vooku\openFrameworks\addons\ofxMidi\libs\rtmidi;C:\Users\vooku\openFrameworks\addons\ofxArgs\src;C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\src;C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\components;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\core;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\libs;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont;
+C:\Users\vooku\openFrameworks\addons\ofxDatGui\src\themes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
@@ -182,6 +198,9 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiComponent.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.cpp" />
+    <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\ofxDatGui.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxBaseGui.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxButton.cpp" />
     <ClCompile Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxColorPicker.cpp" />
@@ -212,6 +231,27 @@ C:\Users\vooku\openFrameworks\addons\ofxXmlSettings\libs;%(AdditionalIncludeDire
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGui2dPad.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiButton.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiColorPicker.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiControls.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiFRM.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiGroups.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiLabel.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiMatrix.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiScrollView.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiSlider.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiTextInput.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiTextInputField.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiTimeGraph.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiComponent.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiConstants.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiEvents.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiIntObject.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\ofxDatGui.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes\ofxDatGuiTheme.h" />
+    <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes\ofxDatGuiThemes.h" />
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxBaseGui.h" />
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxButton.h" />
     <ClInclude Include="..\..\..\..\..\..\..\openFrameworks\addons\ofxGui\src\ofxColorPicker.h" />

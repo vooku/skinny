@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxMidi.h"
 #include "ofxArgs.h"
-#include "ofxGui.h"
+#include "ofxDatGui.h"
 #include "Scene.h"
 #include "meta.h"
 
@@ -34,6 +34,7 @@ public:
     void dragEvent(ofDragInfo dragInfo) { }
     void gotMessage(ofMessage msg) { }
     void newMidiMessage(ofxMidiMessage& msg);
+    void onButtonEvent(ofxDatGuiButtonEvent e);
 
 private:
     struct Settings {
@@ -65,6 +66,6 @@ private:
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
     uint8_t switchNote_;
 
-    ofxPanel gui_;
+    std::unique_ptr<ofxDatGui> gui_;
     ofDirectory dir_;
 };
