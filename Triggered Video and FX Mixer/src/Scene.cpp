@@ -1,8 +1,9 @@
 #include "Scene.h"
 
-Scene::Scene(const SceneDescription & description) : 
+Scene::Scene(const SceneDescription & description) :
     name_(description.name),
-    layerNames(description)
+    layerNames(description),
+    valid_(true)
 {
     for (const auto& layer : description.layers) {
         if (layers_.size() >= maxLayers)
@@ -12,6 +13,8 @@ Scene::Scene(const SceneDescription & description) :
         newLayer->setBlendMode(layer.blendMode);
         if (newLayer->isValid())
             layers_.push_back(std::move(newLayer));
+        else
+            valid_ = false;
     }
 
     for (const auto& effect : description.effects) {

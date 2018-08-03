@@ -33,6 +33,7 @@ public:
     void setupUniforms(ofShader& shader) const;
 
     const std::string& getName() const { return name_; }
+    bool isValid() { return valid_; }
 
 private:
     struct Uniforms {
@@ -49,6 +50,6 @@ private:
     const std::string name_;
     std::vector<std::unique_ptr<Layer>> layers_;
     std::unordered_map<Effect::Type, Effect> effects_;
+    bool valid_;
 
 };
-

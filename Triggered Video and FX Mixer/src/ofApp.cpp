@@ -310,6 +310,10 @@ bool ofApp::loadNext()
     shader_.end();
     ++show_;
 
-    ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());
+    if (currentScene_->isValid())
+        ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());
+    else
+        ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", currentScene_->getName().c_str());
+
     return true;
 }
