@@ -3,6 +3,8 @@
 #include "ofxXmlSettings.h"
 #include "shader.h"
 
+const ofColor ofApp::bgColor = { 45, 45, 48 };
+
 ofApp::ofApp(ofxArgs* args) : 
     switchNote_(MappableDescription::invalid_midi)
 {
@@ -16,7 +18,7 @@ void ofApp::setup()
         return;
     }
 
-    ofSetWindowTitle(NAME);
+    ofSetWindowTitle(name);
 
     if (settings_.console)
         ofLogToConsole();
@@ -27,8 +29,8 @@ void ofApp::setup()
     ofBackground(ofColor::black);
     ofSetVerticalSync(true);
 
-    int major = ofGetGLRenderer()->getGLVersionMajor();
-    int minor = ofGetGLRenderer()->getGLVersionMinor();
+    int major = ofGetGLRenderer()->getGLversionMajor();
+    int minor = ofGetGLRenderer()->getGLversionMinor();
     auto *vendor = (char*)glGetString(GL_VENDOR);
     auto *renderer = (char*)glGetString(GL_RENDERER);
     ofLog(OF_LOG_NOTICE, "Using OpenGL v%d.%d, GPU: %s %s.", major, minor, vendor, renderer);
@@ -66,7 +68,7 @@ void ofApp::setup()
 
 void ofApp::setupGui()
 {
-    ofSetWindowTitle(NAME);
+    ofSetWindowTitle(name);
 
     auto cwd = ".";
     dir_.open(cwd);
@@ -84,8 +86,16 @@ void ofApp::setupGui()
 
     leftPanel_ = std::make_unique<ofxDatGui>(guiDelta_, 2 * guiDelta_);
     for (int i = 0; i < Scene::maxLayers; ++i) {
-        buttons_.push_back(leftPanel_->addButton({}));
+        layerButtons_.push_back(leftPanel_->addButton({}));
     }
+    auto blank = leftPanel_->addButton({});
+    blank->setEnabled(false);
+    blank->setBackgroundColor(bgColor);
+    blank->setStripeColor(bgColor);
+    for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
+        effectButtons_.push_back(leftPanel_->addButton({}));
+    }
+
 }
 
 //--------------------------------------------------------------
@@ -122,7 +132,7 @@ void ofApp::draw()
 
 
 void ofApp::drawGui(ofEventArgs& args) {
-    ofBackground(ofColor(45, 45, 48));
+    ofBackground(bgColor);
     
     fonts_.italic.drawString(status_.forward ? "Loading..." : currentScene_->getName(), guiDelta_, guiDelta_);
     fonts_.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), guiDelta_, ofGetHeight() - guiDelta_);
@@ -280,7 +290,7 @@ bool ofApp::saveConfig()
     ofxXmlSettings config;
     config.addTag("head");
     config.pushTag("head");
-    config.setValue("version", VERSION);
+    config.setValue("version", version);
     config.setValue("switchNote", switchNote_);
     config.popTag(); // head
 
@@ -307,14 +317,19 @@ bool ofApp::loadNext()
     if (currentScene_->isValid()) {
         ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());
         
-        if (buttons_.size() == Scene::maxLayers) {
+        if (layerButtons_.size() == Scene::maxLayers) {
             for (int i = 0; i < Scene::maxLayers; ++i) {
                 if (i < currentScene_->layerNames.size())
-                    buttons_[i]->setLabel(currentScene_->layerNames[i]);
+                    layerButtons_[i]->setLabel(currentScene_->layerNames[i]);
                 else
-                    buttons_[i]->setLabel("");
+                    layerButtons_[i]->setLabel("Click to load a video"); // TODO different style
             }
-        }        
+        }
+        if (effectButtons_.size() == static_cast<int>(Effect::Type::Count)) {
+            for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
+                effectButtons_[i]->setLabel(currentScene_->effectNames[i]);
+            }
+        }
     }
     else {
         // TODO display in gui

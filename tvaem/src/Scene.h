@@ -20,6 +20,18 @@ public:
 
     } const layerNames;
 
+    class EffectNames {
+    public:
+        EffectNames(const SceneDescription& description);
+
+        auto size() const { return names.size(); }
+        const std::string& operator[] (int i) const { return names[i]; }
+
+    private:
+        std::vector<std::string> names;
+
+    } const effectNames;
+
     Scene(const SceneDescription& description);
 
     void bindTextures();

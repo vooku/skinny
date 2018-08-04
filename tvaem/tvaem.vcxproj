@@ -54,19 +54,19 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../../../../openFrameworks/libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../../../../openFrameworks/libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
+    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../../../../openFrameworks/libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="../../../../../../openFrameworks/libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
+    <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -100,7 +100,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\pgmidi;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ios;..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs;..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxArgs\src;..\..\..\addons\ofxDatGui\src;..\..\..\addons\ofxDatGui\src\components;..\..\..\addons\ofxDatGui\src\core;..\..\..\addons\ofxDatGui\src\libs;..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont;..\..\..\addons\ofxDatGui\src\themes;..\..\..\addons\ofxMidi\libs;..\..\..\addons\ofxMidi\libs\pgmidi;..\..\..\addons\ofxMidi\libs\rtmidi;..\..\..\addons\ofxMidi\src;..\..\..\addons\ofxMidi\src\desktop;..\..\..\addons\ofxMidi\src\ios;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
@@ -120,7 +120,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\pgmidi;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ios;..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs;..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxArgs\src;..\..\..\addons\ofxDatGui\src;..\..\..\addons\ofxDatGui\src\components;..\..\..\addons\ofxDatGui\src\core;..\..\..\addons\ofxDatGui\src\libs;..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont;..\..\..\addons\ofxDatGui\src\themes;..\..\..\addons\ofxMidi\libs;..\..\..\addons\ofxMidi\libs\pgmidi;..\..\..\addons\ofxMidi\libs\rtmidi;..\..\..\addons\ofxMidi\src;..\..\..\addons\ofxMidi\src\desktop;..\..\..\addons\ofxMidi\src\ios;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -140,7 +140,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\pgmidi;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ios;..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs;..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxArgs\src;..\..\..\addons\ofxDatGui\src;..\..\..\addons\ofxDatGui\src\components;..\..\..\addons\ofxDatGui\src\core;..\..\..\addons\ofxDatGui\src\libs;..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont;..\..\..\addons\ofxDatGui\src\themes;..\..\..\addons\ofxMidi\libs;..\..\..\addons\ofxMidi\libs\pgmidi;..\..\..\addons\ofxMidi\libs\rtmidi;..\..\..\addons\ofxMidi\src;..\..\..\addons\ofxMidi\src\desktop;..\..\..\addons\ofxMidi\src\ios;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -163,7 +163,7 @@
       <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont;..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\pgmidi;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop;..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ios;..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs;..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\..\..\addons\ofxArgs\src;..\..\..\addons\ofxDatGui\src;..\..\..\addons\ofxDatGui\src\components;..\..\..\addons\ofxDatGui\src\core;..\..\..\addons\ofxDatGui\src\libs;..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont;..\..\..\addons\ofxDatGui\src\themes;..\..\..\addons\ofxMidi\libs;..\..\..\addons\ofxMidi\libs\pgmidi;..\..\..\addons\ofxMidi\libs\rtmidi;..\..\..\addons\ofxMidi\src;..\..\..\addons\ofxMidi\src\desktop;..\..\..\addons\ofxMidi\src\ios;..\..\..\addons\ofxXmlSettings\libs;..\..\..\addons\ofxXmlSettings\src</AdditionalIncludeDirectories>
       <CompileAs>CompileAsCpp</CompileAs>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
@@ -180,68 +180,69 @@
     <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiComponent.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\ofxDatGui.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiIn.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiOut.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxBaseMidi.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidi.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiIn.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiMessage.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiOut.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi\RtMidi.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxml.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+    <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\Layer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\meta.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxArgs\src\ofxArgs.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiComponent.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxDatGui\src\ofxDatGui.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiIn.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiOut.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxBaseMidi.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidi.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiIn.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiMessage.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiOut.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxMidi\libs\rtmidi\RtMidi.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
     <ClCompile Include="src\Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGui2dPad.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiButton.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiColorPicker.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiControls.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiFRM.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiGroups.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiLabel.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiMatrix.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiScrollView.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiSlider.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiTextInput.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiTextInputField.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiTimeGraph.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiComponent.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiConstants.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiEvents.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiIntObject.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\ofxDatGui.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes\ofxDatGuiTheme.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes\ofxDatGuiThemes.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiIn.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiOut.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxBaseMidi.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidi.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiConstants.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiIn.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiMessage.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiOut.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiTypes.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi\RtMidi.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxml.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\Mappable.h" />
     <ClInclude Include="src\meta.h" />
     <ClInclude Include="src\ofApp.h" />
+    <ClInclude Include="..\..\..\addons\ofxArgs\src\ofxArgs.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGui2dPad.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiButton.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiColorPicker.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiControls.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiFRM.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiGroups.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiLabel.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiMatrix.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiScrollView.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiSlider.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiTextInput.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiTextInputField.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiTimeGraph.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiComponent.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiConstants.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiEvents.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiIntObject.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\ofxDatGui.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\themes\ofxDatGuiTheme.h" />
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\themes\ofxDatGuiThemes.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiIn.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiOut.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxBaseMidi.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidi.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiConstants.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiIn.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiMessage.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiOut.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiTypes.h" />
+    <ClInclude Include="..\..\..\addons\ofxMidi\libs\rtmidi\RtMidi.h" />
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\shader.h" />
   </ItemGroup>

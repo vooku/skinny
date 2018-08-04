@@ -9,8 +9,9 @@
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
-    static constexpr const char * VERSION = "0.2.0-alpha";
-    static constexpr const char * NAME = "Triggered Video & FX Mixer";
+    static constexpr const char * version = "0.2.0-alpha";
+    static constexpr const char * name = "Triggered Video & FX Mixer";
+    static const ofColor bgColor;
 
     ofApp(ofxArgs* args);
 
@@ -49,9 +50,9 @@ private:
     } settings_;
 
     struct {
-        bool redraw = false; //!< The canvas should be redrawn.
-        bool exit = false;   //!< The app should exit.
-        bool forward = false; //!< Next scene should be loaded.
+        bool redraw   = false; //!< The canvas should be redrawn.
+        bool exit     = false;   //!< The app should exit.
+        bool forward  = false; //!< Next scene should be loaded.
         bool backward = false; //!< Previous scene should be loaded.
     } status_;
 
@@ -75,7 +76,7 @@ private:
     uint8_t switchNote_;
 
     std::unique_ptr<ofxDatGui> leftPanel_, midPanel_, rightPanel_, gui_;
-    std::vector<ofxDatGuiButton*> buttons_;
+    std::vector<ofxDatGuiButton*> layerButtons_, effectButtons_;
     static const int guiDelta_ = 25;
     struct {
         static const int size = 14;

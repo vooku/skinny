@@ -1,64 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.cpp">
-      <Filter>addons\ofxArgs\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiComponent.cpp">
-      <Filter>addons\ofxDatGui\src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.cpp">
-      <Filter>addons\ofxDatGui\src\libs\ofxSmartFont</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\ofxDatGui.cpp">
-      <Filter>addons\ofxDatGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiIn.cpp">
-      <Filter>addons\ofxMidi\src\desktop</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiOut.cpp">
-      <Filter>addons\ofxMidi\src\desktop</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxBaseMidi.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidi.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiIn.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiMessage.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiOut.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi\RtMidi.cpp">
-      <Filter>addons\ofxMidi\libs\rtmidi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
-      <Filter>addons\ofxXmlSettings\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxml.cpp">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Layer.cpp">
+    <ClCompile Include="src\ofApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\meta.cpp">
+    <ClCompile Include="..\..\..\addons\ofxArgs\src\ofxArgs.cpp">
+      <Filter>addons\ofxArgs\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiComponent.cpp">
+      <Filter>addons\ofxDatGui\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.cpp">
+      <Filter>addons\ofxDatGui\src\libs\ofxSmartFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxDatGui\src\ofxDatGui.cpp">
+      <Filter>addons\ofxDatGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiIn.cpp">
+      <Filter>addons\ofxMidi\src\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiOut.cpp">
+      <Filter>addons\ofxMidi\src\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxBaseMidi.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidi.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiIn.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiMessage.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiOut.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\libs\rtmidi\RtMidi.cpp">
+      <Filter>addons\ofxMidi\libs\rtmidi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+      <Filter>addons\ofxXmlSettings\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Effect.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\ofApp.cpp">
+    <ClCompile Include="src\Layer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\meta.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Scene.cpp">
@@ -124,110 +127,110 @@
       <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
     </Filter>
     <Filter Include="headers">
-      <UniqueIdentifier>{91e8faae-8cf2-442e-88e3-dd940fd705a5}</UniqueIdentifier>
+      <UniqueIdentifier>{818efdae-3dda-4187-a3ee-85fe5a6e48e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.h">
+    <ClInclude Include="..\..\..\addons\ofxArgs\src\ofxArgs.h">
       <Filter>addons\ofxArgs\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGui2dPad.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGui2dPad.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiButton.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiButton.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiColorPicker.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiColorPicker.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiControls.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiControls.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiFRM.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiFRM.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiGroups.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiGroups.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiLabel.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiLabel.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiMatrix.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiMatrix.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiScrollView.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiScrollView.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiSlider.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiSlider.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiTextInput.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiTextInput.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiTextInputField.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiTextInputField.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\components\ofxDatGuiTimeGraph.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGuiTimeGraph.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiComponent.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiComponent.h">
       <Filter>addons\ofxDatGui\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiConstants.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiConstants.h">
       <Filter>addons\ofxDatGui\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiEvents.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiEvents.h">
       <Filter>addons\ofxDatGui\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\core\ofxDatGuiIntObject.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiIntObject.h">
       <Filter>addons\ofxDatGui\src\core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.h">
       <Filter>addons\ofxDatGui\src\libs\ofxSmartFont</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\ofxDatGui.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\ofxDatGui.h">
       <Filter>addons\ofxDatGui\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes\ofxDatGuiTheme.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\themes\ofxDatGuiTheme.h">
       <Filter>addons\ofxDatGui\src\themes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxDatGui\src\themes\ofxDatGuiThemes.h">
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\themes\ofxDatGuiThemes.h">
       <Filter>addons\ofxDatGui\src\themes</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiIn.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiIn.h">
       <Filter>addons\ofxMidi\src\desktop</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\desktop\ofxRtMidiOut.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiOut.h">
       <Filter>addons\ofxMidi\src\desktop</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxBaseMidi.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxBaseMidi.h">
       <Filter>addons\ofxMidi\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidi.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidi.h">
       <Filter>addons\ofxMidi\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiConstants.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiConstants.h">
       <Filter>addons\ofxMidi\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiIn.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiIn.h">
       <Filter>addons\ofxMidi\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiMessage.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiMessage.h">
       <Filter>addons\ofxMidi\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiOut.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiOut.h">
       <Filter>addons\ofxMidi\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\src\ofxMidiTypes.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiTypes.h">
       <Filter>addons\ofxMidi\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxMidi\libs\rtmidi\RtMidi.h">
+    <ClInclude Include="..\..\..\addons\ofxMidi\libs\rtmidi\RtMidi.h">
       <Filter>addons\ofxMidi\libs\rtmidi</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\src\ofxXmlSettings.h">
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h">
       <Filter>addons\ofxXmlSettings\src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxXmlSettings\libs\tinyxml.h">
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClInclude>
     <ClInclude Include="src\Effect.h">
@@ -242,13 +245,13 @@
     <ClInclude Include="src\meta.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>headers</Filter>
+    </ClInclude>
     <ClInclude Include="src\Scene.h">
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\shader.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofApp.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>

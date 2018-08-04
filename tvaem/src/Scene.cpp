@@ -3,6 +3,7 @@
 Scene::Scene(const SceneDescription & description) :
     name_(description.name),
     layerNames(description),
+    effectNames(description),
     valid_(true)
 {
     for (const auto& layer : description.layers) {
@@ -115,5 +116,12 @@ Scene::LayerNames::LayerNames(const SceneDescription & description)
 {
     for (const auto& layer : description.layers) {
         names.push_back(layer.path.filename().string());
+    }
+}
+
+Scene::EffectNames::EffectNames(const SceneDescription & description)
+{
+    for (const auto& effect : description.effects) {
+        names.push_back(Effect::c_str(effect.type));
     }
 }

@@ -7,15 +7,15 @@
 class Layer : public Mappable {
 public:
     enum class BlendMode {
-        Invalid = -1,
-        Normal = 0,      // s
-        Multiply = 1,    // b * s
-        Screen = 2,      // 1 - ((1 - b) * (1 - s))
-        Darken = 3,      // min(b, s)
-        Lighten = 4,     // max(b, s)
-        LinearDodge = 5, // s + b
-        Difference = 6,  // |b - s|
-        Exclusion = 7    // b + s + 2 * b * s
+        Invalid     = -1,
+        Normal      =  0, // s
+        Multiply    =  1, // b * s
+        Screen      =  2, // 1 - ((1 - b) * (1 - s))
+        Darken      =  3, // min(b, s)
+        Lighten     =  4, // max(b, s)
+        LinearDodge =  5, // s + b
+        Difference  =  6, // |b - s|
+        Exclusion   =  7  // b + s + 2 * b * s
     };
 
     Layer(int id, const std::filesystem::path& path, const MidiMap& map = {});
