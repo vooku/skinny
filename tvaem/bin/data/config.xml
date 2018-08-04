@@ -1,17 +1,84 @@
 <head>
-    <version>0.1</version>
-    <switchNote>0</switchNote>
+    <version>0.1.0-alpha</version>
+    <switchNote>44</switchNote>
 </head>
 <show>
-    <scene><name>HK intro</name><layer><id>0</id><video>core/KETCHUP 1.MOV</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>graphics/hklogo_white.mp4</video><blendMode>2</blendMode><midi>45</midi></layer><layer><id>2</id><video>graphics/White Half Strobes.mp4</video><blendMode>6</blendMode><midi>46</midi></layer><layer><id>3</id><video>photos/otface4.mp4</video><blendMode>4</blendMode><midi>47</midi></layer><layer><id>4</id><video>graphics/White strobe light.mp4</video><blendMode>6</blendMode><midi>36</midi></layer><layer><id>5</id><video>photos/nunchack.mp4</video><blendMode>2</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
-    <scene><name>Fallout</name><layer><id>0</id><video>photos/dancehall.mp4</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>graphics/hklogos_white.mp4</video><blendMode>2</blendMode><midi>45</midi></layer><layer><id>2</id><video>graphics/White Half Strobes.mp4</video><blendMode>6</blendMode><midi>46</midi></layer><layer><id>3</id><video>photos/otface4.mp4</video><blendMode>2</blendMode><midi>47</midi></layer><layer><id>4</id><video>core/NUSSBY DRUGS.mp4</video><blendMode>6</blendMode><midi>36</midi></layer><layer><id>5</id><video>core/NUSSBY FIGHT.mp4</video><blendMode>2</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
-    <scene><name>Timelapse</name><layer><id>0</id><video>graphics/hklogo_white.mp4</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>photos/biobizz.mp4</video><blendMode>2</blendMode><midi>45</midi></layer><layer><id>2</id><video>photos/otface2.mp4</video><blendMode>6</blendMode><midi>46</midi></layer><layer><id>3</id><video>photos/tex.mp4</video><blendMode>3</blendMode><midi>47</midi></layer><layer><id>4</id><video>core/DEFCON.MOV</video><blendMode>4</blendMode><midi>36</midi></layer><layer><id>5</id><video>graphics/White strobe light.mp4</video><blendMode>6</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
-    <scene><name>Garden</name><layer><id>0</id><video>core/GARDEN.MOV</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>core/LANOVKA.mov</video><blendMode>2</blendMode><midi>45</midi></layer><layer><id>2</id><video>photos/thai.mp4</video><blendMode>6</blendMode><midi>46</midi></layer><layer><id>3</id><video>graphics/simpleRGB.mp4</video><blendMode>3</blendMode><midi>47</midi></layer><layer><id>4</id><video>graphics/Noise Diagonals 1.mp4</video><blendMode>5</blendMode><midi>36</midi></layer><layer><id>5</id><video>graphics/Noise Diagonals 2.mp4</video><blendMode>5</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
-    <scene><name>Lampa</name><layer><id>0</id><video>photos/lampa.mp4</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>photos/otface1.mp4</video><blendMode>2</blendMode><midi>45</midi></layer><layer><id>2</id><video>graphics/circles.mp4</video><blendMode>1</blendMode><midi>46</midi></layer><layer><id>3</id><video>graphics/simpleRGB.mp4</video><blendMode>3</blendMode><midi>47</midi></layer><layer><id>4</id><video>graphics/White Stripes Horizontal 2.mp4</video><blendMode>5</blendMode><midi>36</midi></layer><layer><id>5</id><video>graphics/White Stripes Horizontal 1.mp4</video><blendMode>5</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
-    <scene><name>Drive</name><layer><id>0</id><video>core/DRIVE 1 .MOV</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>core/DRIVE 2.MOV</video><blendMode>2</blendMode><midi>45</midi></layer><layer><id>2</id><video>photos/car.mp4</video><blendMode>4</blendMode><midi>46</midi></layer><layer><id>3</id><video>graphics/simpleRGB.mp4</video><blendMode>3</blendMode><midi>47</midi></layer><layer><id>4</id><video>graphics/White Half Strobes.mp4</video><blendMode>1</blendMode><midi>36</midi></layer><layer><id>5</id><video>graphics/Noise Strips Horizontal.mp4</video><blendMode>1</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
-    <scene><name>Anitlopa</name><layer><id>0</id><video>lion-antelope-blonde.mov</video><blendMode>0</blendMode><midi>44</midi></layer></scene>
-    <scene><name>Ketchup2</name><layer><id>0</id><video>core/ketchup2.mp4</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>photos/otface3.mp4</video><blendMode>6</blendMode><midi>45</midi></layer><layer><id>2</id><video>photos/drums.mp4</video><blendMode>6</blendMode><midi>46</midi></layer><layer><id>3</id><video>graphics/simpleRGB.mp4</video><blendMode>7</blendMode><midi>47</midi></layer><layer><id>4</id><video>graphics/hklogo_black.mp4</video><blendMode>1</blendMode><midi>36</midi></layer><layer><id>5</id><video>graphics/White strobe light.mp4</video><blendMode>0</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
-    <scene><name>Alpa</name><layer><id>0</id><video>photos/alpa.mp4</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>photos/otface2.mp4</video><blendMode>6</blendMode><midi>45</midi></layer><layer><id>2</id><video>photos/propaganda.mp4</video><blendMode>6</blendMode><midi>46</midi></layer><layer><id>3</id><video>graphics/simpleRGB.mp4</video><blendMode>7</blendMode><midi>47</midi></layer><layer><id>4</id><video>graphics/hklogos_black.mp4</video><blendMode>1</blendMode><midi>36</midi></layer><layer><id>5</id><video>core/NUSSBY NASTREL.mp4</video><blendMode>0</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
-    <scene><name>Baseball</name><layer><id>0</id><video>core/BASEBALL DRUMMER.MOV</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>core/OKNO.MOV</video><blendMode>6</blendMode><midi>45</midi></layer><layer><id>2</id><video>photos/nunchack.mp4</video><blendMode>6</blendMode><midi>46</midi></layer><layer><id>3</id><video>graphics/simpleRGB.mp4</video><blendMode>7</blendMode><midi>47</midi></layer><layer><id>4</id><video>photos/tex.mp4</video><blendMode>6</blendMode><midi>36</midi></layer><layer><id>5</id><video>photos/thai.mp4</video><blendMode>0</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
-    <scene><name>HK outro</name><layer><id>0</id><video>graphics/hklogos_white.mp4</video><blendMode>0</blendMode><midi>44</midi></layer><layer><id>1</id><video>graphics/hklogo_white.mp4</video><blendMode>6</blendMode><midi>45</midi></layer><layer><id>2</id><video>photos/nunchack.mp4</video><blendMode>6</blendMode><midi>46</midi></layer><layer><id>3</id><video>graphics/end.mp4</video><blendMode>7</blendMode><midi>47</midi></layer><layer><id>4</id><video>photos/otface2.mp4</video><blendMode>6</blendMode><midi>36</midi></layer><layer><id>5</id><video>graphics/White strobe light.mp4</video><blendMode>0</blendMode><midi>38</midi></layer><effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect></scene>
+    <scene>
+        <name>Scene 0</name>
+        <layer>
+            <video>../../../videos/Britney_Spears_-_Toxic_Official_Video.mp4</video>
+            <blendMode>0</blendMode>
+            <midi>36</midi>
+        </layer>
+        <layer>
+            <video>../../../videos/White Half Strobes.mp4</video>
+            <blendMode>5</blendMode>
+            <midi>37</midi>
+        </layer>
+        <layer>
+            <video>../../../videos/simpleRGB.mp4</video>
+            <blendMode>4</blendMode>
+            <midi>38</midi>
+        </layer>
+        <layer>
+            <video>../../../videos/circles.mp4</video>
+            <blendMode>1</blendMode>
+            <midi>39</midi>
+        </layer>
+        <effect>
+            <type>0</type>
+            <midi>40</midi>
+        </effect>
+        <effect>
+            <type>1</type>
+            <midi>41</midi>
+        </effect>
+        <effect>
+            <type>2</type>
+            <midi>42</midi>
+        </effect>
+        <effect>
+            <type>3</type>
+            <midi>43</midi>
+        </effect>
+    </scene>
+    <scene>
+        <name>Scene 1</name>
+        <layer>
+            <video>../../../videos/Britney_Spears_-_Toxic_Official_Video.mp4</video>
+            <blendMode>0</blendMode>
+            <midi>36</midi>
+        </layer>
+        <layer>
+            <video>../../../videos/Noise Diagonals 1.mp4</video>
+            <blendMode>5</blendMode>
+            <midi>37</midi>
+        </layer>
+        <layer>
+            <video>../../../videos/Noise Diagonals 2.mp4</video>
+            <blendMode>5</blendMode>
+            <midi>38</midi>
+        </layer>
+        <layer>
+            <video>../../../videos/White Broken Shards.mp4</video>
+            <blendMode>1</blendMode>
+            <midi>39</midi>
+        </layer>
+        <effect>
+            <type>0</type>
+            <midi>40</midi>
+        </effect>
+        <effect>
+            <type>1</type>
+            <midi>41</midi>
+        </effect>
+        <effect>
+            <type>2</type>
+            <midi>42</midi>
+        </effect>
+        <effect>
+            <type>3</type>
+            <midi>43</midi>
+        </effect>
+    </scene>
 </show>
