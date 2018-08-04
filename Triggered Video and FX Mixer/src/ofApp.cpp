@@ -4,10 +4,7 @@
 #include "shader.h"
 
 ofApp::ofApp(ofxArgs* args) : 
-    switchNote_(MappableDescription::invalid_midi),
-    shouldRedraw_(false),
-    shouldReload_(false),
-    shouldExit_(false)
+    switchNote_(MappableDescription::invalid_midi)
 {
     parseArgs(args);
 }
@@ -15,7 +12,7 @@ ofApp::ofApp(ofxArgs* args) :
 void ofApp::setup()
 {
     if (settings_.cancelSetup) {
-        shouldExit_ = true;
+        status_.exit = true;
         return;
     }
 
@@ -37,7 +34,7 @@ void ofApp::setup()
     ofLog(OF_LOG_NOTICE, "Using OpenGL v%d.%d, GPU: %s %s.", major, minor, vendor, renderer);
     if (major < 4 && minor < 3) {
         ofLog(OF_LOG_FATAL_ERROR, "OpenGL version too old!", major, minor);
-        shouldExit_ = true;
+        status_.exit = true;
         return;
     }
 
@@ -48,18 +45,18 @@ void ofApp::setup()
 
     if (!shader_.setupShaderFromSource(GL_COMPUTE_SHADER, computeShader)) {
         ofLog(OF_LOG_FATAL_ERROR, "Could not load shader.");
-        shouldExit_ = true;
+        status_.exit = true;
         return;
     }
     if (!shader_.linkProgram()) {
         ofLog(OF_LOG_FATAL_ERROR, "Could not link shader.");
-        shouldExit_ = true;
+        status_.exit = true;
         return;
     }
 
     if (!setupShow()) {
         ofLog(OF_LOG_FATAL_ERROR, "Could not setup show from configuration file.");
-        shouldExit_ = true;
+        status_.exit = true;
         return;
     }
 
@@ -86,26 +83,26 @@ void ofApp::setupGui()
 //--------------------------------------------------------------
 void ofApp::update()
 {
-    if (shouldExit_) {
+    if (status_.exit) {
         ofExit();
         //return;
     }
 
-    if (shouldReload_) {
+    if (status_.forward) {
         drawGui(ofEventArgs{ });
         loadNext();
-        shouldReload_ = false;
+        status_.forward = false;
     }
 
     if (!currentScene_)
         return;
 
-    if (currentScene_->isFrameNew() || shouldRedraw_) {
+    if (currentScene_->isFrameNew() || status_.redraw) {
         shader_.begin();
         currentScene_->setupUniforms(shader_);
         shader_.dispatchCompute(width_ / 32, height_ / 32, 1);
         shader_.end();
-        shouldRedraw_ = currentScene_->hasActiveFX();
+        status_.redraw = currentScene_->hasActiveFX();
     }
 }
 
@@ -123,7 +120,7 @@ void ofApp::drawGui(ofEventArgs& args) {
     int yOffset = 20;
     const int delta = 20;
 
-    if (shouldReload_) {
+    if (status_.forward) {
         ofDrawBitmapStringHighlight("Loading...", xOffset, yOffset);
     }
     else {
@@ -148,7 +145,7 @@ void ofApp::exit()
 }
 
 void ofApp::exitGui(ofEventArgs& args) {
-    shouldExit_ = true;
+    status_.exit = true;
 }
 
 //--------------------------------------------------------------
@@ -165,7 +162,10 @@ void ofApp::keyReleased(int key)
         ofGetCurrentWindow()->toggleFullscreen();
         break;
     case 'n':
-        shouldReload_ = true;
+        status_.forward = true;
+        break;
+    case 'b':
+        status_.backward = true;
         break;
     }
 }
@@ -178,19 +178,20 @@ void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 void ofApp::newMidiMessage(ofxMidiMessage & msg)
 {
     if (msg.status == MIDI_NOTE_ON && msg.pitch == switchNote_)
-        shouldReload_ = true;
+        status_.forward = true;
     else if (currentScene_) {
         currentScene_->newMidiMessage(msg);
-        shouldRedraw_ = true;
+        status_.redraw = true;
     }
 }
 
 void ofApp::onButtonEvent(ofxDatGuiButtonEvent e)
 {
     if (e.target->getName() == "Next scene") {
-        shouldReload_ = true;
-    }
-    else {
+        status_.forward = true;
+    } else if (e.target->getName() == "Previous scene") {
+        status_.backward = true;
+    } else {
         ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", e.target->getName().c_str());
     }
 }

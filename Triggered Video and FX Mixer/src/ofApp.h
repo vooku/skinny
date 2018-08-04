@@ -46,6 +46,13 @@ private:
         std::string cfgFile;
     } settings_;
 
+    struct {
+        bool redraw = false; //!< The canvas should be redrawn.
+        bool exit = false;   //!< The app should exit.
+        bool forward = false; //!< Next scene should be loaded.
+        bool backward = false; //!< Previous scene should be loaded.
+    } status_;
+
     void usage() const;
     void parseArgs(ofxArgs* args);
     void setupMidi();
@@ -61,9 +68,7 @@ private:
     ofShader shader_;
     ofTexture dst_;
     int width_, height_;
-
-    bool shouldRedraw_, shouldReload_, shouldExit_;
-    
+        
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
     uint8_t switchNote_;
 
