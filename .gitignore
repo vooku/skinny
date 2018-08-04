@@ -2,6 +2,7 @@ tvaem/bin/*
 !tvaem/bin/data/
 tvaem/obj/*
 tvaem/.vs/*
+videos/*
 
 # Prerequisites
 *.d
