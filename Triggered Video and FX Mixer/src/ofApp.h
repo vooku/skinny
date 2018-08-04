@@ -9,8 +9,8 @@
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
-    static constexpr const char * version = "0.1.0-alpha";
-    static constexpr const char * name = "Triggered Video & FX Mixer";
+    static constexpr const char * VERSION = "0.1.0-alpha";
+    static constexpr const char * NAME = "Triggered Video & FX Mixer";
 
     ofApp(ofxArgs* args);
 
@@ -38,6 +38,8 @@ public:
     void onButtonEvent(ofxDatGuiButtonEvent e);
 
 private:
+    static const int MAX_CHARS = 20;
+
     struct Settings {
         Settings() : cancelSetup(false) { }
 
@@ -73,5 +75,9 @@ private:
     uint8_t switchNote_;
 
     std::unique_ptr<ofxDatGui> gui_;
+    struct {
+        static const int size = 12;
+        ofTrueTypeFont regular, italic;
+    } fonts_;
     ofDirectory dir_;
 };

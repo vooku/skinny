@@ -16,7 +16,7 @@ void ofApp::setup()
         return;
     }
 
-    ofSetWindowTitle(name);
+    ofSetWindowTitle(NAME);
 
     if (settings_.console)
         ofLogToConsole();
@@ -66,13 +66,16 @@ void ofApp::setup()
 
 void ofApp::setupGui()
 {
-    ofSetWindowTitle(name);
+    ofSetWindowTitle(NAME);
 
     auto cwd = ".";
     dir_.open(cwd);
     dir_.allowExt("mp4");
     dir_.allowExt("avi");
     dir_.listDir();
+
+    fonts_.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts_.size, true, false);
+    fonts_.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts_.size, true, false);
 
     gui_ = std::make_unique<ofxDatGui>(ofxDatGuiAnchor::BOTTOM_RIGHT);
     gui_->onButtonEvent(this, &ofApp::onButtonEvent);
@@ -118,21 +121,21 @@ void ofApp::drawGui(ofEventArgs& args) {
     
     int xOffset = 20;
     int yOffset = 20;
-    const int delta = 20;
+    const int delta = 25;
 
     if (status_.forward) {
-        ofDrawBitmapStringHighlight("Loading...", xOffset, yOffset);
+        fonts_.italic.drawString("Loading...", xOffset, yOffset);
     }
     else {
-        ofDrawBitmapStringHighlight(currentScene_->getName(), xOffset, yOffset);
+        fonts_.italic.drawString(currentScene_->getName(), xOffset, yOffset);
         yOffset += 2 * delta;
         for (int i = 0; i < currentScene_->layerNames.size(); i++) {
-            ofDrawBitmapString(currentScene_->layerNames[i], xOffset, yOffset);
+            fonts_.regular.drawString(currentScene_->layerNames[i], xOffset, yOffset);
             yOffset += delta;
         }
     }
 
-    ofDrawBitmapStringHighlight("fps: " + std::to_string(ofGetFrameRate()), xOffset, ofGetHeight() - delta);
+    fonts_.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), xOffset, ofGetHeight() - delta);
 
     gui_->draw();
 }
@@ -287,7 +290,7 @@ bool ofApp::saveConfig()
     ofxXmlSettings config;
     config.addTag("head");
     config.pushTag("head");
-    config.setValue("version", version);
+    config.setValue("version", VERSION);
     config.setValue("switchNote", switchNote_);
     config.popTag(); // head
 
