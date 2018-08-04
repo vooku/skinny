@@ -1,0 +1,8 @@
+
+
+--------------------------------------- 2018-08-04-18-41-16-588
+[notice ] Using OpenGL v4.3, GPU: Intel Intel(R) HD Graphics 620.
+[ error ] Cannot load next scene, 0 is too few.
+[ fatal ] Configuration file "" contains no scenes.
+[ fatal ] Could not setup show from configuration file.
+[warning] ofGLProgrammableRenderer: draw(): texture is not allocated

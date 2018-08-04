@@ -1,6 +1,7 @@
-Triggered\ Video\ and\ FX\ Mixer/bin/*
-Triggered\ Video\ and\ FX\ Mixer/obj/*
-.vs/*
+tvaem/bin/*
+!tvaem/bin/data/
+tvaem/obj/*
+tvaem/.vs/*
 
 # Prerequisites
 *.d
