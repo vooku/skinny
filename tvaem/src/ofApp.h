@@ -74,9 +74,11 @@ private:
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
     uint8_t switchNote_;
 
-    std::unique_ptr<ofxDatGui> gui_;
+    std::unique_ptr<ofxDatGui> leftPanel_, midPanel_, rightPanel_, gui_;
+    std::vector<ofxDatGuiButton*> buttons_;
+    static const int guiDelta_ = 25;
     struct {
-        static const int size = 12;
+        static const int size = 14;
         ofTrueTypeFont regular, italic;
     } fonts_;
     ofDirectory dir_;

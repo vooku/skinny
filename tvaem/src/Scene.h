@@ -4,8 +4,6 @@
 #include "meta.h"
 #include <unordered_map>
 
-
-
 class Scene {
 public:
     static const int maxLayers = 7;

@@ -81,6 +81,11 @@ void ofApp::setupGui()
     gui_->onButtonEvent(this, &ofApp::onButtonEvent);
     //gui_->addButton("Previous scene");
     gui_->addButton("Next scene");
+
+    leftPanel_ = std::make_unique<ofxDatGui>(guiDelta_, 2 * guiDelta_);
+    for (int i = 0; i < Scene::maxLayers; ++i) {
+        buttons_.push_back(leftPanel_->addButton({}));
+    }
 }
 
 //--------------------------------------------------------------
@@ -119,23 +124,8 @@ void ofApp::draw()
 void ofApp::drawGui(ofEventArgs& args) {
     ofBackground(ofColor(45, 45, 48));
     
-    int xOffset = 20;
-    int yOffset = 20;
-    const int delta = 25;
-
-    if (status_.forward) {
-        fonts_.italic.drawString("Loading...", xOffset, yOffset);
-    }
-    else {
-        fonts_.italic.drawString(currentScene_->getName(), xOffset, yOffset);
-        yOffset += 2 * delta;
-        for (int i = 0; i < currentScene_->layerNames.size(); i++) {
-            fonts_.regular.drawString(currentScene_->layerNames[i], xOffset, yOffset);
-            yOffset += delta;
-        }
-    }
-
-    fonts_.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), xOffset, ofGetHeight() - delta);
+    fonts_.italic.drawString(status_.forward ? "Loading..." : currentScene_->getName(), guiDelta_, guiDelta_);
+    fonts_.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), guiDelta_, ofGetHeight() - guiDelta_);
 
     gui_->draw();
 }
@@ -314,10 +304,22 @@ bool ofApp::loadNext()
     shader_.end();
     ++show_;
 
-    if (currentScene_->isValid())
+    if (currentScene_->isValid()) {
         ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());
-    else
+        
+        if (buttons_.size() == Scene::maxLayers) {
+            for (int i = 0; i < Scene::maxLayers; ++i) {
+                if (i < currentScene_->layerNames.size())
+                    buttons_[i]->setLabel(currentScene_->layerNames[i]);
+                else
+                    buttons_[i]->setLabel("");
+            }
+        }        
+    }
+    else {
+        // TODO display in gui
         ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", currentScene_->getName().c_str());
+    }
 
     return true;
 }
