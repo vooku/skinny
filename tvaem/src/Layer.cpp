@@ -20,6 +20,7 @@ bool Layer::reload(const std::string& filename)
 {
     player_.closeMovie();
     valid_ = player_.load(filename);
+    player_.setVolume(0);
     
     if (!valid_) {
         ofLog(OF_LOG_ERROR, "Cannot load %s.", filename.c_str());

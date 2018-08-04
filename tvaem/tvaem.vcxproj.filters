@@ -123,6 +123,9 @@
     <Filter Include="addons\ofxXmlSettings\libs">
       <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="headers">
+      <UniqueIdentifier>{91e8faae-8cf2-442e-88e3-dd940fd705a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\..\openFrameworks\addons\ofxArgs\src\ofxArgs.h">
@@ -228,25 +231,25 @@
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClInclude>
     <ClInclude Include="src\Effect.h">
-      <Filter>src</Filter>
+      <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\Layer.h">
-      <Filter>src</Filter>
+      <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\Mappable.h">
-      <Filter>src</Filter>
+      <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\meta.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
+      <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\Scene.h">
-      <Filter>src</Filter>
+      <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\shader.h">
-      <Filter>src</Filter>
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
