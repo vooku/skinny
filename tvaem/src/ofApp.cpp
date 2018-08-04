@@ -303,7 +303,7 @@ bool ofApp::saveConfig()
 
 bool ofApp::loadNext() 
 {
-    if (show_.getSize() <= 1) {
+    if (show_.getSize() < 1) {
         ofLog(OF_LOG_ERROR, "Cannot load next scene, %d is too few.", show_.getSize());
         return false;
     }
