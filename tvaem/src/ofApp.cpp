@@ -71,29 +71,29 @@ void ofApp::setupGui()
     ofSetWindowTitle(name);
 
     auto cwd = ".";
-    dir_.open(cwd);
-    dir_.allowExt("mp4");
-    dir_.allowExt("avi");
-    dir_.listDir();
+    gui_.dir.open(cwd);
+    gui_.dir.allowExt("mp4");
+    gui_.dir.allowExt("avi");
+    gui_.dir.listDir();
 
-    fonts_.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts_.size, true, false);
-    fonts_.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts_.size, true, false);
+    gui_.fonts.regular.load("fonts/IBMPlexSans-Regular.ttf", gui_.fonts.size, true, false);
+    gui_.fonts.italic.load("fonts/IBMPlexSerif-Italic.ttf", gui_.fonts.size, true, false);
 
-    gui_ = std::make_unique<ofxDatGui>(ofxDatGuiAnchor::BOTTOM_RIGHT);
-    gui_->onButtonEvent(this, &ofApp::onButtonEvent);
+    //gui_ = std::make_unique<ofxDatGui>(ofxDatGuiAnchor::BOTTOM_RIGHT);
+    //gui_->onButtonEvent(this, &ofApp::onButtonEvent);
     //gui_->addButton("Previous scene");
-    gui_->addButton("Next scene");
+    //gui_->addButton("Next scene");
 
-    leftPanel_ = std::make_unique<ofxDatGui>(guiDelta_, 2 * guiDelta_);
+    gui_.leftPanel = std::make_unique<ofxDatGui>(gui_.delta, 2 * gui_.delta);
     for (int i = 0; i < Scene::maxLayers; ++i) {
-        layerButtons_.push_back(leftPanel_->addButton({}));
+        gui_.layerButtons.push_back(gui_.leftPanel->addButton({}));
     }
-    auto blank = leftPanel_->addButton({});
+    auto blank = gui_.leftPanel->addButton({});
     blank->setEnabled(false);
     blank->setBackgroundColor(bgColor);
     blank->setStripeColor(bgColor);
     for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-        effectButtons_.push_back(leftPanel_->addButton({}));
+        gui_.effectButtons.push_back(gui_.leftPanel->addButton({}));
     }
 
 }
@@ -134,10 +134,11 @@ void ofApp::draw()
 void ofApp::drawGui(ofEventArgs& args) {
     ofBackground(bgColor);
     
-    fonts_.italic.drawString(status_.forward ? "Loading..." : currentScene_->getName(), guiDelta_, guiDelta_);
-    fonts_.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), guiDelta_, ofGetHeight() - guiDelta_);
+    gui_.fonts.italic.drawString(status_.forward ? "Loading..." : currentScene_->getName(), gui_.delta, gui_.delta);
+    gui_.fonts.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), gui_.delta, ofGetHeight() - gui_.delta);
 
-    gui_->draw();
+    //gui_->draw();
+    gui_.leftPanel->draw();
 }
 
 void ofApp::exit() 
@@ -317,17 +318,17 @@ bool ofApp::loadNext()
     if (currentScene_->isValid()) {
         ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());
         
-        if (layerButtons_.size() == Scene::maxLayers) {
+        if (gui_.layerButtons.size() == Scene::maxLayers) {
             for (int i = 0; i < Scene::maxLayers; ++i) {
                 if (i < currentScene_->layerNames.size())
-                    layerButtons_[i]->setLabel(currentScene_->layerNames[i]);
+                    gui_.layerButtons[i]->setLabel(currentScene_->layerNames[i]);
                 else
-                    layerButtons_[i]->setLabel("Click to load a video"); // TODO different style
+                    gui_.layerButtons[i]->setLabel("Click to load a video"); // TODO different style
             }
         }
-        if (effectButtons_.size() == static_cast<int>(Effect::Type::Count)) {
+        if (gui_.effectButtons.size() == static_cast<int>(Effect::Type::Count)) {
             for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-                effectButtons_[i]->setLabel(currentScene_->effectNames[i]);
+                gui_.effectButtons[i]->setLabel(currentScene_->effectNames[i]);
             }
         }
     }

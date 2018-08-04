@@ -41,20 +41,31 @@ public:
 private:
     static const int MAX_CHARS = 20;
 
-    struct Settings {
-        Settings() : cancelSetup(false) { }
-
+    struct {
         std::vector<unsigned int> midiPorts;
-        bool cancelSetup, verbose, console;
+        bool cancelSetup = false;
+        bool verbose     = false;
+        bool console     = false;
         std::string cfgFile;
     } settings_;
 
     struct {
         bool redraw   = false; //!< The canvas should be redrawn.
-        bool exit     = false;   //!< The app should exit.
+        bool exit     = false; //!< The app should exit.
         bool forward  = false; //!< Next scene should be loaded.
         bool backward = false; //!< Previous scene should be loaded.
     } status_;
+
+    struct {
+        std::unique_ptr<ofxDatGui> leftPanel, midPanel, rightPanel;
+        std::vector<ofxDatGuiButton*> layerButtons, effectButtons;
+        static const int delta = 25;
+        struct {
+            static const int size = 14;
+            ofTrueTypeFont regular, italic;
+        } fonts;
+        ofDirectory dir;
+    } gui_;
 
     void usage() const;
     void parseArgs(ofxArgs* args);
@@ -65,22 +76,12 @@ private:
     bool loadNext();
 
     ShowDescription show_;
-
     std::unique_ptr<Scene> currentScene_;
+    std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
+    uint8_t switchNote_;
 
     ofShader shader_;
     ofTexture dst_;
     int width_, height_;
-        
-    std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
-    uint8_t switchNote_;
 
-    std::unique_ptr<ofxDatGui> leftPanel_, midPanel_, rightPanel_, gui_;
-    std::vector<ofxDatGuiButton*> layerButtons_, effectButtons_;
-    static const int guiDelta_ = 25;
-    struct {
-        static const int size = 14;
-        ofTrueTypeFont regular, italic;
-    } fonts_;
-    ofDirectory dir_;
 };
