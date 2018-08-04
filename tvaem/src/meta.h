@@ -2,6 +2,7 @@
 
 #include <set>
 #include <vector>
+#include <filesystem>
 #include "ofxXmlSettings.h"
 #include "Layer.h"
 #include "Effect.h"
@@ -11,12 +12,12 @@ struct MappableDescription {
 };
 
 struct LayerDescription : public MappableDescription {
-    static const std::string invalid_video;
-    
+    static const std::filesystem::path invalid_path;
+
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
-    std::string video;
+    std::filesystem::path path;
     Mappable::MidiMap midiMap;
     Layer::BlendMode blendMode;
 };

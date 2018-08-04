@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include "ofMain.h"
 #include "Mappable.h"
 
@@ -17,10 +18,10 @@ public:
         Exclusion = 7    // b + s + 2 * b * s
     };
 
-    Layer(int id, const std::string& filename = "", const MidiMap& map = {});
+    Layer(int id, const std::filesystem::path& path, const MidiMap& map = {});
     ~Layer() override;
 
-    bool reload(const std::string& filename);
+    bool reload(const std::filesystem::path& path);
     void bind();
     bool isFrameNew();
 
@@ -38,6 +39,7 @@ public:
 private:
     ofVideoPlayer player_;
     const int id_;
+    const std::string video;
     bool valid_;
     BlendMode blendMode_;
 };

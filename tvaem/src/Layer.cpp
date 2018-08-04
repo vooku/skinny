@@ -1,13 +1,14 @@
 #include "Layer.h"
 
-Layer::Layer(int id, const std::string & filename, const MidiMap & map) :
+Layer::Layer(int id, const std::filesystem::path& path, const MidiMap & map) :
     id_(id),
+    video(path.filename().string()),
     Mappable(map),
     valid_(false)
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
-    reload(filename);    
+    reload(path);    
 }
 
 Layer::~Layer()
@@ -16,17 +17,17 @@ Layer::~Layer()
     player_.closeMovie();
 }
 
-bool Layer::reload(const std::string& filename)
+bool Layer::reload(const std::filesystem::path& path)
 {
     player_.closeMovie();
-    valid_ = player_.load(filename);
+    valid_ = player_.load(path.string());
     player_.setVolume(0);
     
     if (!valid_) {
-        ofLog(OF_LOG_ERROR, "Cannot load %s.", filename.c_str());
+        ofLog(OF_LOG_ERROR, "Cannot load %s at %s", video.c_str(), path.c_str());
     }
     else 
-        ofLog(OF_LOG_VERBOSE, "Loaded %s.", filename.c_str());
+        ofLog(OF_LOG_VERBOSE, "Loaded %s.", video.c_str());
 
     return valid_;
 }

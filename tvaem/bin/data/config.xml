@@ -6,22 +6,22 @@
     <scene>
         <name>Scene 0</name>
         <layer>
-            <video>../../../videos/Britney_Spears_-_Toxic_Official_Video.mp4</video>
+            <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>0</blendMode>
             <midi>36</midi>
         </layer>
         <layer>
-            <video>../../../videos/White Half Strobes.mp4</video>
-            <blendMode>5</blendMode>
+            <path>../../../videos/White Half Strobes.mp4</path>
+            <blendMode>4</blendMode>
             <midi>37</midi>
         </layer>
         <layer>
-            <video>../../../videos/simpleRGB.mp4</video>
-            <blendMode>4</blendMode>
+            <path>../../../videos/simpleRGB.mp4</path>
+            <blendMode>6</blendMode>
             <midi>38</midi>
         </layer>
         <layer>
-            <video>../../../videos/circles.mp4</video>
+            <path>../../../videos/circles.mp4</path>
             <blendMode>1</blendMode>
             <midi>39</midi>
         </layer>
@@ -45,22 +45,22 @@
     <scene>
         <name>Scene 1</name>
         <layer>
-            <video>../../../videos/Britney_Spears_-_Toxic_Official_Video.mp4</video>
+            <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>0</blendMode>
             <midi>36</midi>
         </layer>
         <layer>
-            <video>../../../videos/Noise Diagonals 1.mp4</video>
+            <path>../../../videos/Noise Diagonals 1.mp4</path>
             <blendMode>5</blendMode>
             <midi>37</midi>
         </layer>
         <layer>
-            <video>../../../videos/Noise Diagonals 2.mp4</video>
+            <path>../../../videos/Noise Diagonals 2.mp4</path>
             <blendMode>5</blendMode>
             <midi>38</midi>
         </layer>
         <layer>
-            <video>../../../videos/White Broken Shards.mp4</video>
+            <path>../../../videos/White Broken Shards.mp4</path>
             <blendMode>1</blendMode>
             <midi>39</midi>
         </layer>

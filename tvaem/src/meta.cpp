@@ -1,16 +1,16 @@
 #include "meta.h"
 
 const uint8_t MappableDescription::invalid_midi = 255;
-const std::string LayerDescription::invalid_video = "";
+const std::filesystem::path LayerDescription::invalid_path = {};
 
 bool LayerDescription::fromXml(ofxXmlSettings & config) {
-    video = config.getValue("video", invalid_video);
+    path = config.getValue("path", invalid_path.string());
     blendMode = static_cast<Layer::BlendMode>(config.getValue("blendMode", static_cast<int>(Layer::BlendMode::Invalid)));
     for (int i = 0; i < config.getNumTags("midi"); i++) {
         midiMap.insert(config.getValue("midi", invalid_midi, i));
     }
 
-    if (video == invalid_video || blendMode == Layer::BlendMode::Invalid || midiMap.count(invalid_midi)) {
+    if (path.empty() || blendMode == Layer::BlendMode::Invalid || midiMap.count(invalid_midi)) {
         ofLog(OF_LOG_ERROR, "Layer description contains invalid values and will be skipped.");
         return false;
     }
@@ -19,7 +19,7 @@ bool LayerDescription::fromXml(ofxXmlSettings & config) {
 }
 
 void LayerDescription::toXml(ofxXmlSettings& config) const {
-    config.setValue("video", video);
+    config.setValue("path", path.string());
     config.setValue("blendMode", static_cast<int>(blendMode));
     for (auto midiNote : midiMap)
         config.addValue("midi", midiNote);

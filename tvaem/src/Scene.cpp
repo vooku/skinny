@@ -9,7 +9,7 @@ Scene::Scene(const SceneDescription & description) :
         if (layers_.size() >= maxLayers)
             break;
 
-        auto newLayer = std::make_unique<Layer>(layers_.size(), layer.video, layer.midiMap);
+        auto newLayer = std::make_unique<Layer>(layers_.size(), layer.path, layer.midiMap);
         newLayer->setBlendMode(layer.blendMode);
         if (newLayer->isValid())
             layers_.push_back(std::move(newLayer));
@@ -114,6 +114,6 @@ void Scene::setupUniforms(ofShader& shader) const
 Scene::LayerNames::LayerNames(const SceneDescription & description)
 {
     for (const auto& layer : description.layers) {
-        names.push_back(layer.video);
+        names.push_back(layer.path.filename().string());
     }
 }
