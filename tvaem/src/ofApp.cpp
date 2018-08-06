@@ -84,16 +84,29 @@ void ofApp::setupGui()
     //gui_->addButton("Previous scene");
     //gui_->addButton("Next scene");
 
+    // Left panel (videos)
     gui_.leftPanel = std::make_unique<ofxDatGui>(gui_.delta, 2 * gui_.delta);
     for (int i = 0; i < Scene::maxLayers; ++i) {
         gui_.layerButtons.push_back(gui_.leftPanel->addButton({}));
     }
-    auto blank = gui_.leftPanel->addButton({});
-    blank->setEnabled(false);
-    blank->setBackgroundColor(bgColor);
-    blank->setStripeColor(bgColor);
+    gui_.addBlank(gui_.leftPanel.get());
     for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
         gui_.effectButtons.push_back(gui_.leftPanel->addButton({}));
+    }
+    // TODO callbacks
+
+    // Mid panel (MIDI)
+    gui_.midPanel = std::make_unique<ofxDatGui>(gui_.delta + gui_.layerButtons[0]->getWidth(), 2 * gui_.delta);
+    for (int i = 0; i < Scene::maxLayers; ++i) {
+        gui_.midiInputs.push_back(gui_.midPanel->addTextInput({}));
+        gui_.midiInputs.back()->setInputType(ofxDatGuiInputType::NUMERIC);
+        gui_.midiInputs.back()->setLabel("MIDI");
+    }
+    gui_.addBlank(gui_.midPanel.get());
+    for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
+        gui_.midiInputs.push_back(gui_.midPanel->addTextInput({}));
+        gui_.midiInputs.back()->setInputType(ofxDatGuiInputType::NUMERIC);
+        gui_.midiInputs.back()->setLabel("MIDI");
     }
 
 }
@@ -338,4 +351,12 @@ bool ofApp::loadNext()
     }
 
     return true;
+}
+
+void ofApp::Gui::addBlank(ofxDatGui * panel)
+{
+    auto blank = panel->addButton({});
+    blank->setEnabled(false);
+    blank->setBackgroundColor(bgColor);
+    blank->setStripeColor(bgColor);
 }

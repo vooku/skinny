@@ -56,9 +56,12 @@ private:
         bool backward = false; //!< Previous scene should be loaded.
     } status_;
 
-    struct {
+    struct Gui {
+        void addBlank(ofxDatGui* panel);
+
         std::unique_ptr<ofxDatGui> leftPanel, midPanel, rightPanel;
         std::vector<ofxDatGuiButton*> layerButtons, effectButtons;
+        std::vector<ofxDatGuiTextInput*> midiInputs;
         static const int delta = 25;
         struct {
             static const int size = 14;
