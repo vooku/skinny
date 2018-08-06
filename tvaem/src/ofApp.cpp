@@ -3,10 +3,9 @@
 #include "ofxXmlSettings.h"
 #include "shader.h"
 
-const ofColor ofApp::bgColor = { 45, 45, 48 };
-
 ofApp::ofApp(ofxArgs* args) : 
-    switchNote_(MappableDescription::invalid_midi)
+    switchNote_(MappableDescription::invalid_midi),
+    gui_(status_)
 {
     parseArgs(args);
 }
@@ -70,45 +69,7 @@ void ofApp::setupGui()
 {
     ofSetWindowTitle(name);
 
-    auto cwd = ".";
-    gui_.dir.open(cwd);
-    gui_.dir.allowExt("mp4");
-    gui_.dir.allowExt("avi");
-    gui_.dir.listDir();
-
-    gui_.fonts.regular.load("fonts/IBMPlexSans-Regular.ttf", gui_.fonts.size, true, false);
-    gui_.fonts.italic.load("fonts/IBMPlexSerif-Italic.ttf", gui_.fonts.size, true, false);
-
-    //gui_ = std::make_unique<ofxDatGui>(ofxDatGuiAnchor::BOTTOM_RIGHT);
-    //gui_->onButtonEvent(this, &ofApp::onButtonEvent);
-    //gui_->addButton("Previous scene");
-    //gui_->addButton("Next scene");
-
-    // Left panel (videos)
-    gui_.leftPanel = std::make_unique<ofxDatGui>(gui_.delta, 2 * gui_.delta);
-    for (int i = 0; i < Scene::maxLayers; ++i) {
-        gui_.layerButtons.push_back(gui_.leftPanel->addButton({}));
-    }
-    gui_.addBlank(gui_.leftPanel.get());
-    for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-        gui_.effectButtons.push_back(gui_.leftPanel->addButton({}));
-    }
-    // TODO callbacks
-
-    // Mid panel (MIDI)
-    gui_.midPanel = std::make_unique<ofxDatGui>(gui_.delta + gui_.layerButtons[0]->getWidth(), 2 * gui_.delta);
-    for (int i = 0; i < Scene::maxLayers; ++i) {
-        gui_.midiInputs.push_back(gui_.midPanel->addTextInput({}));
-        gui_.midiInputs.back()->setInputType(ofxDatGuiInputType::NUMERIC);
-        gui_.midiInputs.back()->setLabel("MIDI");
-    }
-    gui_.addBlank(gui_.midPanel.get());
-    for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-        gui_.midiInputs.push_back(gui_.midPanel->addTextInput({}));
-        gui_.midiInputs.back()->setInputType(ofxDatGuiInputType::NUMERIC);
-        gui_.midiInputs.back()->setLabel("MIDI");
-    }
-
+    gui_.setup();
 }
 
 //--------------------------------------------------------------
@@ -145,13 +106,7 @@ void ofApp::draw()
 
 
 void ofApp::drawGui(ofEventArgs& args) {
-    ofBackground(bgColor);
-    
-    gui_.fonts.italic.drawString(status_.forward ? "Loading..." : currentScene_->getName(), gui_.delta, gui_.delta);
-    gui_.fonts.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), gui_.delta, ofGetHeight() - gui_.delta);
-
-    //gui_->draw();
-    gui_.leftPanel->draw();
+    gui_.draw();
 }
 
 void ofApp::exit() 
@@ -199,17 +154,6 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
     else if (currentScene_) {
         currentScene_->newMidiMessage(msg);
         status_.redraw = true;
-    }
-}
-
-void ofApp::onButtonEvent(ofxDatGuiButtonEvent e)
-{
-    if (e.target->getName() == "Next scene") {
-        status_.forward = true;
-    } else if (e.target->getName() == "Previous scene") {
-        status_.backward = true;
-    } else {
-        ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", e.target->getName().c_str());
     }
 }
 
@@ -330,20 +274,7 @@ bool ofApp::loadNext()
 
     if (currentScene_->isValid()) {
         ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());
-        
-        if (gui_.layerButtons.size() == Scene::maxLayers) {
-            for (int i = 0; i < Scene::maxLayers; ++i) {
-                if (i < currentScene_->layerNames.size())
-                    gui_.layerButtons[i]->setLabel(currentScene_->layerNames[i]);
-                else
-                    gui_.layerButtons[i]->setLabel("Click to load a video"); // TODO different style
-            }
-        }
-        if (gui_.effectButtons.size() == static_cast<int>(Effect::Type::Count)) {
-            for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-                gui_.effectButtons[i]->setLabel(currentScene_->effectNames[i]);
-            }
-        }
+        gui_.reload(currentScene_.get());
     }
     else {
         // TODO display in gui
@@ -351,12 +282,4 @@ bool ofApp::loadNext()
     }
 
     return true;
-}
-
-void ofApp::Gui::addBlank(ofxDatGui * panel)
-{
-    auto blank = panel->addButton({});
-    blank->setEnabled(false);
-    blank->setBackgroundColor(bgColor);
-    blank->setStripeColor(bgColor);
 }

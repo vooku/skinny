@@ -3,16 +3,16 @@
 #include "ofMain.h"
 #include "ofxMidi.h"
 #include "ofxArgs.h"
-#include "ofxDatGui.h"
 #include "Scene.h"
 #include "meta.h"
+#include "Gui.h"
+#include "Status.h"
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
     static constexpr const char * version = "0.2.0-alpha";
     static constexpr const char * name = "Triggered Video & FX Mixer";
-    static const ofColor bgColor;
-
+    
     ofApp(ofxArgs* args);
 
     void setup();
@@ -36,11 +36,8 @@ public:
     void dragEvent(ofDragInfo dragInfo) { }
     void gotMessage(ofMessage msg) { }
     void newMidiMessage(ofxMidiMessage& msg);
-    void onButtonEvent(ofxDatGuiButtonEvent e);
 
 private:
-    static const int MAX_CHARS = 20;
-
     struct {
         std::vector<unsigned int> midiPorts;
         bool cancelSetup = false;
@@ -49,27 +46,6 @@ private:
         std::string cfgFile;
     } settings_;
 
-    struct {
-        bool redraw   = false; //!< The canvas should be redrawn.
-        bool exit     = false; //!< The app should exit.
-        bool forward  = false; //!< Next scene should be loaded.
-        bool backward = false; //!< Previous scene should be loaded.
-    } status_;
-
-    struct Gui {
-        void addBlank(ofxDatGui* panel);
-
-        std::unique_ptr<ofxDatGui> leftPanel, midPanel, rightPanel;
-        std::vector<ofxDatGuiButton*> layerButtons, effectButtons;
-        std::vector<ofxDatGuiTextInput*> midiInputs;
-        static const int delta = 25;
-        struct {
-            static const int size = 14;
-            ofTrueTypeFont regular, italic;
-        } fonts;
-        ofDirectory dir;
-    } gui_;
-
     void usage() const;
     void parseArgs(ofxArgs* args);
     void setupMidi();
@@ -77,6 +53,9 @@ private:
     bool loadConfig();
     bool saveConfig();
     bool loadNext();
+    bool loadPrevious();
+
+    Status status_;
 
     ShowDescription show_;
     std::unique_ptr<Scene> currentScene_;
@@ -87,4 +66,5 @@ private:
     ofTexture dst_;
     int width_, height_;
 
+    Gui gui_;
 };

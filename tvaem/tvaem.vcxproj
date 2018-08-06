@@ -181,6 +181,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Effect.cpp" />
+    <ClCompile Include="src\Gui.cpp" />
     <ClCompile Include="src\Layer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\meta.cpp" />
@@ -205,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Effect.h" />
+    <ClInclude Include="src\Gui.h" />
     <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\Mappable.h" />
     <ClInclude Include="src\meta.h" />
@@ -245,6 +247,7 @@
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\shader.h" />
+    <ClInclude Include="src\Status.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

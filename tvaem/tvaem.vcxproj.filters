@@ -67,6 +67,9 @@
     <ClCompile Include="src\Scene.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Gui.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -252,6 +255,12 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\shader.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gui.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Status.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
