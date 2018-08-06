@@ -15,38 +15,49 @@ void Gui::setup()
 
     // Left panel (videos)
     leftPanel_ = std::make_unique<ofxDatGui>(delta, 2 * delta);
-    leftPanel_->addLabel("Videos");
+    leftPanel_->addLabel("Video");
+    leftPanel_->addBreak();
     for (int i = 0; i < Scene::maxLayers; ++i) {
         layerButtons_.push_back(leftPanel_->addButton({}));
-        layerButtons_.back()->onButtonEvent(this, &Gui::onButtonEvent);
+        layerButtons_.back()->onButtonEvent(this, &Gui::onLayerButtonEvent);
     }
-    //addBlank(leftPanel.get());
-    leftPanel_->addLabel("Effects");
+    leftPanel_->addBreak();
+    leftPanel_->addLabel("Effect");
+    leftPanel_->addBreak();
     for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
         effectButtons_.push_back(leftPanel_->addButton({}));
-        layerButtons_.back()->onButtonEvent(this, &Gui::onButtonEvent);
+        effectButtons_.back()->onButtonEvent(this, &Gui::onEffectButtonEvent);
     }
 
     // Mid panel (MIDI)
+    auto midPanelWidth = 3 * delta;
     midPanel_ = std::make_unique<ofxDatGui>(delta + layerButtons_[0]->getWidth(), 2 * delta);
-    for (int i = 0; i < Scene::maxLayers; ++i) {
-        midiInputs_.push_back(midPanel_->addTextInput({}));
-        midiInputs_.back()->setInputType(ofxDatGuiInputType::NUMERIC);
-        midiInputs_.back()->setLabel("MIDI");
+    midPanel_->setWidth(midPanelWidth);
+    midPanel_->addLabel("MIDI");
+    midPanel_->addBreak();
+    for (int i = 0; i < Scene::maxLayers + static_cast<int>(Effect::Type::Count) + 1; ++i) {
+        if (i == Scene::maxLayers) {
+            midPanel_->addBreak();
+            addBlank(midPanel_.get());
+            midPanel_->addBreak();
+        }
+        else {
+            midiInputs_.push_back(midPanel_->addTextInput({}));
+            midiInputs_.back()->setInputType(ofxDatGuiInputType::NUMERIC);
+            midiInputs_.back()->onTextInputEvent(this, &Gui::onMidiInputEvent);
+            midiInputs_.back()->setWidth(midPanelWidth, 0); // This doesn't seem to work right
+        }        
     }
-    addBlank(midPanel_.get());
-    for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-        midiInputs_.push_back(midPanel_->addTextInput({}));
-        midiInputs_.back()->setInputType(ofxDatGuiInputType::NUMERIC);
-        midiInputs_.back()->setLabel("MIDI");
-    }
+
+    // Right panel
+    
 }
 
-void Gui::draw()
+void Gui::draw(const std::string& sceneName)
 {
     ofBackground(bgColor);
 
-    //fonts.italic.drawString(status_.forward ? "Loading..." : currentScene_->getName(), delta, delta);
+    fonts.italic.drawString(status_.forward ? "Loading..." : sceneName, delta, delta);
     fonts.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), delta, ofGetHeight() - delta);
 
     if (leftPanel_) leftPanel_->draw();
@@ -71,7 +82,19 @@ void Gui::reload(const Scene * currentScene)
     }
 }
 
-void Gui::onButtonEvent(ofxDatGuiButtonEvent e)
+void Gui::onLayerButtonEvent(ofxDatGuiButtonEvent e)
+{
+    printf("Layer button presed.\n");
+    // TODO
+}
+
+void Gui::onEffectButtonEvent(ofxDatGuiButtonEvent e)
+{
+    printf("Effect button presed.\n");
+    // TODO
+}
+
+void Gui::onOtherButtonEvent(ofxDatGuiButtonEvent e)
 {
     if (e.target->getName() == "Next scene") {
         status_.forward = true;
@@ -82,6 +105,11 @@ void Gui::onButtonEvent(ofxDatGuiButtonEvent e)
     else {
         ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", e.target->getName().c_str());
     }
+}
+
+void Gui::onMidiInputEvent(ofxDatGuiTextInputEvent e)
+{
+    printf("MIDI: %s.\n", e.text);
     // TODO
 }
 

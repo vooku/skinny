@@ -13,10 +13,13 @@ public:
     Gui(Status& status) : status_(status) {}
 
     void setup();
-    void draw();
+    void draw(const std::string& sceneName);
     void reload(const Scene* currentScene);
 
-    void onButtonEvent(ofxDatGuiButtonEvent e);
+    void onLayerButtonEvent(ofxDatGuiButtonEvent e);
+    void onEffectButtonEvent(ofxDatGuiButtonEvent e);
+    void onOtherButtonEvent(ofxDatGuiButtonEvent e);
+    void onMidiInputEvent(ofxDatGuiTextInputEvent e);
 
 private:
     static const int MAX_CHARS = 20;

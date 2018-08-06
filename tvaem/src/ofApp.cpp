@@ -106,7 +106,7 @@ void ofApp::draw()
 
 
 void ofApp::drawGui(ofEventArgs& args) {
-    gui_.draw();
+    gui_.draw(currentScene_->getName());
 }
 
 void ofApp::exit() 
@@ -124,10 +124,10 @@ void ofApp::exitGui(ofEventArgs& args) {
 void ofApp::keyReleased(int key)
 {
     // 0-9 in ascii
-    if (key >= 0x30 && key < 0x3A) {
-        // key to index 1->0, 0->9
-        currentScene_->playPauseLayer((key - 0x30 + 9) % 10);
-    }
+    //if (key >= 0x30 && key < 0x3A) {
+    //    // key to index 1->0, 0->9
+    //    currentScene_->playPauseLayer((key - 0x30 + 9) % 10);
+    //}
 
     switch (key) {
     case OF_KEY_F11:
