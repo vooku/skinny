@@ -15,8 +15,11 @@ public:
         Lighten     =  4, // max(b, s)
         LinearDodge =  5, // s + b
         Difference  =  6, // |b - s|
-        Exclusion   =  7  // b + s + 2 * b * s
+        Exclusion   =  7, // b + s + 2 * b * s
+        Count       =  8  // Used for iteration
     };
+
+    static char* c_str(BlendMode blendMode);
 
     Layer(int id, const std::filesystem::path& path, const MidiMap& map = {});
     ~Layer() override;

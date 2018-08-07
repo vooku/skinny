@@ -1,4 +1,5 @@
 #include "Gui.h"
+#include <algorithm>
 
 const ofColor Gui::bgColor = { 45, 45, 48 };
 
@@ -13,8 +14,9 @@ void Gui::setup()
     fonts.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts.size, true, false);
     fonts.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts.size, true, false);
 
+    auto yOffset = 2 * delta;
     // Left panel (videos)
-    leftPanel_ = std::make_unique<ofxDatGui>(delta, 2 * delta);
+    leftPanel_ = std::make_unique<ofxDatGui>(delta, yOffset);
     leftPanel_->addLabel("Video");
     leftPanel_->addBreak();
     for (int i = 0; i < Scene::maxLayers; ++i) {
@@ -31,7 +33,7 @@ void Gui::setup()
 
     // Mid panel (MIDI)
     auto midPanelWidth = 3 * delta;
-    midPanel_ = std::make_unique<ofxDatGui>(delta + layerButtons_[0]->getWidth(), 2 * delta);
+    midPanel_ = std::make_unique<ofxDatGui>(delta + leftPanel_->getWidth(), yOffset);
     midPanel_->setWidth(midPanelWidth);
     midPanel_->addLabel("MIDI");
     midPanel_->addBreak();
@@ -50,7 +52,19 @@ void Gui::setup()
     }
 
     // Right panel
-    
+    rightPanel_ = std::make_unique<ofxDatGui>(delta + leftPanel_->getWidth() + midPanel_->getWidth(), yOffset);
+    rightPanel_->addLabel("Blending Mode");
+    rightPanel_->addBreak();
+    std::vector<string> options;
+    for (int i = static_cast<int>(Layer::BlendMode::Normal); i < static_cast<int>(Layer::BlendMode::Count); ++i)
+        options.push_back(Layer::c_str(static_cast<Layer::BlendMode>(i)));
+    for (int i = 0; i < Scene::maxLayers; ++i) {
+        blendModeDropdowns_.push_back(rightPanel_->addDropdown("Select...", options));
+        blendModeDropdowns_.back()->select(static_cast<int>(Layer::BlendMode::Normal));
+        blendModeDropdowns_.back()->onDropdownEvent(this, &Gui::onBlendModeDropdownEvent);
+        //layerButtons_.back()->onButtonEvent(this, &Gui::onLayerButtonEvent);
+    }
+    rightPanel_->addBreak();
 }
 
 void Gui::draw(const std::string& sceneName)
@@ -109,7 +123,13 @@ void Gui::onOtherButtonEvent(ofxDatGuiButtonEvent e)
 
 void Gui::onMidiInputEvent(ofxDatGuiTextInputEvent e)
 {
-    printf("MIDI: %s.\n", e.text);
+    printf("MIDI: %s.\n", e.text.c_str());
+    // TODO
+}
+
+void Gui::onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e)
+{
+    printf("Blending Mode: %s\n", Layer::c_str(static_cast<Layer::BlendMode>(e.child)));
     // TODO
 }
 

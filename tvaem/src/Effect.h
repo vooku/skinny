@@ -4,7 +4,7 @@
 #include "Mappable.h"
 #include <string>
 
-// TODO This class seems to be poorly designed.
+// TODO Using the enum as a key in a map seems like bad design.
 class Effect : public Mappable {
 public:
     enum class Type {

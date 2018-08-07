@@ -1,5 +1,30 @@
 #include "Layer.h"
 
+char * Layer::c_str(BlendMode blendMode)
+{
+    switch (blendMode)
+    {
+    case Layer::BlendMode::Normal:
+        return "Normal";
+    case Layer::BlendMode::Multiply:
+        return "Multiply";
+    case Layer::BlendMode::Screen:
+        return "Screen";
+    case Layer::BlendMode::Darken:
+        return "Darken";
+    case Layer::BlendMode::Lighten:
+        return "Lighten";
+    case Layer::BlendMode::LinearDodge:
+        return "LinearDodge";
+    case Layer::BlendMode::Difference:
+        return "Difference";
+    case Layer::BlendMode::Exclusion:
+        return "Exclusion";
+    default:
+        return "Invalid";
+    }
+}
+
 Layer::Layer(int id, const std::filesystem::path& path, const MidiMap & map) :
     id_(id),
     video(path.filename().string()),

@@ -20,6 +20,7 @@ public:
     void onEffectButtonEvent(ofxDatGuiButtonEvent e);
     void onOtherButtonEvent(ofxDatGuiButtonEvent e);
     void onMidiInputEvent(ofxDatGuiTextInputEvent e);
+    void onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e);
 
 private:
     static const int MAX_CHARS = 20;
@@ -35,7 +36,8 @@ private:
     std::unique_ptr<ofxDatGui> leftPanel_, midPanel_, rightPanel_;
     std::vector<ofxDatGuiButton*> layerButtons_, effectButtons_;
     std::vector<ofxDatGuiTextInput*> midiInputs_;
-    
+    std::vector<ofxDatGuiDropdown*> blendModeDropdowns_;
+
     ofDirectory dir_;
 
     Status& status_;
