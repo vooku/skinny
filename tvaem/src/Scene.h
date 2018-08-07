@@ -37,7 +37,15 @@ public:
     void bindTextures();
     bool isFrameNew();
     bool hasActiveFX() const;
-    void newMidiMessage(ofxMidiMessage & msg);
+
+    /**
+     * Return which layers / effects were (de)activated.
+     */
+    struct FoundMappables {
+        std::unordered_map<int, bool> layers;
+        std::unordered_map<Effect::Type, bool> effects;
+    };
+    FoundMappables newMidiMessage(ofxMidiMessage & msg);
     void playPauseLayer(int idx);
 
     void setupUniforms(ofShader& shader) const;

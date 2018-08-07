@@ -99,7 +99,7 @@ void Gui::draw(const std::string& sceneName)
 {
     ofBackground(bgColor);
 
-    fonts.italic.drawString(status_.forward ? "Loading..." : sceneName, delta, delta);
+    fonts.italic.drawString(status_.forward || status_.backward ? "Loading..." : sceneName, delta, delta);
     fonts.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), delta, ofGetHeight() - delta);
 
     if (playPanel_) playPanel_->draw();
@@ -123,6 +123,18 @@ void Gui::reload(const Scene * currentScene)
             effectButtons_[i]->setLabel(currentScene->effectNames[i]);
         }
     }
+}
+
+void Gui::setActive(int layerId, bool active)
+{
+    if (layerId < Scene::maxLayers) {
+        playPauseToggles_.at(layerId)->setChecked(active);
+    }
+}
+
+void Gui::setActive(Effect::Type type, bool active)
+{
+    playPauseToggles_.at(Scene::maxLayers + static_cast<int>(type))->setChecked(active);
 }
 
 void Gui::onLayerButtonEvent(ofxDatGuiButtonEvent e)

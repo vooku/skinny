@@ -15,6 +15,8 @@ public:
     void setup();
     void draw(const std::string& sceneName);
     void reload(const Scene* currentScene);
+    void setActive(int layerId, bool active);
+    void setActive(Effect::Type type, bool active);
 
     void onLayerButtonEvent(ofxDatGuiButtonEvent e);
     void onEffectButtonEvent(ofxDatGuiButtonEvent e);

@@ -46,31 +46,42 @@ bool Scene::hasActiveFX() const
     return uniforms_.inverse || uniforms_.reducePalette || uniforms_.colorShift;
 }
 
-void Scene::newMidiMessage(ofxMidiMessage & msg) {
+Scene::FoundMappables Scene::newMidiMessage(ofxMidiMessage & msg) {
     auto noteOn = msg.status == MIDI_NOTE_ON;
     auto noteOff = msg.status == MIDI_NOTE_OFF;
     int note = msg.pitch;
 
     if (!noteOn && !noteOff)
-        return;
+        return {};
 
+    FoundMappables result;
     for (auto& layer : layers_) {
         if (layer->containsMidiNote(note)) {
-            if (noteOn)
+            if (noteOn) {
                 layer->play();
-            else if (noteOff)
+                result.layers.insert({ layer->getId(), true });
+            }
+            else if (noteOff) {
                 layer->pause();
+                result.layers.insert({ layer->getId(), false });
+            }
         }
     }
 
     for (auto& effect : effects_) {
         if (effect.second.containsMidiNote(note)) {
-            if (noteOn)
+            if (noteOn) {
                 effect.second.play();
-            else if (noteOff)
+                result.effects.insert({ effect.first, true });
+            }
+            else if (noteOff) {
                 effect.second.pause();
+                result.effects.insert({ effect.first, false });
+            }
         }
     }
+
+    return result;
 }
 
 void Scene::playPauseLayer(int idx) 

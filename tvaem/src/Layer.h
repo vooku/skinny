@@ -32,8 +32,9 @@ public:
     void pause() override;
     void playPause() override;
 
-    float getWidth() const { return player_.getWidth(); }
-    float getHeight() const { return player_.getHeight(); }
+    auto getWidth() const { return player_.getWidth(); }
+    auto getHeight() const { return player_.getHeight(); }
+    auto getId() const { return id_; }
     bool isValid() const { return valid_; }
     BlendMode getBlendMode() const { return blendMode_; }
 

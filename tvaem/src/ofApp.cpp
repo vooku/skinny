@@ -157,7 +157,14 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
     if (msg.status == MIDI_NOTE_ON && msg.pitch == switchNote_)
         status_.forward = true;
     else if (currentScene_) {
-        currentScene_->newMidiMessage(msg);
+        auto foundMappables = currentScene_->newMidiMessage(msg);
+        for (const auto& layer : foundMappables.layers) {
+            gui_.setActive(layer.first, layer.second);
+        }
+        for (const auto& effect : foundMappables.effects) {
+            gui_.setActive(effect.first, effect.second);
+        }
+
         status_.redraw = true;
     }
 }
