@@ -21,6 +21,7 @@ public:
     void onOtherButtonEvent(ofxDatGuiButtonEvent e);
     void onMidiInputEvent(ofxDatGuiTextInputEvent e);
     void onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e);
+    void onPlayToggleEvent(ofxDatGuiToggleEvent e);
 
 private:
     static const int MAX_CHARS = 20;
@@ -33,10 +34,11 @@ private:
     
     void addBlank(ofxDatGui* panel);
 
-    std::unique_ptr<ofxDatGui> leftPanel_, midPanel_, rightPanel_;
+    std::unique_ptr<ofxDatGui> playPanel_, videoFxPanel_, midiPanel_, blendModePanel_;
     std::vector<ofxDatGuiButton*> layerButtons_, effectButtons_;
     std::vector<ofxDatGuiTextInput*> midiInputs_;
     std::vector<ofxDatGuiDropdown*> blendModeDropdowns_;
+    std::vector<ofxDatGuiToggle*> playPauseToggles_;
 
     ofDirectory dir_;
 
