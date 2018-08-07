@@ -19,9 +19,9 @@ void Gui::setup()
     
     // Play & pause panel
     playPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
+    playPanel_->setTheme(&theme_);
     auto playPanelWidth = 2 * delta;
     playPanel_->setWidth(playPanelWidth);
-    playPanel_->setTheme(&theme_);
     xOffset += playPanel_->getWidth();
     playPanel_->addLabel("Play");
     playPanel_->addBreak();
@@ -40,9 +40,9 @@ void Gui::setup()
 
     // Videos & FX panel
     videoFxPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    xOffset += videoFxPanel_->getWidth();
     videoFxPanel_->setTheme(&theme_);
-    videoFxPanel_->addLabel("Video");
+    xOffset += videoFxPanel_->getWidth();
+    videoFxPanel_->addLabel("Video")->setWidth();
     videoFxPanel_->addBreak();
     for (int i = 0; i < Scene::maxLayers; ++i) {
         layerButtons_.push_back(videoFxPanel_->addButton({}));
@@ -59,9 +59,9 @@ void Gui::setup()
     // MIDI panel
     auto midiPanelWidth = 3 * delta;
     midiPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
+    midiPanel_->setTheme(&theme_);
     midiPanel_->setWidth(midiPanelWidth);
     xOffset += midiPanel_->getWidth();
-    midiPanel_->setTheme(&theme_);
     midiPanel_->addLabel("MIDI");
     midiPanel_->addBreak();
     for (int i = 0; i < Scene::maxLayers + static_cast<int>(Effect::Type::Count) + 1; ++i) {
@@ -80,8 +80,8 @@ void Gui::setup()
 
     // Blending modes panel
     blendModePanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    xOffset += blendModePanel_->getWidth();
     blendModePanel_->setTheme(&theme_);
+    xOffset += blendModePanel_->getWidth();
     blendModePanel_->addLabel("Blending Mode");
     blendModePanel_->addBreak();
     std::vector<string> options;
@@ -174,7 +174,7 @@ void Gui::Gui::addBlank(ofxDatGui * panel)
     auto blank = panel->addButton({});
     blank->setEnabled(false);
     blank->setBackgroundColor(bgColor);
-    blank->setStripeColor(bgColor);
+    //blank->setStripeColor(bgColor);
 }
 
 Gui::Theme::Theme() : 
@@ -182,6 +182,7 @@ Gui::Theme::Theme() :
 {
     layout.upperCaseLabels = false;
     //layout.labelWidth = 0;
+    stripe.visible = false;
     font.size = Gui::Fonts::sizeRegular;
     font.file = "fonts/IBMPlexSans-Regular.ttf";
     
