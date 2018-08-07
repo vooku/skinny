@@ -11,8 +11,8 @@ void Gui::setup()
     dir_.allowExt("avi");
     dir_.listDir();
 
-    fonts.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts.size, true, false);
-    fonts.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts.size, true, false);
+    fonts.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts.sizeRegular, true, false);
+    fonts.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts.sizeItalic, true, false);
 
     auto xOffset = delta;
     auto yOffset = 2 * delta;
@@ -21,6 +21,7 @@ void Gui::setup()
     playPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     auto playPanelWidth = 2 * delta;
     playPanel_->setWidth(playPanelWidth);
+    playPanel_->setTheme(&theme_);
     xOffset += playPanel_->getWidth();
     playPanel_->addLabel("Play");
     playPanel_->addBreak();
@@ -40,6 +41,7 @@ void Gui::setup()
     // Videos & FX panel
     videoFxPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     xOffset += videoFxPanel_->getWidth();
+    videoFxPanel_->setTheme(&theme_);
     videoFxPanel_->addLabel("Video");
     videoFxPanel_->addBreak();
     for (int i = 0; i < Scene::maxLayers; ++i) {
@@ -59,6 +61,7 @@ void Gui::setup()
     midiPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     midiPanel_->setWidth(midiPanelWidth);
     xOffset += midiPanel_->getWidth();
+    midiPanel_->setTheme(&theme_);
     midiPanel_->addLabel("MIDI");
     midiPanel_->addBreak();
     for (int i = 0; i < Scene::maxLayers + static_cast<int>(Effect::Type::Count) + 1; ++i) {
@@ -78,6 +81,7 @@ void Gui::setup()
     // Blending modes panel
     blendModePanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     xOffset += blendModePanel_->getWidth();
+    blendModePanel_->setTheme(&theme_);
     blendModePanel_->addLabel("Blending Mode");
     blendModePanel_->addBreak();
     std::vector<string> options;
@@ -171,4 +175,15 @@ void Gui::Gui::addBlank(ofxDatGui * panel)
     blank->setEnabled(false);
     blank->setBackgroundColor(bgColor);
     blank->setStripeColor(bgColor);
+}
+
+Gui::Theme::Theme() : 
+    ofxDatGuiTheme(false) 
+{
+    layout.upperCaseLabels = false;
+    //layout.labelWidth = 0;
+    font.size = Gui::Fonts::sizeRegular;
+    font.file = "fonts/IBMPlexSans-Regular.ttf";
+    
+    init();
 }
