@@ -93,10 +93,6 @@ void ShowDescription::fromXml(ofxXmlSettings & config) {
         config.popTag(); // scene
     }
     currentIdx_ = 0;
-    if (!scenes_.empty())
-        nextIdx_ = (currentIdx_ + 1) % scenes_.size();
-    else
-        nextIdx_ = 0;
 }
 
 void ShowDescription::toXml(ofxXmlSettings & config) const {
@@ -110,6 +106,15 @@ void ShowDescription::toXml(ofxXmlSettings & config) const {
 
 ShowDescription & ShowDescription::operator++() {
     currentIdx_ = ++currentIdx_ % scenes_.size();
-    nextIdx_ = ++nextIdx_ % scenes_.size();
+    return *this;
+}
+
+ShowDescription & ShowDescription::operator--()
+{
+    --currentIdx_;
+    if (currentIdx_ < 0)
+        currentIdx_ = currentIdx_ + scenes_.size();
+    else
+        currentIdx_ = currentIdx_ % scenes_.size();
     return *this;
 }

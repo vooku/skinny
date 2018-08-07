@@ -19,7 +19,7 @@ void Gui::setup()
     
     // Play & pause panel
     playPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    playPanel_->setTheme(&theme_);
+    playPanel_->setTheme(&commonTheme_);
     auto playPanelWidth = 2 * delta;
     playPanel_->setWidth(playPanelWidth);
     xOffset += playPanel_->getWidth();
@@ -40,9 +40,9 @@ void Gui::setup()
 
     // Videos & FX panel
     videoFxPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    videoFxPanel_->setTheme(&theme_);
+    videoFxPanel_->setTheme(&commonTheme_);
     xOffset += videoFxPanel_->getWidth();
-    videoFxPanel_->addLabel("Video")->setWidth();
+    videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
     videoFxPanel_->addBreak();
     for (int i = 0; i < Scene::maxLayers; ++i) {
         layerButtons_.push_back(videoFxPanel_->addButton({}));
@@ -59,7 +59,7 @@ void Gui::setup()
     // MIDI panel
     auto midiPanelWidth = 3 * delta;
     midiPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    midiPanel_->setTheme(&theme_);
+    midiPanel_->setTheme(&commonTheme_);
     midiPanel_->setWidth(midiPanelWidth);
     xOffset += midiPanel_->getWidth();
     midiPanel_->addLabel("MIDI");
@@ -80,7 +80,7 @@ void Gui::setup()
 
     // Blending modes panel
     blendModePanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    blendModePanel_->setTheme(&theme_);
+    blendModePanel_->setTheme(&commonTheme_);
     xOffset += blendModePanel_->getWidth();
     blendModePanel_->addLabel("Blending Mode");
     blendModePanel_->addBreak();
@@ -91,7 +91,6 @@ void Gui::setup()
         blendModeDropdowns_.push_back(blendModePanel_->addDropdown("Select...", options));
         blendModeDropdowns_.back()->select(static_cast<int>(Layer::BlendMode::Normal));
         blendModeDropdowns_.back()->onDropdownEvent(this, &Gui::onBlendModeDropdownEvent);
-        //layerButtons_.back()->onButtonEvent(this, &Gui::onLayerButtonEvent);
     }
     blendModePanel_->addBreak();
 }
@@ -177,14 +176,24 @@ void Gui::Gui::addBlank(ofxDatGui * panel)
     //blank->setStripeColor(bgColor);
 }
 
-Gui::Theme::Theme() : 
+Gui::CommonTheme::CommonTheme() :
     ofxDatGuiTheme(false) 
 {
     layout.upperCaseLabels = false;
-    //layout.labelWidth = 0;
     stripe.visible = false;
     font.size = Gui::Fonts::sizeRegular;
     font.file = "fonts/IBMPlexSans-Regular.ttf";
     
+    init();
+}
+
+Gui::HeaderTheme::HeaderTheme() :
+    ofxDatGuiTheme(false)
+{
+    layout.upperCaseLabels = false;
+    stripe.visible = false;
+    font.size = Gui::Fonts::sizeItalic;
+    font.file = "fonts/IBMPlexSerif-Italic.ttf";
+
     init();
 }

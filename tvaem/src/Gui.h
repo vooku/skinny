@@ -27,10 +27,15 @@ private:
     static const int MAX_CHARS = 20;
     static const int delta = 25;
 
-    class Theme : public ofxDatGuiTheme {
+    class CommonTheme : public ofxDatGuiTheme {
     public:
-        Theme();
-    } theme_;
+        CommonTheme();
+    } commonTheme_;
+
+    class HeaderTheme : public ofxDatGuiTheme {
+    public:
+        HeaderTheme();
+    } headerTheme_;
     
     struct Fonts {
         static const int sizeRegular = 12;

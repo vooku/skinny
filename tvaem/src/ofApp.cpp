@@ -82,8 +82,13 @@ void ofApp::update()
 
     if (status_.forward) {
         drawGui(ofEventArgs{ });
-        loadNext();
+        reload(LoadDir::Forward);
         status_.forward = false;
+    }
+    else if (status_.backward) {
+        drawGui(ofEventArgs{});
+        reload(LoadDir::Backward);
+        status_.backward = false;
     }
 
     if (!currentScene_)
@@ -218,7 +223,7 @@ bool ofApp::setupShow()
         }
     }
 
-    if (!loadNext()) {
+    if (!reload(LoadDir::Init)) {
         ofLog(OF_LOG_FATAL_ERROR, "Configuration file \"%s\" contains no scenes.", settings_.cfgFile.c_str());
         return false;
     }
@@ -259,18 +264,30 @@ bool ofApp::saveConfig()
     return config.saveFile(settings_.cfgFile);
 }
 
-bool ofApp::loadNext() 
+bool ofApp::reload(LoadDir dir)
 {
     if (show_.getSize() < 1) {
         ofLog(OF_LOG_ERROR, "Cannot load next scene, %d is too few.", show_.getSize());
         return false;
     }
 
+    switch (dir)
+    {
+    case ofApp::LoadDir::Forward:
+        ++show_;
+        break;
+    case ofApp::LoadDir::Backward:
+        --show_;
+        break;
+    default:
+        // do nothing
+        break;
+    }
+
     shader_.begin();
     currentScene_.reset(new Scene(show_.currentScene()));
     currentScene_->bindTextures();
-    shader_.end();
-    ++show_;
+    shader_.end();    
 
     if (currentScene_->isValid()) {
         ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());

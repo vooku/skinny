@@ -81,4 +81,43 @@
             <midi>43</midi>
         </effect>
     </scene>
+    <scene>
+        <name>Scene 2</name>
+        <layer>
+            <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
+            <blendMode>0</blendMode>
+            <midi>36</midi>
+        </layer>
+        <layer>
+            <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
+            <blendMode>5</blendMode>
+            <midi>37</midi>
+        </layer>
+        <layer>
+            <path>../../../videos/circle-slow.mov</path>
+            <blendMode>5</blendMode>
+            <midi>38</midi>
+        </layer>
+        <layer>
+            <path>../../../videos/circle-fast.mov</path>
+            <blendMode>1</blendMode>
+            <midi>39</midi>
+        </layer>
+        <effect>
+            <type>0</type>
+            <midi>40</midi>
+        </effect>
+        <effect>
+            <type>1</type>
+            <midi>41</midi>
+        </effect>
+        <effect>
+            <type>2</type>
+            <midi>42</midi>
+        </effect>
+        <effect>
+            <type>3</type>
+            <midi>43</midi>
+        </effect>
+    </scene>
 </show>

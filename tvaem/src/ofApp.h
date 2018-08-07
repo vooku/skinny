@@ -52,8 +52,11 @@ private:
     bool setupShow();
     bool loadConfig();
     bool saveConfig();
-    bool loadNext();
-    bool loadPrevious();
+
+    enum class LoadDir {
+        Init, Forward, Backward
+    };
+    bool reload(LoadDir dir);
 
     Status status_;
 

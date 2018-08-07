@@ -41,17 +41,17 @@ struct SceneDescription {
 
 class ShowDescription {
 public:
-    ShowDescription() : currentIdx_(0), nextIdx_(0) { }
+    ShowDescription() : currentIdx_(0) { }
 
     void fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
     ShowDescription& operator++();
+    ShowDescription& operator--();
 
     const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }
-    const SceneDescription& nextScene() const { return scenes_[nextIdx_]; }
-    size_t getSize() { return scenes_.size(); }
+    auto getSize() { return scenes_.size(); }
 
 private:
     std::vector<SceneDescription> scenes_;
-    int currentIdx_, nextIdx_;
+    int currentIdx_;
 };
