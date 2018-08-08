@@ -5,7 +5,8 @@
 
 ofApp::ofApp(ofxArgs* args) : 
     switchNote_(MappableDescription::invalid_midi),
-    gui_(&status_, nullptr)
+    gui_(&status_, &show_),
+    currentScene_(std::make_unique<Scene>())
 {
     parseArgs(args);
 }
@@ -81,14 +82,19 @@ void ofApp::update()
     }
 
     if (status_.forward) {
-        drawGui(ofEventArgs{ });
+        //drawGui(ofEventArgs{ });
         reload(LoadDir::Forward);
         status_.forward = false;
     }
     else if (status_.backward) {
-        drawGui(ofEventArgs{});
+        //drawGui(ofEventArgs{});
         reload(LoadDir::Backward);
         status_.backward = false;
+    }
+    else if (status_.reload) {
+        //drawGui(ofEventArgs{});
+        reload(LoadDir::Current);
+        status_.reload = false;
     }
 
     if (!currentScene_)
@@ -230,7 +236,7 @@ bool ofApp::setupShow()
         }
     }
 
-    if (!reload(LoadDir::Init)) {
+    if (!reload(LoadDir::Current)) {
         ofLog(OF_LOG_FATAL_ERROR, "Configuration file \"%s\" contains no scenes.", settings_.cfgFile.c_str());
         return false;
     }
@@ -292,7 +298,7 @@ bool ofApp::reload(LoadDir dir)
     }
 
     shader_.begin();
-    currentScene_.reset(new Scene(show_.currentScene()));
+    currentScene_->reload(show_.currentScene());
     currentScene_->bindTextures();
     shader_.end();    
 

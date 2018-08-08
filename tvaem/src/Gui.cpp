@@ -3,20 +3,15 @@
 
 const ofColor Gui::bgColor = { 45, 45, 48 };
 
-Gui::Gui(Status* status, Scene* currentScene) : 
+Gui::Gui(Status* status, ShowDescription* show) :
     status_(status),
-    currentScene_(currentScene)
+    show_(show),
+    currentScene_(nullptr)
 {
 }
 
 void Gui::setup()
 {
-    auto cwd = ".";
-    dir_.open(cwd);
-    dir_.allowExt("mp4");
-    dir_.allowExt("avi");
-    dir_.listDir();
-
     fonts.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts.sizeRegular, true, false);
     fonts.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts.sizeItalic, true, false);
 
@@ -55,19 +50,27 @@ void Gui::setup()
     // Videos & FX panel
     videoFxPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     videoFxPanel_->setTheme(&commonTheme_);
+    videoFxPanel_->setWidth(14 * delta);
     xOffset += videoFxPanel_->getWidth();
     videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
     videoFxPanel_->addBreak();
-    for (int i = 0; i < Scene::maxLayers; ++i) {
-        layerButtons_.push_back(videoFxPanel_->addButton({}));
-        layerButtons_.back()->onButtonEvent(this, &Gui::onLayerButtonEvent);
+
+    layerButtons_.resize(Scene::maxLayers);
+    for (int i = 0; i < layerButtons_.size(); ++i) {
+        layerButtons_[i] = videoFxPanel_->addButton({});
+        layerButtons_[i]->onButtonEvent(this, &Gui::onLayerButtonEvent);
+        layerButtons_[i]->setName(std::to_string(i));
     }
+
     videoFxPanel_->addBreak();
     videoFxPanel_->addLabel("Effect");
     videoFxPanel_->addBreak();
-    for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-        effectButtons_.push_back(videoFxPanel_->addButton({}));
-        effectButtons_.back()->onButtonEvent(this, &Gui::onEffectButtonEvent);
+
+    effectButtons_.resize(static_cast<int>(Effect::Type::Count));
+    for (auto& button : effectButtons_) {
+        button = videoFxPanel_->addButton({});
+        button->onButtonEvent(this, &Gui::onEffectButtonEvent);
+        button->setEnabled(false);
     }
 
     // MIDI panel
@@ -135,8 +138,8 @@ void Gui::reload(Scene* newScene)
 
     if (layerButtons_.size() == Scene::maxLayers) {
         for (int i = 0; i < Scene::maxLayers; ++i) {
-            if (i < currentScene_->layerNames.size())
-                layerButtons_[i]->setLabel(currentScene_->layerNames[i]);
+            if (i < currentScene_->getLayerNames().size())
+                layerButtons_[i]->setLabel(currentScene_->getLayerNames()[i]);
             else
                 layerButtons_[i]->setLabel("Click to load a video"); // TODO different style
         }
@@ -144,7 +147,7 @@ void Gui::reload(Scene* newScene)
 
     if (effectButtons_.size() == static_cast<int>(Effect::Type::Count)) {
         for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-            effectButtons_[i]->setLabel(currentScene_->effectNames[i]);
+            effectButtons_[i]->setLabel(currentScene_->getEffectNames()[i]);
         }
     }
 }
@@ -171,14 +174,23 @@ void Gui::setActive(Effect::Type type, bool active)
 
 void Gui::onLayerButtonEvent(ofxDatGuiButtonEvent e)
 {
-    printf("Layer button presed.\n");
-    // TODO
+    auto openFileResult = ofSystemLoadDialog("Select a video");
+    if (openFileResult.bSuccess) {
+        auto idx = std::stoi(e.target->getName());
+        if (idx < show_->scenes_.size()) {
+            show_->scenes_[show_->currentIdx_].layers[idx].path = openFileResult.getPath();
+            status_->reload = true;
+        }
+    }
+    else {
+        ofSystemAlertDialog("Cannot open " + openFileResult.getPath() + ".");
+    }
 }
 
 void Gui::onEffectButtonEvent(ofxDatGuiButtonEvent e)
 {
     printf("Effect button presed.\n");
-    // TODO
+    // nothing
 }
 
 void Gui::onOtherButtonEvent(ofxDatGuiButtonEvent e)

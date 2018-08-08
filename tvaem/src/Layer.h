@@ -35,6 +35,7 @@ public:
     auto getWidth() const { return player_.getWidth(); }
     auto getHeight() const { return player_.getHeight(); }
     auto getId() const { return id_; }
+    auto getName() const { return name_;  }
     bool isValid() const { return valid_; }
     BlendMode getBlendMode() const { return blendMode_; }
 
@@ -43,7 +44,7 @@ public:
 private:
     ofVideoPlayer player_;
     const int id_;
-    const std::string video;
+    const std::string name_;
     bool valid_;
     BlendMode blendMode_;
 };

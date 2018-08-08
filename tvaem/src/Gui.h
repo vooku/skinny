@@ -10,7 +10,7 @@ public:
     static const ofColor bgColor;
 
     Gui() = delete;
-    Gui(Status* status, Scene* currentScene);
+    Gui(Status* status, ShowDescription* show);
 
     void setup();
     void draw();
@@ -53,8 +53,7 @@ private:
     std::vector<ofxDatGuiDropdown*> blendModeDropdowns_;
     std::vector<ofxDatGuiToggle*> layerToggles_, effectToggles_;
 
-    ofDirectory dir_;
-
     Status* status_; //!< No ownership, do not delete here!
     Scene* currentScene_; //!< No ownership, do not delete here!
+    ShowDescription* show_; //!< No ownership, do not delete here!
 };

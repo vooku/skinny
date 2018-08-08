@@ -27,7 +27,7 @@ char * Layer::c_str(BlendMode blendMode)
 
 Layer::Layer(int id, const std::filesystem::path& path, const MidiMap & map) :
     id_(id),
-    video(path.filename().string()),
+    name_(path.filename().string()),
     Mappable(map),
     valid_(false)
 {
@@ -49,10 +49,10 @@ bool Layer::reload(const std::filesystem::path& path)
     player_.setVolume(0);
     
     if (!valid_) {
-        ofLog(OF_LOG_ERROR, "Cannot load %s at %s", video.c_str(), path.c_str());
+        ofLog(OF_LOG_ERROR, "Cannot load %s at %s", name_.c_str(), path.c_str());
     }
     else 
-        ofLog(OF_LOG_VERBOSE, "Loaded %s.", video.c_str());
+        ofLog(OF_LOG_VERBOSE, "Loaded %s.", name_.c_str());
 
     return valid_;
 }

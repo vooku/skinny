@@ -54,7 +54,7 @@ private:
     bool saveConfig();
 
     enum class LoadDir {
-        Init, Forward, Backward
+        Current, Forward, Backward
     };
     bool reload(LoadDir dir);
 

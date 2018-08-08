@@ -41,6 +41,8 @@ struct SceneDescription {
 
 class ShowDescription {
 public:
+    friend class Gui;
+
     ShowDescription() : currentIdx_(0) { }
 
     void fromXml(ofxXmlSettings& config);

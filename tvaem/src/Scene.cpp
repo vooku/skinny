@@ -1,30 +1,29 @@
 #include "Scene.h"
 
-Scene::Scene(const SceneDescription & description) :
-    name_(description.name),
-    layerNames(description),
-    effectNames(description),
-    valid_(true)
+void Scene::reload(const SceneDescription & description)
 {
-    for (const auto& layer : description.layers) {
-        if (layers_.size() >= maxLayers)
-            break;
+    name_ = description.name;
+    layerNames_ = { description };
+    effectNames_ = { description };
+    valid_ = true;
 
-        auto newLayer = std::make_unique<Layer>(layers_.size(), layer.path, layer.midiMap);
-        newLayer->setBlendMode(layer.blendMode);
-        if (newLayer->isValid())
-            layers_.push_back(std::move(newLayer));
-        else
-            valid_ = false;
+    layers_.resize(description.layers.size());
+
+    for (int i = 0; i < layers_.size() && i < maxLayers; ++i) {
+        if (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName()) {
+
+            auto newLayer = std::make_unique<Layer>(i, description.layers[i].path, description.layers[i].midiMap);
+            newLayer->setBlendMode(description.layers[i].blendMode);
+            if (newLayer->isValid())
+                layers_[i].reset(newLayer.release());
+            else
+                valid_ = false;
+        }
     }
 
     for (const auto& effect : description.effects) {
         effects_.emplace(effect.type, effect.midiMap);
     }
-
-    uniforms_.inverse = false;
-    uniforms_.reducePalette = false;
-    uniforms_.colorShift = 0;
 }
 
 void Scene::bindTextures()
@@ -128,16 +127,16 @@ void Scene::setupUniforms(ofShader& shader) const
     shader.setUniform1i("colorShift2", uniforms_.colorShift2);
 }
 
-Scene::LayerNames::LayerNames(const SceneDescription & description)
+LayerNames::LayerNames(const SceneDescription & description)
 {
     for (const auto& layer : description.layers) {
-        names.push_back(layer.path.filename().string());
+        names_.push_back(layer.path.filename().string());
     }
 }
 
-Scene::EffectNames::EffectNames(const SceneDescription & description)
+EffectNames::EffectNames(const SceneDescription & description)
 {
     for (const auto& effect : description.effects) {
-        names.push_back(Effect::c_str(effect.type));
+        names_.push_back(Effect::c_str(effect.type));
     }
 }
