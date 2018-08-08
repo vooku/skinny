@@ -47,6 +47,7 @@ public:
     };
     FoundMappables newMidiMessage(ofxMidiMessage & msg);
     void playPauseLayer(int idx);
+    void playPauseEffect(Effect::Type type);
 
     void setupUniforms(ofShader& shader) const;
 

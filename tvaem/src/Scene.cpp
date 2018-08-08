@@ -90,6 +90,11 @@ void Scene::playPauseLayer(int idx)
         layers_[idx]->playPause();
 }
 
+void Scene::playPauseEffect(Effect::Type type)
+{
+    effects_.at(type).playPause();
+}
+
 void Scene::setupUniforms(ofShader& shader) const 
 {
     uniforms_.nLayers = layers_.size();

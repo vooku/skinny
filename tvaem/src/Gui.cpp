@@ -215,7 +215,9 @@ void Gui::onPlayToggleEvent(ofxDatGuiToggleEvent e)
             currentScene_->playPauseLayer(layerId);
     }
     else if (name.substr(0, 6).compare("effect") == 0) {
-        // TODO
+        auto type = static_cast<Effect::Type>(std::stoi(name.substr(6)));
+        if (currentScene_)
+            currentScene_->playPauseEffect(type);
     }
 }
 
