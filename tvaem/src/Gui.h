@@ -10,11 +10,11 @@ public:
     static const ofColor bgColor;
 
     Gui() = delete;
-    Gui(Status& status) : status_(status) {}
+    Gui(Status* status, Scene* currentScene);
 
     void setup();
-    void draw(const std::string& sceneName);
-    void reload(const Scene* currentScene);
+    void draw();
+    void reload(Scene* newScene);
     void setActive(int layerId, bool active);
     void setActive(Effect::Type type, bool active);
 
@@ -51,9 +51,10 @@ private:
     std::vector<ofxDatGuiButton*> layerButtons_, effectButtons_;
     std::vector<ofxDatGuiTextInput*> midiInputs_;
     std::vector<ofxDatGuiDropdown*> blendModeDropdowns_;
-    std::vector<ofxDatGuiToggle*> playPauseToggles_;
+    std::vector<ofxDatGuiToggle*> layerToggles_, effectToggles_;
 
     ofDirectory dir_;
 
-    Status& status_;
+    Status* status_; //!< No ownership, do not delete here!
+    Scene* currentScene_; //!< No ownership, do not delete here!
 };

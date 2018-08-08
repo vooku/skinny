@@ -5,7 +5,7 @@
 
 ofApp::ofApp(ofxArgs* args) : 
     switchNote_(MappableDescription::invalid_midi),
-    gui_(status_)
+    gui_(&status_, nullptr)
 {
     parseArgs(args);
 }
@@ -111,7 +111,7 @@ void ofApp::draw()
 
 
 void ofApp::drawGui(ofEventArgs& args) {
-    gui_.draw(currentScene_->getName());
+    gui_.draw();
 }
 
 void ofApp::exit() 
@@ -304,6 +304,8 @@ bool ofApp::reload(LoadDir dir)
         // TODO display in gui
         ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", currentScene_->getName().c_str());
     }
+
+    status_.redraw = true;
 
     return true;
 }
