@@ -9,9 +9,10 @@ void Scene::reload(const SceneDescription & description)
 
     layers_.resize(description.layers.size());
 
-    for (int i = 0; i < layers_.size() && i < maxLayers; ++i) {
-        if (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName()) {
-
+    for (int i = 0; i < layers_.size() && i < MAX_LAYERS; ++i) {
+        bool reloadLayer = description.layers[i].valid; // do not load invalid description
+        reloadLayer = reloadLayer && (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName());
+        if (reloadLayer) {
             auto newLayer = std::make_unique<Layer>(i, description.layers[i].path, description.layers[i].midiMap);
             newLayer->setBlendMode(description.layers[i].blendMode);
             if (newLayer->isValid())
@@ -28,15 +29,19 @@ void Scene::reload(const SceneDescription & description)
 
 void Scene::bindTextures()
 {
-    for (auto& layer : layers_)
-        layer->bind();
+    for (auto& layer : layers_) {
+         if (layer)
+            layer->bind();
+    }
 }
 
 bool Scene::isFrameNew()
 {
     bool newFrame = false;
-    for (auto& layer : layers_)
-        newFrame |= layer->isFrameNew();
+    for (auto& layer : layers_) {
+        if (layer)
+            newFrame |= layer->isFrameNew();
+    }
     return newFrame;
 }
 
@@ -55,7 +60,7 @@ Scene::FoundMappables Scene::newMidiMessage(ofxMidiMessage & msg) {
 
     FoundMappables result;
     for (auto& layer : layers_) {
-        if (layer->containsMidiNote(note)) {
+        if (layer && layer->containsMidiNote(note)) {
             if (noteOn) {
                 layer->play();
                 result.layers.insert({ layer->getId(), true });
@@ -85,7 +90,7 @@ Scene::FoundMappables Scene::newMidiMessage(ofxMidiMessage & msg) {
 
 void Scene::playPauseLayer(int idx) 
 {
-    if (idx < layers_.size())
+    if (idx < layers_.size() && layers_[idx])
         layers_[idx]->playPause();
 }
 
@@ -97,10 +102,15 @@ void Scene::playPauseEffect(Effect::Type type)
 void Scene::setupUniforms(ofShader& shader) const 
 {
     uniforms_.nLayers = layers_.size();
-    for (int i = 0; i < layers_.size() && i < maxLayers; ++i) {
-        uniforms_.playing[i] = layers_[i]->isPlaying();
-        uniforms_.dimensions[i] = { layers_[i]->getWidth(), layers_[i]->getHeight() };
-        uniforms_.blendingModes[i] = static_cast<int>(layers_[i]->getBlendMode());
+    for (int i = 0; i < layers_.size(); ++i) {
+        if (layers_[i]) {
+            uniforms_.playing[i] = layers_[i]->isPlaying();
+            uniforms_.dimensions[i] = { layers_[i]->getWidth(), layers_[i]->getHeight() };
+            uniforms_.blendingModes[i] = static_cast<int>(layers_[i]->getBlendMode());
+        }
+        else {
+            uniforms_.playing[i] = false;
+        }
     }
 
     shader.setUniform1i("nLayers", uniforms_.nLayers);

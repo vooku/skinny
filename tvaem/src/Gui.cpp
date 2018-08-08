@@ -27,8 +27,8 @@ void Gui::setup()
     playPanel_->addLabel("Play");
     playPanel_->addBreak();
 
-    layerToggles_.resize(Scene::maxLayers);
-    for (int i = 0; i < Scene::maxLayers; ++i) {
+    layerToggles_.resize(MAX_LAYERS);
+    for (int i = 0; i < MAX_LAYERS; ++i) {
         layerToggles_[i] = playPanel_->addToggle({});
         layerToggles_[i]->onToggleEvent(this, &Gui::onPlayToggleEvent);
         layerToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
@@ -55,7 +55,7 @@ void Gui::setup()
     videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
     videoFxPanel_->addBreak();
 
-    layerButtons_.resize(Scene::maxLayers);
+    layerButtons_.resize(MAX_LAYERS);
     for (int i = 0; i < layerButtons_.size(); ++i) {
         layerButtons_[i] = videoFxPanel_->addButton({});
         layerButtons_[i]->onButtonEvent(this, &Gui::onLayerButtonEvent);
@@ -81,8 +81,8 @@ void Gui::setup()
     xOffset += midiPanel_->getWidth();
     midiPanel_->addLabel("MIDI");
     midiPanel_->addBreak();
-    for (int i = 0; i < Scene::maxLayers + static_cast<int>(Effect::Type::Count) + 1; ++i) {
-        if (i == Scene::maxLayers) {
+    for (int i = 0; i < MAX_LAYERS + static_cast<int>(Effect::Type::Count) + 1; ++i) {
+        if (i == MAX_LAYERS) {
             midiPanel_->addBreak();
             addBlank(midiPanel_.get());
             midiPanel_->addBreak();
@@ -104,7 +104,7 @@ void Gui::setup()
     std::vector<string> options;
     for (int i = static_cast<int>(Layer::BlendMode::Normal); i < static_cast<int>(Layer::BlendMode::Count); ++i)
         options.push_back(Layer::c_str(static_cast<Layer::BlendMode>(i)));
-    for (int i = 0; i < Scene::maxLayers; ++i) {
+    for (int i = 0; i < MAX_LAYERS; ++i) {
         blendModeDropdowns_.push_back(blendModePanel_->addDropdown("Select...", options));
         blendModeDropdowns_.back()->select(static_cast<int>(Layer::BlendMode::Normal));
         blendModeDropdowns_.back()->onDropdownEvent(this, &Gui::onBlendModeDropdownEvent);
@@ -136,8 +136,8 @@ void Gui::reload(Scene* newScene)
         toggle->setChecked(false);
     }
 
-    if (layerButtons_.size() == Scene::maxLayers) {
-        for (int i = 0; i < Scene::maxLayers; ++i) {
+    if (layerButtons_.size() == MAX_LAYERS) {
+        for (int i = 0; i < MAX_LAYERS; ++i) {
             if (i < currentScene_->getLayerNames().size())
                 layerButtons_[i]->setLabel(currentScene_->getLayerNames()[i]);
             else
@@ -177,13 +177,9 @@ void Gui::onLayerButtonEvent(ofxDatGuiButtonEvent e)
     auto openFileResult = ofSystemLoadDialog("Select a video");
     if (openFileResult.bSuccess) {
         auto idx = std::stoi(e.target->getName());
-        if (idx < show_->scenes_.size()) {
-            show_->scenes_[show_->currentIdx_].layers[idx].path = openFileResult.getPath();
-            status_->reload = true;
-        }
-    }
-    else {
-        ofSystemAlertDialog("Cannot open " + openFileResult.getPath() + ".");
+        auto& layerDescription = show_->scenes_[show_->currentIdx_].layers[idx];
+        layerDescription = { static_cast<unsigned int>(idx), openFileResult.getPath() };
+        status_->reload = true;
     }
 }
 

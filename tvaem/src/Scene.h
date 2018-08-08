@@ -32,8 +32,6 @@ private:
 
 class Scene {
 public:
-    static const int maxLayers = 7;
-
     void reload(const SceneDescription& description);
     void bindTextures();
     bool isFrameNew();
@@ -61,9 +59,9 @@ public:
 private:
     struct Uniforms {
         int nLayers;
-        int playing[maxLayers];
-        glm::ivec2 dimensions[maxLayers];
-        int blendingModes[maxLayers];
+        int playing[MAX_LAYERS];
+        glm::ivec2 dimensions[MAX_LAYERS];
+        int blendingModes[MAX_LAYERS];
         bool inverse = false;
         bool reducePalette = false;
         bool colorShift = false;
