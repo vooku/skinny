@@ -222,14 +222,20 @@ void Gui::onOtherButtonEvent(ofxDatGuiButtonEvent e)
 
 void Gui::onLayerMidiInputEvent(ofxDatGuiTextInputEvent e)
 {
-    printf("MIDI: %s.\n", e.text.c_str());
-    // TODO
+    auto idx = std::stoi(e.target->getName());
+    auto note = static_cast<midiNote>(std::stoi(e.text));
+    show_->scenes_[show_->currentIdx_].layers[idx].midiMap = { note };
+    if (currentScene_)
+        currentScene_->layers_[idx]->setMapping({ note });
 }
 
 void Gui::onEffectMidiInputEvent(ofxDatGuiTextInputEvent e)
 {
-    printf("MIDI: %s.\n", e.text.c_str());
-    // TODO
+    auto idx = std::stoi(e.target->getName());
+    auto note = static_cast<midiNote>(std::stoi(e.text));
+    show_->scenes_[show_->currentIdx_].effects[idx].midiMap = { note };
+    if (currentScene_)
+        currentScene_->effects_[static_cast<Effect::Type>(idx)].setMapping({ note });
 }
 
 void Gui::onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e)
