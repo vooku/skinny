@@ -23,7 +23,7 @@ void Scene::reload(const SceneDescription & description)
     }
 
     for (const auto& effect : description.effects) {
-        effects_.emplace(effect.type, effect.midiMap);
+        effects_[effect.type] = { effect.midiMap };
     }
 }
 

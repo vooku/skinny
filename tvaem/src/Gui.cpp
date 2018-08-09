@@ -218,8 +218,7 @@ void Gui::reload(Scene* newScene)
         auto type = static_cast<Effect::Type>(i);
         effectButtons_[i]->setLabel(Effect::c_str(type));
         auto& midiMap = effects.at(type).getMapping();
-        if (!midiMap.empty())
-            effectMidiInputs_[i]->setText(std::to_string(*midiMap.begin()));
+        effectMidiInputs_[i]->setText(midiMap.empty() ? "" : std::to_string(*midiMap.begin()));
     }
 
     draw();
