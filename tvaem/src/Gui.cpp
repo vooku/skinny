@@ -262,9 +262,12 @@ void Gui::onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e)
 void Gui::onLayerPlayToggleEvent(ofxDatGuiToggleEvent e)
 {    
     auto idx = std::stoi(e.target->getName());
-    if (currentScene_)
+    if (currentScene_) {
         currentScene_->playPauseLayer(idx);
+        status_->redraw = true;
+    }
 }
+
 void Gui::onEffectPlayToggleEvent(ofxDatGuiToggleEvent e)
 {
     auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));

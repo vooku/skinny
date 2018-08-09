@@ -11,13 +11,14 @@ void Scene::reload(const SceneDescription & description)
         }
         else {
             if (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName()) {
-                auto newLayer = std::make_unique<Layer>(i, description.layers[i].path, description.layers[i].midiMap);
-                newLayer->setBlendMode(description.layers[i].blendMode);
+                auto newLayer = std::make_unique<Layer>(i, description.layers[i].path);
                 if (newLayer->isValid())
                     layers_[i].reset(newLayer.release());
                 else
                     valid_ = false;
             }
+            layers_[i]->setBlendMode(description.layers[i].blendMode);
+            layers_[i]->setMapping(description.layers[i].midiMap);
         }
     }
 
