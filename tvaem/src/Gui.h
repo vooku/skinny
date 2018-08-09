@@ -22,9 +22,13 @@ public:
     void onLayerButton(ofxDatGuiButtonEvent e);
     void onEffectButton(ofxDatGuiButtonEvent e);
     void onOtherButton(ofxDatGuiButtonEvent e);
+
     void onLayerMidiInput(ofxDatGuiTextInputEvent e);
     void onEffectMidiInput(ofxDatGuiTextInputEvent e);
+    void onSceneNameInput(ofxDatGuiTextInputEvent e);
+
     void onBlendModeDropdown(ofxDatGuiDropdownEvent e);
+
     void onLayerPlayToggle(ofxDatGuiToggleEvent e);
     void onEffectPlayToggle(ofxDatGuiToggleEvent e);
     void onLayerMuteToggle(ofxDatGuiToggleEvent e);
@@ -39,7 +43,7 @@ private:
         CommonTheme();
     } commonTheme_;
 
-    class HeaderTheme : public ofxDatGuiTheme {
+    class HeaderTheme : public CommonTheme {
     public:
         HeaderTheme();
     } headerTheme_;
@@ -52,7 +56,10 @@ private:
     
     void addBlank(ofxDatGui* panel);
 
-    std::unique_ptr<ofxDatGui> playPanel_, mutePanel_, videoFxPanel_, midiPanel_, blendModePanel_;
+    std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
+                               videoFxPanel_, midiPanel_, blendModePanel_;
+
+    // This class does not own any of the following pointers, do not try to delete them.
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerPlayToggles_;
@@ -62,8 +69,9 @@ private:
     std::array<ofxDatGuiTextInput*, static_cast<int>(Effect::Type::Count)> effectMidiInputs_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;
+    ofxDatGuiTextInput* sceneNameInput_;
 
-    Status* status_; //!< No ownership, do not delete here!
-    Scene* currentScene_; //!< No ownership, do not delete here!
-    ShowDescription* show_; //!< No ownership, do not delete here!
+    Status* status_;
+    Scene* currentScene_;
+    ShowDescription* show_;
 };

@@ -16,8 +16,18 @@ void Gui::setup()
     fonts.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts.sizeItalic, true, false);
 
     auto xOffset = delta;
-    auto yOffset = 2 * delta;
+    auto yOffset = delta;
     
+    // Control panel
+    controlPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
+    controlPanel_->setTheme(&headerTheme_);
+    xOffset += controlPanel_->getWidth() + 2 * delta;
+    
+    sceneNameInput_ = controlPanel_->addTextInput("Scene");
+    sceneNameInput_->setText(currentScene_ ? currentScene_->getName() : "Enter scene name");
+    sceneNameInput_->onTextInputEvent(this, &Gui::onSceneNameInput);
+
+
     // Play & pause panel
     playPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     playPanel_->setTheme(&commonTheme_);
@@ -147,11 +157,11 @@ void Gui::draw()
 {
     ofBackground(bgColor);
 
-    bool loading = status_->forward || status_->backward || status_->reload;
-    auto header = loading ? "Loading..." : (currentScene_ ? currentScene_->getName() : "");
-    fonts.italic.drawString(header, delta, delta);
+    if (status_->forward || status_->backward || status_->reload)
+        fonts.italic.drawString("Loading...", delta, delta);
     fonts.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), delta, ofGetHeight() - delta);
 
+    if (controlPanel_) controlPanel_->draw();
     if (playPanel_) playPanel_->draw();
     if (mutePanel_) mutePanel_->draw();
     if (videoFxPanel_) videoFxPanel_->draw();
@@ -162,6 +172,7 @@ void Gui::draw()
 void Gui::reload(Scene* newScene)
 {
     currentScene_ = newScene;
+    sceneNameInput_->setText(currentScene_->getName());
 
     // layers
     for (auto& toggle : layerPlayToggles_) {
@@ -277,6 +288,13 @@ void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
         currentScene_->effects_[static_cast<Effect::Type>(idx)].setMapping({ note });
 }
 
+void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
+{
+    show_->scenes_[show_->currentIdx_].name = e.text;
+    if (currentScene_)
+        currentScene_->name_ = e.text;
+}
+
 void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 {
     auto idx = std::stoi(e.target->getName());
@@ -316,7 +334,7 @@ void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
         currentScene_->effects_[type].setMute(e.checked);
 }
 
-void Gui::Gui::addBlank(ofxDatGui * panel)
+void Gui::addBlank(ofxDatGui * panel)
 {
     auto blank = panel->addButton({});
     blank->setEnabled(false);
@@ -328,6 +346,9 @@ Gui::CommonTheme::CommonTheme() :
     ofxDatGuiTheme(false) 
 {
     layout.upperCaseLabels = false;
+    layout.textInput.forceUpperCase = false;
+    color.textInput.text = ofColor::antiqueWhite;
+    color.label = ofColor::antiqueWhite;
     stripe.visible = false;
     font.size = Gui::Fonts::sizeRegular;
     font.file = "fonts/IBMPlexSans-Regular.ttf";
@@ -336,10 +357,8 @@ Gui::CommonTheme::CommonTheme() :
 }
 
 Gui::HeaderTheme::HeaderTheme() :
-    ofxDatGuiTheme(false)
+    CommonTheme()
 {
-    layout.upperCaseLabels = false;
-    stripe.visible = false;
     font.size = Gui::Fonts::sizeItalic;
     font.file = "fonts/IBMPlexSerif-Italic.ttf";
 

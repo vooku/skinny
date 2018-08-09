@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     settings.setSize(1920, 1080);
     auto mainWindow = ofCreateWindow(settings);
 
-    settings.setSize(1152, 648);
+    settings.setSize(1175, 600);
     auto guiWindow = ofCreateWindow(settings);
     
     shared_ptr<ofApp> mainApp(new ofApp(args.get()));
