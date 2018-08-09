@@ -66,6 +66,14 @@ void EffectDescription::toXml(ofxXmlSettings & config) const {
 }
 
 
+SceneDescription::SceneDescription(const std::string & name) :
+    name(name)
+{
+    for (int i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
+        effects.push_back({ static_cast<Effect::Type>(i) });
+    }
+}
+
 void SceneDescription::fromXml(ofxXmlSettings & config) {
     name = config.getValue("name", "");
 

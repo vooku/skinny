@@ -33,6 +33,9 @@ struct LayerDescription : public MappableDescription {
 };
 
 struct EffectDescription : public MappableDescription {
+    EffectDescription() = default;
+    EffectDescription(Effect::Type type) : type(type) { }
+
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
@@ -41,6 +44,9 @@ struct EffectDescription : public MappableDescription {
 };
 
 struct SceneDescription {
+    SceneDescription() = default;
+    SceneDescription(const std::string& name);
+
     void fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 

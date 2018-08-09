@@ -267,14 +267,18 @@ void Gui::onEffectButton(ofxDatGuiButtonEvent e)
 
 void Gui::onOtherButton(ofxDatGuiButtonEvent e)
 {
-    if (e.target->getName() == "Next scene") {
+    const auto name = e.target->getName();
+    if (name == "Next scene") {
         status_->forward = true;
     }
-    else if (e.target->getName() == "Previous scene") {
+    else if (name == "Previous scene") {
         status_->backward = true;
     }
+    else if (name == "Append scene") {
+        show_->scenes_.push_back({ "New scene" });
+    }
     else {
-        ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", e.target->getName().c_str());
+        ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", name.c_str());
     }
 }
 
