@@ -37,7 +37,6 @@ public:
     auto getId() const { return id_; }
     const auto& getName() const { return name_; }
     auto getBlendMode() const { return blendMode_; }
-    const auto& getMapping() const { return midiMap_; }
     bool isValid() const { return valid_; }    
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }

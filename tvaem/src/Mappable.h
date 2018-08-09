@@ -20,6 +20,7 @@ public:
     virtual void clearMidiNotes() { midiMap_.clear(); }
     virtual bool containsMidiNote(int note) const { return midiMap_.count(note); }
     virtual void replaceMidiMap(const MidiMap& newMap) { midiMap_ = { newMap }; }
+    virtual const MidiMap& getMapping() const { return midiMap_; }
 
 protected:
     bool active_; 

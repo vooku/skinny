@@ -27,10 +27,9 @@ void Gui::setup()
     playPanel_->addLabel("Play");
     playPanel_->addBreak();
 
-    layerToggles_.resize(MAX_LAYERS);
-    for (int i = 0; i < MAX_LAYERS; ++i) {
+    for (int i = 0; i < layerToggles_.size(); ++i) {
         layerToggles_[i] = playPanel_->addToggle({});
-        layerToggles_[i]->onToggleEvent(this, &Gui::onPlayLayerToggleEvent);
+        layerToggles_[i]->onToggleEvent(this, &Gui::onLayerPlayToggleEvent);
         layerToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
         layerToggles_[i]->setName(std::to_string(i));
     }
@@ -39,10 +38,9 @@ void Gui::setup()
     addBlank(playPanel_.get());
     playPanel_->addBreak();
 
-    effectToggles_.resize(static_cast<int>(Effect::Type::Count));
-    for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
+    for (int i = 0; i < effectToggles_.size(); ++i) {
         effectToggles_[i] = playPanel_->addToggle({});
-        effectToggles_[i]->onToggleEvent(this, &Gui::onPlayEffectToggleEvent);
+        effectToggles_[i]->onToggleEvent(this, &Gui::onEffectPlayToggleEvent);
         effectToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
         effectToggles_[i]->setName(std::to_string(i));
     }
@@ -55,7 +53,6 @@ void Gui::setup()
     videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
     videoFxPanel_->addBreak();
 
-    layerButtons_.resize(MAX_LAYERS);
     for (int i = 0; i < layerButtons_.size(); ++i) {
         layerButtons_[i] = videoFxPanel_->addButton({});
         layerButtons_[i]->onButtonEvent(this, &Gui::onLayerButtonEvent);
@@ -66,7 +63,6 @@ void Gui::setup()
     videoFxPanel_->addLabel("Effect");
     videoFxPanel_->addBreak();
 
-    effectButtons_.resize(static_cast<int>(Effect::Type::Count));
     for (auto& button : effectButtons_) {
         button = videoFxPanel_->addButton({});
         button->onButtonEvent(this, &Gui::onEffectButtonEvent);
@@ -81,18 +77,24 @@ void Gui::setup()
     xOffset += midiPanel_->getWidth();
     midiPanel_->addLabel("MIDI");
     midiPanel_->addBreak();
-    for (int i = 0; i < MAX_LAYERS + static_cast<int>(Effect::Type::Count) + 1; ++i) {
-        if (i == MAX_LAYERS) {
-            midiPanel_->addBreak();
-            addBlank(midiPanel_.get());
-            midiPanel_->addBreak();
-        }
-        else {
-            midiInputs_.push_back(midiPanel_->addTextInput({}));
-            midiInputs_.back()->setInputType(ofxDatGuiInputType::NUMERIC);
-            midiInputs_.back()->onTextInputEvent(this, &Gui::onMidiInputEvent);
-            midiInputs_.back()->setWidth(midiPanelWidth, 0); // This doesn't seem to work right
-        }        
+    for (int i = 0; i < layerMidiInputs_.size(); ++i) {
+        layerMidiInputs_[i] = midiPanel_->addTextInput({});
+        layerMidiInputs_[i]->setName(std::to_string(i));
+        layerMidiInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
+        layerMidiInputs_[i]->onTextInputEvent(this, &Gui::onLayerMidiInputEvent);
+        layerMidiInputs_[i]->setWidth(midiPanelWidth, 0); // This doesn't seem to work right
+    }
+
+    midiPanel_->addBreak();
+    addBlank(midiPanel_.get());
+    midiPanel_->addBreak();
+
+    for (int i = 0; i < effectMidiInputs_.size(); ++i) {
+        effectMidiInputs_[i] = midiPanel_->addTextInput({});
+        effectMidiInputs_[i]->setName(std::to_string(i));
+        effectMidiInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
+        effectMidiInputs_[i]->onTextInputEvent(this, &Gui::onEffectMidiInputEvent);
+        effectMidiInputs_[i]->setWidth(midiPanelWidth, 0); // This doesn't seem to work right
     }
 
     // Blending modes panel
@@ -106,8 +108,7 @@ void Gui::setup()
     for (int i = static_cast<int>(Layer::BlendMode::Normal); i < static_cast<int>(Layer::BlendMode::Count); ++i)
         options.push_back(Layer::c_str(static_cast<Layer::BlendMode>(i)));
 
-    blendModeDropdowns_.resize(MAX_LAYERS);
-    for (int i = 0; i < MAX_LAYERS; ++i) {
+    for (int i = 0; i < blendModeDropdowns_.size(); ++i) {
         blendModeDropdowns_[i] = blendModePanel_->addDropdown("Select...", options);
         blendModeDropdowns_[i]->setName(std::to_string(i));
         blendModeDropdowns_[i]->select(static_cast<int>(Layer::BlendMode::Normal));
@@ -133,10 +134,8 @@ void Gui::reload(Scene* newScene)
 {
     currentScene_ = newScene;
 
+    // layers
     for (auto& toggle : layerToggles_) {
-        toggle->setChecked(false);
-    }
-    for (auto& toggle : effectToggles_) {
         toggle->setChecked(false);
     }
 
@@ -150,15 +149,24 @@ void Gui::reload(Scene* newScene)
                 layerButtons_[i]->setLabel(layers[i]->getName());
                 auto& midiMap = layers[i]->getMapping();
                 if (!midiMap.empty())
-                    midiInputs_[i]->setText(std::to_string(*midiMap.begin()));
+                    layerMidiInputs_[i]->setText(std::to_string(*midiMap.begin()));
                 blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
             }
         }
     }
 
+    // effects
+    for (auto& toggle : effectToggles_) {
+        toggle->setChecked(false);
+    }
+
     auto& effects = currentScene_->getEffects();
     for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-        effectButtons_[i]->setLabel(Effect::c_str(static_cast<Effect::Type>(i)));
+        auto type = static_cast<Effect::Type>(i);
+        effectButtons_[i]->setLabel(Effect::c_str(type));
+        auto& midiMap = effects.at(type).getMapping();
+        if (!midiMap.empty())
+            effectMidiInputs_[i]->setText(std::to_string(*midiMap.begin()));
     }
 }
 
@@ -212,7 +220,13 @@ void Gui::onOtherButtonEvent(ofxDatGuiButtonEvent e)
     }
 }
 
-void Gui::onMidiInputEvent(ofxDatGuiTextInputEvent e)
+void Gui::onLayerMidiInputEvent(ofxDatGuiTextInputEvent e)
+{
+    printf("MIDI: %s.\n", e.text.c_str());
+    // TODO
+}
+
+void Gui::onEffectMidiInputEvent(ofxDatGuiTextInputEvent e)
 {
     printf("MIDI: %s.\n", e.text.c_str());
     // TODO
@@ -228,13 +242,13 @@ void Gui::onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e)
         currentScene_->layers_[idx]->setBlendMode(blendMode);
 }
 
-void Gui::onPlayLayerToggleEvent(ofxDatGuiToggleEvent e)
+void Gui::onLayerPlayToggleEvent(ofxDatGuiToggleEvent e)
 {
     auto idx = std::stoi(e.target->getName());
     if (currentScene_)
         currentScene_->playPauseLayer(idx);
 }
-void Gui::onPlayEffectToggleEvent(ofxDatGuiToggleEvent e)
+void Gui::onEffectPlayToggleEvent(ofxDatGuiToggleEvent e)
 {
     auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
     if (currentScene_)

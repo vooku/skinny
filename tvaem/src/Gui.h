@@ -4,6 +4,7 @@
 #include "ofxDatGui.h"
 #include "Scene.h"
 #include "Status.h"
+#include <array>
 
 class Gui {
 public:
@@ -21,10 +22,11 @@ public:
     void onLayerButtonEvent(ofxDatGuiButtonEvent e);
     void onEffectButtonEvent(ofxDatGuiButtonEvent e);
     void onOtherButtonEvent(ofxDatGuiButtonEvent e);
-    void onMidiInputEvent(ofxDatGuiTextInputEvent e);
+    void onLayerMidiInputEvent(ofxDatGuiTextInputEvent e);
+    void onEffectMidiInputEvent(ofxDatGuiTextInputEvent e);
     void onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e);
-    void onPlayLayerToggleEvent(ofxDatGuiToggleEvent e);
-    void onPlayEffectToggleEvent(ofxDatGuiToggleEvent e);
+    void onLayerPlayToggleEvent(ofxDatGuiToggleEvent e);
+    void onEffectPlayToggleEvent(ofxDatGuiToggleEvent e);
 
 private:
     static const int MAX_CHARS = 20;
@@ -49,10 +51,13 @@ private:
     void addBlank(ofxDatGui* panel);
 
     std::unique_ptr<ofxDatGui> playPanel_, videoFxPanel_, midiPanel_, blendModePanel_;
-    std::vector<ofxDatGuiButton*> layerButtons_, effectButtons_;
-    std::vector<ofxDatGuiTextInput*> midiInputs_;
-    std::vector<ofxDatGuiDropdown*> blendModeDropdowns_;
-    std::vector<ofxDatGuiToggle*> layerToggles_, effectToggles_;
+    std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
+    std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
+    std::array<ofxDatGuiDropdown*,  MAX_LAYERS> blendModeDropdowns_;
+    std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerToggles_;
+    std::array<ofxDatGuiButton*,    static_cast<int>(Effect::Type::Count)> effectButtons_;
+    std::array<ofxDatGuiTextInput*, static_cast<int>(Effect::Type::Count)> effectMidiInputs_;
+    std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectToggles_;
 
     Status* status_; //!< No ownership, do not delete here!
     Scene* currentScene_; //!< No ownership, do not delete here!
