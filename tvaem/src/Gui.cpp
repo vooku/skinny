@@ -205,7 +205,10 @@ void Gui::onLayerButtonEvent(ofxDatGuiButtonEvent e)
     if (openFileResult.bSuccess) {
         auto idx = std::stoi(e.target->getName());
         auto& layerDescription = show_->scenes_[show_->currentIdx_].layers[idx];
-        layerDescription.path = openFileResult.getPath();
+        if (layerDescription.valid)
+            layerDescription.path = openFileResult.getPath();
+        else
+            layerDescription = { static_cast<unsigned int>(idx), openFileResult.getPath() };
         status_->reload = true;
     }
 }
@@ -234,7 +237,7 @@ void Gui::onLayerMidiInputEvent(ofxDatGuiTextInputEvent e)
     auto idx = std::stoi(e.target->getName());
     auto note = static_cast<midiNote>(std::stoi(e.text));
     show_->scenes_[show_->currentIdx_].layers[idx].midiMap = { note };
-    if (currentScene_)
+    if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setMapping({ note });
 }
 
@@ -243,7 +246,7 @@ void Gui::onEffectMidiInputEvent(ofxDatGuiTextInputEvent e)
     auto idx = std::stoi(e.target->getName());
     auto note = static_cast<midiNote>(std::stoi(e.text));
     show_->scenes_[show_->currentIdx_].effects[idx].midiMap = { note };
-    if (currentScene_)
+    if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->effects_[static_cast<Effect::Type>(idx)].setMapping({ note });
 }
 
@@ -252,7 +255,7 @@ void Gui::onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e)
     auto idx = std::stoi(e.target->getName());
     auto blendMode = static_cast<Layer::BlendMode>(e.child);
     show_->scenes_[show_->currentIdx_].layers[idx].blendMode = blendMode;
-    if (currentScene_)
+    if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setBlendMode(blendMode);
 }
 
