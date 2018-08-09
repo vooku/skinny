@@ -101,13 +101,17 @@ void Gui::setup()
     xOffset += blendModePanel_->getWidth();
     blendModePanel_->addLabel("Blending Mode");
     blendModePanel_->addBreak();
+
     std::vector<string> options;
     for (int i = static_cast<int>(Layer::BlendMode::Normal); i < static_cast<int>(Layer::BlendMode::Count); ++i)
         options.push_back(Layer::c_str(static_cast<Layer::BlendMode>(i)));
+
+    blendModeDropdowns_.resize(MAX_LAYERS);
     for (int i = 0; i < MAX_LAYERS; ++i) {
-        blendModeDropdowns_.push_back(blendModePanel_->addDropdown("Select...", options));
-        blendModeDropdowns_.back()->select(static_cast<int>(Layer::BlendMode::Normal));
-        blendModeDropdowns_.back()->onDropdownEvent(this, &Gui::onBlendModeDropdownEvent);
+        blendModeDropdowns_[i] = blendModePanel_->addDropdown("Select...", options);
+        blendModeDropdowns_[i]->setName(std::to_string(i));
+        blendModeDropdowns_[i]->select(static_cast<int>(Layer::BlendMode::Normal));
+        blendModeDropdowns_[i]->onDropdownEvent(this, &Gui::onBlendModeDropdownEvent);
     }
     blendModePanel_->addBreak();
 }
@@ -191,7 +195,7 @@ void Gui::onLayerButtonEvent(ofxDatGuiButtonEvent e)
 
 void Gui::onEffectButtonEvent(ofxDatGuiButtonEvent e)
 {
-    printf("Effect button presed.\n");
+    //printf("Effect button presed.\n");
     // nothing
 }
 
@@ -216,8 +220,11 @@ void Gui::onMidiInputEvent(ofxDatGuiTextInputEvent e)
 
 void Gui::onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e)
 {
-    printf("Blending Mode: %s\n", Layer::c_str(static_cast<Layer::BlendMode>(e.child)));
-    // TODO
+    auto idx = std::stoi(e.target->getName());
+    auto blendMode = static_cast<Layer::BlendMode>(e.child);
+    auto& layerDescription = show_->scenes_[show_->currentIdx_].layers[idx];
+    layerDescription.blendMode = blendMode;
+    currentScene_->layers_[idx]->setBlendMode(blendMode);
 }
 
 void Gui::onPlayToggleEvent(ofxDatGuiToggleEvent e)

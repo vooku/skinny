@@ -4,10 +4,14 @@
 #include "meta.h"
 #include <unordered_map>
 
+class Gui;
+
 class Scene {
 public:
     typedef std::vector<std::unique_ptr<Layer>> Layers;
     typedef std::unordered_map<Effect::Type, Effect> Effects;
+
+    friend class Gui;
 
     void reload(const SceneDescription& description);
     void bindTextures();
