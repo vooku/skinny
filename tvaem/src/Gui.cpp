@@ -30,9 +30,9 @@ void Gui::setup()
     layerToggles_.resize(MAX_LAYERS);
     for (int i = 0; i < MAX_LAYERS; ++i) {
         layerToggles_[i] = playPanel_->addToggle({});
-        layerToggles_[i]->onToggleEvent(this, &Gui::onPlayToggleEvent);
+        layerToggles_[i]->onToggleEvent(this, &Gui::onPlayLayerToggleEvent);
         layerToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
-        layerToggles_[i]->setName("layer" + std::to_string(i));
+        layerToggles_[i]->setName(std::to_string(i));
     }
 
     playPanel_->addBreak();
@@ -42,9 +42,9 @@ void Gui::setup()
     effectToggles_.resize(static_cast<int>(Effect::Type::Count));
     for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
         effectToggles_[i] = playPanel_->addToggle({});
-        effectToggles_[i]->onToggleEvent(this, &Gui::onPlayToggleEvent);
+        effectToggles_[i]->onToggleEvent(this, &Gui::onPlayEffectToggleEvent);
         effectToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
-        effectToggles_[i]->setName("effect" + std::to_string(i));
+        effectToggles_[i]->setName(std::to_string(i));
     }
 
     // Videos & FX panel
@@ -224,22 +224,21 @@ void Gui::onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e)
     auto blendMode = static_cast<Layer::BlendMode>(e.child);
     auto& layerDescription = show_->scenes_[show_->currentIdx_].layers[idx];
     layerDescription.blendMode = blendMode;
-    currentScene_->layers_[idx]->setBlendMode(blendMode);
+    if (currentScene_)
+        currentScene_->layers_[idx]->setBlendMode(blendMode);
 }
 
-void Gui::onPlayToggleEvent(ofxDatGuiToggleEvent e)
+void Gui::onPlayLayerToggleEvent(ofxDatGuiToggleEvent e)
 {
-    const auto& name = e.target->getName();
-    if (name.substr(0, 5).compare("layer") == 0) {
-        int layerId = std::stoi(name.substr(5));
-        if (currentScene_)
-            currentScene_->playPauseLayer(layerId);
-    }
-    else if (name.substr(0, 6).compare("effect") == 0) {
-        auto type = static_cast<Effect::Type>(std::stoi(name.substr(6)));
-        if (currentScene_)
-            currentScene_->playPauseEffect(type);
-    }
+    auto idx = std::stoi(e.target->getName());
+    if (currentScene_)
+        currentScene_->playPauseLayer(idx);
+}
+void Gui::onPlayEffectToggleEvent(ofxDatGuiToggleEvent e)
+{
+    auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
+    if (currentScene_)
+        currentScene_->playPauseEffect(type);
 }
 
 void Gui::Gui::addBlank(ofxDatGui * panel)

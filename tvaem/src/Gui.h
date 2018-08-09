@@ -23,7 +23,8 @@ public:
     void onOtherButtonEvent(ofxDatGuiButtonEvent e);
     void onMidiInputEvent(ofxDatGuiTextInputEvent e);
     void onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e);
-    void onPlayToggleEvent(ofxDatGuiToggleEvent e);
+    void onPlayLayerToggleEvent(ofxDatGuiToggleEvent e);
+    void onPlayEffectToggleEvent(ofxDatGuiToggleEvent e);
 
 private:
     static const int MAX_CHARS = 20;
