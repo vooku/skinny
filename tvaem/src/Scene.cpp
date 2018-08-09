@@ -3,8 +3,6 @@
 void Scene::reload(const SceneDescription & description)
 {
     name_ = description.name;
-    layerNames_ = { description };
-    effectNames_ = { description };
     valid_ = true;
 
     layers_.resize(description.layers.size());
@@ -135,18 +133,4 @@ void Scene::setupUniforms(ofShader& shader) const
     shader.setUniform1i("reducePalette", uniforms_.reducePalette);
     shader.setUniform1i("colorShift", uniforms_.colorShift);
     shader.setUniform1i("colorShift2", uniforms_.colorShift2);
-}
-
-LayerNames::LayerNames(const SceneDescription & description)
-{
-    for (const auto& layer : description.layers) {
-        names_.push_back(layer.path.filename().string());
-    }
-}
-
-EffectNames::EffectNames(const SceneDescription & description)
-{
-    for (const auto& effect : description.effects) {
-        names_.push_back(Effect::c_str(effect.type));
-    }
 }

@@ -136,19 +136,25 @@ void Gui::reload(Scene* newScene)
         toggle->setChecked(false);
     }
 
-    if (layerButtons_.size() == MAX_LAYERS) {
+    auto& layers = currentScene_->getLayers();
+    if (layerButtons_.size() != layers.size()) {
+        ofLog(OF_LOG_WARNING, "Different number of layers and layer buttons");
+    }
+    else {
         for (int i = 0; i < MAX_LAYERS; ++i) {
-            if (i < currentScene_->getLayerNames().size())
-                layerButtons_[i]->setLabel(currentScene_->getLayerNames()[i]);
-            else
-                layerButtons_[i]->setLabel("Click to load a video"); // TODO different style
+            if (layers[i]) {
+                layerButtons_[i]->setLabel(layers[i]->getName());
+                auto& midiMap = layers[i]->getMapping();
+                if (!midiMap.empty())
+                    midiInputs_[i]->setText(std::to_string(*midiMap.begin()));
+                blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
+            }
         }
     }
 
-    if (effectButtons_.size() == static_cast<int>(Effect::Type::Count)) {
-        for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-            effectButtons_[i]->setLabel(currentScene_->getEffectNames()[i]);
-        }
+    auto& effects = currentScene_->getEffects();
+    for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
+        effectButtons_[i]->setLabel(Effect::c_str(static_cast<Effect::Type>(i)));
     }
 }
 
