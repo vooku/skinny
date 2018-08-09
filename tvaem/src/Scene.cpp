@@ -5,18 +5,19 @@ void Scene::reload(const SceneDescription & description)
     name_ = description.name;
     valid_ = true;
 
-    layers_.resize(description.layers.size());
-
-    for (int i = 0; i < layers_.size() && i < MAX_LAYERS; ++i) {
-        bool reloadLayer = description.layers[i].valid; // do not load invalid description
-        reloadLayer = reloadLayer && (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName());
-        if (reloadLayer) {
-            auto newLayer = std::make_unique<Layer>(i, description.layers[i].path, description.layers[i].midiMap);
-            newLayer->setBlendMode(description.layers[i].blendMode);
-            if (newLayer->isValid())
-                layers_[i].reset(newLayer.release());
-            else
-                valid_ = false;
+    for (int i = 0; i < MAX_LAYERS; ++i) {
+        if (!description.layers[i].valid) {
+            layers_[i].reset();
+        }
+        else {
+            if (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName()) {
+                auto newLayer = std::make_unique<Layer>(i, description.layers[i].path, description.layers[i].midiMap);
+                newLayer->setBlendMode(description.layers[i].blendMode);
+                if (newLayer->isValid())
+                    layers_[i].reset(newLayer.release());
+                else
+                    valid_ = false;
+            }
         }
     }
 

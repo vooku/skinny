@@ -4,76 +4,30 @@
 </head>
 <show>
     <scene>
-        <name>Klubovna Scene 0</name>
-        <layer>
-            <id>0</id>
-            <path>../../../videos/videos/Angels Egg 2.mp4</path>
-            <blendMode>0</blendMode>
-            <midi>3</midi>
-        </layer>
-        <layer>
-            <id>1</id>
-            <path>../../../videos/videos/ANNIHILATION.mp4</path>
-            <blendMode>5</blendMode>
-            <midi>4</midi>
-        </layer>
-        <layer>
-            <id>2</id>
-            <path>../../../videos/videos/beach.mp4</path>
-            <blendMode>5</blendMode>
-            <midi>5</midi>
-        </layer>
-        <layer>
-            <id>3</id>
-            <path>../../../videos/videos/Evil Dead II 10.mp4</path>
-            <blendMode>5</blendMode>
-            <midi>6</midi>
-        </layer>
-        <layer>
-            <id>4</id>
-            <path>../../../videos/videos/beach.mp4</path>
-            <blendMode>5</blendMode>
-            <midi>0</midi>
-        </layer>
-        <layer>
-            <id>5</id>
-            <path>../../../videos/White Stripes Horizontal 2.mp4</path>
-            <blendMode>5</blendMode>
-            <midi>1</midi>
-        </layer>
-        <layer>
-            <id>6</id>
-            <path>../../../videos/White Half Strobes.mp4</path>
-            <blendMode>5</blendMode>
-            <midi>2</midi>
-        </layer>
-        <effect><type>0</type><midi>48</midi></effect><effect><type>1</type><midi>49</midi></effect><effect><type>2</type><midi>50</midi></effect><effect><type>3</type><midi>51</midi></effect>
-    </scene>
-    <scene>
         <name>Test Scene 0</name>
         <layer>
             <id>0</id>
             <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>0</blendMode>
-            <midi>0</midi>
+            <midi>36</midi>
         </layer>
         <layer>
             <id>1</id>
             <path>../../../videos/White Half Strobes.mp4</path>
             <blendMode>4</blendMode>
-            <midi>1</midi>
+            <midi>37</midi>
         </layer>
         <layer>
             <id>2</id>
             <path>../../../videos/simpleRGB.mp4</path>
             <blendMode>6</blendMode>
-            <midi>2</midi>
+            <midi>38</midi>
         </layer>
         <layer>
             <id>3</id>
             <path>../../../videos/circles.mp4</path>
             <blendMode>1</blendMode>
-            <midi>3</midi>
+            <midi>39</midi>
         </layer>
         <effect>
             <type>0</type>
@@ -95,12 +49,6 @@
     <scene>
         <name>Test Scene 1</name>
         <layer>
-            <id>0</id>
-            <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
-            <blendMode>0</blendMode>
-            <midi>37</midi>
-        </layer>
-        <layer>
             <id>1</id>
             <path>../../../videos/Noise Diagonals 1.mp4</path>
             <blendMode>5</blendMode>
@@ -110,13 +58,13 @@
             <id>2</id>
             <path>../../../videos/Noise Diagonals 2.mp4</path>
             <blendMode>5</blendMode>
-            <midi>38</midi>
+            <midi>37</midi>
         </layer>
         <layer>
             <id>3</id>
             <path>../../../videos/White Broken Shards.mp4</path>
             <blendMode>1</blendMode>
-            <midi>39</midi>
+            <midi>36</midi>
         </layer>
         <effect>
             <type>0</type>
@@ -146,13 +94,13 @@
         <layer>
             <id>1</id>
             <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
-            <blendMode>5</blendMode>
+            <blendMode>2</blendMode>
             <midi>37</midi>
         </layer>
         <layer>
             <id>2</id>
             <path>../../../videos/circle-slow.mov</path>
-            <blendMode>5</blendMode>
+            <blendMode>1</blendMode>
             <midi>38</midi>
         </layer>
         <layer>

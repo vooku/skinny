@@ -121,7 +121,9 @@ void Gui::draw()
 {
     ofBackground(bgColor);
 
-    fonts.italic.drawString(status_->forward || status_->backward ? "Loading..." : currentScene_->getName(), delta, delta);
+    bool loading = status_->forward || status_->backward || status_->reload;
+    auto header = loading ? "Loading..." : (currentScene_ ? currentScene_->getName() : "");
+    fonts.italic.drawString(header, delta, delta);
     fonts.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), delta, ofGetHeight() - delta);
 
     if (playPanel_) playPanel_->draw();
@@ -152,6 +154,11 @@ void Gui::reload(Scene* newScene)
                     layerMidiInputs_[i]->setText(std::to_string(*midiMap.begin()));
                 blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
             }
+            else {
+                layerButtons_[i]->setLabel("Click to load a video");
+                layerMidiInputs_[i]->setText("");
+                blendModeDropdowns_[i]->select(0);
+            }
         }
     }
 
@@ -168,6 +175,8 @@ void Gui::reload(Scene* newScene)
         if (!midiMap.empty())
             effectMidiInputs_[i]->setText(std::to_string(*midiMap.begin()));
     }
+
+    draw();
 }
 
 void Gui::setActive(int layerId, bool active)
@@ -242,14 +251,13 @@ void Gui::onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e)
 {
     auto idx = std::stoi(e.target->getName());
     auto blendMode = static_cast<Layer::BlendMode>(e.child);
-    auto& layerDescription = show_->scenes_[show_->currentIdx_].layers[idx];
-    layerDescription.blendMode = blendMode;
+    show_->scenes_[show_->currentIdx_].layers[idx].blendMode = blendMode;
     if (currentScene_)
         currentScene_->layers_[idx]->setBlendMode(blendMode);
 }
 
 void Gui::onLayerPlayToggleEvent(ofxDatGuiToggleEvent e)
-{
+{    
     auto idx = std::stoi(e.target->getName());
     if (currentScene_)
         currentScene_->playPauseLayer(idx);

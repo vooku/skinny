@@ -8,7 +8,7 @@ class Gui;
 
 class Scene {
 public:
-    typedef std::vector<std::unique_ptr<Layer>> Layers;
+    typedef std::array<std::unique_ptr<Layer>, MAX_LAYERS> Layers;
     typedef std::unordered_map<Effect::Type, Effect> Effects;
 
     friend class Gui;
