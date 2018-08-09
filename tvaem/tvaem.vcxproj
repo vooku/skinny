@@ -185,6 +185,7 @@
     <ClCompile Include="src\Gui.cpp" />
     <ClCompile Include="src\Layer.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Mappable.cpp" />
     <ClCompile Include="src\meta.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxArgs\src\ofxArgs.cpp" />

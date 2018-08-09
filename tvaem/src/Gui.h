@@ -60,6 +60,8 @@ private:
                                videoFxPanel_, midiPanel_, blendModePanel_;
 
     // This class does not own any of the following pointers, do not try to delete them.
+    ofxDatGuiTextInput* sceneNameInput_;
+    std::vector<ofxDatGuiButton*> controlButtons_;
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerPlayToggles_;
@@ -69,8 +71,7 @@ private:
     std::array<ofxDatGuiTextInput*, static_cast<int>(Effect::Type::Count)> effectMidiInputs_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;
-    ofxDatGuiTextInput* sceneNameInput_;
-
+    
     Status* status_;
     Scene* currentScene_;
     ShowDescription* show_;

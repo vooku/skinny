@@ -7,8 +7,8 @@ class Mappable {
 public:
     typedef std::set<midiNote> MidiMap;
 
-    Mappable() : active_(false), mute_(false) { }
-    Mappable(const MidiMap& map) : active_(false), mute_(false), midiMap_(map) { }
+    Mappable();
+    Mappable(const MidiMap& map);
     virtual ~Mappable() { }
 
     virtual void play() { active_ = true && !mute_; }
@@ -24,7 +24,7 @@ public:
     virtual const MidiMap& getMapping() const { return midiMap_; }
 
     virtual void setMapping(const MidiMap& newMap) { midiMap_ = newMap; }
-    void setMute(bool mute) { mute_ = mute; }
+    void setMute(bool mute);
 
 protected:
     bool active_, mute_; 

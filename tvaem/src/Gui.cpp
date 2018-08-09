@@ -27,6 +27,7 @@ void Gui::setup()
     sceneNameInput_->setText(currentScene_ ? currentScene_->getName() : "Enter scene name");
     sceneNameInput_->onTextInputEvent(this, &Gui::onSceneNameInput);
 
+    controlButtons_.push_back(controlPanel_->addButton("Next Scene"));
 
     // Play & pause panel
     playPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
@@ -49,10 +50,10 @@ void Gui::setup()
     playPanel_->addBreak();
 
     for (int i = 0; i < effectPlayToggles_.size(); ++i) {
-        effectPlayToggles_[i] = playPanel_->addToggle({});
+        effectPlayToggles_[i] = playPanel_->addToggle(std::to_string(i));
         effectPlayToggles_[i]->onToggleEvent(this, &Gui::onEffectPlayToggle);
         effectPlayToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
-        effectPlayToggles_[i]->setName(std::to_string(i));
+        //effectPlayToggles_[i]->setName();
     }
 
     // Mute panel
@@ -315,23 +316,31 @@ void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 
 void Gui::onEffectPlayToggle(ofxDatGuiToggleEvent e)
 {
-    auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
+    
+auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
     if (currentScene_)
         currentScene_->playPauseEffect(type);
 }
 
 void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 {
+    bool mute = e.checked;
     auto idx = std::stoi(e.target->getName());
     if (currentScene_)
-        currentScene_->layers_[idx]->setMute(e.checked);
+        currentScene_->layers_[idx]->setMute(mute);
+    if (mute)
+        layerPlayToggles_[idx]->setChecked(false);
 }
 
 void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 {
-    auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
+    bool mute = e.checked;
+    auto idx = std::stoi(e.target->getName());
+    auto type = static_cast<Effect::Type>(idx);
     if (currentScene_)
-        currentScene_->effects_[type].setMute(e.checked);
+        currentScene_->effects_[type].setMute(mute);
+    if (mute)
+        effectPlayToggles_[idx]->setChecked(false);
 }
 
 void Gui::addBlank(ofxDatGui * panel)
