@@ -196,7 +196,7 @@ void Gui::onLayerButtonEvent(ofxDatGuiButtonEvent e)
     if (openFileResult.bSuccess) {
         auto idx = std::stoi(e.target->getName());
         auto& layerDescription = show_->scenes_[show_->currentIdx_].layers[idx];
-        layerDescription = { static_cast<unsigned int>(idx), openFileResult.getPath() };
+        layerDescription.path = openFileResult.getPath();
         status_->reload = true;
     }
 }
