@@ -27,7 +27,14 @@ void Gui::setup()
     sceneNameInput_->setText(currentScene_ ? currentScene_->getName() : "Enter scene name");
     sceneNameInput_->onTextInputEvent(this, &Gui::onSceneNameInput);
 
-    controlButtons_.push_back(controlPanel_->addButton("Next Scene"));
+    controlButtons_.push_back(controlPanel_->addButton("Next scene"));
+    controlButtons_.push_back(controlPanel_->addButton("Previous scene"));
+    controlButtons_.push_back(controlPanel_->addButton("Append scene"));
+    controlPanel_->addBreak();
+    controlButtons_.push_back(controlPanel_->addButton("Save config"));
+    controlButtons_.push_back(controlPanel_->addButton("Load config"));
+    for (auto& btn : controlButtons_)
+        btn->onButtonEvent(this, &Gui::onOtherButton);
 
     // Play & pause panel
     playPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
@@ -50,10 +57,10 @@ void Gui::setup()
     playPanel_->addBreak();
 
     for (int i = 0; i < effectPlayToggles_.size(); ++i) {
-        effectPlayToggles_[i] = playPanel_->addToggle(std::to_string(i));
+        effectPlayToggles_[i] = playPanel_->addToggle({});
         effectPlayToggles_[i]->onToggleEvent(this, &Gui::onEffectPlayToggle);
         effectPlayToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
-        //effectPlayToggles_[i]->setName();
+        effectPlayToggles_[i]->setName(std::to_string(i));
     }
 
     // Mute panel
@@ -159,7 +166,7 @@ void Gui::draw()
     ofBackground(bgColor);
 
     if (status_->forward || status_->backward || status_->reload)
-        fonts.italic.drawString("Loading...", delta, delta);
+        fonts.italic.drawString("Loading...", 2 * delta, controlPanel_->getHeight() + 3 * delta);
     fonts.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), delta, ofGetHeight() - delta);
 
     if (controlPanel_) controlPanel_->draw();
@@ -354,6 +361,7 @@ void Gui::addBlank(ofxDatGui * panel)
 Gui::CommonTheme::CommonTheme() :
     ofxDatGuiTheme(false) 
 {
+    layout.height *= 1.25;
     layout.upperCaseLabels = false;
     layout.textInput.forceUpperCase = false;
     color.textInput.text = ofColor::antiqueWhite;
@@ -368,6 +376,7 @@ Gui::CommonTheme::CommonTheme() :
 Gui::HeaderTheme::HeaderTheme() :
     CommonTheme()
 {
+    layout.height *= 1.4;
     font.size = Gui::Fonts::sizeItalic;
     font.file = "fonts/IBMPlexSerif-Italic.ttf";
 
