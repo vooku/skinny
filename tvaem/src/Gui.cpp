@@ -35,6 +35,9 @@ void Gui::setup()
     controlButtons_.push_back(controlPanel_->addButton("Load config"));
     for (auto& btn : controlButtons_)
         btn->onButtonEvent(this, &Gui::onOtherButton);
+    
+    controlPanel_->addBreak();
+    controlPanel_->addFRM()->setLabel("fps:");
 
     // Play & pause panel
     playPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
@@ -167,7 +170,6 @@ void Gui::draw()
 
     if (status_->forward || status_->backward || status_->reload)
         fonts.italic.drawString("Loading...", 2 * delta, controlPanel_->getHeight() + 3 * delta);
-    fonts.italic.drawString("fps: " + std::to_string(ofGetFrameRate()), delta, ofGetHeight() - delta);
 
     if (controlPanel_) controlPanel_->draw();
     if (playPanel_) playPanel_->draw();
