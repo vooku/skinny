@@ -31,7 +31,7 @@ public:
     void play() override;
     void pause() override;
     void playPause() override;
-
+    
     auto getWidth() const { return player_.getWidth(); }
     auto getHeight() const { return player_.getHeight(); }
     auto getId() const { return id_; }

@@ -19,14 +19,16 @@ public:
     void setActive(int layerId, bool active);
     void setActive(Effect::Type type, bool active);
 
-    void onLayerButtonEvent(ofxDatGuiButtonEvent e);
-    void onEffectButtonEvent(ofxDatGuiButtonEvent e);
-    void onOtherButtonEvent(ofxDatGuiButtonEvent e);
-    void onLayerMidiInputEvent(ofxDatGuiTextInputEvent e);
-    void onEffectMidiInputEvent(ofxDatGuiTextInputEvent e);
-    void onBlendModeDropdownEvent(ofxDatGuiDropdownEvent e);
-    void onLayerPlayToggleEvent(ofxDatGuiToggleEvent e);
-    void onEffectPlayToggleEvent(ofxDatGuiToggleEvent e);
+    void onLayerButton(ofxDatGuiButtonEvent e);
+    void onEffectButton(ofxDatGuiButtonEvent e);
+    void onOtherButton(ofxDatGuiButtonEvent e);
+    void onLayerMidiInput(ofxDatGuiTextInputEvent e);
+    void onEffectMidiInput(ofxDatGuiTextInputEvent e);
+    void onBlendModeDropdown(ofxDatGuiDropdownEvent e);
+    void onLayerPlayToggle(ofxDatGuiToggleEvent e);
+    void onEffectPlayToggle(ofxDatGuiToggleEvent e);
+    void onLayerMuteToggle(ofxDatGuiToggleEvent e);
+    void onEffectMuteToggle(ofxDatGuiToggleEvent e);
 
 private:
     static const int MAX_CHARS = 20;
@@ -50,14 +52,16 @@ private:
     
     void addBlank(ofxDatGui* panel);
 
-    std::unique_ptr<ofxDatGui> playPanel_, videoFxPanel_, midiPanel_, blendModePanel_;
+    std::unique_ptr<ofxDatGui> playPanel_, mutePanel_, videoFxPanel_, midiPanel_, blendModePanel_;
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
+    std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerPlayToggles_;
+    std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerMuteToggles_;
     std::array<ofxDatGuiDropdown*,  MAX_LAYERS> blendModeDropdowns_;
-    std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerToggles_;
     std::array<ofxDatGuiButton*,    static_cast<int>(Effect::Type::Count)> effectButtons_;
     std::array<ofxDatGuiTextInput*, static_cast<int>(Effect::Type::Count)> effectMidiInputs_;
-    std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectToggles_;
+    std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectPlayToggles_;
+    std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;
 
     Status* status_; //!< No ownership, do not delete here!
     Scene* currentScene_; //!< No ownership, do not delete here!

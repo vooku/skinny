@@ -65,7 +65,7 @@ void Layer::bind() {
 
 void Layer::play()
 {
-    active_ = true;
+    active_ = true && !mute_;
     player_.setPaused(!active_);
 }
 
@@ -77,7 +77,7 @@ void Layer::pause()
 
 void Layer::playPause()
 {
-    active_ = !active_;
+    active_ = !active_ && !mute_;
     player_.setPaused(!active_);
 }
 
