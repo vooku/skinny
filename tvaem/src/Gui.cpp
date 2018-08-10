@@ -288,6 +288,14 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
             status_->reload = true;
         }
     }
+    else if (name == "Save config") {
+        auto openFileResult = ofSystemSaveDialog("config.xml", "Save config as");
+        if (openFileResult.bSuccess) {
+            if (!show_->toXml(openFileResult.fileName)) {
+                ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", openFileResult.fileName.c_str());
+            }
+        }
+    }
     else {
         ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", name.c_str());
     }

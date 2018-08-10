@@ -242,22 +242,6 @@ bool ofApp::setupShow()
     return true;
 }
 
-//bool ofApp::saveConfig()
-//{  
-//    ofxXmlSettings config;
-//    config.addTag("head");
-//    config.pushTag("head");
-//    config.setValue("version", version);
-//    config.setValue("switchNote", switchNote_);
-//    config.popTag(); // head
-//
-//    config.addTag("show");
-//    config.pushTag("show");
-//    show_.toXml(config);
-//    config.popTag(); // show
-//    return config.saveFile(settings_.cfgFile);
-//}
-
 bool ofApp::reload(LoadDir dir)
 {
     if (show_.getSize() < 1) {

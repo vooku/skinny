@@ -97,11 +97,14 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
 void SceneDescription::toXml(ofxXmlSettings & config) const {
     config.addValue("name", name);
 
-    for (int i = 0; i < layers.size(); i++) {
-        config.addTag("layer");
-        config.pushTag("layer", i);
-        layers[i].toXml(config);
-        config.popTag(); // layer
+    int validLayers = 0;
+    for (const auto& layer : layers) {
+        if (layer.valid) {
+            config.addTag("layer");
+            config.pushTag("layer", validLayers++);
+            layer.toXml(config);
+            config.popTag(); // layer
+        }
     }
 
     for (int i = 0; i < effects.size(); i++) {
@@ -139,14 +142,26 @@ bool ShowDescription::fromXml(const std::string& filename) {
     return true;
 }
 
-//void ShowDescription::toXml(ofxXmlSettings & config) const {
-//    for (int i = 0; i < scenes_.size(); i++) {
-//        config.addTag("scene");
-//        config.pushTag("scene", i);
-//        scenes_[i].toXml(config);
-//        config.popTag(); // scene
-//    }
-//}
+bool ShowDescription::toXml(const std::string& filename) const {
+    ofxXmlSettings config;
+    config.addTag("head");
+    config.pushTag("head");
+    config.setValue("version", version);
+    config.setValue("switchNote", switchNote_);
+    config.popTag(); // head
+
+    config.addTag("show");
+    config.pushTag("show");
+    for (int i = 0; i < scenes_.size(); i++) {
+        config.addTag("scene");
+        config.pushTag("scene", i);
+        scenes_[i].toXml(config);
+        config.popTag(); // scene
+    }
+    config.popTag(); // show
+
+    return config.saveFile(filename);
+}
 
 ShowDescription & ShowDescription::operator++() {
     currentIdx_ = ++currentIdx_ % scenes_.size();

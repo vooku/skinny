@@ -60,7 +60,7 @@ public:
     friend class Gui;
 
     bool fromXml(const std::string& filename);
-    //void toXml(const std::string& filename) const;
+    bool toXml(const std::string& filename) const;
     ShowDescription& operator++();
     ShowDescription& operator--();
     void appendScene(const std::string& name = "New scene");
