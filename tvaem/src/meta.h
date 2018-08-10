@@ -59,18 +59,18 @@ class ShowDescription {
 public:
     friend class Gui;
 
-    ShowDescription() : currentIdx_(0) { }
-
-    void fromXml(ofxXmlSettings& config);
-    void toXml(ofxXmlSettings& config) const;
+    bool fromXml(const std::string& filename);
+    //void toXml(const std::string& filename) const;
     ShowDescription& operator++();
     ShowDescription& operator--();
     void appendScene(const std::string& name = "New scene");
 
     const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }
     auto getSize() { return scenes_.size(); }
+    auto getSwitchNote() { return switchNote_; }
 
 private:
     std::vector<SceneDescription> scenes_;
-    int currentIdx_;
+    int currentIdx_ = 0;
+    midiNote switchNote_ = MappableDescription::invalid_midi;
 };

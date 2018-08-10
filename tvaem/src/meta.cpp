@@ -112,7 +112,21 @@ void SceneDescription::toXml(ofxXmlSettings & config) const {
     }
 }
 
-void ShowDescription::fromXml(ofxXmlSettings & config) {
+bool ShowDescription::fromXml(const std::string& filename) {
+    ofxXmlSettings config;
+    if (!config.loadFile(filename)) {
+        return false;
+    }
+
+    currentIdx_ = 0;
+    scenes_.clear();
+    // TODO check for pushTag() etc return values
+
+    config.pushTag("head");
+    switchNote_ = config.getValue("switchNote", MappableDescription::invalid_midi);
+    config.popTag(); // head
+
+    config.pushTag("show");
     for (int i = 0; i < config.getNumTags("scene"); i++) {
         config.pushTag("scene", i);
         SceneDescription scene;
@@ -120,17 +134,19 @@ void ShowDescription::fromXml(ofxXmlSettings & config) {
         scenes_.push_back(std::move(scene));
         config.popTag(); // scene
     }
-    currentIdx_ = 0;
+    config.popTag(); // show
+
+    return true;
 }
 
-void ShowDescription::toXml(ofxXmlSettings & config) const {
-    for (int i = 0; i < scenes_.size(); i++) {
-        config.addTag("scene");
-        config.pushTag("scene", i);
-        scenes_[i].toXml(config);
-        config.popTag(); // scene
-    }
-}
+//void ShowDescription::toXml(ofxXmlSettings & config) const {
+//    for (int i = 0; i < scenes_.size(); i++) {
+//        config.addTag("scene");
+//        config.pushTag("scene", i);
+//        scenes_[i].toXml(config);
+//        config.popTag(); // scene
+//    }
+//}
 
 ShowDescription & ShowDescription::operator++() {
     currentIdx_ = ++currentIdx_ % scenes_.size();

@@ -10,7 +10,6 @@
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
-    static constexpr const char * version = "0.2.0-alpha";
     static constexpr const char * name = "Triggered Video & FX Mixer";
     
     ofApp(ofxArgs* args);
@@ -50,8 +49,6 @@ private:
     void parseArgs(ofxArgs* args);
     void setupMidi();
     bool setupShow();
-    bool loadConfig();
-    bool saveConfig();
 
     enum class LoadDir {
         Current, Forward, Backward
@@ -63,7 +60,6 @@ private:
     ShowDescription show_;
     std::unique_ptr<Scene> currentScene_;
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
-    uint8_t switchNote_;
 
     ofShader shader_;
     ofTexture dst_;

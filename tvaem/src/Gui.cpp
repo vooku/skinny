@@ -278,6 +278,16 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
     else if (name == "Append scene") {
         show_->appendScene();
     }
+    else if (name == "Load config") {
+        auto openFileResult = ofSystemLoadDialog("Select config file");
+        if (openFileResult.bSuccess) {
+            if (!show_->fromXml(openFileResult.fileName)) {
+                ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
+                show_->appendScene();
+            }
+            status_->reload = true;
+        }
+    }
     else {
         ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", name.c_str());
     }

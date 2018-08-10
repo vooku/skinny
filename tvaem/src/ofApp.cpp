@@ -4,7 +4,6 @@
 #include "shader.h"
 
 ofApp::ofApp(ofxArgs* args) : 
-    switchNote_(MappableDescription::invalid_midi),
     gui_(&status_, &show_),
     currentScene_(std::make_unique<Scene>())
 {
@@ -160,7 +159,7 @@ void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 
 void ofApp::newMidiMessage(ofxMidiMessage & msg)
 {
-    if (msg.status == MIDI_NOTE_ON && msg.pitch == switchNote_)
+    if (msg.status == MIDI_NOTE_ON && msg.pitch == show_.getSwitchNote())
         status_.forward = true;
     else if (currentScene_) {
         auto foundMappables = currentScene_->newMidiMessage(msg);
@@ -230,7 +229,8 @@ void ofApp::setupMidi()
 
 bool ofApp::setupShow()
 {
-    if (settings_.cfgFile == "" || !loadConfig()) {
+    if (!show_.fromXml(settings_.cfgFile)) {
+        ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", settings_.cfgFile.c_str());
         show_.appendScene();
     }
 
@@ -242,40 +242,21 @@ bool ofApp::setupShow()
     return true;
 }
 
-bool ofApp::loadConfig()
-{
-    ofxXmlSettings config;
-    if (!config.loadFile(settings_.cfgFile)) {
-        ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", settings_.cfgFile.c_str());
-        return false;
-    }
-
-    config.pushTag("head");
-    switchNote_ = config.getValue("switchNote", MappableDescription::invalid_midi);
-    config.popTag(); // head
-    
-    config.pushTag("show");
-    show_.fromXml(config);
-    config.popTag(); // show
-    
-    return true;
-}
-
-bool ofApp::saveConfig()
-{  
-    ofxXmlSettings config;
-    config.addTag("head");
-    config.pushTag("head");
-    config.setValue("version", version);
-    config.setValue("switchNote", switchNote_);
-    config.popTag(); // head
-
-    config.addTag("show");
-    config.pushTag("show");
-    show_.toXml(config);
-    config.popTag(); // show
-    return config.saveFile(settings_.cfgFile);
-}
+//bool ofApp::saveConfig()
+//{  
+//    ofxXmlSettings config;
+//    config.addTag("head");
+//    config.pushTag("head");
+//    config.setValue("version", version);
+//    config.setValue("switchNote", switchNote_);
+//    config.popTag(); // head
+//
+//    config.addTag("show");
+//    config.pushTag("show");
+//    show_.toXml(config);
+//    config.popTag(); // show
+//    return config.saveFile(settings_.cfgFile);
+//}
 
 bool ofApp::reload(LoadDir dir)
 {
