@@ -131,7 +131,7 @@ void ofApp::exitGui(ofEventArgs& args) {
 }
 
 //--------------------------------------------------------------
-void ofApp::keyReleased(int key)
+void ofApp::keyReleased(ofKeyEventArgs& key)
 {
     // 0-9 in ascii
     //if (key >= 0x30 && key < 0x3A) {
@@ -139,22 +139,24 @@ void ofApp::keyReleased(int key)
     //    currentScene_->playPauseLayer((key - 0x30 + 9) % 10);
     //}
 
-    switch (key) {
+    switch (key.codepoint) {
     case OF_KEY_F11:
         ofGetCurrentWindow()->toggleFullscreen();
         break;
-    case 'n':
-        status_.forward = true;
+    case 'N':
+        //if (key.hasModifier(OF_KEY_CONTROL))
+            status_.forward = true;
         break;
-    case 'b':
-        status_.backward = true;
+    case 'B':
+        //if (key.hasModifier(OF_KEY_CONTROL))
+            status_.backward = true;
         break;
     }
 }
 
 void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 {
-    keyReleased(args.codepoint);
+    keyReleased(args);
 }
 
 void ofApp::newMidiMessage(ofxMidiMessage & msg)
