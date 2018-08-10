@@ -65,6 +65,7 @@ public:
     void toXml(ofxXmlSettings& config) const;
     ShowDescription& operator++();
     ShowDescription& operator--();
+    void appendScene(const std::string& name = "New scene");
 
     const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }
     auto getSize() { return scenes_.size(); }

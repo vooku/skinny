@@ -230,10 +230,8 @@ void ofApp::setupMidi()
 
 bool ofApp::setupShow()
 {
-    if (settings_.cfgFile != "") {
-        if (!loadConfig()) {
-            return false;
-        }
+    if (settings_.cfgFile == "" || !loadConfig()) {
+        show_.appendScene();
     }
 
     if (!reload(LoadDir::Current)) {
@@ -247,8 +245,10 @@ bool ofApp::setupShow()
 bool ofApp::loadConfig()
 {
     ofxXmlSettings config;
-    if (!config.loadFile(settings_.cfgFile))
+    if (!config.loadFile(settings_.cfgFile)) {
+        ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", settings_.cfgFile.c_str());
         return false;
+    }
 
     config.pushTag("head");
     switchNote_ = config.getValue("switchNote", MappableDescription::invalid_midi);

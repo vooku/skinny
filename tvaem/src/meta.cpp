@@ -146,3 +146,8 @@ ShowDescription & ShowDescription::operator--()
         currentIdx_ = currentIdx_ % scenes_.size();
     return *this;
 }
+
+void ShowDescription::appendScene(const std::string& name)
+{
+    scenes_.push_back({ name });
+}

@@ -276,7 +276,7 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
         status_->backward = true;
     }
     else if (name == "Append scene") {
-        show_->scenes_.push_back({ "New scene" });
+        show_->appendScene();
     }
     else {
         ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", name.c_str());
