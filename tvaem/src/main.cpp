@@ -6,7 +6,7 @@
 //}
 
 int main(int argc, char *argv[]) {
-    std::unique_ptr<ofxArgs> args = std::make_unique<ofxArgs>(argc, argv);
+    auto args = std::make_unique<ofxArgs>(argc, argv);
 
     ofGLWindowSettings settings;
 
@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 
     settings.setSize(1175, 600);
     auto guiWindow = ofCreateWindow(settings);
-    
+
     shared_ptr<ofApp> mainApp(new ofApp(args.get()));
     mainApp->setupGui();
     ofAddListener(guiWindow->events().draw, mainApp.get(), &ofApp::drawGui);

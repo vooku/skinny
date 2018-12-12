@@ -5,24 +5,24 @@ const ofColor Gui::bgColor = { 45, 45, 48 };
 
 Gui::Gui(Status* status, ShowDescription* show) :
     status_(status),
-    show_(show),
-    currentScene_(nullptr)
+    currentScene_(nullptr),
+    show_(show)
 {
 }
 
 void Gui::setup()
 {
-    fonts.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts.sizeRegular, true, false);
-    fonts.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts.sizeItalic, true, false);
+    fonts_.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts_.sizeRegular, true, false);
+    fonts_.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts_.sizeItalic, true, false);
 
-    auto xOffset = delta;
-    auto yOffset = delta;
-    
+    auto xOffset = DELTA;
+    auto yOffset = DELTA;
+
     // Control panel
     controlPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     controlPanel_->setTheme(&headerTheme_);
-    xOffset += controlPanel_->getWidth() + 2 * delta;
-    
+    xOffset += controlPanel_->getWidth() + 2 * DELTA;
+
     sceneNameInput_ = controlPanel_->addTextInput("Scene");
     sceneNameInput_->setText(currentScene_ ? currentScene_->getName() : "Enter scene name");
     sceneNameInput_->onTextInputEvent(this, &Gui::onSceneNameInput);
@@ -35,14 +35,14 @@ void Gui::setup()
     controlButtons_.push_back(controlPanel_->addButton("Load config"));
     for (auto& btn : controlButtons_)
         btn->onButtonEvent(this, &Gui::onOtherButton);
-    
+
     controlPanel_->addBreak();
     controlPanel_->addFRM()->setLabel("fps:");
 
     // Play & pause panel
     playPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     playPanel_->setTheme(&commonTheme_);
-    auto playPanelWidth = 2 * delta;
+    auto playPanelWidth = 2 * DELTA;
     playPanel_->setWidth(playPanelWidth);
     xOffset += playPanel_->getWidth();
     playPanel_->addLabel("Play");
@@ -95,7 +95,7 @@ void Gui::setup()
     // Videos & FX panel
     videoFxPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     videoFxPanel_->setTheme(&commonTheme_);
-    videoFxPanel_->setWidth(14 * delta);
+    videoFxPanel_->setWidth(14 * DELTA);
     xOffset += videoFxPanel_->getWidth();
     videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
     videoFxPanel_->addBreak();
@@ -117,7 +117,7 @@ void Gui::setup()
     }
 
     // MIDI panel
-    auto midiPanelWidth = 3 * delta;
+    auto midiPanelWidth = 3 * DELTA;
     midiPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     midiPanel_->setTheme(&commonTheme_);
     midiPanel_->setWidth(midiPanelWidth);
@@ -164,12 +164,12 @@ void Gui::setup()
     blendModePanel_->addBreak();
 }
 
-void Gui::draw()
+void Gui::draw() const
 {
     ofBackground(bgColor);
 
     if (status_->forward || status_->backward || status_->reload)
-        fonts.italic.drawString("Loading...", 2 * delta, controlPanel_->getHeight() + 3 * delta);
+        fonts_.italic.drawString("Loading...", 2 * DELTA, controlPanel_->getHeight() + 3 * DELTA);
 
     if (controlPanel_) controlPanel_->draw();
     if (playPanel_) playPanel_->draw();
@@ -336,7 +336,7 @@ void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 }
 
 void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
-{    
+{
     auto idx = std::stoi(e.target->getName());
     if (currentScene_) {
         currentScene_->playPauseLayer(idx);
@@ -346,15 +346,14 @@ void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 
 void Gui::onEffectPlayToggle(ofxDatGuiToggleEvent e)
 {
-    
-auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
+    auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
     if (currentScene_)
         currentScene_->playPauseEffect(type);
 }
 
 void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 {
-    bool mute = e.checked;
+    auto mute = e.checked;
     auto idx = std::stoi(e.target->getName());
     if (currentScene_)
         currentScene_->layers_[idx]->setMute(mute);
@@ -364,7 +363,7 @@ void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 
 void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 {
-    bool mute = e.checked;
+    auto mute = e.checked;
     auto idx = std::stoi(e.target->getName());
     auto type = static_cast<Effect::Type>(idx);
     if (currentScene_)
@@ -382,7 +381,7 @@ void Gui::addBlank(ofxDatGui * panel)
 }
 
 Gui::CommonTheme::CommonTheme() :
-    ofxDatGuiTheme(false) 
+    ofxDatGuiTheme(false)
 {
     layout.height *= 1.25;
     layout.upperCaseLabels = false;
@@ -392,7 +391,7 @@ Gui::CommonTheme::CommonTheme() :
     stripe.visible = false;
     font.size = Gui::Fonts::sizeRegular;
     font.file = "fonts/IBMPlexSans-Regular.ttf";
-    
+
     init();
 }
 

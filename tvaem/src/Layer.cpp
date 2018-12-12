@@ -4,21 +4,21 @@ char * Layer::c_str(BlendMode blendMode)
 {
     switch (blendMode)
     {
-    case Layer::BlendMode::Normal:
+    case BlendMode::Normal:
         return "Normal";
-    case Layer::BlendMode::Multiply:
+    case BlendMode::Multiply:
         return "Multiply";
-    case Layer::BlendMode::Screen:
+    case BlendMode::Screen:
         return "Screen";
-    case Layer::BlendMode::Darken:
+    case BlendMode::Darken:
         return "Darken";
-    case Layer::BlendMode::Lighten:
+    case BlendMode::Lighten:
         return "Lighten";
-    case Layer::BlendMode::LinearDodge:
+    case BlendMode::LinearDodge:
         return "LinearDodge";
-    case Layer::BlendMode::Difference:
+    case BlendMode::Difference:
         return "Difference";
-    case Layer::BlendMode::Exclusion:
+    case BlendMode::Exclusion:
         return "Exclusion";
     default:
         return "Invalid";
@@ -26,18 +26,18 @@ char * Layer::c_str(BlendMode blendMode)
 }
 
 Layer::Layer(int id, const std::filesystem::path& path, const MidiMap & map) :
+    Mappable(map),
     id_(id),
     name_(path.filename().string()),
-    Mappable(map),
     valid_(false)
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
-    reload(path);    
+    reload(path);
 }
 
 Layer::~Layer()
-{   
+{
     //player_.getTexture().unbind(id_); // throws exception renderer being null
     player_.closeMovie();
 }
@@ -47,11 +47,11 @@ bool Layer::reload(const std::filesystem::path& path)
     player_.closeMovie();
     valid_ = player_.load(path.string());
     player_.setVolume(0);
-    
+
     if (!valid_) {
         ofLog(OF_LOG_ERROR, "Cannot load %s at %s", name_.c_str(), path.c_str());
     }
-    else 
+    else
         ofLog(OF_LOG_VERBOSE, "Loaded %s.", name_.c_str());
 
     return valid_;
@@ -65,7 +65,7 @@ void Layer::bind() {
 
 void Layer::play()
 {
-    active_ = true && !mute_;
+    active_ = !mute_;
     player_.setPaused(!active_);
 }
 
@@ -84,5 +84,5 @@ void Layer::playPause()
 bool Layer::isFrameNew()
 {
     player_.update();
-    return player_.isFrameNew(); 
+    return player_.isFrameNew();
 }

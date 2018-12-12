@@ -3,7 +3,6 @@
 #include <set>
 #include <vector>
 #include <array>
-#include <filesystem>
 #include "ofxXmlSettings.h"
 #include "Layer.h"
 #include "Effect.h"
@@ -34,7 +33,7 @@ struct LayerDescription : public MappableDescription {
 
 struct EffectDescription : public MappableDescription {
     EffectDescription() = default;
-    EffectDescription(Effect::Type type) : type(type) { }
+    explicit EffectDescription(Effect::Type type) : type(type) { }
 
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
@@ -45,7 +44,7 @@ struct EffectDescription : public MappableDescription {
 
 struct SceneDescription {
     SceneDescription() = default;
-    SceneDescription(const std::string& name);
+    explicit SceneDescription(const std::string& name);
 
     void fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
@@ -66,8 +65,8 @@ public:
     void appendScene(const std::string& name = "New scene");
 
     const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }
-    auto getSize() { return scenes_.size(); }
-    auto getSwitchNote() { return switchNote_; }
+    auto getSize() const { return scenes_.size(); }
+    auto getSwitchNote() const { return switchNote_; }
 
 private:
     std::vector<SceneDescription> scenes_;

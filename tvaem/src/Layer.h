@@ -1,6 +1,5 @@
 #pragma once
 
-#include <filesystem>
 #include "ofMain.h"
 #include "Mappable.h"
 
@@ -31,13 +30,13 @@ public:
     void play() override;
     void pause() override;
     void playPause() override;
-    
+
     auto getWidth() const { return player_.getWidth(); }
     auto getHeight() const { return player_.getHeight(); }
     auto getId() const { return id_; }
     const auto& getName() const { return name_; }
     auto getBlendMode() const { return blendMode_; }
-    bool isValid() const { return valid_; }    
+    bool isValid() const { return valid_; }
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
 

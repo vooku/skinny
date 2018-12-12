@@ -1,11 +1,10 @@
 #include <ctime>
 #include "ofApp.h"
-#include "ofxXmlSettings.h"
 #include "shader.h"
 
-ofApp::ofApp(ofxArgs* args) : 
-    gui_(&status_, &show_),
-    currentScene_(std::make_unique<Scene>())
+ofApp::ofApp(ofxArgs* args) :
+    currentScene_(std::make_unique<Scene>()),
+    gui_(&status_, &show_)
 {
     parseArgs(args);
 }
@@ -17,21 +16,21 @@ void ofApp::setup()
         return;
     }
 
-    ofSetWindowTitle(name);
+    ofSetWindowTitle(NAME);
 
     if (settings_.console)
         ofLogToConsole();
-    else 
+    else
         ofLogToFile("tvaem.log", true);
     ofSetLogLevel(settings_.verbose ? OF_LOG_VERBOSE : OF_LOG_NOTICE);
     ofSetFrameRate(30);
     ofBackground(ofColor::black);
     ofSetVerticalSync(true);
 
-    int major = ofGetGLRenderer()->getGLversionMajor();
-    int minor = ofGetGLRenderer()->getGLversionMinor();
-    auto *vendor = (char*)glGetString(GL_VENDOR);
-    auto *renderer = (char*)glGetString(GL_RENDERER);
+    const auto major = ofGetGLRenderer()->getGLversionMajor();
+    const auto minor = ofGetGLRenderer()->getGLversionMinor();
+    const auto vendor = glGetString(GL_VENDOR);
+    const auto renderer = glGetString(GL_RENDERER);
     ofLog(OF_LOG_NOTICE, "Using OpenGL v%d.%d, GPU: %s %s.", major, minor, vendor, renderer);
     if (major < 4 && minor < 3) {
         ofLog(OF_LOG_FATAL_ERROR, "OpenGL version too old!", major, minor);
@@ -67,7 +66,7 @@ void ofApp::setup()
 
 void ofApp::setupGui()
 {
-    ofSetWindowTitle(name);
+    ofSetWindowTitle(NAME);
 
     gui_.setup();
 }
@@ -119,7 +118,7 @@ void ofApp::drawGui(ofEventArgs& args) {
     gui_.draw();
 }
 
-void ofApp::exit() 
+void ofApp::exit()
 {
     for (auto& midiInput : midiInputs_) {
         midiInput->closePort();
@@ -151,6 +150,8 @@ void ofApp::keyReleased(ofKeyEventArgs& key)
         //if (key.hasModifier(OF_KEY_CONTROL))
             status_.backward = true;
         break;
+    default:
+        break;
     }
 }
 
@@ -176,7 +177,7 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
     }
 }
 
-void ofApp::usage() const
+void ofApp::usage()
 {
     std::cout <<
         "Usage:\n"
@@ -217,7 +218,7 @@ void ofApp::parseArgs(ofxArgs* args)
     settings_.cfgFile = args->getString("--config", "");
 }
 
-void ofApp::setupMidi() 
+void ofApp::setupMidi()
 {
     if (settings_.verbose)
         ofxMidiIn::listPorts();
@@ -267,10 +268,10 @@ bool ofApp::reload(LoadDir dir)
     shader_.begin();
     currentScene_->reload(show_.currentScene());
     currentScene_->bindTextures();
-    shader_.end();    
+    shader_.end();
 
     if (currentScene_->isValid()) {
-        ofLog(OF_LOG_NOTICE, "Succesfully loaded scene %s.", currentScene_->getName().c_str());
+        ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", currentScene_->getName().c_str());
         gui_.reload(currentScene_.get());
     }
     else {

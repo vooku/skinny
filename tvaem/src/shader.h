@@ -1,6 +1,8 @@
-static const auto computeShader = 
+#pragma once
+
+static const auto computeShader =
     "#version 440\n"
-    
+
     "layout(rgba8, binding = 0) uniform readonly image2D layer0;\n"
     "layout(rgba8, binding = 1) uniform readonly image2D layer1;\n"
     "layout(rgba8, binding = 2) uniform readonly image2D layer2;\n"
@@ -10,7 +12,7 @@ static const auto computeShader =
     "layout(rgba8, binding = 6) uniform readonly image2D layer6;\n"
     "layout(rgba8, binding = 7) uniform writeonly image2D dst;\n"
     "layout(local_size_x = 32, local_size_y = 32, local_size_z = 1) in;\n"
-    
+
     "uniform int nLayers;\n"
     "uniform bool[7] playing;\n"
     "uniform ivec2[7] dimensions;\n"
@@ -19,7 +21,7 @@ static const auto computeShader =
     "uniform bool reducePalette;\n"
     "uniform bool colorShift;\n"
     "uniform bool colorShift2;\n"
-    
+
     "void main(){\n"
     "	const ivec2 xy = ivec2(gl_GlobalInvocationID.xy);\n"
     "	const vec2 globalDims = gl_WorkGroupSize.xy * gl_NumWorkGroups.xy;\n"
@@ -33,7 +35,7 @@ static const auto computeShader =
     "	colors[6] = imageLoad(layer6, ivec2(xy / globalDims * dimensions[6])).rgb;\n"
     "	vec3 blended = vec3(0.0);\n"
     "	bool anyPlaying = false;\n"
-    
+
     "	for (int i = 0; i < nLayers; i++) {\n"
     "		if (playing[i]) {\n"
     "			anyPlaying = true;\n"
@@ -72,7 +74,7 @@ static const auto computeShader =
     "		blended = mix(blended, blended.brg, colorShift);\n"
     "		blended = mix(blended, blended.gbr, colorShift2);\n"
     "	}\n"
-    
+
     "	imageStore(dst, xy, vec4(blended, 1.0));\n"
     "}\n"
 ;

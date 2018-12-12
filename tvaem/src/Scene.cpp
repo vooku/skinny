@@ -5,7 +5,7 @@ void Scene::reload(const SceneDescription & description)
     name_ = description.name;
     valid_ = true;
 
-    for (int i = 0; i < MAX_LAYERS; ++i) {
+    for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (!description.layers[i].valid) {
             layers_[i].reset();
         }
@@ -23,7 +23,7 @@ void Scene::reload(const SceneDescription & description)
     }
 
     for (const auto& effect : description.effects) {
-        effects_[effect.type] = { effect.midiMap };
+        effects_[effect.type] = Effect(effect.midiMap);
     }
 }
 
@@ -53,7 +53,7 @@ bool Scene::hasActiveFX() const
 Scene::FoundMappables Scene::newMidiMessage(ofxMidiMessage & msg) {
     auto noteOn = msg.status == MIDI_NOTE_ON;
     auto noteOff = msg.status == MIDI_NOTE_OFF;
-    int note = msg.pitch;
+    auto note = msg.pitch;
 
     if (!noteOn && !noteOff)
         return {};
@@ -88,7 +88,7 @@ Scene::FoundMappables Scene::newMidiMessage(ofxMidiMessage & msg) {
     return result;
 }
 
-void Scene::playPauseLayer(int idx) 
+void Scene::playPauseLayer(int idx)
 {
     if (idx < layers_.size() && layers_[idx])
         layers_[idx]->playPause();
@@ -99,10 +99,10 @@ void Scene::playPauseEffect(Effect::Type type)
     effects_.at(type).playPause();
 }
 
-void Scene::setupUniforms(ofShader& shader) const 
+void Scene::setupUniforms(ofShader& shader) const
 {
-    uniforms_.nLayers = layers_.size();
-    for (int i = 0; i < layers_.size(); ++i) {
+    uniforms_.nLayers = static_cast<int>(layers_.size());
+    for (auto i = 0; i < layers_.size(); ++i) {
         if (layers_[i]) {
             uniforms_.playing[i] = layers_[i]->isPlaying();
             uniforms_.dimensions[i] = { layers_[i]->getWidth(), layers_[i]->getHeight() };

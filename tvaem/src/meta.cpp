@@ -24,7 +24,7 @@ bool LayerDescription::fromXml(ofxXmlSettings & config) {
     path = config.getValue("path", invalid_path.string());
     blendMode = static_cast<Layer::BlendMode>(config.getValue("blendMode", static_cast<int>(Layer::BlendMode::Invalid)));
 
-    for (int i = 0; i < config.getNumTags("midi"); i++) {
+    for (auto i = 0; i < config.getNumTags("midi"); i++) {
         midiMap.insert(config.getValue("midi", invalid_midi, i));
     }
 
@@ -69,15 +69,15 @@ void EffectDescription::toXml(ofxXmlSettings & config) const {
 SceneDescription::SceneDescription(const std::string & name) :
     name(name)
 {
-    for (int i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
-        effects.push_back({ static_cast<Effect::Type>(i) });
+    for (auto i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
+        effects.push_back(EffectDescription(static_cast<Effect::Type>(i)));
     }
 }
 
 void SceneDescription::fromXml(ofxXmlSettings & config) {
     name = config.getValue("name", "");
 
-    for (int i = 0; i < config.getNumTags("layer"); i++) {
+    for (auto i = 0; i < config.getNumTags("layer"); i++) {
         config.pushTag("layer", i);
         LayerDescription layer;
         if (layer.fromXml(config))
@@ -97,7 +97,7 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
 void SceneDescription::toXml(ofxXmlSettings & config) const {
     config.addValue("name", name);
 
-    int validLayers = 0;
+    auto validLayers = 0;
     for (const auto& layer : layers) {
         if (layer.valid) {
             config.addTag("layer");
@@ -130,7 +130,7 @@ bool ShowDescription::fromXml(const std::string& filename) {
     config.popTag(); // head
 
     config.pushTag("show");
-    for (int i = 0; i < config.getNumTags("scene"); i++) {
+    for (auto i = 0; i < config.getNumTags("scene"); i++) {
         config.pushTag("scene", i);
         SceneDescription scene;
         scene.fromXml(config);
@@ -146,7 +146,7 @@ bool ShowDescription::toXml(const std::string& filename) const {
     ofxXmlSettings config;
     config.addTag("head");
     config.pushTag("head");
-    config.setValue("version", version);
+    config.setValue("version", VERSION);
     config.setValue("switchNote", switchNote_);
     config.popTag(); // head
 
@@ -172,13 +172,13 @@ ShowDescription & ShowDescription::operator--()
 {
     --currentIdx_;
     if (currentIdx_ < 0)
-        currentIdx_ = currentIdx_ + scenes_.size();
+        currentIdx_ = currentIdx_ + static_cast<int>(scenes_.size());
     else
-        currentIdx_ = currentIdx_ % scenes_.size();
+        currentIdx_ = currentIdx_ % static_cast<int>(scenes_.size());
     return *this;
 }
 
 void ShowDescription::appendScene(const std::string& name)
 {
-    scenes_.push_back({ name });
+    scenes_.push_back(SceneDescription(name));
 }

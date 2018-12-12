@@ -1,8 +1,6 @@
 #pragma once
 
-#include "OfxMidi.h"
 #include "Mappable.h"
-#include <string>
 
 // TODO Using the enum as a key in a map seems like bad design.
 class Effect : public Mappable {
@@ -15,12 +13,10 @@ public:
         ColorShift2   =  3,
         Count         =  4
     };
-    
+
     static char* c_str(Type);
 
     Effect() : Mappable() { }
-    Effect(const MidiMap& map) : Mappable(map) { }
-    
-private:
+    explicit Effect(const MidiMap& map) : Mappable(map) { }
 
 };

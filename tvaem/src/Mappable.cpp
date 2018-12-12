@@ -1,7 +1,7 @@
 #include "Mappable.h"
 
-Mappable::Mappable() : 
-    active_(false), 
+Mappable::Mappable() :
+    active_(false),
     mute_(false)
 {
 }

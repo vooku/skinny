@@ -10,21 +10,21 @@
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
-    static constexpr const char * name = "Triggered Video & FX Mixer";
-    
-    ofApp(ofxArgs* args);
+    static constexpr const char * NAME = "Triggered Video & FX Mixer";
 
-    void setup();
+    explicit ofApp(ofxArgs* args);
+
+    void setup() override;
     void setupGui();
-    void update();
-    void draw();
+    void update() override;
+    void draw() override;
     void drawGui(ofEventArgs& args);
-    void exit();
+    void exit() override;
     void exitGui(ofEventArgs& args);
-    
-    void keyReleased(ofKeyEventArgs& key);
+
+    void keyReleased(ofKeyEventArgs& key) override;
     void keyReleasedGui(ofKeyEventArgs& args);
-    void newMidiMessage(ofxMidiMessage& msg);
+    void newMidiMessage(ofxMidiMessage& msg) override;
 
 private:
     struct {
@@ -35,7 +35,7 @@ private:
         std::string cfgFile;
     } settings_;
 
-    void usage() const;
+    static void usage();
     void parseArgs(ofxArgs* args);
     void setupMidi();
     bool setupShow();

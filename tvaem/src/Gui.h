@@ -14,7 +14,7 @@ public:
     Gui(Status* status, ShowDescription* show);
 
     void setup();
-    void draw();
+    void draw() const;
     void reload(Scene* newScene);
     void setActive(int layerId, bool active);
     void setActive(Effect::Type type, bool active);
@@ -36,7 +36,7 @@ public:
 
 private:
     static const int MAX_CHARS = 20;
-    static const int delta = 25;
+    static const int DELTA = 25;
 
     class CommonTheme : public ofxDatGuiTheme {
     public:
@@ -47,13 +47,13 @@ private:
     public:
         HeaderTheme();
     } headerTheme_;
-    
+
     struct Fonts {
         static const int sizeRegular = 12;
         static const int sizeItalic = 14;
         ofTrueTypeFont regular, italic;
-    } fonts;
-    
+    } fonts_;
+
     void addBlank(ofxDatGui* panel);
 
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
@@ -71,7 +71,7 @@ private:
     std::array<ofxDatGuiTextInput*, static_cast<int>(Effect::Type::Count)> effectMidiInputs_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;
-    
+
     Status* status_;
     Scene* currentScene_;
     ShowDescription* show_;

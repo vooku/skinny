@@ -8,7 +8,7 @@ public:
     typedef std::set<midiNote> MidiMap;
 
     Mappable();
-    Mappable(const MidiMap& map);
+    explicit Mappable(const MidiMap& map);
     virtual ~Mappable() { }
 
     virtual void play() { active_ = true && !mute_; }
@@ -27,7 +27,7 @@ public:
     void setMute(bool mute);
 
 protected:
-    bool active_, mute_; 
+    bool active_, mute_;
     MidiMap midiMap_;
 
 };

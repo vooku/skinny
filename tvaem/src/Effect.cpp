@@ -2,13 +2,13 @@
 
 char* Effect::c_str(Type type) {
     switch (type)
-    {    case Effect::Type::Inverse:
+    {    case Type::Inverse:
         return "Inverse";
-    case Effect::Type::ReducePalette:
+    case Type::ReducePalette:
         return "Reduce Palette";
-    case Effect::Type::ColorShift:
+    case Type::ColorShift:
         return "Color Shift";
-    case Effect::Type::ColorShift2:
+    case Type::ColorShift2:
         return "Double Shift";
     default:
         return "Invalid";
