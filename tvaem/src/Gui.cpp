@@ -55,25 +55,23 @@ void Gui::reload(Scene* newScene)
     }
 
     auto& layers = currentScene_->getLayers();
-    if (layerButtons_.size() != layers.size()) {
-        ofLog(OF_LOG_WARNING, "Different number of layers and layer buttons");
-    }
-    else {
-        for (auto i = 0; i < MAX_LAYERS; ++i) {
-            if (layers[i]) {
-                layerButtons_[i]->setLabel(layers[i]->getName());
-                auto& midiMap = layers[i]->getMapping();
-                if (!midiMap.empty())
-                    layerMidiInputs_[i]->setText(std::to_string(*midiMap.begin()));
-                layerCCInputs_[i]->setText(std::to_string(layers[i]->getAlphaControl()));
-                blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
-            }
-            else {
-                layerButtons_[i]->setLabel("Click to load a video");
-                layerMidiInputs_[i]->setText("");
-                layerCCInputs_[i]->setText("");
-                blendModeDropdowns_[i]->select(0);
-            }
+    assert(layerButtons_.size() == layers.size());
+
+    for (auto i = 0; i < MAX_LAYERS; ++i) {
+        if (layers[i]) {
+            layerButtons_[i]->setLabel(layers[i]->getName());
+            auto& midiMap = layers[i]->getMapping();
+            if (!midiMap.empty())
+                layerMidiInputs_[i]->setText(std::to_string(*midiMap.begin()));
+            layerCCInputs_[i]->setText(std::to_string(layers[i]->getAlphaControl()));
+            layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
+            blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
+        }
+        else {
+            layerButtons_[i]->setLabel("Click to load a video");
+            layerMidiInputs_[i]->setText("");
+            layerCCInputs_[i]->setText("");
+            blendModeDropdowns_[i]->select(0);
         }
     }
 
@@ -91,6 +89,18 @@ void Gui::reload(Scene* newScene)
     }
 
     draw();
+}
+
+void Gui::update()
+{
+    auto& layers = currentScene_->getLayers();
+    for (auto i = 0; i < MAX_LAYERS; ++i) {
+        if (layers[i]) {
+            layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
+        } else {
+            layerAlphaLabels_[i]->setLabel("");
+        }
+    }
 }
 
 void Gui::setActive(int layerId, bool active)
@@ -429,7 +439,20 @@ void Gui::setupMidiCcPanel(glm::ivec2& pos, int w)
 
     midiCcPanel_->addBreak();
 }
-void Gui::setuAlphaPanel(glm::ivec2& pos) {}
+void Gui::setuAlphaPanel(glm::ivec2& pos)
+{
+    alphaPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    alphaPanel_->setTheme(&commonTheme_);
+    alphaPanel_->setWidth(2.5 * DELTA);
+    pos.x += alphaPanel_->getWidth();
+    alphaPanel_->addLabel("Alpha");
+    alphaPanel_->addBreak();
+    for (auto& layerAlphaLabel : layerAlphaLabels_) {
+        layerAlphaLabel = alphaPanel_->addLabel("");
+    }
+
+    alphaPanel_->addBreak();
+}
 
 void Gui::setupBlendModePanel(glm::ivec2& pos)
 {

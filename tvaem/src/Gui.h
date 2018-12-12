@@ -15,6 +15,7 @@ public:
     void setup();
     void draw() const;
     void reload(Scene* newScene);
+    void update();
     void setActive(int layerId, bool active);
     void setActive(Effect::Type type, bool active);
 
@@ -75,7 +76,7 @@ private:
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerCCInputs_;
-    std::array<ofxDatGuiLabel*, MAX_LAYERS> layerAlphaLabels_;
+    std::array<ofxDatGuiLabel*,     MAX_LAYERS> layerAlphaLabels_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerMuteToggles_;
     std::array<ofxDatGuiDropdown*,  MAX_LAYERS> blendModeDropdowns_;

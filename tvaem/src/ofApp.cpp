@@ -99,6 +99,8 @@ void ofApp::update()
     if (!currentScene_)
         return;
 
+    gui_.update();
+
     if (currentScene_->isFrameNew() || Status::instance().redraw) {
         shader_.begin();
         currentScene_->setupUniforms(shader_);
