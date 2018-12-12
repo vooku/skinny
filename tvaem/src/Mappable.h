@@ -16,10 +16,10 @@ public:
     virtual void playPause() { active_ = !active_ && !mute_; }
     virtual bool isPlaying() const { return active_; }
 
-    virtual void addMidiNote(int note) { midiMap_.insert(note); }
-    virtual void removeMidiNote(int note) { midiMap_.erase(note); }
+    virtual void addMidiNote(midiNote note) { midiMap_.insert(note); }
+    virtual void removeMidiNote(midiNote note) { midiMap_.erase(note); }
     virtual void clearMidiNotes() { midiMap_.clear(); }
-    virtual bool containsMidiNote(int note) const { return midiMap_.count(note); }
+    virtual bool containsMidiNote(midiNote note) const { return midiMap_.count(note); }
     virtual void replaceMidiMap(const MidiMap& newMap) { midiMap_ = { newMap }; }
     virtual const MidiMap& getMapping() const { return midiMap_; }
 

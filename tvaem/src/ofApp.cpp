@@ -255,10 +255,10 @@ bool ofApp::reload(LoadDir dir)
 
     switch (dir)
     {
-    case ofApp::LoadDir::Forward:
+    case LoadDir::Forward:
         ++show_;
         break;
-    case ofApp::LoadDir::Backward:
+    case LoadDir::Backward:
         --show_;
         break;
     default:

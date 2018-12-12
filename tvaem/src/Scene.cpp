@@ -50,25 +50,34 @@ bool Scene::hasActiveFX() const
     return uniforms_.inverse || uniforms_.reducePalette || uniforms_.colorShift;
 }
 
-Scene::FoundMappables Scene::newMidiMessage(ofxMidiMessage & msg) {
-    auto noteOn = msg.status == MIDI_NOTE_ON;
-    auto noteOff = msg.status == MIDI_NOTE_OFF;
-    auto note = msg.pitch;
+Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
+    const auto noteOn = msg.status == MIDI_NOTE_ON;
+    const auto noteOff = msg.status == MIDI_NOTE_OFF;
+    const auto note = msg.pitch;
+    const auto cc = msg.status == MIDI_CONTROL_CHANGE;
+    const auto control = msg.control;
+    const auto value = msg.value;
 
-    if (!noteOn && !noteOff)
+    if (!noteOn && !noteOff && !cc)
         return {};
 
     FoundMappables result;
     for (auto& layer : layers_) {
-        if (layer && layer->containsMidiNote(note)) {
+        if (!layer)
+            break;
+
+        if (layer->containsMidiNote(note)) {
             if (noteOn) {
                 layer->play();
                 result.layers.insert({ layer->getId(), true });
-            }
-            else if (noteOff) {
+            } else if (noteOff) {
                 layer->pause();
                 result.layers.insert({ layer->getId(), false });
             }
+        }
+
+        if (cc && layer->containsAlphaControl(control)) {
+            layer->setAlpha(value);
         }
     }
 
@@ -77,8 +86,7 @@ Scene::FoundMappables Scene::newMidiMessage(ofxMidiMessage & msg) {
             if (noteOn) {
                 effect.second.play();
                 result.effects.insert({ effect.first, true });
-            }
-            else if (noteOff) {
+            } else if (noteOff) {
                 effect.second.pause();
                 result.effects.insert({ effect.first, false });
             }
@@ -107,8 +115,8 @@ void Scene::setupUniforms(ofShader& shader) const
             uniforms_.playing[i] = layers_[i]->isPlaying();
             uniforms_.dimensions[i] = { layers_[i]->getWidth(), layers_[i]->getHeight() };
             uniforms_.blendingModes[i] = static_cast<int>(layers_[i]->getBlendMode());
-        }
-        else {
+            uniforms_.alphas[i] = layers_[i]->getAlpha();
+        } else {
             uniforms_.playing[i] = false;
         }
     }
@@ -117,6 +125,7 @@ void Scene::setupUniforms(ofShader& shader) const
     shader.setUniform1iv("playing", uniforms_.playing, uniforms_.nLayers);
     shader.setUniform2iv("dimensions", reinterpret_cast<int*>(uniforms_.dimensions), uniforms_.nLayers);
     shader.setUniform1iv("blendingModes", uniforms_.blendingModes, uniforms_.nLayers);
+    shader.setUniform1fv("alphas", uniforms_.alphas, uniforms_.nLayers);
 
     auto it = effects_.find(Effect::Type::Inverse);
     if (it != effects_.end())

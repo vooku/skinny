@@ -20,7 +20,7 @@ public:
 
     static char* c_str(BlendMode blendMode);
 
-    Layer(int id, const std::filesystem::path& path, const MidiMap& map = {});
+    Layer(int id, const std::filesystem::path& path, const MidiMap& map = {}/*, TODO midiNote alphaMidi*/);
     ~Layer() override;
 
     bool reload(const std::filesystem::path& path);
@@ -37,13 +37,20 @@ public:
     const auto& getName() const { return name_; }
     auto getBlendMode() const { return blendMode_; }
     bool isValid() const { return valid_; }
+    bool containsAlphaControl(midiNote control) const { return control == alphaControl_; }
+    float getAlpha() const { return alpha_; }
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
+    void setAlpha(int alpha) { alpha_ = (alpha < 0 ? 0 : alpha > 127 ? 127 : alpha) / 127.0f; }
 
 private:
+    static const int ALPHA_MIDI_OFFSET = 1;
+
     ofVideoPlayer player_;
     const int id_;
     const std::string name_;
     bool valid_;
     BlendMode blendMode_;
+    float alpha_;
+    midiNote alphaControl_;
 };

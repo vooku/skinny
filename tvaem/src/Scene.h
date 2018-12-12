@@ -25,7 +25,7 @@ public:
         std::unordered_map<int, bool> layers;
         std::unordered_map<Effect::Type, bool> effects;
     };
-    FoundMappables newMidiMessage(ofxMidiMessage & msg);
+    FoundMappables newMidiMessage(const ofxMidiMessage & msg);
 
     void playPauseLayer(int idx);
     void playPauseEffect(Effect::Type type);
@@ -43,6 +43,7 @@ private:
         int playing[MAX_LAYERS];
         glm::ivec2 dimensions[MAX_LAYERS];
         int blendingModes[MAX_LAYERS];
+        float alphas[MAX_LAYERS];
         bool inverse = false;
         bool reducePalette = false;
         bool colorShift = false;

@@ -29,7 +29,9 @@ Layer::Layer(int id, const std::filesystem::path& path, const MidiMap & map) :
     Mappable(map),
     id_(id),
     name_(path.filename().string()),
-    valid_(false)
+    valid_(false),
+    alpha_(1),
+    alphaControl_(ALPHA_MIDI_OFFSET + id)
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
