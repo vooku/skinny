@@ -1,7 +1,7 @@
 #include "Gui.h"
 #include "Status.h"
 
-const ofColor Gui::bgColor = { 45, 45, 48 };
+const ofColor Gui::BACKGROUND_COLOR = { 45, 45, 48 };
 
 Gui::Gui(ShowDescription* show) :
     currentScene_(nullptr),
@@ -14,187 +14,34 @@ void Gui::setup()
     fonts_.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts_.sizeRegular, true, false);
     fonts_.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts_.sizeItalic, true, false);
 
-    auto xOffset = DELTA;
-    auto yOffset = DELTA;
+    glm::ivec2 pos{ DELTA, DELTA };
+    const auto toggleWidth = 2 * DELTA;
+    const auto midiInWidth = 3 * DELTA;
 
-    // Control panel
-    controlPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    controlPanel_->setTheme(&headerTheme_);
-    xOffset += controlPanel_->getWidth() + 2 * DELTA;
-
-    sceneNameInput_ = controlPanel_->addTextInput("Scene");
-    sceneNameInput_->setText(currentScene_ ? currentScene_->getName() : "Enter scene name");
-    sceneNameInput_->onTextInputEvent(this, &Gui::onSceneNameInput);
-
-    controlButtons_.push_back(controlPanel_->addButton("Next scene"));
-    controlButtons_.push_back(controlPanel_->addButton("Previous scene"));
-    controlButtons_.push_back(controlPanel_->addButton("Append scene"));
-    controlPanel_->addBreak();
-    controlButtons_.push_back(controlPanel_->addButton("Save config"));
-    controlButtons_.push_back(controlPanel_->addButton("Load config"));
-    for (auto& btn : controlButtons_)
-        btn->onButtonEvent(this, &Gui::onOtherButton);
-
-    controlPanel_->addBreak();
-    controlPanel_->addFRM()->setLabel("fps:");
-
-    // Play & pause panel
-    playPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    playPanel_->setTheme(&commonTheme_);
-    auto playPanelWidth = 2 * DELTA;
-    playPanel_->setWidth(playPanelWidth);
-    xOffset += playPanel_->getWidth();
-    playPanel_->addLabel("Play");
-    playPanel_->addBreak();
-
-    for (auto i = 0; i < layerPlayToggles_.size(); ++i) {
-        layerPlayToggles_[i] = playPanel_->addToggle({});
-        layerPlayToggles_[i]->onToggleEvent(this, &Gui::onLayerPlayToggle);
-        layerPlayToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
-        layerPlayToggles_[i]->setName(std::to_string(i));
-    }
-
-    playPanel_->addBreak();
-    addBlank(playPanel_.get());
-    playPanel_->addBreak();
-
-    for (auto i = 0; i < effectPlayToggles_.size(); ++i) {
-        effectPlayToggles_[i] = playPanel_->addToggle({});
-        effectPlayToggles_[i]->onToggleEvent(this, &Gui::onEffectPlayToggle);
-        effectPlayToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
-        effectPlayToggles_[i]->setName(std::to_string(i));
-    }
-
-    // Mute panel
-    mutePanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    mutePanel_->setTheme(&commonTheme_);
-    mutePanel_->setWidth(playPanelWidth);
-    xOffset += mutePanel_->getWidth();
-    mutePanel_->addLabel("Mute");
-    mutePanel_->addBreak();
-
-    for (auto i = 0; i < layerMuteToggles_.size(); ++i) {
-        layerMuteToggles_[i] = mutePanel_->addToggle({});
-        layerMuteToggles_[i]->onToggleEvent(this, &Gui::onLayerMuteToggle);
-        layerMuteToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
-        layerMuteToggles_[i]->setName(std::to_string(i));
-    }
-
-    mutePanel_->addBreak();
-    addBlank(mutePanel_.get());
-    mutePanel_->addBreak();
-
-    for (auto i = 0; i < effectMuteToggles_.size(); ++i) {
-        effectMuteToggles_[i] = mutePanel_->addToggle({});
-        effectMuteToggles_[i]->onToggleEvent(this, &Gui::onEffectMuteToggle);
-        effectMuteToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
-        effectMuteToggles_[i]->setName(std::to_string(i));
-    }
-
-    // Videos & FX panel
-    videoFxPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    videoFxPanel_->setTheme(&commonTheme_);
-    videoFxPanel_->setWidth(14 * DELTA);
-    xOffset += videoFxPanel_->getWidth();
-    videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
-    videoFxPanel_->addBreak();
-
-    for (auto i = 0; i < layerButtons_.size(); ++i) {
-        layerButtons_[i] = videoFxPanel_->addButton({});
-        layerButtons_[i]->onButtonEvent(this, &Gui::onLayerButton);
-        layerButtons_[i]->setName(std::to_string(i));
-    }
-
-    videoFxPanel_->addBreak();
-    videoFxPanel_->addLabel("Effect");
-    videoFxPanel_->addBreak();
-
-    for (auto& button : effectButtons_) {
-        button = videoFxPanel_->addButton({});
-        button->onButtonEvent(this, &Gui::onEffectButton);
-        button->setEnabled(false);
-    }
-
-    // MIDI panel
-    auto midiPanelWidth = 3 * DELTA;
-    midiPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    midiPanel_->setTheme(&commonTheme_);
-    midiPanel_->setWidth(midiPanelWidth);
-    xOffset += midiPanel_->getWidth();
-    midiPanel_->addLabel("MIDI");
-    midiPanel_->addBreak();
-    for (auto i = 0; i < layerMidiInputs_.size(); ++i) {
-        layerMidiInputs_[i] = midiPanel_->addTextInput({});
-        layerMidiInputs_[i]->setName(std::to_string(i));
-        layerMidiInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
-        layerMidiInputs_[i]->onTextInputEvent(this, &Gui::onLayerMidiInput);
-        layerMidiInputs_[i]->setWidth(midiPanelWidth, 0); // This doesn't seem to work right
-    }
-
-    midiPanel_->addBreak();
-    addBlank(midiPanel_.get());
-    midiPanel_->addBreak();
-
-    for (auto i = 0; i < effectMidiInputs_.size(); ++i) {
-        effectMidiInputs_[i] = midiPanel_->addTextInput({});
-        effectMidiInputs_[i]->setName(std::to_string(i));
-        effectMidiInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
-        effectMidiInputs_[i]->onTextInputEvent(this, &Gui::onEffectMidiInput);
-        effectMidiInputs_[i]->setWidth(midiPanelWidth, 0); // This doesn't seem to work right
-    }
-
-    // MIDI CC panel
-    midiCCPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    midiCCPanel_->setTheme(&commonTheme_);
-    midiCCPanel_->setWidth(midiPanelWidth);
-    xOffset += midiCCPanel_->getWidth();
-    midiCCPanel_->addLabel("CC");
-    midiCCPanel_->addBreak();
-    for (auto i = 0; i < layerCCInputs_.size(); ++i) {
-        layerCCInputs_[i] = midiCCPanel_->addTextInput({});
-        layerCCInputs_[i]->setName(std::to_string(i));
-        layerCCInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
-        layerCCInputs_[i]->onTextInputEvent(this, &Gui::onLayerCCInput);
-        layerCCInputs_[i]->setWidth(midiPanelWidth, 0); // This doesn't seem to work right
-    }
-
-    midiCCPanel_->addBreak();
-
-    // Blending modes panel
-    blendModePanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
-    blendModePanel_->setTheme(&commonTheme_);
-    blendModePanel_->setWidth(6 * DELTA);
-    xOffset += blendModePanel_->getWidth();
-    blendModePanel_->addLabel("Blending Mode");
-    blendModePanel_->addBreak();
-
-    std::vector<string> options;
-    for (auto i = static_cast<int>(Layer::BlendMode::Normal); i < static_cast<int>(Layer::BlendMode::Count); ++i)
-        options.push_back(Layer::c_str(static_cast<Layer::BlendMode>(i)));
-
-    for (int i = 0; i < blendModeDropdowns_.size(); ++i) {
-        blendModeDropdowns_[i] = blendModePanel_->addDropdown("Select...", options);
-        blendModeDropdowns_[i]->setName(std::to_string(i));
-        blendModeDropdowns_[i]->select(static_cast<int>(Layer::BlendMode::Normal));
-        blendModeDropdowns_[i]->onDropdownEvent(this, &Gui::onBlendModeDropdown);
-    }
-    blendModePanel_->addBreak();
+    setupControlPanel(pos);
+    setupPlayPanel(pos, toggleWidth);
+    setupMutePanel(pos, toggleWidth);
+    setupVideoFxPanel(pos);
+    setupMidiPanel(pos, midiInWidth);
+    setupMidiCcPanel(pos, midiInWidth);
+    setuAlphaPanel(pos);
+    setupBlendModePanel(pos);
 }
 
 void Gui::draw() const
 {
-    ofBackground(bgColor);
+    ofBackground(BACKGROUND_COLOR);
 
     if (Status::instance().forward || Status::instance().backward || Status::instance().reload)
         fonts_.italic.drawString("Loading...", 2 * DELTA, controlPanel_->getHeight() + 3 * DELTA);
 
     if (controlPanel_) controlPanel_->draw();
-    if (playPanel_) playPanel_->draw();
-    if (mutePanel_) mutePanel_->draw();
-    if (videoFxPanel_) videoFxPanel_->draw();
-    if (midiPanel_) midiPanel_->draw();
-    if (midiCCPanel_) midiCCPanel_->draw();
-    if (blendModePanel_) blendModePanel_->draw();
+    //if (playPanel_) playPanel_->draw();
+    //if (mutePanel_) mutePanel_->draw();
+    //if (videoFxPanel_) videoFxPanel_->draw();
+    //if (midiPanel_) midiPanel_->draw();
+    //if (midiCcPanel_) midiCcPanel_->draw();
+    //if (blendModePanel_) blendModePanel_->draw();
 }
 
 void Gui::reload(Scene* newScene)
@@ -400,7 +247,7 @@ void Gui::addBlank(ofxDatGui * panel)
 {
     auto blank = panel->addButton({});
     blank->setEnabled(false);
-    blank->setBackgroundColor(bgColor);
+    blank->setBackgroundColor(BACKGROUND_COLOR);
     //blank->setStripeColor(bgColor);
 }
 
@@ -427,4 +274,181 @@ Gui::HeaderTheme::HeaderTheme() :
     font.file = "fonts/IBMPlexSerif-Italic.ttf";
 
     init();
+}
+
+void Gui::setupControlPanel(glm::ivec2& pos)
+{
+    controlPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    controlPanel_->setTheme(&headerTheme_);
+    pos.x += controlPanel_->getWidth() + 2 * DELTA;
+
+    sceneNameInput_ = controlPanel_->addTextInput("Scene");
+    sceneNameInput_->setText(currentScene_ ? currentScene_->getName() : "Enter scene name");
+    sceneNameInput_->onTextInputEvent(this, &Gui::onSceneNameInput);
+
+    controlButtons_.push_back(controlPanel_->addButton("Next scene"));
+    controlButtons_.push_back(controlPanel_->addButton("Previous scene"));
+    controlButtons_.push_back(controlPanel_->addButton("Append scene"));
+    controlPanel_->addBreak();
+    controlButtons_.push_back(controlPanel_->addButton("Save config"));
+    controlButtons_.push_back(controlPanel_->addButton("Load config"));
+    for (auto& btn : controlButtons_)
+        btn->onButtonEvent(this, &Gui::onOtherButton);
+
+    controlPanel_->addBreak();
+    controlPanel_->addFRM()->setLabel("fps:");
+}
+
+void Gui::setupPlayPanel(glm::ivec2& pos, int w)
+{
+    playPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    playPanel_->setTheme(&commonTheme_);
+    playPanel_->setWidth(w);
+    pos.x += playPanel_->getWidth();
+    playPanel_->addLabel("Play");
+    playPanel_->addBreak();
+
+    for (auto i = 0; i < layerPlayToggles_.size(); ++i) {
+        layerPlayToggles_[i] = playPanel_->addToggle({});
+        layerPlayToggles_[i]->onToggleEvent(this, &Gui::onLayerPlayToggle);
+        layerPlayToggles_[i]->setWidth(w, 0); // This doesn't seem to work right
+        layerPlayToggles_[i]->setName(std::to_string(i));
+    }
+
+    playPanel_->addBreak();
+    addBlank(playPanel_.get());
+    playPanel_->addBreak();
+
+    for (auto i = 0; i < effectPlayToggles_.size(); ++i) {
+        effectPlayToggles_[i] = playPanel_->addToggle({});
+        effectPlayToggles_[i]->onToggleEvent(this, &Gui::onEffectPlayToggle);
+        effectPlayToggles_[i]->setWidth(w, 0); // This doesn't seem to work right
+        effectPlayToggles_[i]->setName(std::to_string(i));
+    }
+}
+
+void Gui::setupMutePanel(glm::ivec2& pos, int w)
+{
+    mutePanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    mutePanel_->setTheme(&commonTheme_);
+    mutePanel_->setWidth(w);
+    pos.x += mutePanel_->getWidth();
+    mutePanel_->addLabel("Mute");
+    mutePanel_->addBreak();
+
+    for (auto i = 0; i < layerMuteToggles_.size(); ++i) {
+        layerMuteToggles_[i] = mutePanel_->addToggle({});
+        layerMuteToggles_[i]->onToggleEvent(this, &Gui::onLayerMuteToggle);
+        layerMuteToggles_[i]->setWidth(w, 0); // This doesn't seem to work right
+        layerMuteToggles_[i]->setName(std::to_string(i));
+    }
+
+    mutePanel_->addBreak();
+    addBlank(mutePanel_.get());
+    mutePanel_->addBreak();
+
+    for (auto i = 0; i < effectMuteToggles_.size(); ++i) {
+        effectMuteToggles_[i] = mutePanel_->addToggle({});
+        effectMuteToggles_[i]->onToggleEvent(this, &Gui::onEffectMuteToggle);
+        effectMuteToggles_[i]->setWidth(w, 0); // This doesn't seem to work right
+        effectMuteToggles_[i]->setName(std::to_string(i));
+    }
+}
+
+void Gui::setupVideoFxPanel(glm::ivec2& pos)
+{
+    // Videos & FX panel
+    videoFxPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    videoFxPanel_->setTheme(&commonTheme_);
+    videoFxPanel_->setWidth(14 * DELTA);
+    pos.x += videoFxPanel_->getWidth();
+    videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
+    videoFxPanel_->addBreak();
+
+    for (auto i = 0; i < layerButtons_.size(); ++i) {
+        layerButtons_[i] = videoFxPanel_->addButton({});
+        layerButtons_[i]->onButtonEvent(this, &Gui::onLayerButton);
+        layerButtons_[i]->setName(std::to_string(i));
+    }
+
+    videoFxPanel_->addBreak();
+    videoFxPanel_->addLabel("Effect");
+    videoFxPanel_->addBreak();
+
+    for (auto& button : effectButtons_) {
+        button = videoFxPanel_->addButton({});
+        button->onButtonEvent(this, &Gui::onEffectButton);
+        button->setEnabled(false);
+    }
+}
+
+void Gui::setupMidiPanel(glm::ivec2& pos, int w)
+{
+    midiPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    midiPanel_->setTheme(&commonTheme_);
+    midiPanel_->setWidth(w);
+    pos.x += midiPanel_->getWidth();
+    midiPanel_->addLabel("MIDI");
+    midiPanel_->addBreak();
+    for (auto i = 0; i < layerMidiInputs_.size(); ++i) {
+        layerMidiInputs_[i] = midiPanel_->addTextInput({});
+        layerMidiInputs_[i]->setName(std::to_string(i));
+        layerMidiInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
+        layerMidiInputs_[i]->onTextInputEvent(this, &Gui::onLayerMidiInput);
+        layerMidiInputs_[i]->setWidth(w, 0); // This doesn't seem to work right
+    }
+
+    midiPanel_->addBreak();
+    addBlank(midiPanel_.get());
+    midiPanel_->addBreak();
+
+    for (auto i = 0; i < effectMidiInputs_.size(); ++i) {
+        effectMidiInputs_[i] = midiPanel_->addTextInput({});
+        effectMidiInputs_[i]->setName(std::to_string(i));
+        effectMidiInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
+        effectMidiInputs_[i]->onTextInputEvent(this, &Gui::onEffectMidiInput);
+        effectMidiInputs_[i]->setWidth(w, 0); // This doesn't seem to work right
+    }
+}
+
+void Gui::setupMidiCcPanel(glm::ivec2& pos, int w)
+{
+    midiCcPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    midiCcPanel_->setTheme(&commonTheme_);
+    midiCcPanel_->setWidth(w);
+    pos.x += midiCcPanel_->getWidth();
+    midiCcPanel_->addLabel("CC");
+    midiCcPanel_->addBreak();
+    for (auto i = 0; i < layerCCInputs_.size(); ++i) {
+        layerCCInputs_[i] = midiCcPanel_->addTextInput({});
+        layerCCInputs_[i]->setName(std::to_string(i));
+        layerCCInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
+        layerCCInputs_[i]->onTextInputEvent(this, &Gui::onLayerCCInput);
+        layerCCInputs_[i]->setWidth(w, 0); // This doesn't seem to work right
+    }
+
+    midiCcPanel_->addBreak();
+}
+void Gui::setuAlphaPanel(glm::ivec2& pos) {}
+
+void Gui::setupBlendModePanel(glm::ivec2& pos)
+{
+    blendModePanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    blendModePanel_->setTheme(&commonTheme_);
+    blendModePanel_->setWidth(6 * DELTA);
+    pos.x += blendModePanel_->getWidth();
+    blendModePanel_->addLabel("Blending Mode");
+    blendModePanel_->addBreak();
+
+    std::vector<string> options;
+    for (auto i = static_cast<int>(Layer::BlendMode::Normal); i < static_cast<int>(Layer::BlendMode::Count); ++i)
+        options.push_back(Layer::c_str(static_cast<Layer::BlendMode>(i)));
+
+    for (int i = 0; i < blendModeDropdowns_.size(); ++i) {
+        blendModeDropdowns_[i] = blendModePanel_->addDropdown("Select...", options);
+        blendModeDropdowns_[i]->setName(std::to_string(i));
+        blendModeDropdowns_[i]->select(static_cast<int>(Layer::BlendMode::Normal));
+        blendModeDropdowns_[i]->onDropdownEvent(this, &Gui::onBlendModeDropdown);
+    }
+    blendModePanel_->addBreak();
 }

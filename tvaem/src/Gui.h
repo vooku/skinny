@@ -7,7 +7,7 @@
 
 class Gui {
 public:
-    static const ofColor bgColor;
+    static const ofColor BACKGROUND_COLOR;
 
     Gui() = delete;
     explicit Gui(ShowDescription* show);
@@ -54,10 +54,20 @@ private:
         ofTrueTypeFont regular, italic;
     } fonts_;
 
+    void setupControlPanel(glm::ivec2& pos);
+    void setupPlayPanel(glm::ivec2& pos, int w);
+    void setupMutePanel(glm::ivec2& pos, int w);
+    void setupVideoFxPanel(glm::ivec2& pos);
+    void setupMidiPanel(glm::ivec2& pos, int w);
+    void setupMidiCcPanel(glm::ivec2& pos, int w);
+    void setuAlphaPanel(glm::ivec2& pos);
+    void setupBlendModePanel(glm::ivec2& pos);
+
     void addBlank(ofxDatGui* panel);
 
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
-                               videoFxPanel_, midiPanel_, midiCCPanel_, blendModePanel_;
+                               videoFxPanel_, midiPanel_, midiCcPanel_,
+                               alphaPanel_, blendModePanel_;
 
     // This class does not own any of the following pointers, do not try to delete them.
     ofxDatGuiTextInput* sceneNameInput_;
@@ -65,6 +75,7 @@ private:
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerCCInputs_;
+    std::array<ofxDatGuiLabel*, MAX_LAYERS> layerAlphaLabels_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerMuteToggles_;
     std::array<ofxDatGuiDropdown*,  MAX_LAYERS> blendModeDropdowns_;
