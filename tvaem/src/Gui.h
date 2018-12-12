@@ -3,7 +3,6 @@
 #include "ofMain.h"
 #include "ofxDatGui.h"
 #include "Scene.h"
-#include "Status.h"
 #include <array>
 
 class Gui {
@@ -11,7 +10,7 @@ public:
     static const ofColor bgColor;
 
     Gui() = delete;
-    Gui(Status* status, ShowDescription* show);
+    explicit Gui(ShowDescription* show);
 
     void setup();
     void draw() const;
@@ -72,7 +71,6 @@ private:
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;
 
-    Status* status_;
     Scene* currentScene_;
     ShowDescription* show_;
 };

@@ -1,10 +1,11 @@
 #include <ctime>
 #include "ofApp.h"
 #include "shader.h"
+#include "Status.h"
 
 ofApp::ofApp(ofxArgs* args) :
     currentScene_(std::make_unique<Scene>()),
-    gui_(&status_, &show_)
+    gui_(&show_)
 {
     parseArgs(args);
 }
@@ -12,7 +13,7 @@ ofApp::ofApp(ofxArgs* args) :
 void ofApp::setup()
 {
     if (settings_.cancelSetup) {
-        status_.exit = true;
+        Status::instance().exit = true;
         return;
     }
 
@@ -34,7 +35,7 @@ void ofApp::setup()
     ofLog(OF_LOG_NOTICE, "Using OpenGL v%d.%d, GPU: %s %s.", major, minor, vendor, renderer);
     if (major < 4 && minor < 3) {
         ofLog(OF_LOG_FATAL_ERROR, "OpenGL version too old!", major, minor);
-        status_.exit = true;
+        Status::instance().exit = true;
         return;
     }
 
@@ -45,18 +46,18 @@ void ofApp::setup()
 
     if (!shader_.setupShaderFromSource(GL_COMPUTE_SHADER, computeShader)) {
         ofLog(OF_LOG_FATAL_ERROR, "Could not load shader.");
-        status_.exit = true;
+        Status::instance().exit = true;
         return;
     }
     if (!shader_.linkProgram()) {
         ofLog(OF_LOG_FATAL_ERROR, "Could not link shader.");
-        status_.exit = true;
+        Status::instance().exit = true;
         return;
     }
 
     if (!setupShow()) {
         ofLog(OF_LOG_FATAL_ERROR, "Could not setup show from configuration file.");
-        status_.exit = true;
+        Status::instance().exit = true;
         return;
     }
 
@@ -74,36 +75,36 @@ void ofApp::setupGui()
 //--------------------------------------------------------------
 void ofApp::update()
 {
-    if (status_.exit) {
+    if (Status::instance().exit) {
         ofExit();
         //return;
     }
 
-    if (status_.forward) {
+    if (Status::instance().forward) {
         //drawGui(ofEventArgs{ });
         reload(LoadDir::Forward);
-        status_.forward = false;
+        Status::instance().forward = false;
     }
-    else if (status_.backward) {
+    else if (Status::instance().backward) {
         //drawGui(ofEventArgs{});
         reload(LoadDir::Backward);
-        status_.backward = false;
+        Status::instance().backward = false;
     }
-    else if (status_.reload) {
+    else if (Status::instance().reload) {
         //drawGui(ofEventArgs{});
         reload(LoadDir::Current);
-        status_.reload = false;
+        Status::instance().reload = false;
     }
 
     if (!currentScene_)
         return;
 
-    if (currentScene_->isFrameNew() || status_.redraw) {
+    if (currentScene_->isFrameNew() || Status::instance().redraw) {
         shader_.begin();
         currentScene_->setupUniforms(shader_);
         shader_.dispatchCompute(width_ / 32, height_ / 32, 1);
         shader_.end();
-        status_.redraw = currentScene_->hasActiveFX();
+        Status::instance().redraw = currentScene_->hasActiveFX();
     }
 }
 
@@ -114,7 +115,7 @@ void ofApp::draw()
 }
 
 
-void ofApp::drawGui(ofEventArgs& args) {
+void ofApp::drawGui(ofEventArgs&) {
     gui_.draw();
 }
 
@@ -125,8 +126,8 @@ void ofApp::exit()
     }
 }
 
-void ofApp::exitGui(ofEventArgs& args) {
-    status_.exit = true;
+void ofApp::exitGui(ofEventArgs&) {
+    Status::instance().exit = true;
 }
 
 //--------------------------------------------------------------
@@ -144,11 +145,11 @@ void ofApp::keyReleased(ofKeyEventArgs& key)
         break;
     case 'N':
         //if (key.hasModifier(OF_KEY_CONTROL))
-            status_.forward = true;
+            Status::instance().forward = true;
         break;
     case 'B':
         //if (key.hasModifier(OF_KEY_CONTROL))
-            status_.backward = true;
+            Status::instance().backward = true;
         break;
     default:
         break;
@@ -163,7 +164,7 @@ void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 void ofApp::newMidiMessage(ofxMidiMessage & msg)
 {
     if (msg.status == MIDI_NOTE_ON && msg.pitch == show_.getSwitchNote())
-        status_.forward = true;
+        Status::instance().forward = true;
     else if (currentScene_) {
         auto foundMappables = currentScene_->newMidiMessage(msg);
         for (const auto& layer : foundMappables.layers) {
@@ -173,7 +174,7 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
             gui_.setActive(effect.first, effect.second);
         }
 
-        status_.redraw = true;
+        Status::instance().redraw = true;
     }
 }
 
@@ -279,7 +280,7 @@ bool ofApp::reload(LoadDir dir)
         ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", currentScene_->getName().c_str());
     }
 
-    status_.redraw = true;
+    Status::instance().redraw = true;
 
     return true;
 }

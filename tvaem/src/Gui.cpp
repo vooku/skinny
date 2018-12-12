@@ -1,10 +1,9 @@
 #include "Gui.h"
-#include <algorithm>
+#include "Status.h"
 
 const ofColor Gui::bgColor = { 45, 45, 48 };
 
-Gui::Gui(Status* status, ShowDescription* show) :
-    status_(status),
+Gui::Gui(ShowDescription* show) :
     currentScene_(nullptr),
     show_(show)
 {
@@ -168,7 +167,7 @@ void Gui::draw() const
 {
     ofBackground(bgColor);
 
-    if (status_->forward || status_->backward || status_->reload)
+    if (Status::instance().forward || Status::instance().backward || Status::instance().reload)
         fonts_.italic.drawString("Loading...", 2 * DELTA, controlPanel_->getHeight() + 3 * DELTA);
 
     if (controlPanel_) controlPanel_->draw();
@@ -256,7 +255,7 @@ void Gui::onLayerButton(ofxDatGuiButtonEvent e)
             layerDescription.path = openFileResult.getPath();
         else
             layerDescription = { static_cast<unsigned int>(idx), openFileResult.getPath() };
-        status_->reload = true;
+        Status::instance().reload = true;
     }
 }
 
@@ -270,10 +269,10 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
 {
     const auto name = e.target->getName();
     if (name == "Next scene") {
-        status_->forward = true;
+        Status::instance().forward = true;
     }
     else if (name == "Previous scene") {
-        status_->backward = true;
+        Status::instance().backward = true;
     }
     else if (name == "Append scene") {
         show_->appendScene();
@@ -285,7 +284,7 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
                 ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
                 show_->appendScene();
             }
-            status_->reload = true;
+            Status::instance().reload = true;
         }
     }
     else if (name == "Save config") {
@@ -340,7 +339,7 @@ void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
     auto idx = std::stoi(e.target->getName());
     if (currentScene_) {
         currentScene_->playPauseLayer(idx);
-        status_->redraw = true;
+        Status::instance().redraw = true;
     }
 }
 

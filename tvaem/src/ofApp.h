@@ -6,7 +6,6 @@
 #include "Scene.h"
 #include "meta.h"
 #include "Gui.h"
-#include "Status.h"
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
@@ -44,8 +43,6 @@ private:
         Current, Forward, Backward
     };
     bool reload(LoadDir dir);
-
-    Status status_;
 
     ShowDescription show_;
     std::unique_ptr<Scene> currentScene_;
