@@ -37,11 +37,12 @@ public:
     const auto& getName() const { return name_; }
     auto getBlendMode() const { return blendMode_; }
     bool isValid() const { return valid_; }
-    bool containsAlphaControl(midiNote control) const { return control == alphaControl_; }
     float getAlpha() const { return alpha_; }
+    midiNote getAlphaControl() const { return alphaControl_; }
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
     void setAlpha(int alpha) { alpha_ = (alpha < 0 ? 0 : alpha > 127 ? 127 : alpha) / 127.0f; }
+    void setAlphaControl(midiNote control) { alphaControl_ = control; }
 
 private:
     static const int ALPHA_MIDI_OFFSET = 1;

@@ -76,7 +76,7 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
             }
         }
 
-        if (cc && layer->containsAlphaControl(control)) {
+        if (cc && layer->getAlphaControl() == control) {
             layer->setAlpha(value);
         }
     }

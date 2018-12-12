@@ -47,7 +47,7 @@ void Gui::setup()
     playPanel_->addLabel("Play");
     playPanel_->addBreak();
 
-    for (int i = 0; i < layerPlayToggles_.size(); ++i) {
+    for (auto i = 0; i < layerPlayToggles_.size(); ++i) {
         layerPlayToggles_[i] = playPanel_->addToggle({});
         layerPlayToggles_[i]->onToggleEvent(this, &Gui::onLayerPlayToggle);
         layerPlayToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
@@ -58,7 +58,7 @@ void Gui::setup()
     addBlank(playPanel_.get());
     playPanel_->addBreak();
 
-    for (int i = 0; i < effectPlayToggles_.size(); ++i) {
+    for (auto i = 0; i < effectPlayToggles_.size(); ++i) {
         effectPlayToggles_[i] = playPanel_->addToggle({});
         effectPlayToggles_[i]->onToggleEvent(this, &Gui::onEffectPlayToggle);
         effectPlayToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
@@ -73,7 +73,7 @@ void Gui::setup()
     mutePanel_->addLabel("Mute");
     mutePanel_->addBreak();
 
-    for (int i = 0; i < layerMuteToggles_.size(); ++i) {
+    for (auto i = 0; i < layerMuteToggles_.size(); ++i) {
         layerMuteToggles_[i] = mutePanel_->addToggle({});
         layerMuteToggles_[i]->onToggleEvent(this, &Gui::onLayerMuteToggle);
         layerMuteToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
@@ -84,7 +84,7 @@ void Gui::setup()
     addBlank(mutePanel_.get());
     mutePanel_->addBreak();
 
-    for (int i = 0; i < effectMuteToggles_.size(); ++i) {
+    for (auto i = 0; i < effectMuteToggles_.size(); ++i) {
         effectMuteToggles_[i] = mutePanel_->addToggle({});
         effectMuteToggles_[i]->onToggleEvent(this, &Gui::onEffectMuteToggle);
         effectMuteToggles_[i]->setWidth(playPanelWidth, 0); // This doesn't seem to work right
@@ -99,7 +99,7 @@ void Gui::setup()
     videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
     videoFxPanel_->addBreak();
 
-    for (int i = 0; i < layerButtons_.size(); ++i) {
+    for (auto i = 0; i < layerButtons_.size(); ++i) {
         layerButtons_[i] = videoFxPanel_->addButton({});
         layerButtons_[i]->onButtonEvent(this, &Gui::onLayerButton);
         layerButtons_[i]->setName(std::to_string(i));
@@ -123,7 +123,7 @@ void Gui::setup()
     xOffset += midiPanel_->getWidth();
     midiPanel_->addLabel("MIDI");
     midiPanel_->addBreak();
-    for (int i = 0; i < layerMidiInputs_.size(); ++i) {
+    for (auto i = 0; i < layerMidiInputs_.size(); ++i) {
         layerMidiInputs_[i] = midiPanel_->addTextInput({});
         layerMidiInputs_[i]->setName(std::to_string(i));
         layerMidiInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
@@ -135,7 +135,7 @@ void Gui::setup()
     addBlank(midiPanel_.get());
     midiPanel_->addBreak();
 
-    for (int i = 0; i < effectMidiInputs_.size(); ++i) {
+    for (auto i = 0; i < effectMidiInputs_.size(); ++i) {
         effectMidiInputs_[i] = midiPanel_->addTextInput({});
         effectMidiInputs_[i]->setName(std::to_string(i));
         effectMidiInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
@@ -143,15 +143,33 @@ void Gui::setup()
         effectMidiInputs_[i]->setWidth(midiPanelWidth, 0); // This doesn't seem to work right
     }
 
+    // MIDI CC panel
+    midiCCPanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
+    midiCCPanel_->setTheme(&commonTheme_);
+    midiCCPanel_->setWidth(midiPanelWidth);
+    xOffset += midiCCPanel_->getWidth();
+    midiCCPanel_->addLabel("CC");
+    midiCCPanel_->addBreak();
+    for (auto i = 0; i < layerCCInputs_.size(); ++i) {
+        layerCCInputs_[i] = midiCCPanel_->addTextInput({});
+        layerCCInputs_[i]->setName(std::to_string(i));
+        layerCCInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
+        layerCCInputs_[i]->onTextInputEvent(this, &Gui::onLayerCCInput);
+        layerCCInputs_[i]->setWidth(midiPanelWidth, 0); // This doesn't seem to work right
+    }
+
+    midiCCPanel_->addBreak();
+
     // Blending modes panel
     blendModePanel_ = std::make_unique<ofxDatGui>(xOffset, yOffset);
     blendModePanel_->setTheme(&commonTheme_);
+    blendModePanel_->setWidth(6 * DELTA);
     xOffset += blendModePanel_->getWidth();
     blendModePanel_->addLabel("Blending Mode");
     blendModePanel_->addBreak();
 
     std::vector<string> options;
-    for (int i = static_cast<int>(Layer::BlendMode::Normal); i < static_cast<int>(Layer::BlendMode::Count); ++i)
+    for (auto i = static_cast<int>(Layer::BlendMode::Normal); i < static_cast<int>(Layer::BlendMode::Count); ++i)
         options.push_back(Layer::c_str(static_cast<Layer::BlendMode>(i)));
 
     for (int i = 0; i < blendModeDropdowns_.size(); ++i) {
@@ -175,6 +193,7 @@ void Gui::draw() const
     if (mutePanel_) mutePanel_->draw();
     if (videoFxPanel_) videoFxPanel_->draw();
     if (midiPanel_) midiPanel_->draw();
+    if (midiCCPanel_) midiCCPanel_->draw();
     if (blendModePanel_) blendModePanel_->draw();
 }
 
@@ -193,17 +212,19 @@ void Gui::reload(Scene* newScene)
         ofLog(OF_LOG_WARNING, "Different number of layers and layer buttons");
     }
     else {
-        for (int i = 0; i < MAX_LAYERS; ++i) {
+        for (auto i = 0; i < MAX_LAYERS; ++i) {
             if (layers[i]) {
                 layerButtons_[i]->setLabel(layers[i]->getName());
                 auto& midiMap = layers[i]->getMapping();
                 if (!midiMap.empty())
                     layerMidiInputs_[i]->setText(std::to_string(*midiMap.begin()));
+                layerCCInputs_[i]->setText(std::to_string(layers[i]->getAlphaControl()));
                 blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
             }
             else {
                 layerButtons_[i]->setLabel("Click to load a video");
                 layerMidiInputs_[i]->setText("");
+                layerCCInputs_[i]->setText("");
                 blendModeDropdowns_[i]->select(0);
             }
         }
@@ -270,14 +291,11 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
     const auto name = e.target->getName();
     if (name == "Next scene") {
         Status::instance().forward = true;
-    }
-    else if (name == "Previous scene") {
+    } else if (name == "Previous scene") {
         Status::instance().backward = true;
-    }
-    else if (name == "Append scene") {
+    } else if (name == "Append scene") {
         show_->appendScene();
-    }
-    else if (name == "Load config") {
+    } else if (name == "Load config") {
         auto openFileResult = ofSystemLoadDialog("Select config file");
         if (openFileResult.bSuccess) {
             if (!show_->fromXml(openFileResult.fileName)) {
@@ -286,27 +304,34 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
             }
             Status::instance().reload = true;
         }
-    }
-    else if (name == "Save config") {
+    } else if (name == "Save config") {
         auto openFileResult = ofSystemSaveDialog("config.xml", "Save config as");
         if (openFileResult.bSuccess) {
             if (!show_->toXml(openFileResult.fileName)) {
                 ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", openFileResult.fileName.c_str());
             }
         }
-    }
-    else {
+    } else {
         ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", name.c_str());
     }
 }
 
 void Gui::onLayerMidiInput(ofxDatGuiTextInputEvent e)
 {
-    auto idx = std::stoi(e.target->getName());
-    auto note = static_cast<midiNote>(std::stoi(e.text));
+    const auto idx = std::stoi(e.target->getName());
+    const auto note = static_cast<midiNote>(std::stoi(e.text));
     show_->scenes_[show_->currentIdx_].layers[idx].midiMap = { note };
     if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setMapping({ note });
+}
+
+void Gui::onLayerCCInput(ofxDatGuiTextInputEvent e)
+{
+    const auto idx = std::stoi(e.target->getName());
+    const auto control = static_cast<midiNote>(std::stoi(e.text));
+    //show_->scenes_[show_->currentIdx_].layers[idx].midiMap = { note }; TODO
+    if (currentScene_ && currentScene_->layers_[idx])
+        currentScene_->layers_[idx]->setAlphaControl(control);
 }
 
 void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
@@ -327,8 +352,8 @@ void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
 
 void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 {
-    auto idx = std::stoi(e.target->getName());
-    auto blendMode = static_cast<Layer::BlendMode>(e.child);
+    const auto idx = std::stoi(e.target->getName());
+    const auto blendMode = static_cast<Layer::BlendMode>(e.child);
     show_->scenes_[show_->currentIdx_].layers[idx].blendMode = blendMode;
     if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setBlendMode(blendMode);
@@ -336,7 +361,7 @@ void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 
 void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 {
-    auto idx = std::stoi(e.target->getName());
+    const auto idx = std::stoi(e.target->getName());
     if (currentScene_) {
         currentScene_->playPauseLayer(idx);
         Status::instance().redraw = true;
@@ -345,15 +370,15 @@ void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 
 void Gui::onEffectPlayToggle(ofxDatGuiToggleEvent e)
 {
-    auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
+    const auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
     if (currentScene_)
         currentScene_->playPauseEffect(type);
 }
 
 void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 {
-    auto mute = e.checked;
-    auto idx = std::stoi(e.target->getName());
+    const auto mute = e.checked;
+    const auto idx = std::stoi(e.target->getName());
     if (currentScene_)
         currentScene_->layers_[idx]->setMute(mute);
     if (mute)
@@ -362,9 +387,9 @@ void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 
 void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 {
-    auto mute = e.checked;
-    auto idx = std::stoi(e.target->getName());
-    auto type = static_cast<Effect::Type>(idx);
+    const auto mute = e.checked;
+    const auto idx = std::stoi(e.target->getName());
+    const auto type = static_cast<Effect::Type>(idx);
     if (currentScene_)
         currentScene_->effects_[type].setMute(mute);
     if (mute)

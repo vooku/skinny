@@ -23,6 +23,7 @@ public:
     void onOtherButton(ofxDatGuiButtonEvent e);
 
     void onLayerMidiInput(ofxDatGuiTextInputEvent e);
+    void onLayerCCInput(ofxDatGuiTextInputEvent e);
     void onEffectMidiInput(ofxDatGuiTextInputEvent e);
     void onSceneNameInput(ofxDatGuiTextInputEvent e);
 
@@ -56,13 +57,14 @@ private:
     void addBlank(ofxDatGui* panel);
 
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
-                               videoFxPanel_, midiPanel_, blendModePanel_;
+                               videoFxPanel_, midiPanel_, midiCCPanel_, blendModePanel_;
 
     // This class does not own any of the following pointers, do not try to delete them.
     ofxDatGuiTextInput* sceneNameInput_;
     std::vector<ofxDatGuiButton*> controlButtons_;
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
+    std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerCCInputs_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerMuteToggles_;
     std::array<ofxDatGuiDropdown*,  MAX_LAYERS> blendModeDropdowns_;
