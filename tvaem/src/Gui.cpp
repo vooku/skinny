@@ -61,9 +61,7 @@ void Gui::reload(Scene* newScene)
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (layers[i]) {
             layerButtons_[i]->setLabel(layers[i]->getName());
-            auto& midiMap = layers[i]->getMapping();
-            if (!midiMap.empty())
-                layerMidiInputs_[i]->setText(std::to_string(*midiMap.begin()));
+            layerMidiInputs_[i]->setText(std::to_string(layers[i]->getNote()));
             layerCCInputs_[i]->setText(std::to_string(layers[i]->getAlphaControl()));
             layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
             blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
@@ -85,8 +83,7 @@ void Gui::reload(Scene* newScene)
     for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
         auto type = static_cast<Effect::Type>(i);
         effectButtons_[i]->setLabel(Effect::c_str(type));
-        auto& midiMap = effects.at(type).getMapping();
-        effectMidiInputs_[i]->setText(midiMap.empty() ? "" : std::to_string(*midiMap.begin()));
+        effectMidiInputs_[i]->setText(std::to_string(effects.at(type).getNote()));
     }
 
     draw();
@@ -183,9 +180,9 @@ void Gui::onLayerMidiInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
     const auto note = static_cast<midiNote>(std::stoi(e.text));
-    show_->scenes_[show_->currentIdx_].layers[idx].midiMap = { note };
+    show_->scenes_[show_->currentIdx_].layers[idx].note = note ;
     if (currentScene_ && currentScene_->layers_[idx])
-        currentScene_->layers_[idx]->setMapping({ note });
+        currentScene_->layers_[idx]->setNote(note);
 }
 
 void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
@@ -209,9 +206,9 @@ void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
 {
     auto idx = std::stoi(e.target->getName());
     auto note = static_cast<midiNote>(std::stoi(e.text));
-    show_->scenes_[show_->currentIdx_].effects[idx].midiMap = { note };
+    show_->scenes_[show_->currentIdx_].effects[idx].note = note;
     if (currentScene_ && currentScene_->layers_[idx])
-        currentScene_->effects_[static_cast<Effect::Type>(idx)].setMapping({ note });
+        currentScene_->effects_[static_cast<Effect::Type>(idx)].setNote(note);
 }
 
 void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)

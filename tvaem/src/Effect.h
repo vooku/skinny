@@ -17,6 +17,6 @@ public:
     static char* c_str(Type);
 
     Effect() : Mappable() { }
-    explicit Effect(const MidiMap& map) : Mappable(map) { }
+    explicit Effect(midiNote note) : Mappable(note) { }
 
 };

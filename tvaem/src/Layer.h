@@ -23,7 +23,7 @@ public:
     static char* c_str(BlendMode blendMode);
 
     // TODO use layer description?
-    Layer(int id, const std::filesystem::path& path, const MidiMap& map = {});
+    Layer(int id, const std::filesystem::path& path, midiNote note);
     ~Layer() override;
 
     bool reload(const std::filesystem::path& path);

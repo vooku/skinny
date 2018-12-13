@@ -5,18 +5,18 @@ const std::filesystem::path LayerDescription::invalid_path = {};
 
 LayerDescription::LayerDescription(unsigned int id,
                                    const std::filesystem::path& path,
-                                   const Mappable::MidiMap& midiMap,
+                                   midiNote note,
                                    midiNote alphaControl,
                                    //float alpha,
                                    const Layer::BlendMode& blendMode) :
     id(id),
     path(path),
     alphaControl(alphaControl == -1 ? id + Layer::ALPHA_MIDI_OFFSET : alphaControl),
-    midiMap(midiMap),
+    note(note),
     //alpha(alpha),
     blendMode(blendMode)
 {
-    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || midiMap.count(invalid_midi) > 0);
+    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || note > 127);
     if (!valid)
         ofLog(OF_LOG_ERROR, "Layer description was initialized with invalid values.");
 }
@@ -28,12 +28,9 @@ bool LayerDescription::fromXml(ofxXmlSettings & config) {
     path = config.getValue("path", invalid_path.string());
     blendMode = static_cast<Layer::BlendMode>(config.getValue("blendMode", static_cast<int>(Layer::BlendMode::Invalid)));
     alphaControl = config.getValue("alphaControl", static_cast<int>(id + Layer::ALPHA_MIDI_OFFSET));
+    note = config.getValue("midi", invalid_midi);
 
-    for (auto i = 0; i < config.getNumTags("midi"); i++) {
-        midiMap.insert(config.getValue("midi", invalid_midi, i));
-    }
-
-    if (id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || midiMap.count(invalid_midi)) {
+    if (id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || note == invalid_midi) {
         ofLog(OF_LOG_ERROR, "Layer description contains invalid values and will be skipped.");
         return false;
     }
@@ -47,18 +44,14 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("path", path.string());
     config.setValue("blendMode", static_cast<int>(blendMode));
     config.setValue("alphaControl", alphaControl);
-
-    for (auto midiNote : midiMap)
-        config.addValue("midi", midiNote);
+    config.setValue("midi", note);
 }
 
 bool EffectDescription::fromXml(ofxXmlSettings & config) {
     type = static_cast<Effect::Type>(config.getValue("type", static_cast<int>(Effect::Type::Invalid)));
-    for (auto i = 0; i < config.getNumTags("midi"); i++) {
-        midiMap.insert(config.getValue("midi", invalid_midi, i));
-    }
+    note = config.getValue("midi", invalid_midi);
 
-    if (type == Effect::Type::Invalid || midiMap.count(invalid_midi)) {
+    if (type == Effect::Type::Invalid || note == invalid_midi) {
         ofLog(OF_LOG_ERROR, "Effect description contains invalid values and will be skipped.");
         return false;
     }
@@ -68,8 +61,7 @@ bool EffectDescription::fromXml(ofxXmlSettings & config) {
 
 void EffectDescription::toXml(ofxXmlSettings & config) const {
     config.setValue("type", static_cast<int>(type));
-    for (auto midiNote : midiMap)
-        config.addValue("midi", midiNote);
+    config.setValue("midi", note);
 }
 
 

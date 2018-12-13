@@ -10,7 +10,7 @@
             <id>0</id>
             <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>0</blendMode>
-            <alphaControl>2</alphaControl>
+            <alphaControl>1</alphaControl>
             <midi>36</midi>
         </layer>
         <layer>

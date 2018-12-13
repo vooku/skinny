@@ -12,20 +12,19 @@ void Scene::reload(const SceneDescription & description)
         }
         else {
             if (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName()) {
-                auto newLayer = std::make_unique<Layer>(i, description.layers[i].path);
+                auto newLayer = std::make_unique<Layer>(i, description.layers[i].path, description.layers[i].note);
                 if (newLayer->isValid())
                     layers_[i].reset(newLayer.release());
                 else
                     valid_ = false;
             }
             layers_[i]->setBlendMode(description.layers[i].blendMode);
-            layers_[i]->setMapping(description.layers[i].midiMap);
             layers_[i]->setAlphaControl(description.layers[i].alphaControl);
         }
     }
 
     for (const auto& effect : description.effects) {
-        effects_[effect.type] = Effect(effect.midiMap);
+        effects_[effect.type] = Effect(effect.note);
     }
 }
 
@@ -73,7 +72,7 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
         if (!layer)
             break;
 
-        if (layer->containsMidiNote(note)) {
+        if (layer->getNote() == note) {
             if (noteOn) {
                 layer->play();
                 result.layers.insert({ layer->getId(), true });
@@ -89,7 +88,7 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
     }
 
     for (auto& effect : effects_) {
-        if (effect.second.containsMidiNote(note)) {
+        if (effect.second.getNote() == note) {
             if (noteOn) {
                 effect.second.play();
                 result.effects.insert({ effect.first, true });

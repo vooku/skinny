@@ -25,8 +25,8 @@ char * Layer::c_str(BlendMode blendMode)
     }
 }
 
-Layer::Layer(int id, const std::filesystem::path& path, const MidiMap & map) :
-    Mappable(map),
+Layer::Layer(int id, const std::filesystem::path& path, midiNote note) :
+    Mappable(note),
     id_(id),
     name_(path.filename().string()),
     valid_(false),
