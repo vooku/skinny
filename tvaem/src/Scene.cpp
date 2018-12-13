@@ -20,6 +20,7 @@ void Scene::reload(const SceneDescription & description)
             }
             layers_[i]->setBlendMode(description.layers[i].blendMode);
             layers_[i]->setMapping(description.layers[i].midiMap);
+            layers_[i]->setAlphaControl(description.layers[i].alphaControl);
         }
     }
 

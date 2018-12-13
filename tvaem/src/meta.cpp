@@ -27,6 +27,7 @@ bool LayerDescription::fromXml(ofxXmlSettings & config) {
     id = config.getValue("id", -1);
     path = config.getValue("path", invalid_path.string());
     blendMode = static_cast<Layer::BlendMode>(config.getValue("blendMode", static_cast<int>(Layer::BlendMode::Invalid)));
+    alphaControl = config.getValue("alphaControl", static_cast<int>(id + Layer::ALPHA_MIDI_OFFSET));
 
     for (auto i = 0; i < config.getNumTags("midi"); i++) {
         midiMap.insert(config.getValue("midi", invalid_midi, i));
@@ -45,13 +46,15 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("id", static_cast<int>(id));
     config.setValue("path", path.string());
     config.setValue("blendMode", static_cast<int>(blendMode));
+    config.setValue("alphaControl", alphaControl);
+
     for (auto midiNote : midiMap)
         config.addValue("midi", midiNote);
 }
 
 bool EffectDescription::fromXml(ofxXmlSettings & config) {
     type = static_cast<Effect::Type>(config.getValue("type", static_cast<int>(Effect::Type::Invalid)));
-    for (int i = 0; i < config.getNumTags("midi"); i++) {
+    for (auto i = 0; i < config.getNumTags("midi"); i++) {
         midiMap.insert(config.getValue("midi", invalid_midi, i));
     }
 

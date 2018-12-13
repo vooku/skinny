@@ -10,24 +10,28 @@
             <id>0</id>
             <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>0</blendMode>
+            <alphaControl>2</alphaControl>
             <midi>36</midi>
         </layer>
         <layer>
             <id>1</id>
             <path>../../../videos/White Half Strobes.mp4</path>
             <blendMode>4</blendMode>
+            <alphaControl>2</alphaControl>
             <midi>37</midi>
         </layer>
         <layer>
             <id>2</id>
             <path>../../../videos/simpleRGB.mp4</path>
             <blendMode>6</blendMode>
+            <alphaControl>3</alphaControl>
             <midi>38</midi>
         </layer>
         <layer>
             <id>3</id>
             <path>../../../videos/circles.mp4</path>
             <blendMode>1</blendMode>
+            <alphaControl>4</alphaControl>
             <midi>39</midi>
         </layer>
         <effect>
@@ -54,18 +58,21 @@
             <id>1</id>
             <path>../../../videos/Noise Diagonals 1.mp4</path>
             <blendMode>5</blendMode>
+            <alphaControl>1</alphaControl>
             <midi>38</midi>
         </layer>
         <layer>
             <id>2</id>
             <path>../../../videos/Noise Diagonals 2.mp4</path>
             <blendMode>5</blendMode>
+            <alphaControl>2</alphaControl>
             <midi>37</midi>
         </layer>
         <layer>
             <id>3</id>
             <path>../../../videos/White Broken Shards.mp4</path>
             <blendMode>1</blendMode>
+            <alphaControl>3</alphaControl>
             <midi>36</midi>
         </layer>
         <effect>
@@ -92,24 +99,28 @@
             <id>0</id>
             <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>0</blendMode>
+            <alphaControl>1</alphaControl>
             <midi>36</midi>
         </layer>
         <layer>
             <id>1</id>
             <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>2</blendMode>
+            <alphaControl>2</alphaControl>
             <midi>37</midi>
         </layer>
         <layer>
             <id>2</id>
             <path>../../../videos/circle-slow.mov</path>
             <blendMode>1</blendMode>
+            <alphaControl>3</alphaControl>
             <midi>38</midi>
         </layer>
         <layer>
             <id>3</id>
             <path>../../../videos/circle-fast.mov</path>
             <blendMode>1</blendMode>
+            <alphaControl>4</alphaControl>
             <midi>39</midi>
         </layer>
         <effect>
