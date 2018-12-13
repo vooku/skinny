@@ -18,7 +18,7 @@ struct LayerDescription : public MappableDescription {
     LayerDescription(unsigned int id,
                      const std::filesystem::path& path,
                      midiNote note = invalid_midi,
-                     midiNote alphaControl = -1,
+                     midiNote alphaControl = invalid_midi,
                      //float alpha = 1.0f,
                      const Layer::BlendMode& blendMode = Layer::BlendMode::Normal);
 

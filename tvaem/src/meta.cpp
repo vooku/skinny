@@ -11,12 +11,12 @@ LayerDescription::LayerDescription(unsigned int id,
                                    const Layer::BlendMode& blendMode) :
     id(id),
     path(path),
-    alphaControl(alphaControl == -1 ? id + Layer::ALPHA_MIDI_OFFSET : alphaControl),
-    note(note),
+    alphaControl(alphaControl == invalid_midi ? id + Layer::ALPHA_MIDI_OFFSET : alphaControl),
+    note(note == invalid_midi ? id + Layer::MIDI_OFFSET : note),
     //alpha(alpha),
     blendMode(blendMode)
 {
-    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || note > 127);
+    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || this->note > 127);
     if (!valid)
         ofLog(OF_LOG_ERROR, "Layer description was initialized with invalid values.");
 }
