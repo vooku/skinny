@@ -18,6 +18,9 @@ void ofApp::setup()
     }
 
     ofSetWindowTitle(NAME);
+#ifdef NDEBUG
+    ofSetEscapeQuitsApp(false);
+#endif
 
     if (settings_.console)
         ofLogToConsole();
