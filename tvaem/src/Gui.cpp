@@ -48,6 +48,7 @@ void Gui::reload(Scene* newScene)
 {
     currentScene_ = newScene;
     sceneNameInput_->setText(currentScene_->getName());
+    masterAlphaInput_->setText(std::to_string(currentScene_->getAlphaControl()));
 
     // layers
     for (auto& toggle : layerPlayToggles_) {
@@ -94,6 +95,8 @@ void Gui::reload(Scene* newScene)
 void Gui::update()
 {
     if (currentScene_) {
+        masterAlphaInput_->setLabel(std::to_string(static_cast<int>(currentScene_->getAlpha() * 127)));
+
         auto& layers = currentScene_->getLayers();
         for (auto i = 0; i < MAX_LAYERS; ++i) {
             if (layers[i]) {
@@ -185,13 +188,21 @@ void Gui::onLayerMidiInput(ofxDatGuiTextInputEvent e)
         currentScene_->layers_[idx]->setMapping({ note });
 }
 
-void Gui::onLayerCCInput(ofxDatGuiTextInputEvent e)
+void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
     const auto control = static_cast<midiNote>(std::stoi(e.text));
     //show_->scenes_[show_->currentIdx_].layers[idx].midiMap = { note }; TODO
     if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setAlphaControl(control);
+}
+
+void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
+{
+    const auto control = static_cast<midiNote>(std::stoi(e.text));
+    //show_->scenes_[show_->currentIdx_].layers[idx].midiMap = { note }; TODO
+    if (currentScene_)
+        currentScene_->setAlphaControl(control);
 }
 
 void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
@@ -307,6 +318,14 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     controlButtons_.push_back(controlPanel_->addButton("Load config"));
     for (auto& btn : controlButtons_)
         btn->onButtonEvent(this, &Gui::onOtherButton);
+
+    controlPanel_->addBreak();
+    //addBlank(controlPanel_.get());
+    controlPanel_->addLabel("Master alpha:");
+    masterAlphaInput_ = controlPanel_->addTextInput("");
+    masterAlphaInput_->setInputType(ofxDatGuiInputType::NUMERIC);
+    masterAlphaInput_->onTextInputEvent(this, &Gui::onMasterAlphaCcInput);
+    //addBlank(controlPanel_.get());
 
     controlPanel_->addBreak();
     controlPanel_->addFRM()->setLabel("fps:");
@@ -433,10 +452,10 @@ void Gui::setupMidiCcPanel(glm::ivec2& pos, int w)
     midiCcPanel_->addLabel("CC");
     midiCcPanel_->addBreak();
     for (auto i = 0; i < layerCCInputs_.size(); ++i) {
-        layerCCInputs_[i] = midiCcPanel_->addTextInput({});
+        layerCCInputs_[i] = midiCcPanel_->addTextInput("");
         layerCCInputs_[i]->setName(std::to_string(i));
         layerCCInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
-        layerCCInputs_[i]->onTextInputEvent(this, &Gui::onLayerCCInput);
+        layerCCInputs_[i]->onTextInputEvent(this, &Gui::onLayerCcInput);
         layerCCInputs_[i]->setWidth(w, 0); // This doesn't seem to work right
     }
 

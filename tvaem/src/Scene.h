@@ -40,6 +40,7 @@ public:
     const auto& getEffects() const { return effects_; }
     bool isValid() const { return valid_; }
     midiNote getAlphaControl() const { return alphaControl_; }
+    float getAlpha() const { return uniforms_.alpha; }
 
 private:
     struct Uniforms {

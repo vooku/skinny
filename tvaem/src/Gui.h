@@ -24,7 +24,8 @@ public:
     void onOtherButton(ofxDatGuiButtonEvent e);
 
     void onLayerMidiInput(ofxDatGuiTextInputEvent e);
-    void onLayerCCInput(ofxDatGuiTextInputEvent e);
+    void onLayerCcInput(ofxDatGuiTextInputEvent e);
+    void onMasterAlphaCcInput(ofxDatGuiTextInputEvent e);
     void onEffectMidiInput(ofxDatGuiTextInputEvent e);
     void onSceneNameInput(ofxDatGuiTextInputEvent e);
 
@@ -72,6 +73,7 @@ private:
 
     // This class does not own any of the following pointers, do not try to delete them.
     ofxDatGuiTextInput* sceneNameInput_;
+    ofxDatGuiTextInput* masterAlphaInput_;
     std::vector<ofxDatGuiButton*> controlButtons_;
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
