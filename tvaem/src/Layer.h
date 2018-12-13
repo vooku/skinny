@@ -18,12 +18,13 @@ public:
         Count       =  8  // Used for iteration
     };
 
+    static const int MIDI_OFFSET = 0;
     static const int ALPHA_MIDI_OFFSET = 1;
 
     static char* c_str(BlendMode blendMode);
 
     // TODO use layer description?
-    Layer(int id, const std::filesystem::path& path, midiNote note);
+    Layer(int id, const std::filesystem::path& path, midiNote note = -1);
     ~Layer() override;
 
     bool reload(const std::filesystem::path& path);

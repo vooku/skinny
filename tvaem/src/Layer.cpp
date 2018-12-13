@@ -26,7 +26,7 @@ char * Layer::c_str(BlendMode blendMode)
 }
 
 Layer::Layer(int id, const std::filesystem::path& path, midiNote note) :
-    Mappable(note),
+    Mappable(note == -1 ? MIDI_OFFSET + id : note),
     id_(id),
     name_(path.filename().string()),
     valid_(false),
