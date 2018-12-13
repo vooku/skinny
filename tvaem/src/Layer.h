@@ -18,6 +18,8 @@ public:
         Count       =  8  // Used for iteration
     };
 
+    static const int ALPHA_MIDI_OFFSET = 1;
+
     static char* c_str(BlendMode blendMode);
 
     Layer(int id, const std::filesystem::path& path, const MidiMap& map = {}/*, TODO midiNote alphaMidi*/);
@@ -45,8 +47,6 @@ public:
     void setAlphaControl(midiNote control) { alphaControl_ = control; }
 
 private:
-    static const int ALPHA_MIDI_OFFSET = 1;
-
     ofVideoPlayer player_;
     const int id_;
     const std::string name_;

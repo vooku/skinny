@@ -2,7 +2,6 @@
 
 #include <set>
 #include <vector>
-#include <array>
 #include "ofxXmlSettings.h"
 #include "Layer.h"
 #include "Effect.h"
@@ -19,6 +18,8 @@ struct LayerDescription : public MappableDescription {
     LayerDescription(unsigned int id,
                      const std::filesystem::path& path,
                      const Mappable::MidiMap& midiMap = {},
+                     midiNote alphaControl = -1,
+                     //float alpha = 1.0f,
                      const Layer::BlendMode& blendMode = Layer::BlendMode::Normal);
 
     bool fromXml(ofxXmlSettings& config);
@@ -27,6 +28,8 @@ struct LayerDescription : public MappableDescription {
     unsigned int id;
     std::filesystem::path path;
     Mappable::MidiMap midiMap;
+    midiNote alphaControl;
+    //float alpha;
     Layer::BlendMode blendMode;
     bool valid = false;
 };
@@ -44,12 +47,13 @@ struct EffectDescription : public MappableDescription {
 
 struct SceneDescription {
     SceneDescription() = default;
-    explicit SceneDescription(const std::string& name);
+    SceneDescription(const std::string& name, midiNote alphaControl = DEFAULT_MASTER_ALPHA_CONTROL);
 
     void fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
     std::string name;
+    midiNote alphaControl;
     std::array<LayerDescription, MAX_LAYERS> layers;
     std::vector<EffectDescription> effects;
 };

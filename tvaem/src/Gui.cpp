@@ -192,7 +192,7 @@ void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
     const auto control = static_cast<midiNote>(std::stoi(e.text));
-    //show_->scenes_[show_->currentIdx_].layers[idx].midiMap = { note }; TODO
+    show_->scenes_[show_->currentIdx_].layers[idx].alphaControl = control;
     if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setAlphaControl(control);
 }
@@ -200,7 +200,7 @@ void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto control = static_cast<midiNote>(std::stoi(e.text));
-    //show_->scenes_[show_->currentIdx_].layers[idx].midiMap = { note }; TODO
+    show_->scenes_[show_->currentIdx_].alphaControl = control;
     if (currentScene_)
         currentScene_->setAlphaControl(control);
 }

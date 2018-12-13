@@ -3,6 +3,7 @@
 void Scene::reload(const SceneDescription & description)
 {
     name_ = description.name;
+    alphaControl_ = description.alphaControl;
     valid_ = true;
 
     for (auto i = 0; i < MAX_LAYERS; ++i) {

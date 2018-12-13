@@ -6,10 +6,14 @@ const std::filesystem::path LayerDescription::invalid_path = {};
 LayerDescription::LayerDescription(unsigned int id,
                                    const std::filesystem::path& path,
                                    const Mappable::MidiMap& midiMap,
+                                   midiNote alphaControl,
+                                   //float alpha,
                                    const Layer::BlendMode& blendMode) :
     id(id),
     path(path),
+    alphaControl(alphaControl == -1 ? id + Layer::ALPHA_MIDI_OFFSET : alphaControl),
     midiMap(midiMap),
+    //alpha(alpha),
     blendMode(blendMode)
 {
     valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || midiMap.count(invalid_midi) > 0);
@@ -66,8 +70,9 @@ void EffectDescription::toXml(ofxXmlSettings & config) const {
 }
 
 
-SceneDescription::SceneDescription(const std::string & name) :
-    name(name)
+SceneDescription::SceneDescription(const std::string& name, midiNote alphaControl) :
+    name(name),
+    alphaControl(alphaControl)
 {
     for (auto i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
         effects.push_back(EffectDescription(static_cast<Effect::Type>(i)));
@@ -76,6 +81,7 @@ SceneDescription::SceneDescription(const std::string & name) :
 
 void SceneDescription::fromXml(ofxXmlSettings & config) {
     name = config.getValue("name", "");
+    alphaControl = config.getValue("masterAlphaControl", DEFAULT_MASTER_ALPHA_CONTROL);
 
     for (auto i = 0; i < config.getNumTags("layer"); i++) {
         config.pushTag("layer", i);
@@ -85,7 +91,7 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
         config.popTag(); // layer
     }
 
-    for (int i = 0; i < config.getNumTags("effect"); i++) {
+    for (auto i = 0; i < config.getNumTags("effect"); i++) {
         config.pushTag("effect", i);
         EffectDescription effect;
         if (effect.fromXml(config))
@@ -96,6 +102,7 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
 
 void SceneDescription::toXml(ofxXmlSettings & config) const {
     config.addValue("name", name);
+    config.addValue("masterAlphaControl", alphaControl);
 
     auto validLayers = 0;
     for (const auto& layer : layers) {
@@ -107,7 +114,7 @@ void SceneDescription::toXml(ofxXmlSettings & config) const {
         }
     }
 
-    for (int i = 0; i < effects.size(); i++) {
+    for (auto i = 0; i < effects.size(); i++) {
         config.addTag("effect");
         config.pushTag("effect", i);
         effects[i].toXml(config);

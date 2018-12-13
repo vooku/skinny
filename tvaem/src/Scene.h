@@ -60,6 +60,6 @@ private:
     Layers layers_;
     Effects effects_;
     bool valid_;
-    midiNote alphaControl_ = 0;
+    midiNote alphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
 
 };
