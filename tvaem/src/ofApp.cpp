@@ -111,6 +111,10 @@ void ofApp::update()
         shader_.end();
         Status::instance().redraw = currentScene_->hasActiveFX();
     }
+
+    if (ofGetFrameNum() % 300 == 0) {
+        ofLog(OF_LOG_NOTICE, "fps: %f", ofGetFrameRate());
+    }
 }
 
 //--------------------------------------------------------------
