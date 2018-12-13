@@ -120,11 +120,13 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
+    ofBackground(ofColor::black);
     dst_.draw(0, 0);
 }
 
 
 void ofApp::drawGui(ofEventArgs&) {
+
     gui_.draw();
 }
 
