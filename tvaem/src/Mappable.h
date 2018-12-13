@@ -11,7 +11,7 @@ public:
     explicit Mappable(const MidiMap& map);
     virtual ~Mappable() { }
 
-    virtual void play() { active_ = true && !mute_; }
+    virtual void play() { active_ = !mute_; }
     virtual void pause() { active_ = false; }
     virtual void playPause() { active_ = !active_ && !mute_; }
     virtual bool isPlaying() const { return active_; }

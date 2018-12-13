@@ -93,12 +93,15 @@ void Gui::reload(Scene* newScene)
 
 void Gui::update()
 {
-    auto& layers = currentScene_->getLayers();
-    for (auto i = 0; i < MAX_LAYERS; ++i) {
-        if (layers[i]) {
-            layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
-        } else {
-            layerAlphaLabels_[i]->setLabel("");
+    if (currentScene_) {
+        auto& layers = currentScene_->getLayers();
+        for (auto i = 0; i < MAX_LAYERS; ++i) {
+            if (layers[i]) {
+                layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
+            }
+            else {
+                layerAlphaLabels_[i]->setLabel("");
+            }
         }
     }
 }

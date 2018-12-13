@@ -61,6 +61,11 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
     if (!noteOn && !noteOff && !cc)
         return {};
 
+    if (cc && alphaControl_ ==  control) {
+        setAlpha(value);
+        return {};
+    }
+
     FoundMappables result;
     for (auto& layer : layers_) {
         if (!layer)
@@ -126,6 +131,7 @@ void Scene::setupUniforms(ofShader& shader) const
     shader.setUniform2iv("dimensions", reinterpret_cast<int*>(uniforms_.dimensions), uniforms_.nLayers);
     shader.setUniform1iv("blendingModes", uniforms_.blendingModes, uniforms_.nLayers);
     shader.setUniform1fv("alphas", uniforms_.alphas, uniforms_.nLayers);
+    shader.setUniform1f("masterAlpha", uniforms_.alpha);
 
     auto it = effects_.find(Effect::Type::Inverse);
     if (it != effects_.end())

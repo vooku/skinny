@@ -32,10 +32,14 @@ public:
 
     void setupUniforms(ofShader& shader) const;
 
+    void setAlpha(int alpha) const { uniforms_.alpha = (alpha < 0 ? 0 : alpha > 127 ? 127 : alpha) / 127.0f; }
+    void setAlphaControl(midiNote control) { alphaControl_ = control; }
+
     const auto& getName() const { return name_; }
     const auto& getLayers() const { return layers_; }
     const auto& getEffects() const { return effects_; }
     bool isValid() const { return valid_; }
+    midiNote getAlphaControl() const { return alphaControl_; }
 
 private:
     struct Uniforms {
@@ -44,6 +48,7 @@ private:
         glm::ivec2 dimensions[MAX_LAYERS];
         int blendingModes[MAX_LAYERS];
         float alphas[MAX_LAYERS];
+        float alpha = 1.0f;
         bool inverse = false;
         bool reducePalette = false;
         bool colorShift = false;
@@ -54,5 +59,6 @@ private:
     Layers layers_;
     Effects effects_;
     bool valid_;
+    midiNote alphaControl_ = 0;
 
 };
