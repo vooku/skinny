@@ -14,3 +14,5 @@ char* Effect::c_str(Type type) {
         return "Invalid";
     }
 }
+
+Effect::Effect(midiNote note) : Mappable(note) {}

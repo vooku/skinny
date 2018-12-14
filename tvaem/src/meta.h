@@ -1,6 +1,5 @@
 #pragma once
 
-#include <set>
 #include <vector>
 #include "ofxXmlSettings.h"
 #include "Layer.h"
@@ -36,13 +35,14 @@ struct LayerDescription : public MappableDescription {
 
 struct EffectDescription : public MappableDescription {
     EffectDescription() = default;
-    explicit EffectDescription(Effect::Type type, midiNote note = invalid_midi) : type(type), note(note) { }
+    explicit EffectDescription(Effect::Type type, midiNote note = invalid_midi);
 
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
     Effect::Type type;
     midiNote note;
+    bool valid = false;
 };
 
 struct SceneDescription {

@@ -14,9 +14,11 @@ public:
         Count         =  4
     };
 
+    static const int MIDI_OFFSET = 48;
+
     static char* c_str(Type);
 
-    Effect() : Mappable() { }
-    explicit Effect(midiNote note) : Mappable(note) { }
+    Effect() = default;
+    explicit Effect(midiNote note);
 
 };

@@ -47,6 +47,15 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("midi", note);
 }
 
+EffectDescription::EffectDescription(Effect::Type type, midiNote note) :
+    type(type),
+    note(note == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : note)
+{
+    valid = !(type == Effect::Type::Invalid || this->note > 127);
+    if (!valid)
+        ofLog(OF_LOG_ERROR, "Effect description was initialized with invalid values.");
+}
+
 bool EffectDescription::fromXml(ofxXmlSettings & config) {
     type = static_cast<Effect::Type>(config.getValue("type", static_cast<int>(Effect::Type::Invalid)));
     note = config.getValue("midi", invalid_midi);
@@ -109,11 +118,14 @@ void SceneDescription::toXml(ofxXmlSettings & config) const {
         }
     }
 
-    for (auto i = 0; i < effects.size(); i++) {
-        config.addTag("effect");
-        config.pushTag("effect", i);
-        effects[i].toXml(config);
-        config.popTag(); // effect
+    auto validEffects = 0;
+    for (const auto&  effect : effects) {
+        if (effect.valid) {
+            config.addTag("effect");
+            config.pushTag("effect", validEffects++);
+            effect.toXml(config);
+            config.popTag(); // effect
+        }
     }
 }
 
