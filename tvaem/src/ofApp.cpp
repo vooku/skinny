@@ -1,6 +1,5 @@
 #include <ctime>
 #include "ofApp.h"
-#include "shader.h"
 #include "Status.h"
 
 ofApp::ofApp(ofxArgs* args) :
@@ -47,7 +46,11 @@ void ofApp::setup()
 
     setupMidi();
 
-    if (!shader_.setupShaderFromSource(GL_COMPUTE_SHADER, computeShader)) {
+#ifndef NDEBUG
+    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/shader.comp")) {
+#else
+    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "./shader.comp")) {
+#endif
         ofLog(OF_LOG_FATAL_ERROR, "Could not load shader.");
         Status::instance().exit = true;
         return;
