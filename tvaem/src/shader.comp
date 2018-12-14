@@ -16,7 +16,7 @@ uniform ivec2[7] dimensions;
 uniform int[7] blendingModes;
 uniform float[7] alphas;
 uniform float masterAlpha;
-uniform bool inverse;
+uniform bool invert;
 uniform bool reducePalette;
 uniform bool colorShift;
 uniform bool colorShift2;
@@ -42,41 +42,47 @@ void main(){
                case 1: {// Multiply
                    vec3 tmp = blended * colors[i];
                    blended = mix(blended, tmp, alphas[i]);
-                   break;}
+                   break;
+               }
                case 2: {// Screen
                    vec3 tmp = 1.0 - (1.0 - blended) * (1.0 - colors[i]);
                    blended = mix(blended, tmp, alphas[i]);
-                   break;}
+                   break;
+               }
                case 3: {// Darken
                    vec3 tmp = min(blended, colors[i]);
                    blended = mix(blended, tmp, alphas[i]);
-                   break;}
+                   break;
+               }
                case 4: {// Lighten
                    vec3 tmp = max(blended, colors[i]);
                    blended = mix(blended, tmp, alphas[i]);
-                   break;}
+                   break;
+               }
                case 5: {// LinearDodge
-                   vec3 tmp = blended + colors[i];
+                   vec3 tmp = clamp(blended + colors[i], 0.0, 1.0);
                    blended = mix(blended, tmp, alphas[i]);
-                   break;}
+                   break;
+               }
                case 6: {// Difference
                    vec3 tmp = abs(blended - colors[i]);
                    blended = mix(blended, tmp, alphas[i]);
-                   break;}
+                   break;
+               }
                case 7: {// Exclusion
-                   vec3 tmp = blended + colors[i] + 2.0 * blended * colors[i];
+                   vec3 tmp = clamp(blended + colors[i] + 2.0 * blended * colors[i], 0.0, 1.0);
                    blended = mix(blended, tmp, alphas[i]);
-                   break;}
-               default:{
-                   vec3 tmp = colors[i];
-                   blended = mix(blended, tmp, alphas[i]);
-                   break;}
+                   break;
+               }
+               default: // Normal
+                   blended = mix(blended, colors[i], alphas[i]);
+                   break;
            }
-           blended = masterAlpha * clamp(vec3(0.0), vec3(1.0), blended);
+           blended = masterAlpha * clamp(blended, vec3(0.0), vec3(1.0));
        }
    }
    if (anyPlaying) {
-       blended = mix(blended, vec3(1.0) - blended, inverse);
+       blended = mix(blended, vec3(1.0) - blended, invert);
        blended = mix(blended, round(blended), reducePalette);
        blended = mix(blended, blended.brg, colorShift);
        blended = mix(blended, blended.gbr, colorShift2);
