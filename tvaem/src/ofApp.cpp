@@ -49,7 +49,7 @@ void ofApp::setup()
 #ifndef NDEBUG
     if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/shader.comp")) {
 #else
-    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "./shader.comp")) {
+    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "shader.comp")) {
 #endif
         ofLog(OF_LOG_FATAL_ERROR, "Could not load shader.");
         Status::instance().exit = true;
