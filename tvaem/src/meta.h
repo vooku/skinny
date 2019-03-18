@@ -71,9 +71,15 @@ public:
     const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }
     auto getSize() const { return scenes_.size(); }
     auto getSwitchNote() const { return switchNote_; }
+    auto getMidiChannel() const { return midiChannel_; }
+
+    void setMidiChannel(int channel) { midiChannel_ = channel; }
 
 private:
+    static const int default_channel = 10;
+
     std::vector<SceneDescription> scenes_;
     int currentIdx_ = 0;
     midiNote switchNote_ = MappableDescription::invalid_midi;
+    int midiChannel_ = default_channel;
 };

@@ -183,6 +183,11 @@ void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 
 void ofApp::newMidiMessage(ofxMidiMessage & msg)
 {
+    if (msg.channel != show_.getMidiChannel()) {
+        ofLog(OF_LOG_WARNING, "Received a MIDI message on an incorrect channel: %d %d %d.", msg.channel, msg.status, msg.pitch);
+        return;
+    }
+
     if (msg.status == MIDI_NOTE_ON && msg.pitch == show_.getSwitchNote())
         Status::instance().forward = true;
     else if (currentScene_) {

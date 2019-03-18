@@ -141,6 +141,7 @@ bool ShowDescription::fromXml(const std::string& filename) {
 
     config.pushTag("head");
     switchNote_ = config.getValue("switchNote", MappableDescription::invalid_midi);
+    midiChannel_ = config.getValue("channel", default_channel);
     config.popTag(); // head
 
     config.pushTag("show");
@@ -162,6 +163,7 @@ bool ShowDescription::toXml(const std::string& filename) const {
     config.pushTag("head");
     config.setValue("version", VERSION);
     config.setValue("switchNote", switchNote_);
+    config.setValue("channel", midiChannel_);
     config.popTag(); // head
 
     config.addTag("show");

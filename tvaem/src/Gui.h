@@ -28,6 +28,7 @@ public:
     void onMasterAlphaCcInput(ofxDatGuiTextInputEvent e);
     void onEffectMidiInput(ofxDatGuiTextInputEvent e);
     void onSceneNameInput(ofxDatGuiTextInputEvent e);
+    void onMidiChannelInput(ofxDatGuiTextInputEvent e);
 
     void onBlendModeDropdown(ofxDatGuiDropdownEvent e);
 
@@ -74,6 +75,7 @@ private:
     // This class does not own any of the following pointers, do not try to delete them.
     ofxDatGuiTextInput* sceneNameInput_;
     ofxDatGuiTextInput* masterAlphaInput_;
+    ofxDatGuiTextInput* midiChannelInput_;
     std::vector<ofxDatGuiButton*> controlButtons_;
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;

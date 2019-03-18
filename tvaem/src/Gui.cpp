@@ -218,6 +218,13 @@ void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
         currentScene_->name_ = e.text;
 }
 
+void Gui::onMidiChannelInput(ofxDatGuiTextInputEvent e)
+{
+    auto channel = std::min(std::max(std::stoi(e.text), 1), 16);
+    show_->setMidiChannel(channel);
+    midiChannelInput_->setText(std::to_string(channel));
+}
+
 void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
@@ -318,14 +325,20 @@ void Gui::setupControlPanel(glm::ivec2& pos)
 
     controlPanel_->addBreak();
     //addBlank(controlPanel_.get());
-    controlPanel_->addLabel("Master alpha:");
+    controlPanel_->addLabel("Master alpha");
     masterAlphaInput_ = controlPanel_->addTextInput("");
     masterAlphaInput_->setInputType(ofxDatGuiInputType::NUMERIC);
     masterAlphaInput_->onTextInputEvent(this, &Gui::onMasterAlphaCcInput);
     //addBlank(controlPanel_.get());
 
     controlPanel_->addBreak();
-    controlPanel_->addFRM()->setLabel("fps:");
+    midiChannelInput_ = controlPanel_->addTextInput("Channel");
+    midiChannelInput_->setInputType(ofxDatGuiInputType::NUMERIC);
+    midiChannelInput_->setText(std::to_string(show_->getMidiChannel()));
+    midiChannelInput_->onTextInputEvent(this, &Gui::onMidiChannelInput);
+
+    controlPanel_->addBreak();
+    controlPanel_->addFRM()->setLabel("fps");
 }
 
 void Gui::setupPlayPanel(glm::ivec2& pos, int w)
