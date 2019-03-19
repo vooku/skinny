@@ -52,25 +52,30 @@ void Gui::reload(Scene* newScene)
     masterAlphaInput_->setText(std::to_string(currentScene_->getAlphaControl()));
 
     // layers
-    for (auto& toggle : layerPlayToggles_) {
-        toggle->setChecked(false);
-    }
+    //for (auto& toggle : layerPlayToggles_) {
+    //    toggle->setChecked(false);
+    //}
 
     auto& layers = currentScene_->getLayers();
     assert(layerButtons_.size() == layers.size());
 
     for (auto i = 0; i < MAX_LAYERS; ++i) {
+        layerPlayToggles_[i]->setChecked(false);
+        layerMuteToggles_[i]->setChecked(false);
+
         if (layers[i]) {
             layerButtons_[i]->setLabel(layers[i]->getName());
             layerMidiInputs_[i]->setText(std::to_string(layers[i]->getNote()));
             layerCCInputs_[i]->setText(std::to_string(layers[i]->getAlphaControl()));
             layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
+            layerRetriggerToggles_[i]->setChecked(layers[i]->getRetrigger());
             blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
         }
         else {
             layerButtons_[i]->setLabel("Click to load a video");
             layerMidiInputs_[i]->setText("");
             layerCCInputs_[i]->setText("");
+            layerRetriggerToggles_[i]->setChecked(false);
             blendModeDropdowns_[i]->select(0);
         }
     }
@@ -81,7 +86,7 @@ void Gui::reload(Scene* newScene)
     }
 
     auto& effects = currentScene_->getEffects();
-    for (int i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
+    for (auto i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
         auto type = static_cast<Effect::Type>(i);
         effectButtons_[i]->setLabel(Effect::c_str(type));
         effectMidiInputs_[i]->setText(std::to_string(effects.at(type).getNote()));
@@ -274,9 +279,11 @@ void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 
 void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
 {
+    const auto retrigger = e.checked;
     const auto idx = std::stoi(e.target->getName());
+    show_->scenes_[show_->currentIdx_].layers[idx].retrigger = retrigger;
     if (currentScene_ && currentScene_->layers_[idx])
-        currentScene_->layers_[idx]->setRetrigger(e.checked);
+        currentScene_->layers_[idx]->setRetrigger(retrigger);
 }
 
 void Gui::addBlank(ofxDatGui * panel)

@@ -29,6 +29,7 @@ struct LayerDescription : public MappableDescription {
     midiNote note;
     midiNote alphaControl;
     //float alpha;
+    bool retrigger = false;
     Layer::BlendMode blendMode;
     bool valid = false;
 };

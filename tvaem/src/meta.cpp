@@ -29,6 +29,7 @@ bool LayerDescription::fromXml(ofxXmlSettings & config) {
     blendMode = static_cast<Layer::BlendMode>(config.getValue("blendMode", static_cast<int>(Layer::BlendMode::Invalid)));
     alphaControl = config.getValue("alphaControl", static_cast<int>(id + Layer::ALPHA_MIDI_OFFSET));
     note = config.getValue("midi", invalid_midi);
+    retrigger = config.getValue("retrigger", false);
 
     if (id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || note == invalid_midi) {
         ofLog(OF_LOG_ERROR, "Layer description contains invalid values and will be skipped.");
@@ -45,6 +46,7 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("blendMode", static_cast<int>(blendMode));
     config.setValue("alphaControl", alphaControl);
     config.setValue("midi", note);
+    config.setValue("retrigger", retrigger);
 }
 
 EffectDescription::EffectDescription(Effect::Type type, midiNote note) :
