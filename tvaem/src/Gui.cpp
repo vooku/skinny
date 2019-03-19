@@ -128,7 +128,7 @@ void Gui::setActive(Effect::Type type, bool active)
 
 void Gui::onLayerButton(ofxDatGuiButtonEvent e)
 {
-    auto openFileResult = ofSystemLoadDialog("Select a video");
+    auto openFileResult = ofSystemLoadDialog("Select a video on layer " + e.target->getName());
     if (openFileResult.bSuccess) {
         auto idx = std::stoi(e.target->getName());
         auto& layerDescription = show_->scenes_[show_->currentIdx_].layers[idx];
