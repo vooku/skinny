@@ -95,12 +95,19 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
         config.popTag(); // layer
     }
 
-    for (auto i = 0; i < config.getNumTags("effect"); i++) {
-        config.pushTag("effect", i);
-        EffectDescription effect;
-        if (effect.fromXml(config))
-            effects.push_back(std::move(effect));
-        config.popTag(); // effect
+    if (config.getNumTags("effect") == 0) {
+        // create default effects
+        for (auto i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
+            effects.push_back(EffectDescription(static_cast<Effect::Type>(i)));
+        }
+    } else {
+        for (auto i = 0; i < config.getNumTags("effect"); i++) {
+            config.pushTag("effect", i);
+            EffectDescription effect;
+            if (effect.fromXml(config))
+                effects.push_back(std::move(effect));
+            config.popTag(); // effect
+        }
     }
 }
 
