@@ -25,6 +25,7 @@ void Gui::setup()
     setupMidiPanel(pos, midiInWidth);
     setupMidiCcPanel(pos, midiInWidth);
     setuAlphaPanel(pos);
+    setupRetriggerPanel(pos);
     setupBlendModePanel(pos);
 }
 
@@ -254,7 +255,7 @@ void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 {
     const auto mute = e.checked;
     const auto idx = std::stoi(e.target->getName());
-    if (currentScene_)
+    if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setMute(mute);
     if (mute)
         layerPlayToggles_[idx]->setChecked(false);
@@ -269,6 +270,13 @@ void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
         currentScene_->effects_[type].setMute(mute);
     if (mute)
         effectPlayToggles_[idx]->setChecked(false);
+}
+
+void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
+{
+    const auto idx = std::stoi(e.target->getName());
+    if (currentScene_ && currentScene_->layers_[idx])
+        currentScene_->layers_[idx]->setRetrigger(e.checked);
 }
 
 void Gui::addBlank(ofxDatGui * panel)
@@ -484,6 +492,23 @@ void Gui::setuAlphaPanel(glm::ivec2& pos)
     }
 
     alphaPanel_->addBreak();
+}
+
+void Gui::setupRetriggerPanel(glm::ivec2 & pos)
+{
+    retriggerPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    retriggerPanel_->setTheme(&commonTheme_);
+    retriggerPanel_->setWidth(2.5 * DELTA);
+    pos.x += retriggerPanel_->getWidth();
+    retriggerPanel_->addLabel("Re");
+    retriggerPanel_->addBreak();
+    for (auto i = 0; i < layerRetriggerToggles_.size(); ++i) {
+        layerRetriggerToggles_[i] = retriggerPanel_->addToggle({});
+        layerRetriggerToggles_[i]->onToggleEvent(this, &Gui::onLayerRetriggerToggle);
+        layerRetriggerToggles_[i]->setName(std::to_string(i));
+    }
+
+    retriggerPanel_->addBreak();
 }
 
 void Gui::setupBlendModePanel(glm::ivec2& pos)

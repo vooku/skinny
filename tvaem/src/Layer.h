@@ -43,16 +43,19 @@ public:
     bool isValid() const { return valid_; }
     float getAlpha() const { return alpha_; }
     midiNote getAlphaControl() const { return alphaControl_; }
+    auto getRetrigger() const { return retrigger_; }
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
     void setAlpha(int alpha) { alpha_ = (alpha < 0 ? 0 : alpha > 127 ? 127 : alpha) / 127.0f; }
     void setAlphaControl(midiNote control) { alphaControl_ = control; }
+    void setRetrigger(bool value) { retrigger_ = value; }
 
 private:
     ofVideoPlayer player_;
     const int id_;
     const std::string name_;
     bool valid_;
+    bool retrigger_ = false;
     BlendMode blendMode_;
     float alpha_;
     midiNote alphaControl_;

@@ -74,12 +74,16 @@ void Layer::play()
 void Layer::pause()
 {
     active_ = false;
+    if (retrigger_)
+        player_.setFrame(0);
     player_.setPaused(!active_);
 }
 
 void Layer::playPause()
 {
     active_ = !active_ && !mute_;
+    if (!active_ && retrigger_)
+        player_.setFrame(0);
     player_.setPaused(!active_);
 }
 
