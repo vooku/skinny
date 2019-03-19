@@ -30,6 +30,9 @@ void ofApp::setup()
     ofBackground(ofColor::black);
     ofSetVerticalSync(true);
 
+    ofLog(OF_LOG_NOTICE, "TRIGERRED VIDEO & FX MIXER %s", VERSION);
+    ofLog(OF_LOG_NOTICE, "Designed by Vadim Vooku Petrov.");
+
     const auto major = ofGetGLRenderer()->getGLversionMajor();
     const auto minor = ofGetGLRenderer()->getGLversionMinor();
     const auto vendor = glGetString(GL_VENDOR);

@@ -3,6 +3,7 @@ tvaem/bin/*
 tvaem/obj/*
 tvaem/.vs/*
 videos/*
+*.log
 
 # Prerequisites
 *.d
