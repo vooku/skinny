@@ -28,7 +28,7 @@
             <midi>2</midi>
         </layer>
         <layer>
-            <id>3</id>
+            <id>4</id>
             <path>../../../videos/circles.mp4</path>
             <blendMode>1</blendMode>
             <alphaControl>4</alphaControl>

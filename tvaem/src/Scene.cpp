@@ -70,7 +70,7 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
     FoundMappables result;
     for (auto& layer : layers_) {
         if (!layer)
-            break;
+            continue;
 
         if (layer->getNote() == note) {
             if (noteOn) {
