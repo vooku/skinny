@@ -77,7 +77,7 @@ public:
     void setMidiChannel(int channel) { midiChannel_ = channel; }
 
 private:
-    static const int default_channel = 10;
+    static const int default_channel = 2;
 
     std::vector<SceneDescription> scenes_;
     int currentIdx_ = 0;

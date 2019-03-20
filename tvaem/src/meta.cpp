@@ -177,7 +177,7 @@ bool ShowDescription::toXml(const std::string& filename) const {
 
     config.addTag("show");
     config.pushTag("show");
-    for (int i = 0; i < scenes_.size(); i++) {
+    for (auto i = 0; i < scenes_.size(); i++) {
         config.addTag("scene");
         config.pushTag("scene", i);
         scenes_[i].toXml(config);

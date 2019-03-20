@@ -50,6 +50,7 @@ void Gui::reload(Scene* newScene)
     currentScene_ = newScene;
     sceneNameInput_->setText(currentScene_->getName());
     masterAlphaInput_->setText(std::to_string(currentScene_->getAlphaControl()));
+    midiChannelInput_->setText(std::to_string(show_->getMidiChannel()));
 
     // layers
     //for (auto& toggle : layerPlayToggles_) {
