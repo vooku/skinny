@@ -94,7 +94,7 @@ void Gui::reload(Scene* newScene)
 
 void Gui::update()
 {
-    //sceneScrollView_->update();
+    sceneScrollView_->update();
 
     if (currentScene_) {
         masterAlphaInput_->setLabel(std::to_string(static_cast<int>(currentScene_->getAlpha() * 127)));
@@ -287,6 +287,11 @@ void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
         currentScene_->layers_[idx]->setRetrigger(retrigger);
 }
 
+void Gui::onScrollViewEvent(ofxDatGuiScrollViewEvent e)
+{
+    std::cout << e.target->getLabel() << std::endl;
+}
+
 void Gui::reloadScenes()
 {
     if (!sceneScrollView_)
@@ -376,6 +381,7 @@ void Gui::setupScenePanel(glm::ivec2& pos)
     sceneScrollView_->setPosition(pos.x, pos.y);
     sceneScrollView_->setTheme(&commonTheme_);
     sceneScrollView_->setWidth(8 * DELTA);
+    sceneScrollView_->onScrollViewEvent(this, &Gui::onScrollViewEvent);
     pos.x += sceneScrollView_->getWidth() + DELTA;
 }
 

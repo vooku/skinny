@@ -38,6 +38,8 @@ public:
     void onEffectMuteToggle(ofxDatGuiToggleEvent e);
     void onLayerRetriggerToggle(ofxDatGuiToggleEvent e);
 
+    void onScrollViewEvent(ofxDatGuiScrollViewEvent e);
+
     void reloadScenes();
 
 private:
