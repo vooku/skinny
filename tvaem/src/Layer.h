@@ -18,6 +18,10 @@ public:
         Count       =  8  // Used for iteration
     };
 
+    enum class ErrorType {
+        Invalid, Failed
+    };
+
     static const int MIDI_OFFSET = 0;
     static const int ALPHA_MIDI_OFFSET = 1;
 
@@ -25,6 +29,7 @@ public:
 
     // TODO use layer description?
     Layer(int id, const std::filesystem::path& path, midiNote note = -1);
+    Layer(int id, ErrorType error);
     ~Layer() override;
 
     bool reload(const std::filesystem::path& path);
@@ -53,7 +58,7 @@ public:
 private:
     ofVideoPlayer player_;
     const int id_;
-    const std::string name_;
+    std::string name_;
     bool valid_;
     bool retrigger_ = false;
     BlendMode blendMode_;
