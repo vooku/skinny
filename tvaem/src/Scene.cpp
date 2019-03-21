@@ -8,7 +8,7 @@ void Scene::reload(const SceneDescription & description)
 
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (!description.layers[i].valid) {
-            layers_[i].reset();
+            layers_[i].reset(/*new Layer(i, Layer::ErrorType::Invalid)*/);
         }
         else {
             if (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName()) {
@@ -16,11 +16,14 @@ void Scene::reload(const SceneDescription & description)
                 if (newLayer->isValid())
                     layers_[i].reset(newLayer.release());
                 else
-                    valid_ = false;
+                    layers_[i].reset(new Layer(i, Layer::ErrorType::Failed));
             }
-            layers_[i]->setBlendMode(description.layers[i].blendMode);
-            layers_[i]->setAlphaControl(description.layers[i].alphaControl);
-            layers_[i]->setRetrigger(description.layers[i].retrigger);
+
+            if (layers_[i]) {
+                layers_[i]->setBlendMode(description.layers[i].blendMode);
+                layers_[i]->setAlphaControl(description.layers[i].alphaControl);
+                layers_[i]->setRetrigger(description.layers[i].retrigger);
+            }
         }
     }
 
@@ -39,7 +42,7 @@ void Scene::bindTextures()
 
 bool Scene::isFrameNew()
 {
-    bool newFrame = false;
+    auto newFrame = false;
     for (auto& layer : layers_) {
         if (layer)
             newFrame |= layer->isFrameNew();
