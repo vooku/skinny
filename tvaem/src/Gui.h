@@ -59,6 +59,7 @@ private:
     } fonts_;
 
     void setupControlPanel(glm::ivec2& pos);
+    void setupScenePanel(glm::ivec2& pos);
     void setupPlayPanel(glm::ivec2& pos, int w);
     void setupMutePanel(glm::ivec2& pos, int w);
     void setupVideoFxPanel(glm::ivec2& pos);
@@ -70,6 +71,8 @@ private:
 
     void addBlank(ofxDatGui* panel);
 
+    void reloadScenes();
+
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
                                videoFxPanel_, midiPanel_, midiCcPanel_,
                                alphaPanel_, retriggerPanel_, blendModePanel_;
@@ -78,7 +81,9 @@ private:
     ofxDatGuiTextInput* sceneNameInput_;
     ofxDatGuiTextInput* masterAlphaInput_;
     ofxDatGuiTextInput* midiChannelInput_;
+    ofxDatGuiScrollView* sceneScrollView_;
     std::vector<ofxDatGuiButton*> controlButtons_;
+    std::vector<ofxDatGuiScrollViewItem*> sceneScrollItems_;
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerCCInputs_;

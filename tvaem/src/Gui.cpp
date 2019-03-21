@@ -19,6 +19,7 @@ void Gui::setup()
     const auto midiInWidth = 3 * DELTA;
 
     setupControlPanel(pos);
+    setupScenePanel(pos);
     setupPlayPanel(pos, toggleWidth);
     setupMutePanel(pos, toggleWidth);
     setupVideoFxPanel(pos);
@@ -37,6 +38,7 @@ void Gui::draw() const
         fonts_.italic.drawString("Loading...", 2 * DELTA, controlPanel_->getHeight() + 3 * DELTA);
 
     if (controlPanel_) controlPanel_->draw();
+    if (sceneScrollView_) sceneScrollView_->draw();
     //if (playPanel_) playPanel_->draw();
     //if (mutePanel_) mutePanel_->draw();
     //if (videoFxPanel_) videoFxPanel_->draw();
@@ -51,11 +53,6 @@ void Gui::reload(Scene* newScene)
     sceneNameInput_->setText(currentScene_->getName());
     masterAlphaInput_->setText(std::to_string(currentScene_->getAlphaControl()));
     midiChannelInput_->setText(std::to_string(show_->getMidiChannel()));
-
-    // layers
-    //for (auto& toggle : layerPlayToggles_) {
-    //    toggle->setChecked(false);
-    //}
 
     auto& layers = currentScene_->getLayers();
     assert(layerButtons_.size() == layers.size());
@@ -295,6 +292,13 @@ void Gui::addBlank(ofxDatGui * panel)
     //blank->setStripeColor(bgColor);
 }
 
+void Gui::reloadScenes()
+{
+    for (auto i = 0; i < 20; ++i) {
+        sceneScrollView_->add("lol");
+    }
+}
+
 Gui::CommonTheme::CommonTheme() :
     ofxDatGuiTheme(false)
 {
@@ -314,7 +318,7 @@ Gui::HeaderTheme::HeaderTheme() :
     CommonTheme()
 {
     layout.height *= 1.4;
-    font.size = Gui::Fonts::sizeItalic;
+    font.size = Fonts::sizeItalic;
     font.file = "fonts/IBMPlexSerif-Italic.ttf";
 
     init();
@@ -324,7 +328,7 @@ void Gui::setupControlPanel(glm::ivec2& pos)
 {
     controlPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
     controlPanel_->setTheme(&headerTheme_);
-    pos.x += controlPanel_->getWidth() + 2 * DELTA;
+    pos.x += controlPanel_->getWidth() + DELTA;
 
     sceneNameInput_ = controlPanel_->addTextInput("Scene");
     sceneNameInput_->setText(currentScene_ ? currentScene_->getName() : "Enter scene name");
@@ -355,6 +359,17 @@ void Gui::setupControlPanel(glm::ivec2& pos)
 
     controlPanel_->addBreak();
     controlPanel_->addFRM()->setLabel("fps");
+}
+
+void Gui::setupScenePanel(glm::ivec2& pos)
+{
+    sceneScrollView_ = new ofxDatGuiScrollView("Scenes", 14);
+    sceneScrollView_->setPosition(pos.x, pos.y);
+    sceneScrollView_->setTheme(&commonTheme_);
+    sceneScrollView_->setWidth(8 * DELTA);
+    pos.x += sceneScrollView_->getWidth() + DELTA;
+
+    reloadScenes();
 }
 
 void Gui::setupPlayPanel(glm::ivec2& pos, int w)
@@ -418,7 +433,7 @@ void Gui::setupVideoFxPanel(glm::ivec2& pos)
     // Videos & FX panel
     videoFxPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
     videoFxPanel_->setTheme(&commonTheme_);
-    videoFxPanel_->setWidth(14 * DELTA);
+    videoFxPanel_->setWidth(8 * DELTA);
     pos.x += videoFxPanel_->getWidth();
     videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
     videoFxPanel_->addBreak();
