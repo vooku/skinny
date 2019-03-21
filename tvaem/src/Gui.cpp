@@ -4,7 +4,6 @@
 const ofColor Gui::BACKGROUND_COLOR = { 45, 45, 48 };
 
 Gui::Gui(ShowDescription* show) :
-    currentScene_(nullptr),
     show_(show)
 {
 }
@@ -37,8 +36,8 @@ void Gui::draw() const
     if (Status::instance().forward || Status::instance().backward || Status::instance().reload)
         fonts_.italic.drawString("Loading...", 2 * DELTA, controlPanel_->getHeight() + 3 * DELTA);
 
-    if (controlPanel_) controlPanel_->draw();
     if (sceneScrollView_) sceneScrollView_->draw();
+    if (controlPanel_) controlPanel_->draw();
     //if (playPanel_) playPanel_->draw();
     //if (mutePanel_) mutePanel_->draw();
     //if (videoFxPanel_) videoFxPanel_->draw();
@@ -95,6 +94,8 @@ void Gui::reload(Scene* newScene)
 
 void Gui::update()
 {
+    //sceneScrollView_->update();
+
     if (currentScene_) {
         masterAlphaInput_->setLabel(std::to_string(static_cast<int>(currentScene_->getAlpha() * 127)));
 
@@ -159,6 +160,7 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
         Status::instance().backward = true;
     } else if (name == "Append scene") {
         show_->appendScene();
+        reloadScenes();
     } else if (name == "Load config") {
         auto openFileResult = ofSystemLoadDialog("Select config file");
         if (openFileResult.bSuccess) {
@@ -168,6 +170,7 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
             }
             Status::instance().reload = true;
         }
+        reloadScenes();
     } else if (name == "Save config") {
         auto openFileResult = ofSystemSaveDialog("config.xml", "Save config as");
         if (openFileResult.bSuccess) {
@@ -284,19 +287,25 @@ void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
         currentScene_->layers_[idx]->setRetrigger(retrigger);
 }
 
+void Gui::reloadScenes()
+{
+    if (!sceneScrollView_)
+        return;
+
+    sceneScrollView_->clear();
+    for (const auto& scene : show_->scenes_) {
+        sceneScrollView_->add(scene.name);
+    }
+
+    Status::instance().redraw = true;
+}
+
 void Gui::addBlank(ofxDatGui * panel)
 {
     auto blank = panel->addButton({});
     blank->setEnabled(false);
     blank->setBackgroundColor(BACKGROUND_COLOR);
     //blank->setStripeColor(bgColor);
-}
-
-void Gui::reloadScenes()
-{
-    for (auto i = 0; i < 20; ++i) {
-        sceneScrollView_->add("lol");
-    }
 }
 
 Gui::CommonTheme::CommonTheme() :
@@ -368,8 +377,6 @@ void Gui::setupScenePanel(glm::ivec2& pos)
     sceneScrollView_->setTheme(&commonTheme_);
     sceneScrollView_->setWidth(8 * DELTA);
     pos.x += sceneScrollView_->getWidth() + DELTA;
-
-    reloadScenes();
 }
 
 void Gui::setupPlayPanel(glm::ivec2& pos, int w)

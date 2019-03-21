@@ -7,54 +7,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxArgs\src\ofxArgs.cpp">
-      <Filter>addons\ofxArgs\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiComponent.cpp">
-      <Filter>addons\ofxDatGui\src\core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.cpp">
-      <Filter>addons\ofxDatGui\src\libs\ofxSmartFont</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxDatGui\src\ofxDatGui.cpp">
-      <Filter>addons\ofxDatGui\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiIn.cpp">
-      <Filter>addons\ofxMidi\src\desktop</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiOut.cpp">
-      <Filter>addons\ofxMidi\src\desktop</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxBaseMidi.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidi.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiIn.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiMessage.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiOut.cpp">
-      <Filter>addons\ofxMidi\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxMidi\libs\rtmidi\RtMidi.cpp">
-      <Filter>addons\ofxMidi\libs\rtmidi</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
-      <Filter>addons\ofxXmlSettings\src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClCompile>
     <ClCompile Include="src\Effect.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -73,6 +25,54 @@
     <ClCompile Include="src\Mappable.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.cpp">
+      <Filter>addons\ofxXmlSettings\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxArgs\src\ofxArgs.cpp">
+      <Filter>addons\ofxArgs\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxDatGui\src\ofxDatGui.cpp">
+      <Filter>addons\ofxDatGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiComponent.cpp">
+      <Filter>addons\ofxDatGui\src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.cpp">
+      <Filter>addons\ofxDatGui\src\libs\ofxSmartFont</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxBaseMidi.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidi.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiIn.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiMessage.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\ofxMidiOut.cpp">
+      <Filter>addons\ofxMidi\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiIn.cpp">
+      <Filter>addons\ofxMidi\src\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiOut.cpp">
+      <Filter>addons\ofxMidi\src\desktop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxMidi\libs\rtmidi\RtMidi.cpp">
+      <Filter>addons\ofxMidi\libs\rtmidi</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -81,64 +81,106 @@
     <Filter Include="addons">
       <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
     </Filter>
-    <Filter Include="addons\ofxArgs">
-      <UniqueIdentifier>{B4C6ECF0-53A2-CE5D-D585-23B4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxArgs\src">
-      <UniqueIdentifier>{4E7CF9DB-07AE-7836-4EB4-F236}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxDatGui">
-      <UniqueIdentifier>{B36B06DF-1AA4-00D4-5A1B-6893}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxDatGui\src">
-      <UniqueIdentifier>{CAA2E9BA-611F-99B2-780A-B8BA}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxDatGui\src\components">
-      <UniqueIdentifier>{8EFE15E2-401E-A657-3818-AD66}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxDatGui\src\core">
-      <UniqueIdentifier>{6835CAB6-404A-D3AD-148B-CD60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxDatGui\src\libs">
-      <UniqueIdentifier>{ABAEF2A2-DCDC-DB83-4614-EB2B}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxDatGui\src\libs\ofxSmartFont">
-      <UniqueIdentifier>{A694AB8C-4705-277A-3AC8-2B8E}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxDatGui\src\themes">
-      <UniqueIdentifier>{2646318C-49AB-44C5-70D8-23E6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxMidi">
-      <UniqueIdentifier>{4DF4D977-A753-531B-5057-9AC1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxMidi\src">
-      <UniqueIdentifier>{7EED8620-FDD5-520C-3F5D-2677}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxMidi\src\desktop">
-      <UniqueIdentifier>{03CA45A4-AB22-A57E-895E-C6BC}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxMidi\libs">
-      <UniqueIdentifier>{B8086AD6-372B-1A12-88A6-74F9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxMidi\libs\rtmidi">
-      <UniqueIdentifier>{8E6C5628-3502-6F01-4B1D-AEAE}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxXmlSettings">
-      <UniqueIdentifier>{877F005D-13E6-0592-1D97-F2E3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxXmlSettings\src">
-      <UniqueIdentifier>{CCB2AC63-49D2-977C-CFE8-AEAD}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="addons\ofxXmlSettings\libs">
-      <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="headers">
       <UniqueIdentifier>{818efdae-3dda-4187-a3ee-85fe5a6e48e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="addons\ofxXmlSettings">
+      <UniqueIdentifier>{729cfacf-9a73-4dfc-95c0-946d095da912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxXmlSettings\src">
+      <UniqueIdentifier>{baf6802e-e4b2-44dc-8d68-0dcae88a245a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxXmlSettings\libs">
+      <UniqueIdentifier>{d89b930e-ce44-456e-a1db-dde81a73dbda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxArgs">
+      <UniqueIdentifier>{70f6cdfe-e887-4fff-9a7d-a234ced9a06d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxArgs\src">
+      <UniqueIdentifier>{16c9788a-2f2d-4e87-a79f-84eaed780777}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxDatGui">
+      <UniqueIdentifier>{9b5b963e-bbe6-4d23-acae-8153db1fe84a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxDatGui\src">
+      <UniqueIdentifier>{04c86d91-da93-43db-9c6f-9d119481e9cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxDatGui\src\components">
+      <UniqueIdentifier>{18035908-53d9-4fd7-9ff0-99af2d41d2cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxDatGui\src\core">
+      <UniqueIdentifier>{6ccc772c-5aa8-4eef-bc54-273e6eec9160}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxDatGui\src\libs">
+      <UniqueIdentifier>{175758d3-855b-4e5c-8fb3-dd5a8021b9c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxDatGui\src\libs\ofxSmartFont">
+      <UniqueIdentifier>{55ca8f4d-8e50-4eb5-92f1-bcb7b2e0d174}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxDatGui\src\themes">
+      <UniqueIdentifier>{f70be138-583a-4857-b6a0-59fb870b032e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxMidi">
+      <UniqueIdentifier>{046f0a0c-5b3f-496c-859b-4ed23a60b698}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxMidi\src">
+      <UniqueIdentifier>{af5e3041-e201-4361-b701-2a0b067f2f60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxMidi\src\desktop">
+      <UniqueIdentifier>{119e02e2-7840-4aea-8750-2644276a45b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxMidi\src\ios">
+      <UniqueIdentifier>{31844213-b7b4-44d1-b1fb-fc51032f6dd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxMidi\libs">
+      <UniqueIdentifier>{aa85fa34-4f77-4ac5-ab77-46fc41a3a9b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxMidi\libs\pgmidi">
+      <UniqueIdentifier>{27c0e681-88f9-464a-8cd9-e1b11c95e48d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="addons\ofxMidi\libs\rtmidi">
+      <UniqueIdentifier>{74591c19-ab38-4fc3-ab84-c5c1c529a6fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Effect.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mappable.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\meta.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Gui.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Status.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h">
+      <Filter>addons\ofxXmlSettings\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
+      <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxArgs\src\ofxArgs.h">
       <Filter>addons\ofxArgs\src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxDatGui\src\ofxDatGui.h">
+      <Filter>addons\ofxDatGui\src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGui2dPad.h">
       <Filter>addons\ofxDatGui\src\components</Filter>
@@ -194,20 +236,11 @@
     <ClInclude Include="..\..\..\addons\ofxDatGui\src\libs\ofxSmartFont\ofxSmartFont.h">
       <Filter>addons\ofxDatGui\src\libs\ofxSmartFont</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxDatGui\src\ofxDatGui.h">
-      <Filter>addons\ofxDatGui\src</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxDatGui\src\themes\ofxDatGuiTheme.h">
       <Filter>addons\ofxDatGui\src\themes</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxDatGui\src\themes\ofxDatGuiThemes.h">
       <Filter>addons\ofxDatGui\src\themes</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiIn.h">
-      <Filter>addons\ofxMidi\src\desktop</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiOut.h">
-      <Filter>addons\ofxMidi\src\desktop</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxBaseMidi.h">
       <Filter>addons\ofxMidi\src</Filter>
@@ -230,41 +263,44 @@
     <ClInclude Include="..\..\..\addons\ofxMidi\src\ofxMidiTypes.h">
       <Filter>addons\ofxMidi\src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiIn.h">
+      <Filter>addons\ofxMidi\src\desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\desktop\ofxRtMidiOut.h">
+      <Filter>addons\ofxMidi\src\desktop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ios\ofxPGMidiContext.h">
+      <Filter>addons\ofxMidi\src\ios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ios\ofxPGMidiDelegate.h">
+      <Filter>addons\ofxMidi\src\ios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ios\ofxPGMidiIn.h">
+      <Filter>addons\ofxMidi\src\ios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ios\ofxPGMidiOut.h">
+      <Filter>addons\ofxMidi\src\ios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\src\ios\ofxPGMidiSourceDelegate.h">
+      <Filter>addons\ofxMidi\src\ios</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\libs\pgmidi\iOSVersionDetection.h">
+      <Filter>addons\ofxMidi\libs\pgmidi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\libs\pgmidi\PGArc.h">
+      <Filter>addons\ofxMidi\libs\pgmidi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\libs\pgmidi\PGMidi.h">
+      <Filter>addons\ofxMidi\libs\pgmidi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\libs\pgmidi\PGMidiAllSources.h">
+      <Filter>addons\ofxMidi\libs\pgmidi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxMidi\libs\pgmidi\PGMidiFind.h">
+      <Filter>addons\ofxMidi\libs\pgmidi</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxMidi\libs\rtmidi\RtMidi.h">
       <Filter>addons\ofxMidi\libs\rtmidi</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h">
-      <Filter>addons\ofxXmlSettings\src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
-      <Filter>addons\ofxXmlSettings\libs</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Effect.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Layer.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Mappable.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\meta.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofApp.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Scene.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Gui.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Status.h">
-      <Filter>headers</Filter>
-    </ClInclude>
-    <ClInclude Include="src\base.h">
-      <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

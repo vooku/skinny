@@ -271,6 +271,8 @@ bool ofApp::setupShow()
         return false;
     }
 
+    //gui_.reloadScenes();
+
     return true;
 }
 
