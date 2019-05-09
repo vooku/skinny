@@ -138,6 +138,12 @@ void SceneDescription::toXml(ofxXmlSettings & config) const {
     }
 }
 
+ShowDescription::ShowDescription()
+{
+    // Create default scene -- show is valid / usable right from the start
+    appendScene();
+}
+
 bool ShowDescription::fromXml(const std::string& filename) {
     ofxXmlSettings config;
     if (!config.loadFile(filename)) {

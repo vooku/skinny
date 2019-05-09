@@ -64,14 +64,10 @@ void ofApp::setup()
         return;
     }
 
-    if (!setupShow()) {
-        ofLog(OF_LOG_FATAL_ERROR, "Could not setup show from configuration file.");
-        Status::instance().exit = true;
-        return;
-    }
-
     dst_.allocate(width_, height_, GL_RGBA8);
     dst_.bindAsImage(7, GL_WRITE_ONLY);
+
+    reload(LoadDir::Current);
 }
 
 void ofApp::setupGui()
@@ -214,7 +210,6 @@ void ofApp::usage()
         "    --list-midiports List available MIDI ports.\n"
         "    --midiport <number> Try to open up a MIDI port <number> for input as listed by --list-midiports.\n"
         "    --midiports-all Open all available MIDI ports for input.\n"
-        "    --config <file>  Load configuration from <file>.\n"
         "    --console Log to console."
         "    -v, --verbose Use verbose mode."
         << std::endl;
@@ -235,7 +230,7 @@ void ofApp::parseArgs(ofxArgs* args)
     }
 
     if (args->contains("--midiports-all")) {
-        for (int i = 0; i < ofxMidiIn::getNumPorts(); ++i)
+        for (auto i = 0; i < ofxMidiIn::getNumPorts(); ++i)
             settings_.midiPorts.push_back(i);
     }
     else {
@@ -244,7 +239,6 @@ void ofApp::parseArgs(ofxArgs* args)
 
     settings_.verbose = args->contains("-v") || args->contains("--verbose");
     settings_.console = args->contains("--console");
-    settings_.cfgFile = args->getString("--config", "");
 }
 
 void ofApp::setupMidi()
@@ -257,21 +251,6 @@ void ofApp::setupMidi()
         midiInputs_.back()->addListener(this);
         midiInputs_.back()->setVerbose(/*settings_.verbose*/false);
     }
-}
-
-bool ofApp::setupShow()
-{
-    if (!show_.fromXml(settings_.cfgFile)) {
-        ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", settings_.cfgFile.c_str());
-        show_.appendScene();
-    }
-
-    if (!reload(LoadDir::Current)) {
-        ofLog(OF_LOG_FATAL_ERROR, "Configuration file \"%s\" contains no scenes.", settings_.cfgFile.c_str());
-        return false;
-    }
-
-    return true;
 }
 
 bool ofApp::reload(LoadDir dir)

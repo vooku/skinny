@@ -63,6 +63,8 @@ class ShowDescription {
 public:
     friend class Gui;
 
+    ShowDescription();
+
     bool fromXml(const std::string& filename);
     bool toXml(const std::string& filename) const;
     ShowDescription& operator++();

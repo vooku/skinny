@@ -31,13 +31,12 @@ private:
         bool cancelSetup = false;
         bool verbose     = false;
         bool console     = false;
-        std::string cfgFile;
     } settings_;
 
     static void usage();
+    [[deprecated("Console configuration is going to be removed eventually")]]
     void parseArgs(ofxArgs* args);
     void setupMidi();
-    bool setupShow();
 
     enum class LoadDir {
         Current, Forward, Backward
