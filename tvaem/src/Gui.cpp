@@ -34,7 +34,7 @@ void Gui::draw() const
     ofBackground(BACKGROUND_COLOR);
 
     if (Status::instance().forward || Status::instance().backward || Status::instance().reload)
-        fonts_.italic.drawString("Loading...", 2 * DELTA, controlPanel_->getHeight() + 3 * DELTA);
+        fonts_.italic.drawString("Loading...", 2 * DELTA, controlPanel_->getHeight() + 2 * DELTA);
 
     if (controlPanel_) controlPanel_->draw();
     //if (playPanel_) playPanel_->draw();
@@ -153,8 +153,23 @@ void Gui::onEffectButton(ofxDatGuiButtonEvent e)
     // nothing
 }
 
-void Gui::onOtherButton(ofxDatGuiButtonEvent e)
+void Gui::onControlButton(ofxDatGuiButtonEvent e)
 {
+    auto save = [&](const std::string& path) {
+        if (!show_->toXml(path)) {
+            ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
+        } else {
+            configPath_ = path;
+        }
+    };
+
+    auto saveAs = [&]() {
+        auto openFileResult = ofSystemSaveDialog("config.xml", "Save config as");
+        if (openFileResult.bSuccess) {
+            save(openFileResult.filePath);
+        }
+    };
+
     const auto name = e.target->getName();
     if (name == "Next scene") {
         Status::instance().forward = true;
@@ -165,19 +180,22 @@ void Gui::onOtherButton(ofxDatGuiButtonEvent e)
     } else if (name == "Load config") {
         auto openFileResult = ofSystemLoadDialog("Select config file");
         if (openFileResult.bSuccess) {
-            if (!show_->fromXml(openFileResult.fileName)) {
+            if (!show_->fromXml(openFileResult.filePath)) {
                 ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
                 show_->appendScene();
+            } else {
+                configPath_ = openFileResult.filePath;
             }
             Status::instance().reload = true;
         }
     } else if (name == "Save config") {
-        auto openFileResult = ofSystemSaveDialog("config.xml", "Save config as");
-        if (openFileResult.bSuccess) {
-            if (!show_->toXml(openFileResult.fileName)) {
-                ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", openFileResult.fileName.c_str());
-            }
+        if (!configPath_.empty()) {
+            save(configPath_);
+        } else {
+            saveAs();
         }
+    } else if (name == "Save as") {
+        saveAs();
     } else {
         ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", name.c_str());
     }
@@ -335,9 +353,10 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     controlButtons_.push_back(controlPanel_->addButton("Append scene"));
     controlPanel_->addBreak();
     controlButtons_.push_back(controlPanel_->addButton("Save config"));
+    controlButtons_.push_back(controlPanel_->addButton("Save as"));
     controlButtons_.push_back(controlPanel_->addButton("Load config"));
     for (auto& btn : controlButtons_)
-        btn->onButtonEvent(this, &Gui::onOtherButton);
+        btn->onButtonEvent(this, &Gui::onControlButton);
 
     controlPanel_->addBreak();
     //addBlank(controlPanel_.get());

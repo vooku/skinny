@@ -4,6 +4,7 @@
 #include "ofxDatGui.h"
 #include "Scene.h"
 #include <array>
+#include <experimental/filesystem>
 
 class Gui {
 public:
@@ -21,7 +22,7 @@ public:
 
     void onLayerButton(ofxDatGuiButtonEvent e);
     void onEffectButton(ofxDatGuiButtonEvent e);
-    void onOtherButton(ofxDatGuiButtonEvent e);
+    void onControlButton(ofxDatGuiButtonEvent e);
 
     void onLayerMidiInput(ofxDatGuiTextInputEvent e);
     void onLayerCcInput(ofxDatGuiTextInputEvent e);
@@ -94,4 +95,5 @@ private:
 
     Scene* currentScene_;
     ShowDescription* show_;
+    std::string configPath_;
 };

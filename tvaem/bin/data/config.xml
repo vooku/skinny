@@ -39,22 +39,6 @@
             <midi>3</midi>
             <retrigger>0</retrigger>
         </layer>
-        <effect>
-            <type>0</type>
-            <midi>48</midi>
-        </effect>
-        <effect>
-            <type>1</type>
-            <midi>49</midi>
-        </effect>
-        <effect>
-            <type>2</type>
-            <midi>50</midi>
-        </effect>
-        <effect>
-            <type>3</type>
-            <midi>51</midi>
-        </effect>
     </scene>
     <scene>
         <name>Test Scene 1</name>
@@ -83,22 +67,6 @@
             <midi>2</midi>
             <retrigger>0</retrigger>
         </layer>
-        <effect>
-            <type>0</type>
-            <midi>48</midi>
-        </effect>
-        <effect>
-            <type>1</type>
-            <midi>49</midi>
-        </effect>
-        <effect>
-            <type>2</type>
-            <midi>50</midi>
-        </effect>
-        <effect>
-            <type>3</type>
-            <midi>51</midi>
-        </effect>
     </scene>
     <scene>
         <name>Test Scene 2</name>
@@ -135,21 +103,5 @@
             <midi>3</midi>
             <retrigger>0</retrigger>
         </layer>
-        <effect>
-            <type>0</type>
-            <midi>48</midi>
-        </effect>
-        <effect>
-            <type>1</type>
-            <midi>49</midi>
-        </effect>
-        <effect>
-            <type>2</type>
-            <midi>50</midi>
-        </effect>
-        <effect>
-            <type>3</type>
-            <midi>51</midi>
-        </effect>
     </scene>
 </show>
