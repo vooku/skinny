@@ -260,6 +260,8 @@ bool ofApp::reload(LoadDir dir)
         return false;
     }
 
+    gui_.displayMessage("Loading...");
+
     switch (dir)
     {
     case LoadDir::Forward:

@@ -40,8 +40,9 @@ void Gui::draw() const
 {
     ofBackground(BACKGROUND_COLOR);
 
-    if (Status::instance().forward || Status::instance().backward || Status::instance().reload)
-        fonts_.italic.drawString("Loading...", 2 * DELTA, controlPanel_->getHeight() + 2 * DELTA);
+    if (std::chrono::system_clock::now() - msg_.start < msg_.duration) {
+        fonts_.italic.drawString(msg_.msg, 2 * DELTA, controlPanel_->getHeight() + 2 * DELTA);
+    }
 
     if (controlPanel_) controlPanel_->draw();
     //if (playPanel_) playPanel_->draw();
@@ -140,6 +141,13 @@ void Gui::setActive(Effect::Type type, bool active)
     }
 }
 
+void Gui::displayMessage(const std::string& msg, int duration)
+{
+    msg_.msg = msg;
+    msg_.duration = std::chrono::milliseconds{ duration };
+    msg_.start = std::chrono::system_clock::now();
+}
+
 void Gui::onLayerButton(ofxDatGuiButtonEvent e)
 {
     auto openFileResult = ofSystemLoadDialog("Select a video on layer " + e.target->getName());
@@ -165,8 +173,10 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
     auto save = [&](const std::string& path) {
         if (!show_->toXml(path)) {
             ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
+            displayMessage("Cannot save config file to " + path, 1000);
         } else {
             configPath_ = path;
+            displayMessage("Saved!", 1000);
         }
     };
 

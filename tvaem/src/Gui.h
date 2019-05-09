@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include <array>
 #include <experimental/filesystem>
+#include <chrono>
 
 class Gui {
 public:
@@ -19,6 +20,14 @@ public:
     void update();
     void setActive(int layerId, bool active);
     void setActive(Effect::Type type, bool active);
+
+    /**
+     * @brief Display a single line message in the GUI.
+     *
+     * @param msg       Desired message
+     * @param duration  Duration in ms
+     */
+    void displayMessage(const std::string& msg, int duration = 1000);
 
     void onLayerButton(ofxDatGuiButtonEvent e);
     void onEffectButton(ofxDatGuiButtonEvent e);
@@ -105,5 +114,12 @@ private:
 
     Scene* currentScene_;
     ShowDescription* show_;
+
     std::string configPath_;
+
+    struct Message {
+        std::string msg;
+        std::chrono::milliseconds duration;
+        std::chrono::system_clock::time_point start;
+    } msg_;
 };
