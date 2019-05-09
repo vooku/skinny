@@ -1,6 +1,13 @@
 #include "Gui.h"
 #include "Status.h"
 
+const std::string Gui::Btn::NEXT = "Next scene";
+const std::string Gui::Btn::PREV = "Previous scene";
+const std::string Gui::Btn::APPEND = "Append scene";
+const std::string Gui::Btn::SAVE = "Save";
+const std::string Gui::Btn::SAVE_AS = "Save as";
+const std::string Gui::Btn::LOAD = "Load";
+
 const ofColor Gui::BACKGROUND_COLOR = { 45, 45, 48 };
 
 Gui::Gui(ShowDescription* show) :
@@ -171,13 +178,13 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
     };
 
     const auto name = e.target->getName();
-    if (name == "Next scene") {
+    if (name == Btn::NEXT) {
         Status::instance().forward = true;
-    } else if (name == "Previous scene") {
+    } else if (name == Btn::PREV) {
         Status::instance().backward = true;
-    } else if (name == "Append scene") {
+    } else if (name == Btn::APPEND) {
         show_->appendScene();
-    } else if (name == "Load config") {
+    } else if (name == Btn::LOAD) {
         auto openFileResult = ofSystemLoadDialog("Select config file");
         if (openFileResult.bSuccess) {
             if (!show_->fromXml(openFileResult.filePath)) {
@@ -188,13 +195,13 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
             }
             Status::instance().reload = true;
         }
-    } else if (name == "Save config") {
+    } else if (name == Btn::SAVE) {
         if (!configPath_.empty()) {
             save(configPath_);
         } else {
             saveAs();
         }
-    } else if (name == "Save as") {
+    } else if (name == Btn::SAVE_AS) {
         saveAs();
     } else {
         ofLog(OF_LOG_WARNING, "Unassigned button \"%s\" pressed.", name.c_str());
@@ -348,13 +355,13 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     sceneNameInput_->setText(currentScene_ ? currentScene_->getName() : "Enter scene name");
     sceneNameInput_->onTextInputEvent(this, &Gui::onSceneNameInput);
 
-    controlButtons_.push_back(controlPanel_->addButton("Next scene"));
-    controlButtons_.push_back(controlPanel_->addButton("Previous scene"));
-    controlButtons_.push_back(controlPanel_->addButton("Append scene"));
+    controlButtons_.push_back(controlPanel_->addButton(Btn::NEXT));
+    controlButtons_.push_back(controlPanel_->addButton(Btn::PREV));
+    controlButtons_.push_back(controlPanel_->addButton(Btn::APPEND));
     controlPanel_->addBreak();
-    controlButtons_.push_back(controlPanel_->addButton("Save config"));
-    controlButtons_.push_back(controlPanel_->addButton("Save as"));
-    controlButtons_.push_back(controlPanel_->addButton("Load config"));
+    controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE));
+    controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE_AS));
+    controlButtons_.push_back(controlPanel_->addButton(Btn::LOAD));
     for (auto& btn : controlButtons_)
         btn->onButtonEvent(this, &Gui::onControlButton);
 

@@ -43,6 +43,16 @@ private:
     static const int MAX_CHARS = 20;
     static const int DELTA = 25;
 
+    // control button names
+    struct Btn {
+        static const std::string NEXT;
+        static const std::string PREV;
+        static const std::string APPEND;
+        static const std::string SAVE;
+        static const std::string SAVE_AS;
+        static const std::string LOAD;
+    };
+
     class CommonTheme : public ofxDatGuiTheme {
     public:
         CommonTheme();
