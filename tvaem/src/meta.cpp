@@ -22,22 +22,19 @@ LayerDescription::LayerDescription(unsigned int id,
 }
 
 bool LayerDescription::fromXml(ofxXmlSettings & config) {
-    valid = false;
-
     id = config.getValue("id", -1);
     path = config.getValue("path", invalid_path.string());
     blendMode = static_cast<Layer::BlendMode>(config.getValue("blendMode", static_cast<int>(Layer::BlendMode::Invalid)));
     alphaControl = config.getValue("alphaControl", static_cast<int>(id + Layer::ALPHA_MIDI_OFFSET));
     note = config.getValue("midi", invalid_midi);
     retrigger = config.getValue("retrigger", false);
+    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || note == invalid_midi);
 
-    if (id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || note == invalid_midi) {
+    if (!valid) {
         ofLog(OF_LOG_ERROR, "Layer description contains invalid values and will be skipped.");
-        return false;
     }
 
-    valid = true;
-    return true;
+    return valid;
 }
 
 void LayerDescription::toXml(ofxXmlSettings& config) const {
@@ -61,13 +58,13 @@ EffectDescription::EffectDescription(Effect::Type type, midiNote note) :
 bool EffectDescription::fromXml(ofxXmlSettings & config) {
     type = static_cast<Effect::Type>(config.getValue("type", static_cast<int>(Effect::Type::Invalid)));
     note = config.getValue("midi", invalid_midi);
+    valid = !(type == Effect::Type::Invalid || note == invalid_midi);
 
-    if (type == Effect::Type::Invalid || note == invalid_midi) {
+    if (!valid) {
         ofLog(OF_LOG_ERROR, "Effect description contains invalid values and will be skipped.");
-        return false;
     }
 
-    return true;
+    return valid;
 }
 
 void EffectDescription::toXml(ofxXmlSettings & config) const {
