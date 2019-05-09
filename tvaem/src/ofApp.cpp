@@ -155,20 +155,6 @@ void ofApp::keyReleased(ofKeyEventArgs& key)
     switch(key.key) {
     case OF_KEY_F11:
         ofGetCurrentWindow()->toggleFullscreen();
-        return;
-    default:
-        break;
-    }
-
-    switch (key.codepoint) {
-
-    case 'N':
-        //if (key.hasModifier(OF_KEY_CONTROL))
-            Status::instance().forward = true;
-        break;
-    case 'B':
-        //if (key.hasModifier(OF_KEY_CONTROL))
-            Status::instance().backward = true;
         break;
     default:
         break;
