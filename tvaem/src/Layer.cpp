@@ -35,7 +35,6 @@ Layer::Layer(int id, const std::filesystem::path& path, midiNote note) :
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
-    player_.setVolume(0);
 
     valid_ = reload(path);
 
@@ -51,6 +50,7 @@ Layer::Layer(int id, ErrorType error) :
     id_(id),
     name_(error == ErrorType::Invalid ? "Invalid description." : "Failed to load."),
     valid_(false),
+    blendMode_(BlendMode::Normal),
     alpha_(0),
     alphaControl_(ALPHA_MIDI_OFFSET + id)
 {
@@ -65,7 +65,9 @@ Layer::~Layer()
 bool Layer::reload(const std::filesystem::path& path)
 {
     player_.closeMovie();
-    return player_.load(path.string());
+    const auto success = player_.load(path.string());
+    player_.setVolume(0);
+    return success;
 }
 
 void Layer::bind() {
