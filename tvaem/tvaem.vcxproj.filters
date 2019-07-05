@@ -73,6 +73,9 @@
     <ClCompile Include="src\Mappable.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Show.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -264,6 +267,9 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\base.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Show.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>

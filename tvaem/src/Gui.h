@@ -113,7 +113,7 @@ private:
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;
 
     Scene* currentScene_;
-    ShowDescription* show_;
+    ShowDescription* showDescription_;
 
     std::string configPath_;
 

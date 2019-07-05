@@ -3,7 +3,7 @@
 #include "ofMain.h"
 #include "ofxMidi.h"
 #include "ofxArgs.h"
-#include "Scene.h"
+#include "Show.h"
 #include "meta.h"
 #include "Gui.h"
 
@@ -42,12 +42,13 @@ private:
     enum class LoadDir {
         Current, Forward, Backward
     };
+
     bool reload(LoadDir dir);
 
-    ShowDescription show_;
-    std::unique_ptr<Scene> currentScene_;
-    std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
+    std::unique_ptr<Show> show_;
+    ShowDescription showDescription_;
 
+    std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
     ofShader shader_;
     ofTexture dst_;
     int width_, height_;

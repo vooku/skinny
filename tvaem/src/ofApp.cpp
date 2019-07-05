@@ -3,8 +3,7 @@
 #include "Status.h"
 
 ofApp::ofApp(ofxArgs* args) :
-    currentScene_(std::make_unique<Scene>()),
-    gui_(&show_)
+    gui_(&showDescription_)
 {
     parseArgs(args);
 }
@@ -67,6 +66,8 @@ void ofApp::setup()
     dst_.allocate(width_, height_, GL_RGBA8);
     dst_.bindAsImage(7, GL_WRITE_ONLY);
 
+    show_ = make_unique<Show>(shader_, width_, height_);
+
     reload(LoadDir::Current);
 }
 
@@ -86,33 +87,20 @@ void ofApp::update()
     }
 
     if (Status::instance().forward) {
-        //drawGui(ofEventArgs{ });
         reload(LoadDir::Forward);
         Status::instance().forward = false;
     }
     else if (Status::instance().backward) {
-        //drawGui(ofEventArgs{});
         reload(LoadDir::Backward);
         Status::instance().backward = false;
     }
     else if (Status::instance().reload) {
-        //drawGui(ofEventArgs{});
         reload(LoadDir::Current);
         Status::instance().reload = false;
     }
 
-    if (!currentScene_)
-        return;
-
     gui_.update();
-
-    if (currentScene_->isFrameNew() || Status::instance().redraw) {
-        shader_.begin();
-        currentScene_->setupUniforms(shader_);
-        shader_.dispatchCompute(width_ / 32, height_ / 32, 1);
-        shader_.end();
-        Status::instance().redraw = currentScene_->hasActiveFX();
-    }
+    show_->update();
 
     if (ofGetFrameNum() % 300 == 0) {
         ofLog(OF_LOG_NOTICE, "fps: %f", ofGetFrameRate());
@@ -168,23 +156,15 @@ void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 
 void ofApp::newMidiMessage(ofxMidiMessage & msg)
 {
-    if (msg.channel != show_.getMidiChannel()) {
+    if (msg.channel != showDescription_.getMidiChannel()) {
         ofLog(OF_LOG_WARNING, "Received a MIDI message on an incorrect channel: %d %d %d.", msg.channel, msg.status, msg.pitch);
         return;
     }
 
-    if (msg.status == MIDI_NOTE_ON && msg.pitch == show_.getSwitchNote())
+    if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription_.getSwitchNote())
         Status::instance().forward = true;
-    else if (currentScene_) {
-        auto foundMappables = currentScene_->newMidiMessage(msg);
-        for (const auto& layer : foundMappables.layers) {
-            gui_.setActive(layer.first, layer.second);
-        }
-        for (const auto& effect : foundMappables.effects) {
-            gui_.setActive(effect.first, effect.second);
-        }
-
-        Status::instance().redraw = true;
+    else {
+        show_->newMidiMessage(msg);
     }
 }
 
@@ -235,8 +215,8 @@ void ofApp::setupMidi()
 
 bool ofApp::reload(LoadDir dir)
 {
-    if (show_.getSize() < 1) {
-        ofLog(OF_LOG_ERROR, "Cannot load next scene, %d is too few.", show_.getSize());
+    if (showDescription_.getSize() < 1) {
+        ofLog(OF_LOG_ERROR, "Cannot load next scene, %d is too few.", showDescription_.getSize());
         return false;
     }
 
@@ -245,31 +225,19 @@ bool ofApp::reload(LoadDir dir)
     switch (dir)
     {
     case LoadDir::Forward:
-        ++show_;
+        ++showDescription_;
         break;
     case LoadDir::Backward:
-        --show_;
+        --showDescription_;
         break;
     default:
         // do nothing
         break;
     }
 
-    shader_.begin();
-    currentScene_->reload(show_.currentScene());
-    currentScene_->bindTextures();
-    shader_.end();
-
-    if (currentScene_->isValid()) {
-        ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", currentScene_->getName().c_str());
-        gui_.reload(currentScene_.get());
+    if (show_->reload(showDescription_.currentScene())) {
+        Status::instance().redraw = true;
     }
-    else {
-        // TODO display in gui
-        ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", currentScene_->getName().c_str());
-    }
-
-    Status::instance().redraw = true;
 
     return true;
 }

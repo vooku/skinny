@@ -212,6 +212,7 @@
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
     <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\Show.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\base.h" />
@@ -256,6 +257,7 @@
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
     <ClInclude Include="src\Scene.h" />
+    <ClInclude Include="src\Show.h" />
     <ClInclude Include="src\Status.h" />
   </ItemGroup>
   <ItemGroup>
