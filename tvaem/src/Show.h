@@ -4,16 +4,19 @@
 class Show
 {
 public:
-    Show(ofShader& shader, int width, int height);
+    Show(int width, int height);
 
     void update();
+    void draw();
     Scene::FoundMappables newMidiMessage(ofxMidiMessage & msg);
     bool reload(const SceneDescription& description);
 
     auto getCurrentScene() const { return currentScene_; }
 
 private:
-    ofShader& shader_;
+    ofShader shader_;
+    ofTexture dst_;
     const int width_, height_;
     std::shared_ptr<Scene> currentScene_;
+
 };

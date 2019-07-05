@@ -49,9 +49,6 @@ private:
     ShowDescription showDescription_;
 
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
-    ofShader shader_;
-    ofTexture dst_;
-    int width_, height_;
 
     Gui gui_;
 };

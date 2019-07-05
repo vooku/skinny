@@ -43,30 +43,9 @@ void ofApp::setup()
         return;
     }
 
-    width_ = ofGetCurrentWindow()->getWidth();
-    height_ = ofGetCurrentWindow()->getHeight();
-
     setupMidi();
 
-#ifndef NDEBUG
-    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/shader.comp")) {
-#else
-    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "shader.comp")) {
-#endif
-        ofLog(OF_LOG_FATAL_ERROR, "Could not load shader.");
-        Status::instance().exit = true;
-        return;
-    }
-    if (!shader_.linkProgram()) {
-        ofLog(OF_LOG_FATAL_ERROR, "Could not link shader.");
-        Status::instance().exit = true;
-        return;
-    }
-
-    dst_.allocate(width_, height_, GL_RGBA8);
-    dst_.bindAsImage(7, GL_WRITE_ONLY);
-
-    show_ = make_unique<Show>(shader_, width_, height_);
+    show_ = make_unique<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
 
     reload(LoadDir::Current);
 }
@@ -111,7 +90,7 @@ void ofApp::update()
 void ofApp::draw()
 {
     ofBackground(ofColor::black);
-    dst_.draw(0, 0);
+    show_->draw();
 }
 
 
@@ -220,7 +199,7 @@ void ofApp::setupMidi()
 bool ofApp::reload(LoadDir dir)
 {
     if (showDescription_.getSize() < 1) {
-        ofLog(OF_LOG_ERROR, "Cannot load next scene, %d is too few.", showDescription_.getSize());
+        ofLog(OF_LOG_ERROR, "Cannot load a scene from and empty show.");
         return false;
     }
 
