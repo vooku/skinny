@@ -192,35 +192,27 @@ void ofApp::usage()
 {
     std::cout <<
         "Usage:\n"
-        "    -h, --help, --usage Print this message.\n"
-        "    --list-midiports List available MIDI ports.\n"
-        "    --midiport <number> Try to open up a MIDI port <number> for input as listed by --list-midiports.\n"
-        "    --midiports-all Open all available MIDI ports for input.\n"
-        "    --console Log to console."
+        "    -h, --help, --usage    Print this message.\n"
+        "    --midiport <number>    Try to open up a MIDI port <number> for input.\n"
+        "    --console              Log to console instead to a file."
         "    -v, --verbose Use verbose mode."
         << std::endl;
 }
 
 void ofApp::parseArgs(ofxArgs* args)
 {
-    if (args->contains("-h") || args->contains("-help") || args->contains("-usage")) {
+    if (args->contains("-h") || args->contains("--help") || args->contains("--usage")) {
         usage();
         settings_.cancelSetup = true;
         return;
     }
 
-    if (args->contains("--list-midiports")) {
-        ofxMidiIn::listPorts();
-        settings_.cancelSetup = true;
-        return;
+    if (args->contains("--midiport")) {
+        settings_.midiPorts.push_back(args->getInt("--midiport", 0));
     }
-
-    if (args->contains("--midiports-all")) {
+    else { // --midiports-all
         for (auto i = 0; i < ofxMidiIn::getNumPorts(); ++i)
             settings_.midiPorts.push_back(i);
-    }
-    else {
-        settings_.midiPorts.push_back(args->getInt("--midiport", 0));
     }
 
     settings_.verbose = args->contains("-v") || args->contains("--verbose");
@@ -229,8 +221,10 @@ void ofApp::parseArgs(ofxArgs* args)
 
 void ofApp::setupMidi()
 {
-    if (settings_.verbose)
+    if (settings_.verbose) {
         ofxMidiIn::listPorts();
+    }
+
     for (auto portNumber : settings_.midiPorts) {
         midiInputs_.push_back(std::make_unique<ofxMidiIn>());
         midiInputs_.back()->openPort(portNumber);

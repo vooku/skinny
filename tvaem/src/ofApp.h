@@ -33,8 +33,9 @@ private:
         bool console     = false;
     } settings_;
 
+    [[deprecated("Console configuration is going to be removed soon.")]]
     static void usage();
-    [[deprecated("Console configuration is going to be removed eventually")]]
+    [[deprecated("Console configuration is going to be removed soon.")]]
     void parseArgs(ofxArgs* args);
     void setupMidi();
 
