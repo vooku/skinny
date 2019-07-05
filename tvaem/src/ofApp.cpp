@@ -3,7 +3,7 @@
 #include "Status.h"
 
 ofApp::ofApp(ofxArgs* args) :
-    gui_(&showDescription_)
+    gui_(showDescription_)
 {
     parseArgs(args);
 }
@@ -134,17 +134,12 @@ void ofApp::exitGui(ofEventArgs&) {
 //--------------------------------------------------------------
 void ofApp::keyReleased(ofKeyEventArgs& key)
 {
-    // 0-9 in ascii
-    //if (key >= 0x30 && key < 0x3A) {
-    //    // key to index 1->0, 0->9
-    //    currentScene_->playPauseLayer((key - 0x30 + 9) % 10);
-    //}
-
     switch(key.key) {
     case OF_KEY_F11:
         ofGetCurrentWindow()->toggleFullscreen();
         break;
     default:
+        // nothing
         break;
     }
 }
@@ -164,7 +159,16 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
     if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription_.getSwitchNote())
         Status::instance().forward = true;
     else {
-        show_->newMidiMessage(msg);
+        auto foundMappables = show_->newMidiMessage(msg);
+
+        for (const auto& layer : foundMappables.layers) {
+            gui_.setActive(layer.first, layer.second);
+        }
+        for (const auto& effect : foundMappables.effects) {
+            gui_.setActive(effect.first, effect.second);
+        }
+
+        Status::instance().redraw = true;
     }
 }
 
@@ -236,7 +240,13 @@ bool ofApp::reload(LoadDir dir)
     }
 
     if (show_->reload(showDescription_.currentScene())) {
+        ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription_.currentScene().name.c_str());
+        gui_.reload(show_->getCurrentScene());
         Status::instance().redraw = true;
+    }
+    else {
+        // TODO display in gui
+        ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", showDescription_.currentScene().name.c_str());
     }
 
     return true;

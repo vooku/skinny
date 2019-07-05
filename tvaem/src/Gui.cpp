@@ -10,7 +10,7 @@ const std::string Gui::Btn::LOAD = "Load";
 
 const ofColor Gui::BACKGROUND_COLOR = { 45, 45, 48 };
 
-Gui::Gui(ShowDescription* show) :
+Gui::Gui(ShowDescription& show) :
     currentScene_(nullptr),
     showDescription_(show)
 {
@@ -53,12 +53,12 @@ void Gui::draw() const
     //if (blendModePanel_) blendModePanel_->draw();
 }
 
-void Gui::reload(Scene* newScene)
+void Gui::reload(std::shared_ptr<Scene> newScene)
 {
     currentScene_ = newScene;
     sceneNameInput_->setText(currentScene_->getName());
     masterAlphaInput_->setText(std::to_string(currentScene_->getAlphaControl()));
-    midiChannelInput_->setText(std::to_string(showDescription_->getMidiChannel()));
+    midiChannelInput_->setText(std::to_string(showDescription_.getMidiChannel()));
 
     // layers
     //for (auto& toggle : layerPlayToggles_) {
@@ -153,7 +153,7 @@ void Gui::onLayerButton(ofxDatGuiButtonEvent e)
     auto openFileResult = ofSystemLoadDialog("Select a video on layer " + e.target->getName());
     if (openFileResult.bSuccess) {
         auto idx = std::stoi(e.target->getName());
-        auto& layerDescription = showDescription_->scenes_[showDescription_->currentIdx_].layers[idx];
+        auto& layerDescription = showDescription_.scenes_[showDescription_.currentIdx_].layers[idx];
         if (layerDescription.valid)
             layerDescription.path = openFileResult.getPath();
         else
@@ -171,7 +171,7 @@ void Gui::onEffectButton(ofxDatGuiButtonEvent e)
 void Gui::onControlButton(ofxDatGuiButtonEvent e)
 {
     auto save = [&](const std::string& path) {
-        if (!showDescription_->toXml(path)) {
+        if (!showDescription_.toXml(path)) {
             ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
             displayMessage("Cannot save config file to " + path, 1000);
         } else {
@@ -193,13 +193,13 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
     } else if (name == Btn::PREV) {
         Status::instance().backward = true;
     } else if (name == Btn::APPEND) {
-        showDescription_->appendScene();
+        showDescription_.appendScene();
     } else if (name == Btn::LOAD) {
         auto openFileResult = ofSystemLoadDialog("Select config file");
         if (openFileResult.bSuccess) {
-            if (!showDescription_->fromXml(openFileResult.filePath)) {
+            if (!showDescription_.fromXml(openFileResult.filePath)) {
                 ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
-                showDescription_->appendScene();
+                showDescription_.appendScene();
             } else {
                 configPath_ = openFileResult.filePath;
             }
@@ -222,7 +222,7 @@ void Gui::onLayerMidiInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
     const auto note = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_->scenes_[showDescription_->currentIdx_].layers[idx].note = note ;
+    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].note = note ;
     if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setNote(note);
 }
@@ -231,7 +231,7 @@ void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
     const auto control = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_->scenes_[showDescription_->currentIdx_].layers[idx].alphaControl = control;
+    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].alphaControl = control;
     if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setAlphaControl(control);
 }
@@ -239,7 +239,7 @@ void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto control = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_->scenes_[showDescription_->currentIdx_].alphaControl = control;
+    showDescription_.scenes_[showDescription_.currentIdx_].alphaControl = control;
     if (currentScene_)
         currentScene_->setAlphaControl(control);
 }
@@ -248,14 +248,14 @@ void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
 {
     auto idx = std::stoi(e.target->getName());
     auto note = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_->scenes_[showDescription_->currentIdx_].effects[idx].note = note;
+    showDescription_.scenes_[showDescription_.currentIdx_].effects[idx].note = note;
     if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->effects_[static_cast<Effect::Type>(idx)].setNote(note);
 }
 
 void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
 {
-    showDescription_->scenes_[showDescription_->currentIdx_].name = e.text;
+    showDescription_.scenes_[showDescription_.currentIdx_].name = e.text;
     if (currentScene_)
         currentScene_->name_ = e.text;
 }
@@ -263,7 +263,7 @@ void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
 void Gui::onMidiChannelInput(ofxDatGuiTextInputEvent e)
 {
     auto channel = std::min(std::max(std::stoi(e.text), 1), 16);
-    showDescription_->setMidiChannel(channel);
+    showDescription_.setMidiChannel(channel);
     midiChannelInput_->setText(std::to_string(channel));
 }
 
@@ -271,7 +271,7 @@ void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
     const auto blendMode = static_cast<Layer::BlendMode>(e.child);
-    showDescription_->scenes_[showDescription_->currentIdx_].layers[idx].blendMode = blendMode;
+    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].blendMode = blendMode;
     if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setBlendMode(blendMode);
 }
@@ -317,7 +317,7 @@ void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
 {
     const auto retrigger = e.checked;
     const auto idx = std::stoi(e.target->getName());
-    showDescription_->scenes_[showDescription_->currentIdx_].layers[idx].retrigger = retrigger;
+    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].retrigger = retrigger;
     if (currentScene_ && currentScene_->layers_[idx])
         currentScene_->layers_[idx]->setRetrigger(retrigger);
 }
@@ -386,7 +386,7 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     controlPanel_->addBreak();
     midiChannelInput_ = controlPanel_->addTextInput("Channel");
     midiChannelInput_->setInputType(ofxDatGuiInputType::NUMERIC);
-    midiChannelInput_->setText(std::to_string(showDescription_->getMidiChannel()));
+    midiChannelInput_->setText(std::to_string(showDescription_.getMidiChannel()));
     midiChannelInput_->onTextInputEvent(this, &Gui::onMidiChannelInput);
 
     controlPanel_->addBreak();

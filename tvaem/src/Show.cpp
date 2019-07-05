@@ -5,7 +5,7 @@ Show::Show(ofShader& shader, int width, int height) :
     shader_(shader),
     width_(width),
     height_(height),
-    currentScene_(std::make_unique<Scene>())
+    currentScene_(std::make_shared<Scene>())
 {}
 
 void Show::update()
@@ -22,17 +22,9 @@ void Show::update()
     }
 }
 
-void Show::newMidiMessage(ofxMidiMessage& msg)
+Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
 {
-    auto foundMappables = currentScene_->newMidiMessage(msg);
-    for (const auto& layer : foundMappables.layers) {
-        //gui_.setActive(layer.first, layer.second);
-    }
-    for (const auto& effect : foundMappables.effects) {
-        //gui_.setActive(effect.first, effect.second);
-    }
-
-    Status::instance().redraw = true;
+    return currentScene_->newMidiMessage(msg);
 }
 
 bool Show::reload(const SceneDescription& description)
@@ -41,15 +33,6 @@ bool Show::reload(const SceneDescription& description)
     currentScene_->reload(description);
     currentScene_->bindTextures();
     shader_.end();
-
-    if (currentScene_->isValid()) {
-        ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", currentScene_->getName().c_str());
-        //gui_.reload(currentScene_.get());
-    }
-    else {
-        // TODO display in gui
-        ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", currentScene_->getName().c_str());
-    }
 
     return currentScene_->isValid();
 }

@@ -12,11 +12,11 @@ public:
     static const ofColor BACKGROUND_COLOR;
 
     Gui() = delete;
-    explicit Gui(ShowDescription* show);
+    explicit Gui(ShowDescription& show);
 
     void setup();
     void draw() const;
-    void reload(Scene* newScene);
+    void reload(std::shared_ptr<Scene> newScene);
     void update();
     void setActive(int layerId, bool active);
     void setActive(Effect::Type type, bool active);
@@ -112,8 +112,8 @@ private:
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;
 
-    Scene* currentScene_;
-    ShowDescription* showDescription_;
+    std::shared_ptr<Scene> currentScene_;
+    ShowDescription& showDescription_;
 
     std::string configPath_;
 

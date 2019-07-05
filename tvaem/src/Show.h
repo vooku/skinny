@@ -7,13 +7,13 @@ public:
     Show(ofShader& shader, int width, int height);
 
     void update();
-    void newMidiMessage(ofxMidiMessage & msg);
+    Scene::FoundMappables newMidiMessage(ofxMidiMessage & msg);
     bool reload(const SceneDescription& description);
 
-
+    auto getCurrentScene() const { return currentScene_; }
 
 private:
     ofShader& shader_;
     const int width_, height_;
-    std::unique_ptr<Scene> currentScene_;
+    std::shared_ptr<Scene> currentScene_;
 };
