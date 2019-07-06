@@ -13,6 +13,8 @@ public:
     virtual void playPause() { active_ = !active_ && !mute_; }
     virtual bool isPlaying() const { return active_; }
 
+    // TODO virtual bool newMidiMessage(ofxMidiMessage& msg);
+
     virtual midiNote getNote() const { return note_; }
 
     virtual void setNote(midiNote note) { note_ = note; }

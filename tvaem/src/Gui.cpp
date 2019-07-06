@@ -94,12 +94,13 @@ void Gui::reload(std::shared_ptr<Scene> newScene)
         toggle->setChecked(false);
     }
 
-    auto& effects = currentScene_->getEffects();
-    for (auto i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-        auto type = static_cast<Effect::Type>(i);
-        effectButtons_[i]->setLabel(Effect::c_str(type));
-        effectMidiInputs_[i]->setText(std::to_string(effects.at(type).getNote()));
-    }
+    // TODO
+    //auto& effects = currentScene_->getEffects();
+    //for (auto i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
+    //    auto type = static_cast<Effect::Type>(i);
+    //    effectButtons_[i]->setLabel(Effect::c_str(type));
+    //    effectMidiInputs_[i]->setText(std::to_string(effects.at(type).getNote()));
+    //}
 
     draw();
 }
@@ -246,11 +247,12 @@ void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
 
 void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
 {
-    auto idx = std::stoi(e.target->getName());
-    auto note = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_.scenes_[showDescription_.currentIdx_].effects[idx].note = note;
-    if (currentScene_ && currentScene_->layers_[idx])
-        currentScene_->effects_[static_cast<Effect::Type>(idx)].setNote(note);
+    // TODO
+    //auto idx = std::stoi(e.target->getName());
+    //auto note = static_cast<midiNote>(std::stoi(e.text));
+    //showDescription_.scenes_[showDescription_.currentIdx_].effects[idx].note = note;
+    //if (currentScene_ && currentScene_->layers_[idx])
+    //    currentScene_->effects_[static_cast<Effect::Type>(idx)].setNote(note);
 }
 
 void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
@@ -287,9 +289,10 @@ void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 
 void Gui::onEffectPlayToggle(ofxDatGuiToggleEvent e)
 {
-    const auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
-    if (currentScene_)
-        currentScene_->playPauseEffect(type);
+    // TODO
+    //const auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
+    //if (currentScene_)
+    //    currentScene_->playPauseEffect(type);
 }
 
 void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
@@ -304,13 +307,14 @@ void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 
 void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 {
-    const auto mute = e.checked;
-    const auto idx = std::stoi(e.target->getName());
-    const auto type = static_cast<Effect::Type>(idx);
-    if (currentScene_)
-        currentScene_->effects_[type].setMute(mute);
-    if (mute)
-        effectPlayToggles_[idx]->setChecked(false);
+    // TODO
+    //const auto mute = e.checked;
+    //const auto idx = std::stoi(e.target->getName());
+    //const auto type = static_cast<Effect::Type>(idx);
+    //if (currentScene_)
+    //    currentScene_->effects_[type].setMute(mute);
+    //if (mute)
+    //    effectPlayToggles_[idx]->setChecked(false);
 }
 
 void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
