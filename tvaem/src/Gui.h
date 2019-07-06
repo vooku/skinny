@@ -31,7 +31,6 @@ public:
     void displayMessage(const std::string& msg, int duration = 1000);
 
     void onLayerButton(ofxDatGuiButtonEvent e);
-    void onEffectButton(ofxDatGuiButtonEvent e);
     void onControlButton(ofxDatGuiButtonEvent e);
 
     void onLayerMidiInput(ofxDatGuiTextInputEvent e);
@@ -42,6 +41,7 @@ public:
     void onMidiChannelInput(ofxDatGuiTextInputEvent e);
 
     void onBlendModeDropdown(ofxDatGuiDropdownEvent e);
+    void onEffectDropdown(ofxDatGuiDropdownEvent e);
 
     void onLayerPlayToggle(ofxDatGuiToggleEvent e);
     void onEffectPlayToggle(ofxDatGuiToggleEvent e);
@@ -108,7 +108,7 @@ private:
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerMuteToggles_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerRetriggerToggles_;
     std::array<ofxDatGuiDropdown*,  MAX_LAYERS> blendModeDropdowns_;
-    std::array<ofxDatGuiButton*,    static_cast<int>(Effect::Type::Count)> effectButtons_;
+    std::array<ofxDatGuiDropdown*,  static_cast<int>(Effect::Type::Count)> effectDropdowns_;
     std::array<ofxDatGuiTextInput*, static_cast<int>(Effect::Type::Count)> effectMidiInputs_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;

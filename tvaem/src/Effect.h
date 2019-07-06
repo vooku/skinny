@@ -2,7 +2,6 @@
 
 #include "Mappable.h"
 
-// TODO Using the enum as a key in a map seems like bad design.
 class Effect : public Mappable {
 public:
     enum class Type {

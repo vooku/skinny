@@ -62,10 +62,6 @@ void Gui::reload()
     midiChannelInput_->setText(std::to_string(showDescription_.getMidiChannel()));
 
     // layers
-    //for (auto& toggle : layerPlayToggles_) {
-    //    toggle->setChecked(false);
-    //}
-
     auto& layers = show_->getCurrentScene()->getLayers();
     assert(layerButtons_.size() == layers.size());
 
@@ -91,14 +87,11 @@ void Gui::reload()
     }
 
     // effects
-    for (auto& toggle : effectPlayToggles_) {
-        toggle->setChecked(false);
-    }
-
     for (auto i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-        auto type = static_cast<Effect::Type>(i);
-        effectButtons_[i]->setLabel(Effect::c_str(type));
-        effectMidiInputs_[i]->setText(std::to_string(show_->effects_.at(type).getNote()));
+        effectPlayToggles_[i]->setChecked(false);
+        effectMuteToggles_[i]->setChecked(false);
+        // TODO effectDropdowns_[i]->select()
+
     }
 
     draw();
@@ -167,12 +160,6 @@ void Gui::onLayerButton(ofxDatGuiButtonEvent e)
             layerDescription = { static_cast<unsigned int>(idx), openFileResult.getPath() };
         Status::instance().reload = true;
     }
-}
-
-void Gui::onEffectButton(ofxDatGuiButtonEvent e)
-{
-    //printf("Effect button presed.\n");
-    // nothing
 }
 
 void Gui::onControlButton(ofxDatGuiButtonEvent e)
@@ -280,6 +267,11 @@ void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
     showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].blendMode = blendMode;
     if (show_->getCurrentScene() && show_->getCurrentScene()->layers_[idx])
         show_->getCurrentScene()->layers_[idx]->setBlendMode(blendMode);
+}
+
+void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
+{
+    // TODO
 }
 
 void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
@@ -473,10 +465,15 @@ void Gui::setupVideoFxPanel(glm::ivec2& pos)
     videoFxPanel_->addLabel("Effect");
     videoFxPanel_->addBreak();
 
-    for (auto& button : effectButtons_) {
-        button = videoFxPanel_->addButton({});
-        button->onButtonEvent(this, &Gui::onEffectButton);
-        button->setEnabled(false);
+    std::vector<string> options;
+    for (auto i = static_cast<int>(Effect::Type::Inverse); i < static_cast<int>(Effect::Type::Count); ++i)
+        options.push_back(Effect::c_str(static_cast<Effect::Type>(i)));
+
+    for (auto i = 0; i < effectDropdowns_.size(); ++i) {
+        effectDropdowns_[i] = videoFxPanel_->addDropdown("Select...", options);
+        effectDropdowns_[i]->setName(std::to_string(i));
+        effectDropdowns_[i]->select(i);
+        effectDropdowns_[i]->onDropdownEvent(this, &Gui::onEffectDropdown);
     }
 }
 
