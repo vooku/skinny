@@ -90,8 +90,8 @@ void Gui::reload()
     for (auto i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
         effectPlayToggles_[i]->setChecked(false);
         effectMuteToggles_[i]->setChecked(false);
-        // TODO effectDropdowns_[i]->select()
-
+        effectDropdowns_[i]->select(static_cast<int>(show_->effects_[i]->type));
+        effectMidiInputs_[i]->setText(std::to_string(show_->effects_[i]->getNote()));
     }
 
     draw();
@@ -217,7 +217,7 @@ void Gui::onLayerMidiInput(ofxDatGuiTextInputEvent e)
     const auto idx = std::stoi(e.target->getName());
     const auto note = static_cast<midiNote>(std::stoi(e.text));
     showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].note = note ;
-    if (show_->getCurrentScene() && show_->getCurrentScene()->layers_[idx])
+    if (show_ && show_->getCurrentScene()->layers_[idx])
         show_->getCurrentScene()->layers_[idx]->setNote(note);
 }
 
@@ -226,7 +226,7 @@ void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
     const auto idx = std::stoi(e.target->getName());
     const auto control = static_cast<midiNote>(std::stoi(e.text));
     showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].alphaControl = control;
-    if (show_->getCurrentScene() && show_->getCurrentScene()->layers_[idx])
+    if (show_ && show_->getCurrentScene()->layers_[idx])
         show_->getCurrentScene()->layers_[idx]->setAlphaControl(control);
 }
 
@@ -242,8 +242,8 @@ void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
 {
     auto idx = std::stoi(e.target->getName());
     auto note = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_.scenes_[showDescription_.currentIdx_].effects[idx].note = note;
-    show_->effects_[static_cast<Effect::Type>(idx)].setNote(note);
+    // TODO showDescription_.scenes_[showDescription_.currentIdx_].effects[idx].note = note;
+    show_->effects_[idx]->setNote(note);
 }
 
 void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
@@ -265,13 +265,18 @@ void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
     const auto idx = std::stoi(e.target->getName());
     const auto blendMode = static_cast<Layer::BlendMode>(e.child);
     showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].blendMode = blendMode;
-    if (show_->getCurrentScene() && show_->getCurrentScene()->layers_[idx])
+    if (show_ && show_->getCurrentScene()->layers_[idx])
         show_->getCurrentScene()->layers_[idx]->setBlendMode(blendMode);
 }
 
 void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
 {
+    const auto idx = std::stoi(e.target->getName());
+    const auto type = static_cast<Effect::Type>(e.child);
+    const auto note = show_->effects_[idx]->getNote();
     // TODO
+    if (show_)
+        show_->effects_[idx].reset(new Effect(type, note));
 }
 
 void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
@@ -285,15 +290,15 @@ void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 
 void Gui::onEffectPlayToggle(ofxDatGuiToggleEvent e)
 {
-    const auto type = static_cast<Effect::Type>(std::stoi(e.target->getName()));
-    show_->playPauseEffect(type);
+    const auto idx = std::stoi(e.target->getName());
+    show_->playPauseEffect(idx);
 }
 
 void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 {
     const auto mute = e.checked;
     const auto idx = std::stoi(e.target->getName());
-    if (show_->getCurrentScene() && show_->getCurrentScene()->layers_[idx])
+    if (show_ && show_->getCurrentScene()->layers_[idx])
         show_->getCurrentScene()->layers_[idx]->setMute(mute);
     if (mute)
         layerPlayToggles_[idx]->setChecked(false);
@@ -303,10 +308,9 @@ void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 {
     const auto mute = e.checked;
     const auto idx = std::stoi(e.target->getName());
-    const auto type = static_cast<Effect::Type>(idx);
-    show_->effects_[type].setMute(mute);
-    if (mute)
-        effectPlayToggles_[idx]->setChecked(false);
+    show_->effects_[idx]->setMute(mute);
+    // TODO if (mute)
+    //    effectPlayToggles_[idx]->setChecked(false);
 }
 
 void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
@@ -314,7 +318,7 @@ void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
     const auto retrigger = e.checked;
     const auto idx = std::stoi(e.target->getName());
     showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].retrigger = retrigger;
-    if (show_->getCurrentScene() && show_->getCurrentScene()->layers_[idx])
+    if (show_ && show_->getCurrentScene()->layers_[idx])
         show_->getCurrentScene()->layers_[idx]->setRetrigger(retrigger);
 }
 

@@ -53,14 +53,14 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
     const auto note = msg.pitch;
 
     for (auto& effect : effects_) {
-        if (effect.second.getNote() == note) {
+        if (effect->getNote() == note) {
             if (noteOn) {
-                effect.second.play();
-                result.effects.insert({ effect.first, true });
+                effect->play();
+                result.effects.insert({ effect->type, true });
             }
             else if (noteOff) {
-                effect.second.pause();
-                result.effects.insert({ effect.first, false });
+                effect->pause();
+                result.effects.insert({ effect->type, false });
             }
         }
     }
@@ -74,8 +74,9 @@ bool Show::reload(const SceneDescription& description)
     currentScene_->reload(description);
     currentScene_->bindTextures();
 
-    for (const auto& effect : description.effects) {
-        effects_[effect.type] = Effect(effect.note);
+    for (auto i = 0; i < description.effects.size(); ++i) {
+        const auto& effect = description.effects[i];
+        effects_[i].reset(new Effect(effect.type, effect.note));
     }
 
     shader_.end();
@@ -83,35 +84,36 @@ bool Show::reload(const SceneDescription& description)
     return currentScene_->isValid();
 }
 
-void Show::playPauseEffect(Effect::Type type)
+void Show::playPauseEffect(int i)
 {
-    effects_.at(type).playPause();
+    effects_[i]->playPause();
 }
 
 void Show::setupUniforms() const
 {
     currentScene_->setupUniforms(shader_);
 
-    auto it = effects_.find(Effect::Type::Inverse);
-    if (it != effects_.end())
-        uniforms_.inverse = it->second.isPlaying();
-    it = effects_.find(Effect::Type::ReducePalette);
-    if (it != effects_.end())
-        uniforms_.reducePalette = it->second.isPlaying();
-    it = effects_.find(Effect::Type::ColorShift);
-    if (it != effects_.end())
-        uniforms_.colorShift = it->second.isPlaying();
-    it = effects_.find(Effect::Type::ColorShift2);
-    if (it != effects_.end())
-        uniforms_.colorShift2 = it->second.isPlaying();
+    for (auto i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
+        effectUniforms_[static_cast<Effect::Type>(i)] = false;
+    }
 
-    shader_.setUniform1i("invert", uniforms_.inverse);
-    shader_.setUniform1i("reducePalette", uniforms_.reducePalette);
-    shader_.setUniform1i("colorShift", uniforms_.colorShift);
-    shader_.setUniform1i("colorShift2", uniforms_.colorShift2);
+    for (const auto& effect : effects_) {
+        effectUniforms_[effect->type] = effect->isPlaying() || effectUniforms_[effect->type];
+    }
+
+    shader_.setUniform1i("invert", effectUniforms_[Effect::Type::Inverse]);
+    shader_.setUniform1i("reducePalette", effectUniforms_[Effect::Type::ReducePalette]);
+    shader_.setUniform1i("colorShift", effectUniforms_[Effect::Type::ColorShift]);
+    shader_.setUniform1i("colorShift2", effectUniforms_[Effect::Type::ColorShift2]);
 }
 
 bool Show::hasActiveFX() const
 {
-    return uniforms_.inverse || uniforms_.reducePalette || uniforms_.colorShift || uniforms_.colorShift2;
+    for (const auto& fu : effectUniforms_) {
+        if (fu.second) {
+            return true;
+        }
+    }
+
+    return false;
 }

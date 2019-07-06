@@ -11,13 +11,12 @@ public:
         ColorShift    =  2,
         ColorShift2   =  3,
         Count         =  4
-    };
+    } const type;
 
     static const int MIDI_OFFSET = 48;
 
     static char* c_str(Type);
 
-    Effect() = default;
-    explicit Effect(midiNote note);
-
+    Effect();
+    Effect(Type type, midiNote note);
 };

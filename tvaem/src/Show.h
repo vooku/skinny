@@ -6,7 +6,7 @@ class Gui;
 class Show
 {
 public:
-    typedef std::unordered_map<Effect::Type, Effect> Effects;
+    typedef std::array<std::unique_ptr<Effect>, MAX_EFFECTS> Effects;
 
     friend class Gui;
 
@@ -16,18 +16,13 @@ public:
     void draw();
     Scene::FoundMappables newMidiMessage(ofxMidiMessage & msg);
     bool reload(const SceneDescription& description);
-    void playPauseEffect(Effect::Type type);
+    void playPauseEffect(int i);
 
     auto getCurrentScene() const { return currentScene_; }
     const auto& getEffects() const { return effects_; }
 
 private:
-    struct Uniforms {
-        bool inverse = false;
-        bool reducePalette = false;
-        bool colorShift = false;
-        bool colorShift2 = false;
-    } mutable uniforms_;
+    mutable std::map<Effect::Type, bool> effectUniforms_;
 
     void setupUniforms() const;
     bool hasActiveFX() const;

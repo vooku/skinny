@@ -15,4 +15,12 @@ char* Effect::c_str(Type type) {
     }
 }
 
-Effect::Effect(midiNote note) : Mappable(note) {}
+Effect::Effect() :
+    Mappable(),
+    type(Type::Inverse)
+{}
+
+Effect::Effect(Type type, midiNote note) :
+    Mappable(note),
+    type(type)
+{}
