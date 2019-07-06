@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxDatGui.h"
-#include "Scene.h"
+#include "Show.h"
 #include <array>
 #include <experimental/filesystem>
 #include <chrono>
@@ -12,12 +12,13 @@ public:
     static const ofColor BACKGROUND_COLOR;
 
     Gui() = delete;
-    explicit Gui(ShowDescription& show);
+    Gui(ShowDescription& showDescription);
 
     void setup();
     void draw() const;
-    void reload(std::shared_ptr<Scene> newScene);
+    void reload();
     void update();
+    void setShow(std::shared_ptr<Show> show);
     void setActive(int layerId, bool active);
     void setActive(Effect::Type type, bool active);
 
@@ -112,7 +113,7 @@ private:
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;
 
-    std::shared_ptr<Scene> currentScene_;
+    std::shared_ptr<Show> show_;
     ShowDescription& showDescription_;
 
     std::string configPath_;

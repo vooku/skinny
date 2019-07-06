@@ -83,6 +83,11 @@ bool Show::reload(const SceneDescription& description)
     return currentScene_->isValid();
 }
 
+void Show::playPauseEffect(Effect::Type type)
+{
+    effects_.at(type).playPause();
+}
+
 void Show::setupUniforms() const
 {
     currentScene_->setupUniforms(shader_);

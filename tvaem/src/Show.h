@@ -1,10 +1,14 @@
 #pragma once
 #include "Scene.h"
 
+class Gui;
+
 class Show
 {
 public:
     typedef std::unordered_map<Effect::Type, Effect> Effects;
+
+    friend class Gui;
 
     Show(int width, int height);
 
@@ -12,6 +16,7 @@ public:
     void draw();
     Scene::FoundMappables newMidiMessage(ofxMidiMessage & msg);
     bool reload(const SceneDescription& description);
+    void playPauseEffect(Effect::Type type);
 
     auto getCurrentScene() const { return currentScene_; }
     const auto& getEffects() const { return effects_; }

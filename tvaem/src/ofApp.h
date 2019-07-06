@@ -45,7 +45,7 @@ private:
 
     bool reload(LoadDir dir);
 
-    std::unique_ptr<Show> show_;
+    std::shared_ptr<Show> show_;
     ShowDescription showDescription_;
 
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;

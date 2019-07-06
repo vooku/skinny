@@ -45,7 +45,8 @@ void ofApp::setup()
 
     setupMidi();
 
-    show_ = make_unique<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
+    show_ = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
+    gui_.setShow(show_);
 
     reload(LoadDir::Current);
 }
@@ -220,7 +221,7 @@ bool ofApp::reload(LoadDir dir)
 
     if (show_->reload(showDescription_.currentScene())) {
         ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription_.currentScene().name.c_str());
-        gui_.reload(show_->getCurrentScene());
+        gui_.reload();
         Status::instance().redraw = true;
     }
     else {
