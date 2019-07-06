@@ -2,7 +2,6 @@
 
 #include "OfxMidi.h"
 #include "meta.h"
-#include <unordered_map>
 
 class Gui;
 
@@ -20,8 +19,8 @@ public:
      * Return which layers / effects were (de)activated.
      */
     struct FoundMappables {
-        std::unordered_map<int, bool> layers;
-        std::unordered_map<Effect::Type, bool> effects;
+        std::vector<std::pair<int, bool>> layers;
+        std::vector<std::pair<int, bool>> effects;
     };
     FoundMappables newMidiMessage(const ofxMidiMessage & msg);
 

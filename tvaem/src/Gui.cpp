@@ -121,23 +121,23 @@ void Gui::setShow(std::shared_ptr<Show> show)
     show_ = show;
 }
 
-void Gui::setActive(int layerId, bool active)
+void Gui::setActiveLayer(int idx, bool active)
 {
-    if (layerId < layerPlayToggles_.size()) {
-        layerPlayToggles_[layerId]->setChecked(active);
+    if (idx < layerPlayToggles_.size()) {
+        layerPlayToggles_[idx]->setChecked(active);
     }
     else {
-        ofLog(OF_LOG_WARNING, "Trying to activate layer #%d out of bounds", layerId);
+        ofLog(OF_LOG_WARNING, "Trying to activate layer #%d out of bounds", idx);
     }
 }
 
-void Gui::setActive(Effect::Type type, bool active)
+void Gui::setActiveEffect(int idx, bool active)
 {
-    if (static_cast<int>(type) < effectPlayToggles_.size()) {
-        effectPlayToggles_.at(static_cast<int>(type))->setChecked(active);
+    if (idx < effectPlayToggles_.size()) {
+        effectPlayToggles_[idx]->setChecked(active);
     }
     else {
-        ofLog(OF_LOG_WARNING, "Trying to activate effect #%d out of bounds", static_cast<int>(type));
+        ofLog(OF_LOG_WARNING, "Trying to activate effect #%d out of bounds", idx);
     }
 }
 
@@ -242,7 +242,7 @@ void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
 {
     auto idx = std::stoi(e.target->getName());
     auto note = static_cast<midiNote>(std::stoi(e.text));
-    // TODO showDescription_.scenes_[showDescription_.currentIdx_].effects[idx].note = note;
+    showDescription_.effects_[idx].note = note;
     show_->effects_[idx]->setNote(note);
 }
 
@@ -274,7 +274,7 @@ void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
     const auto idx = std::stoi(e.target->getName());
     const auto type = static_cast<Effect::Type>(e.child);
     const auto note = show_->effects_[idx]->getNote();
-    // TODO
+    showDescription_.effects_[idx].type = type;
     if (show_)
         show_->effects_[idx].reset(new Effect(type, note));
 }

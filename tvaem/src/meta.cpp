@@ -76,11 +76,7 @@ void EffectDescription::toXml(ofxXmlSettings & config) const {
 SceneDescription::SceneDescription(const std::string& name, midiNote alphaControl) :
     name(name),
     alphaControl(alphaControl)
-{
-    for (auto i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
-        effects.push_back(EffectDescription(static_cast<Effect::Type>(i)));
-    }
-}
+{}
 
 void SceneDescription::fromXml(ofxXmlSettings & config) {
     name = config.getValue("name", "");
@@ -92,21 +88,6 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
         if (layer.fromXml(config))
             layers[layer.id] = std::move(layer);
         config.popTag(); // layer
-    }
-
-    if (config.getNumTags("effect") == 0) {
-        // create default effects
-        for (auto i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
-            effects.push_back(EffectDescription(static_cast<Effect::Type>(i)));
-        }
-    } else {
-        for (auto i = 0; i < config.getNumTags("effect"); i++) {
-            config.pushTag("effect", i);
-            EffectDescription effect;
-            if (effect.fromXml(config))
-                effects.push_back(std::move(effect));
-            config.popTag(); // effect
-        }
     }
 }
 
@@ -123,22 +104,15 @@ void SceneDescription::toXml(ofxXmlSettings & config) const {
             config.popTag(); // layer
         }
     }
-
-    auto validEffects = 0;
-    for (const auto&  effect : effects) {
-        if (effect.valid) {
-            config.addTag("effect");
-            config.pushTag("effect", validEffects++);
-            effect.toXml(config);
-            config.popTag(); // effect
-        }
-    }
 }
 
 ShowDescription::ShowDescription()
 {
     // Create default scene -- show is valid / usable right from the start
     appendScene();
+    for (auto i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
+        effects_[i] = EffectDescription(static_cast<Effect::Type>(i));
+    }
 }
 
 bool ShowDescription::fromXml(const std::string& filename) {
@@ -157,6 +131,7 @@ bool ShowDescription::fromXml(const std::string& filename) {
     config.popTag(); // head
 
     config.pushTag("show");
+
     for (auto i = 0; i < config.getNumTags("scene"); i++) {
         config.pushTag("scene", i);
         SceneDescription scene;
@@ -164,6 +139,25 @@ bool ShowDescription::fromXml(const std::string& filename) {
         scenes_.push_back(std::move(scene));
         config.popTag(); // scene
     }
+
+    config.pushTag("effects");
+    if (config.getNumTags("effect") == 0) {
+        // create default effects
+        for (auto i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
+            effects_[i] = EffectDescription(static_cast<Effect::Type>(i));
+        }
+    }
+    else {
+        for (auto i = 0; i < config.getNumTags("effect"); i++) {
+            config.pushTag("effect", i);
+            EffectDescription effect;
+            if (effect.fromXml(config))
+                effects_[i] = std::move(effect);
+            config.popTag(); // effect
+        }
+    }
+    config.popTag(); // effects
+
     config.popTag(); // show
 
     return true;
@@ -180,12 +174,27 @@ bool ShowDescription::toXml(const std::string& filename) const {
 
     config.addTag("show");
     config.pushTag("show");
+
+    config.addTag("effects");
+    config.pushTag("effects");
+    auto validEffects = 0;
+    for (const auto& effect : effects_) {
+        if (effect.valid) {
+            config.addTag("effect");
+            config.pushTag("effect", validEffects++);
+            effect.toXml(config);
+            config.popTag(); // effect
+        }
+    }
+    config.popTag(); // effects
+
     for (auto i = 0; i < scenes_.size(); i++) {
         config.addTag("scene");
         config.pushTag("scene", i);
         scenes_[i].toXml(config);
         config.popTag(); // scene
     }
+
     config.popTag(); // show
 
     return config.saveFile(filename);

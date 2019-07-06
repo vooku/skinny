@@ -15,7 +15,7 @@ public:
     void update();
     void draw();
     Scene::FoundMappables newMidiMessage(ofxMidiMessage & msg);
-    bool reload(const SceneDescription& description);
+    bool reload(const ShowDescription& description);
     void playPauseEffect(int i);
 
     auto getCurrentScene() const { return currentScene_; }

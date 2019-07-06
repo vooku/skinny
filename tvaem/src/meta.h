@@ -56,7 +56,6 @@ struct SceneDescription {
     std::string name;
     midiNote alphaControl;
     std::array<LayerDescription, MAX_LAYERS> layers;
-    std::vector<EffectDescription> effects;
 };
 
 class ShowDescription {
@@ -75,6 +74,7 @@ public:
     auto getSize() const { return scenes_.size(); }
     auto getSwitchNote() const { return switchNote_; }
     auto getMidiChannel() const { return midiChannel_; }
+    const auto& getEffects() const { return effects_; }
 
     void setMidiChannel(int channel) { midiChannel_ = channel; }
 
@@ -82,6 +82,8 @@ private:
     static const int default_channel = 2;
 
     std::vector<SceneDescription> scenes_;
+    std::array<EffectDescription, MAX_EFFECTS> effects_;
+
     int currentIdx_ = 0;
     midiNote switchNote_ = MappableDescription::invalid_midi;
     int midiChannel_ = default_channel;

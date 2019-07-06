@@ -142,10 +142,10 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
         auto foundMappables = show_->newMidiMessage(msg);
 
         for (const auto& layer : foundMappables.layers) {
-            gui_.setActive(layer.first, layer.second);
+            gui_.setActiveLayer(layer.first, layer.second);
         }
         for (const auto& effect : foundMappables.effects) {
-            gui_.setActive(effect.first, effect.second);
+            gui_.setActiveEffect(effect.first, effect.second);
         }
 
         Status::instance().redraw = true;
@@ -219,7 +219,7 @@ bool ofApp::reload(LoadDir dir)
         break;
     }
 
-    if (show_->reload(showDescription_.currentScene())) {
+    if (show_->reload(showDescription_)) {
         ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription_.currentScene().name.c_str());
         gui_.reload();
         Status::instance().redraw = true;

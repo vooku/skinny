@@ -19,8 +19,8 @@ public:
     void reload();
     void update();
     void setShow(std::shared_ptr<Show> show);
-    void setActive(int layerId, bool active);
-    void setActive(Effect::Type type, bool active);
+    void setActiveLayer(int idx, bool active);
+    void setActiveEffect(int idx, bool active);
 
     /**
      * @brief Display a single line message in the GUI.

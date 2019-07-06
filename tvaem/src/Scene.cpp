@@ -70,10 +70,10 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
         if (layer->getNote() == note) {
             if (noteOn) {
                 layer->play();
-                result.layers.insert({ layer->getId(), true });
+                result.layers.emplace_back(layer->getId(), true);
             } else if (noteOff) {
                 layer->pause();
-                result.layers.insert({ layer->getId(), false });
+                result.layers.emplace_back(layer->getId(), false);
             }
         }
 

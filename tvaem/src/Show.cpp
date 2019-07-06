@@ -52,15 +52,15 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
     const auto noteOff = msg.status == MIDI_NOTE_OFF;
     const auto note = msg.pitch;
 
-    for (auto& effect : effects_) {
-        if (effect->getNote() == note) {
+    for (auto i = 0; i < MAX_EFFECTS; ++i) {
+        if (effects_[i]->getNote() == note) {
             if (noteOn) {
-                effect->play();
-                result.effects.insert({ effect->type, true });
+                effects_[i]->play();
+                result.effects.emplace_back(i, true);
             }
             else if (noteOff) {
-                effect->pause();
-                result.effects.insert({ effect->type, false });
+                effects_[i]->pause();
+                result.effects.emplace_back(i, false);
             }
         }
     }
@@ -68,14 +68,14 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
     return result;
 }
 
-bool Show::reload(const SceneDescription& description)
+bool Show::reload(const ShowDescription& description)
 {
     shader_.begin();
-    currentScene_->reload(description);
+    currentScene_->reload(description.currentScene());
     currentScene_->bindTextures();
 
-    for (auto i = 0; i < description.effects.size(); ++i) {
-        const auto& effect = description.effects[i];
+    for (auto i = 0; i < MAX_EFFECTS; ++i) {
+        const auto& effect = description.getEffects()[i];
         effects_[i].reset(new Effect(effect.type, effect.note));
     }
 
