@@ -58,6 +58,7 @@ void Gui::reload()
         return;
 
     sceneNameInput_->setText(show_->getCurrentScene()->getName());
+    sceneNameInput_->setLabel("Scene " + std::to_string(showDescription_.getSceneIndex() + 1));
     masterAlphaInput_->setText(std::to_string(show_->getCurrentScene()->getAlphaControl()));
     midiChannelInput_->setText(std::to_string(showDescription_.getMidiChannel()));
 
@@ -361,7 +362,7 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     controlPanel_->setTheme(&headerTheme_);
     pos.x += controlPanel_->getWidth() + 2 * DELTA;
 
-    sceneNameInput_ = controlPanel_->addTextInput("Scene");
+    sceneNameInput_ = controlPanel_->addTextInput("Scene " + std::to_string(showDescription_.getSceneIndex() + 1));
     sceneNameInput_->setText(show_ ? show_->getCurrentScene()->getName() : "Enter scene name");
     sceneNameInput_->onTextInputEvent(this, &Gui::onSceneNameInput);
 
