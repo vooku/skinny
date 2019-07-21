@@ -28,10 +28,10 @@ private:
     bool hasActiveFX() const;
 
     mutable ofShader shader_;
-    ofTexture dst_;
     const int width_, height_;
     std::shared_ptr<Scene> currentScene_;
 
     Effects effects_;
 
+    ofVideoPlayer player_; // #TODO remove
 };

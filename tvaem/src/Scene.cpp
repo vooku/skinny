@@ -28,11 +28,20 @@ void Scene::reload(const SceneDescription & description)
     }
 }
 
-void Scene::bindTextures()
+void Scene::bind()
 {
     for (auto& layer : layers_) {
          if (layer)
             layer->bind();
+    }
+}
+
+
+void Scene::unbind()
+{
+    for (auto& layer : layers_) {
+        if (layer)
+            layer->unbind();
     }
 }
 
@@ -111,6 +120,5 @@ void Scene::setupUniforms(ofShader& shader) const
     shader.setUniform1iv("blendingModes", uniforms_.blendingModes, uniforms_.nLayers);
     shader.setUniform1fv("alphas", uniforms_.alphas, uniforms_.nLayers);
     shader.setUniform1f("masterAlpha", uniforms_.alpha);
-
 
 }

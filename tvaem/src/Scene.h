@@ -12,7 +12,8 @@ public:
     friend class Gui;
 
     void reload(const SceneDescription& description);
-    void bindTextures();
+    void bind();
+    void unbind();
     bool isFrameNew();
 
     /**
