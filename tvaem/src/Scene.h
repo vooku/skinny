@@ -29,23 +29,22 @@ public:
 
     void setupUniforms(ofShader& shader) const;
 
-    void setAlpha(int alpha) const { uniforms_.alpha = (alpha < 0 ? 0 : alpha > 127 ? 127 : alpha) / 127.0f; }
+    void setAlpha(int alpha) const { uniforms_.masterAlpha = (alpha < 0 ? 0 : alpha > 127 ? 127 : alpha) / 127.0f; }
     void setAlphaControl(midiNote control) { alphaControl_ = control; }
 
     const auto& getName() const { return name_; }
     const auto& getLayers() const { return layers_; }
     bool isValid() const { return valid_; }
     midiNote getAlphaControl() const { return alphaControl_; }
-    float getAlpha() const { return uniforms_.alpha; }
+    float getAlpha() const { return uniforms_.masterAlpha; }
 
 private:
     struct Uniforms {
-        int nLayers;
         int playing[MAX_LAYERS];
-        glm::ivec2 dimensions[MAX_LAYERS];
+        glm::vec2 dimensions[MAX_LAYERS];
         int blendingModes[MAX_LAYERS];
         float alphas[MAX_LAYERS];
-        float alpha = 1.0f;
+        float masterAlpha = 1.0f;
     } mutable uniforms_;
 
     std::string name_;

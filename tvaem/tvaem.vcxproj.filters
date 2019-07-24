@@ -277,9 +277,6 @@
     <ResourceCompile Include="icon.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\shader.comp">
-      <Filter>src</Filter>
-    </None>
     <None Include="src\shaders\shader.frag">
       <Filter>src</Filter>
     </None>

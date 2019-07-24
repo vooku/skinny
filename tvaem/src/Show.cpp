@@ -18,34 +18,22 @@ Show::Show(int width, int height) :
         Status::instance().exit = true;
         return;
     }
-
-    player_.load("C:\\Users\\vooku\\ownCloud\\video\\Simulacrum Tech Demo\\Assets\\Videos\\Britney_Spears_-_Toxic_Official_Video.mp4");
-    player_.play();
 }
 
 void Show::update()
 {
-    player_.update();
-
-    if (!currentScene_)
-        return;
-
-    //if (currentScene_->isFrameNew() || Status::instance().redraw) {
-        //shader_.begin();
-        ////setupUniforms();
-        //ofDrawRectangle(0, 0, width_, height_);
-        //shader_.end();
-        Status::instance().redraw = hasActiveFX();
-    //}
 }
 
 void Show::draw()
 {
-    shader_.begin();
-    //setupUniforms();
-    player_.getTexture().bind(1);
-    ofDrawRectangle(0, 0, width_, height_);
-    shader_.end();
+    if (currentScene_->isFrameNew() || Status::instance().redraw) {
+        shader_.begin();
+        setupUniforms();
+        currentScene_->bind();
+        ofDrawRectangle(0, 0, width_, height_);
+        currentScene_->unbind();
+        shader_.end();
+    }
 }
 
 Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
@@ -107,6 +95,7 @@ void Show::setupUniforms() const
         effectUniforms_[effect->type] = effect->isPlaying() || effectUniforms_[effect->type];
     }
 
+    shader_.setUniform2iv("screenSize", reinterpret_cast<int*>(&glm::ivec2{ width_, height_ }));
     shader_.setUniform1i("invert", effectUniforms_[Effect::Type::Inverse]);
     shader_.setUniform1i("reducePalette", effectUniforms_[Effect::Type::ReducePalette]);
     shader_.setUniform1i("colorShift", effectUniforms_[Effect::Type::ColorShift]);

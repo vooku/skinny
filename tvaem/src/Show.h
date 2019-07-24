@@ -32,6 +32,4 @@ private:
     std::shared_ptr<Scene> currentScene_;
 
     Effects effects_;
-
-    ofVideoPlayer player_; // #TODO remove
 };

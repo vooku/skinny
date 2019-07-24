@@ -58,7 +58,6 @@ Layer::Layer(int id, ErrorType error) :
 
 Layer::~Layer()
 {
-    //player_.getTexture().unbind(id_); // throws exception renderer being null
     player_.closeMovie();
 }
 

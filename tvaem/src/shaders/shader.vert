@@ -1,13 +1,20 @@
 #version 440
 
-uniform mat4 modelViewProjectionMatrix;
+const int n = 8;
 
 in vec4 position;
-in vec2 texcoord;
 
-out vec2 uv;
+uniform vec2[n] dimensions;
+uniform ivec2 screenSize;
+uniform mat4 modelViewProjectionMatrix;
+
+out vec2[n] uvs;
 
 void main(){
-    uv = position.xy * vec2(640.0 / 1920.0, 360.0 / 1080);
+    for (int i = 0; i < n; i++)
+    {
+        uvs[i] = position.xy * dimensions[i] / screenSize;
+    }
+
     gl_Position = modelViewProjectionMatrix * position;
 }
