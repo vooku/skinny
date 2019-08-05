@@ -26,7 +26,7 @@ void Show::update()
 
 void Show::draw()
 {
-    if (currentScene_->isFrameNew() || Status::instance().redraw) {
+    if (currentScene_->isFrameNew()) {
         shader_.begin();
         setupUniforms();
         currentScene_->bind();

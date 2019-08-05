@@ -147,8 +147,6 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
         for (const auto& effect : foundMappables.effects) {
             gui_.setActiveEffect(effect.first, effect.second);
         }
-
-        Status::instance().redraw = true;
     }
 }
 
@@ -222,7 +220,6 @@ bool ofApp::reload(LoadDir dir)
     if (show_->reload(showDescription_)) {
         ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription_.currentScene().name.c_str());
         gui_.reload();
-        Status::instance().redraw = true;
     }
     else {
         // TODO display in gui
