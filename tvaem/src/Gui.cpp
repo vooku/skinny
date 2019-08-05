@@ -285,7 +285,6 @@ void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
     const auto idx = std::stoi(e.target->getName());
     if (show_->getCurrentScene()) {
         show_->getCurrentScene()->playPauseLayer(idx);
-        Status::instance().redraw = true;
     }
 }
 

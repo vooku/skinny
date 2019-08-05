@@ -34,6 +34,7 @@ public:
 
     bool reload(const std::filesystem::path& path);
     void bind();
+    void unbind();
     bool isFrameNew();
 
     void play() override;

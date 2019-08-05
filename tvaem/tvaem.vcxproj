@@ -182,8 +182,8 @@
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
-      <Command>copy src\shader.comp bin\data\shader.comp</Command>
-      <Outputs>bin\data\shader.comp</Outputs>
+      <Command>copy src\shaders\* bin\data\shaders</Command>
+      <Outputs>bin\data\shaders</Outputs>
       <TreatOutputAsContent>true</TreatOutputAsContent>
     </CustomBuildStep>
   </ItemDefinitionGroup>
@@ -273,7 +273,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shader.comp" />
+    <None Include="src\shaders\shader.frag" />
+    <None Include="src\shaders\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>

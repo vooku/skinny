@@ -7,41 +7,33 @@ Show::Show(int width, int height) :
     currentScene_(std::make_shared<Scene>())
 {
 #ifndef NDEBUG
-    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "../../src/shader.comp")) {
+    const auto shaderFile = "../../src/shaders/shader";
 #else
-    if (!shader_.setupShaderFromFile(GL_COMPUTE_SHADER, "shader.comp")) {
+    const auto shaderFile = "shaders/shader";
 #endif
-        ofLog(OF_LOG_FATAL_ERROR, "Could not load shader.");
-        Status::instance().exit = true;
-        return;
-    }
-    if (!shader_.linkProgram()) {
-        ofLog(OF_LOG_FATAL_ERROR, "Could not link shader.");
-        Status::instance().exit = true;
-        return;
-    }
 
-    dst_.allocate(width_, height_, GL_RGBA8);
-    dst_.bindAsImage(7, GL_WRITE_ONLY);
+    shader_.load(shaderFile);
+    if (!shader_.isLoaded()) {
+        ofLog(OF_LOG_FATAL_ERROR, "Could not load shaders.");
+        Status::instance().exit = true;
+        return;
+    }
 }
 
 void Show::update()
 {
-    if (!currentScene_)
-        return;
-
-    if (currentScene_->isFrameNew() || Status::instance().redraw) {
-        shader_.begin();
-        setupUniforms();
-        shader_.dispatchCompute(width_ / 32, height_ / 32, 1);
-        shader_.end();
-        Status::instance().redraw = hasActiveFX();
-    }
 }
 
 void Show::draw()
 {
-    dst_.draw(0, 0);
+    if (currentScene_->isFrameNew()) {
+        shader_.begin();
+        setupUniforms();
+        currentScene_->bind();
+        ofDrawRectangle(0, 0, width_, height_);
+        currentScene_->unbind();
+        shader_.end();
+    }
 }
 
 Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
@@ -70,9 +62,10 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
 
 bool Show::reload(const ShowDescription& description)
 {
+    currentScene_->bind();
+
     shader_.begin();
     currentScene_->reload(description.currentScene());
-    currentScene_->bindTextures();
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         const auto& effect = description.getEffects()[i];
@@ -80,6 +73,7 @@ bool Show::reload(const ShowDescription& description)
     }
 
     shader_.end();
+    currentScene_->unbind();
 
     return currentScene_->isValid();
 }
@@ -101,6 +95,7 @@ void Show::setupUniforms() const
         effectUniforms_[effect->type] = effect->isPlaying() || effectUniforms_[effect->type];
     }
 
+    shader_.setUniform2iv("screenSize", reinterpret_cast<int*>(&glm::ivec2{ width_, height_ }));
     shader_.setUniform1i("invert", effectUniforms_[Effect::Type::Inverse]);
     shader_.setUniform1i("reducePalette", effectUniforms_[Effect::Type::ReducePalette]);
     shader_.setUniform1i("colorShift", effectUniforms_[Effect::Type::ColorShift]);

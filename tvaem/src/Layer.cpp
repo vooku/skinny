@@ -58,7 +58,6 @@ Layer::Layer(int id, ErrorType error) :
 
 Layer::~Layer()
 {
-    //player_.getTexture().unbind(id_); // throws exception renderer being null
     player_.closeMovie();
 }
 
@@ -73,7 +72,15 @@ bool Layer::reload(const std::filesystem::path& path)
 void Layer::bind() {
     if (!valid_)
         return;
-    player_.getTexture().bindAsImage(id_, GL_READ_ONLY);
+    player_.getTexture().bind(id_);
+}
+
+
+void Layer::unbind()
+{
+    if (!valid_)
+        return;
+    player_.getTexture().unbind(id_);
 }
 
 void Layer::play()
