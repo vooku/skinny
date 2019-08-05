@@ -182,8 +182,8 @@
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
-      <Command>copy src\shader.comp bin\data\shader.comp</Command>
-      <Outputs>bin\data\shader.comp</Outputs>
+      <Command>copy src\shaders\* bin\data\shaders</Command>
+      <Outputs>bin\data\shaders</Outputs>
       <TreatOutputAsContent>true</TreatOutputAsContent>
     </CustomBuildStep>
   </ItemDefinitionGroup>
