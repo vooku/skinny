@@ -23,7 +23,7 @@ public:
     };
 
     static const int MIDI_OFFSET = 0;
-    static const int ALPHA_MIDI_OFFSET = 1;
+    static const int ALPHA_MIDI_OFFSET = 0;
 
     static char* c_str(BlendMode blendMode);
 

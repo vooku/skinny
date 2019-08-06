@@ -13,7 +13,7 @@ public:
         Count         =  4
     } const type;
 
-    static const int MIDI_OFFSET = 48;
+    static const int MIDI_OFFSET = 8;
 
     static char* c_str(Type);
 
