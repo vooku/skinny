@@ -63,7 +63,7 @@ void Gui::reload()
     midiChannelInput_->setText(std::to_string(showDescription_.getMidiChannel()));
 
     // layers
-    auto& layers = show_->getCurrentScene()->getLayers();
+    const auto& layers = show_->getCurrentScene()->getLayers();
     assert(layerButtons_.size() == layers.size());
 
     for (auto i = 0; i < MAX_LAYERS; ++i) {
@@ -88,12 +88,14 @@ void Gui::reload()
     }
 
     // effects
+    const auto& effects = show_->effects_;
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         effectPlayToggles_[i]->setChecked(false);
         effectMuteToggles_[i]->setChecked(false);
-        effectDropdowns_[i]->select(static_cast<int>(show_->effects_[i]->type));
-        effectMidiInputs_[i]->setText(std::to_string(show_->effects_[i]->getNote()));
-        effectCCInputs_[i]->setText(std::to_string(show_->effects_[i]->getCc()));
+        effectDropdowns_[i]->select(static_cast<int>(effects[i]->type));
+        effectMidiInputs_[i]->setText(std::to_string(effects[i]->getNote()));
+        effectCCInputs_[i]->setText(std::to_string(effects[i]->getCc()));
+        effectParamLabels_[i]->setLabel(std::to_string(effects[i]->param_));
     }
 
     draw();
@@ -106,7 +108,7 @@ void Gui::update()
 
     masterAlphaInput_->setLabel(std::to_string(static_cast<int>(show_->getAlpha() * 127)));
 
-    auto& layers = show_->getCurrentScene()->getLayers();
+    const auto& layers = show_->getCurrentScene()->getLayers();
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (layers[i]) {
             layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
@@ -114,6 +116,10 @@ void Gui::update()
         else {
             layerAlphaLabels_[i]->setLabel("");
         }
+    }
+
+    for (auto i = 0; i < MAX_EFFECTS; ++i) {
+        effectParamLabels_[i]->setLabel(std::to_string(show_->effects_[i]->param_));
     }
 
 }
@@ -559,11 +565,17 @@ void Gui::setuAlphaPanel(glm::ivec2& pos)
     pos.x += alphaPanel_->getWidth();
     alphaPanel_->addLabel("Alpha");
     alphaPanel_->addBreak();
-    for (auto& layerAlphaLabel : layerAlphaLabels_) {
-        layerAlphaLabel = alphaPanel_->addLabel("");
+    for (auto& label : layerAlphaLabels_) {
+        label = alphaPanel_->addLabel("");
     }
 
     alphaPanel_->addBreak();
+    alphaPanel_->addLabel("Para");
+    alphaPanel_->addBreak();
+
+    for (auto& label : effectParamLabels_) {
+        label = alphaPanel_->addLabel("");
+    }
 }
 
 void Gui::setupRetriggerPanel(glm::ivec2 & pos)

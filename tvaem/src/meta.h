@@ -43,7 +43,7 @@ struct EffectDescription : public MappableDescription {
 
     Effect::Type type;
     midiNote note, cc;
-    int param;
+    int param = 127;
     bool valid = false;
 };
 

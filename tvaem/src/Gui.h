@@ -114,6 +114,7 @@ private:
     std::array<ofxDatGuiTextInput*, MAX_EFFECTS> effectCCInputs_;
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectMuteToggles_;
+    std::array<ofxDatGuiLabel*,     MAX_EFFECTS> effectParamLabels_;
 
     std::shared_ptr<Show> show_;
     ShowDescription& showDescription_;
