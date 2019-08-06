@@ -29,7 +29,7 @@ void Gui::setup()
     setupMutePanel(pos, toggleWidth);
     setupVideoFxPanel(pos);
     setupMidiPanel(pos, midiInWidth);
-    setupMidiCcPanel(pos, midiInWidth);
+    setupCcPanel(pos, midiInWidth);
     setuAlphaPanel(pos);
     setupRetriggerPanel(pos);
     setupBlendModePanel(pos);
@@ -73,7 +73,7 @@ void Gui::reload()
         if (layers[i]) {
             layerButtons_[i]->setLabel(layers[i]->getName());
             layerMidiInputs_[i]->setText(std::to_string(layers[i]->getNote()));
-            layerCCInputs_[i]->setText(std::to_string(layers[i]->getAlphaControl()));
+            layerCCInputs_[i]->setText(std::to_string(layers[i]->getCc()));
             layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
             layerRetriggerToggles_[i]->setChecked(layers[i]->getRetrigger());
             blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
@@ -88,11 +88,12 @@ void Gui::reload()
     }
 
     // effects
-    for (auto i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
+    for (auto i = 0; i < MAX_EFFECTS; ++i) {
         effectPlayToggles_[i]->setChecked(false);
         effectMuteToggles_[i]->setChecked(false);
         effectDropdowns_[i]->select(static_cast<int>(show_->effects_[i]->type));
         effectMidiInputs_[i]->setText(std::to_string(show_->effects_[i]->getNote()));
+        effectCCInputs_[i]->setText(std::to_string(show_->effects_[i]->getCc()));
     }
 
     draw();
@@ -226,9 +227,9 @@ void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
     const auto control = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].alphaControl = control;
+    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].cc = control;
     if (show_ && show_->getCurrentScene()->layers_[idx])
-        show_->getCurrentScene()->layers_[idx]->setAlphaControl(control);
+        show_->getCurrentScene()->layers_[idx]->setCc(control);
 }
 
 void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
@@ -245,6 +246,16 @@ void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
     auto note = static_cast<midiNote>(std::stoi(e.text));
     showDescription_.effects_[idx].note = note;
     show_->effects_[idx]->setNote(note);
+}
+
+
+void Gui::onEffectCcInput(ofxDatGuiTextInputEvent e)
+{
+    const auto idx = std::stoi(e.target->getName());
+    const auto cc = static_cast<midiNote>(std::stoi(e.text));
+    showDescription_.effects_[idx].cc = cc;
+    if (show_)
+        show_->effects_[idx]->setCc(cc);
 }
 
 void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
@@ -275,9 +286,11 @@ void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
     const auto idx = std::stoi(e.target->getName());
     const auto type = static_cast<Effect::Type>(e.child);
     const auto note = show_->effects_[idx]->getNote();
+    const auto cc = show_->effects_[idx]->getCc();
+    const auto param = show_->effects_[idx]->param_;
     showDescription_.effects_[idx].type = type;
     if (show_)
-        show_->effects_[idx].reset(new Effect(type, note));
+        show_->effects_[idx].reset(new Effect(type, note, cc, param));
 }
 
 void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
@@ -470,7 +483,7 @@ void Gui::setupVideoFxPanel(glm::ivec2& pos)
     videoFxPanel_->addBreak();
 
     std::vector<string> options;
-    for (auto i = static_cast<int>(Effect::Type::Inverse); i < static_cast<int>(Effect::Type::Count); ++i)
+    for (auto i = static_cast<int>(Effect::Type::Inverse); i < MAX_EFFECTS; ++i)
         options.push_back(Effect::c_str(static_cast<Effect::Type>(i)));
 
     for (auto i = 0; i < effectDropdowns_.size(); ++i) {
@@ -510,23 +523,33 @@ void Gui::setupMidiPanel(glm::ivec2& pos, int w)
     }
 }
 
-void Gui::setupMidiCcPanel(glm::ivec2& pos, int w)
+void Gui::setupCcPanel(glm::ivec2& pos, int w)
 {
-    midiCcPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
-    midiCcPanel_->setTheme(&commonTheme_);
-    midiCcPanel_->setWidth(w);
-    pos.x += midiCcPanel_->getWidth();
-    midiCcPanel_->addLabel("CC");
-    midiCcPanel_->addBreak();
+    ccPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+    ccPanel_->setTheme(&commonTheme_);
+    ccPanel_->setWidth(w);
+    pos.x += ccPanel_->getWidth();
+    ccPanel_->addLabel("CC");
+    ccPanel_->addBreak();
     for (auto i = 0; i < layerCCInputs_.size(); ++i) {
-        layerCCInputs_[i] = midiCcPanel_->addTextInput("");
+        layerCCInputs_[i] = ccPanel_->addTextInput("");
         layerCCInputs_[i]->setName(std::to_string(i));
         layerCCInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
         layerCCInputs_[i]->onTextInputEvent(this, &Gui::onLayerCcInput);
         layerCCInputs_[i]->setWidth(w, 0); // This doesn't seem to work right
     }
 
-    midiCcPanel_->addBreak();
+    ccPanel_->addBreak();
+    addBlank(ccPanel_.get());
+    ccPanel_->addBreak();
+
+    for (auto i = 0; i < effectCCInputs_.size(); ++i) {
+        effectCCInputs_[i] = ccPanel_->addTextInput({});
+        effectCCInputs_[i]->setName(std::to_string(i));
+        effectCCInputs_[i]->setInputType(ofxDatGuiInputType::NUMERIC);
+        effectCCInputs_[i]->onTextInputEvent(this, &Gui::onEffectCcInput);
+        effectCCInputs_[i]->setWidth(w, 0); // This doesn't seem to work right
+    }
 }
 void Gui::setuAlphaPanel(glm::ivec2& pos)
 {

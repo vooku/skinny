@@ -20,7 +20,8 @@ Effect::Effect() :
     type(Type::Inverse)
 {}
 
-Effect::Effect(Type type, midiNote note) :
-    Mappable(note),
-    type(type)
+Effect::Effect(Type type, midiNote note, midiNote control, int param) :
+    Mappable(note, control),
+    type(type),
+    param_(param)
 {}

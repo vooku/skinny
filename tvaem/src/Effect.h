@@ -3,6 +3,8 @@
 #include "Mappable.h"
 
 class Effect : public Mappable {
+    friend class Gui;
+
 public:
     enum class Type {
         Invalid       = -1,
@@ -18,5 +20,9 @@ public:
     static char* c_str(Type);
 
     Effect();
-    Effect(Type type, midiNote note);
+    Effect(Type type, midiNote note, midiNote control, int param);
+
+private:
+    int param_ = 127;
+
 };

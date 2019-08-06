@@ -73,7 +73,7 @@ bool Show::reload(const ShowDescription& description)
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         const auto& effect = description.getEffects()[i];
-        effects_[i].reset(new Effect(effect.type, effect.note));
+        effects_[i].reset(new Effect(effect.type, effect.note, effect.cc, effect.param));
     }
 
     shader_.end();

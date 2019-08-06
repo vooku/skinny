@@ -5,8 +5,8 @@
 class Mappable {
 public:
     Mappable() = default;
-    explicit Mappable(midiNote note) : note_(note) { }
-    virtual ~Mappable() { }
+    Mappable(midiNote note, midiNote cc);
+    virtual ~Mappable() = default;
 
     virtual void play() { active_ = !mute_; }
     virtual void pause() { active_ = false; }
@@ -16,13 +16,16 @@ public:
     // TODO virtual bool newMidiMessage(ofxMidiMessage& msg);
 
     virtual midiNote getNote() const { return note_; }
+    virtual midiNote getCc() const { return cc_; }
 
     virtual void setNote(midiNote note) { note_ = note; }
+    virtual void setCc(midiNote cc) { cc_ = cc; }
     void setMute(bool mute);
 
 protected:
     bool active_ = false;
     bool mute_ = false;
     midiNote note_ = 0;
+    midiNote cc_ = 0;
 
 };

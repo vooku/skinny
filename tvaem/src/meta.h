@@ -8,6 +8,7 @@
 
 struct MappableDescription {
     static const uint8_t invalid_midi;
+    // #TODO actual inheritance?
 };
 
 struct LayerDescription : public MappableDescription {
@@ -17,7 +18,7 @@ struct LayerDescription : public MappableDescription {
     LayerDescription(unsigned int id,
                      const std::filesystem::path& path,
                      midiNote note = invalid_midi,
-                     midiNote alphaControl = invalid_midi,
+                     midiNote cc = invalid_midi,
                      //float alpha = 1.0f,
                      const Layer::BlendMode& blendMode = Layer::BlendMode::Normal);
 
@@ -26,8 +27,7 @@ struct LayerDescription : public MappableDescription {
 
     unsigned int id;
     std::filesystem::path path;
-    midiNote note;
-    midiNote alphaControl;
+    midiNote note, cc;
     //float alpha;
     bool retrigger = false;
     Layer::BlendMode blendMode;
@@ -36,13 +36,14 @@ struct LayerDescription : public MappableDescription {
 
 struct EffectDescription : public MappableDescription {
     EffectDescription() = default;
-    explicit EffectDescription(Effect::Type type, midiNote note = invalid_midi);
+    explicit EffectDescription(Effect::Type type, midiNote note = invalid_midi, midiNote cc = invalid_midi);
 
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
     Effect::Type type;
-    midiNote note;
+    midiNote note, cc;
+    int param;
     bool valid = false;
 };
 

@@ -20,7 +20,7 @@ void Scene::reload(const SceneDescription & description)
 
             if (layers_[i]) {
                 layers_[i]->setBlendMode(description.layers[i].blendMode);
-                layers_[i]->setAlphaControl(description.layers[i].alphaControl);
+                layers_[i]->setCc(description.layers[i].cc);
                 layers_[i]->setRetrigger(description.layers[i].retrigger);
             }
         }
@@ -58,11 +58,11 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
     const auto noteOn = msg.status == MIDI_NOTE_ON;
     const auto noteOff = msg.status == MIDI_NOTE_OFF;
     const auto note = msg.pitch;
-    const auto cc = msg.status == MIDI_CONTROL_CHANGE;
-    const auto control = msg.control;
+    const auto isCc = msg.status == MIDI_CONTROL_CHANGE;
+    const auto cc = msg.control;
     const auto value = msg.value;
 
-    if (!noteOn && !noteOff && !cc) {
+    if (!noteOn && !noteOff && !isCc) {
         return {};
     }
 
@@ -81,7 +81,7 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
             }
         }
 
-        if (cc && layer->getAlphaControl() == control) {
+        if (isCc && layer->getCc() == cc) {
             layer->setAlpha(value);
         }
     }

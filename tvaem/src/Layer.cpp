@@ -25,13 +25,13 @@ char * Layer::c_str(BlendMode blendMode)
     }
 }
 
-Layer::Layer(int id, const std::filesystem::path& path, midiNote note) :
-    Mappable(note == -1 ? MIDI_OFFSET + id : note),
+Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote control) :
+    Mappable(note == -1 ? MIDI_OFFSET + id : note,
+             control == -1 ? ALPHA_MIDI_OFFSET + id : note),
     id_(id),
     name_(path.filename().string()),
     valid_(false),
-    alpha_(1),
-    alphaControl_(ALPHA_MIDI_OFFSET + id)
+    alpha_(1)
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
@@ -46,13 +46,12 @@ Layer::Layer(int id, const std::filesystem::path& path, midiNote note) :
 }
 
 Layer::Layer(int id, ErrorType error) :
-    Mappable(MIDI_OFFSET + id),
+    Mappable(MIDI_OFFSET + id, ALPHA_MIDI_OFFSET + id),
     id_(id),
     name_(error == ErrorType::Invalid ? "Invalid description." : "Failed to load."),
     valid_(false),
     blendMode_(BlendMode::Normal),
-    alpha_(0),
-    alphaControl_(ALPHA_MIDI_OFFSET + id)
+    alpha_(0)
 {
 }
 

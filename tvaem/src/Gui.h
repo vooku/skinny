@@ -37,6 +37,7 @@ public:
     void onLayerCcInput(ofxDatGuiTextInputEvent e);
     void onMasterAlphaCcInput(ofxDatGuiTextInputEvent e);
     void onEffectMidiInput(ofxDatGuiTextInputEvent e);
+    void onEffectCcInput(ofxDatGuiTextInputEvent e);
     void onSceneNameInput(ofxDatGuiTextInputEvent e);
     void onMidiChannelInput(ofxDatGuiTextInputEvent e);
 
@@ -84,7 +85,7 @@ private:
     void setupMutePanel(glm::ivec2& pos, int w);
     void setupVideoFxPanel(glm::ivec2& pos);
     void setupMidiPanel(glm::ivec2& pos, int w);
-    void setupMidiCcPanel(glm::ivec2& pos, int w);
+    void setupCcPanel(glm::ivec2& pos, int w);
     void setuAlphaPanel(glm::ivec2& pos);
     void setupRetriggerPanel(glm::ivec2& pos);
     void setupBlendModePanel(glm::ivec2& pos);
@@ -92,7 +93,7 @@ private:
     void addBlank(ofxDatGui* panel);
 
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
-                               videoFxPanel_, midiPanel_, midiCcPanel_,
+                               videoFxPanel_, midiPanel_, ccPanel_,
                                alphaPanel_, retriggerPanel_, blendModePanel_;
 
     // This class does not own any of the following pointers, do not try to delete them.
@@ -108,10 +109,11 @@ private:
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerMuteToggles_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerRetriggerToggles_;
     std::array<ofxDatGuiDropdown*,  MAX_LAYERS> blendModeDropdowns_;
-    std::array<ofxDatGuiDropdown*,  static_cast<int>(Effect::Type::Count)> effectDropdowns_;
-    std::array<ofxDatGuiTextInput*, static_cast<int>(Effect::Type::Count)> effectMidiInputs_;
-    std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectPlayToggles_;
-    std::array<ofxDatGuiToggle*,    static_cast<int>(Effect::Type::Count)> effectMuteToggles_;
+    std::array<ofxDatGuiDropdown*,  MAX_EFFECTS> effectDropdowns_;
+    std::array<ofxDatGuiTextInput*, MAX_EFFECTS> effectMidiInputs_;
+    std::array<ofxDatGuiTextInput*, MAX_EFFECTS> effectCCInputs_;
+    std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectPlayToggles_;
+    std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectMuteToggles_;
 
     std::shared_ptr<Show> show_;
     ShowDescription& showDescription_;

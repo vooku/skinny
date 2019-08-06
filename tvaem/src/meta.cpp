@@ -6,13 +6,13 @@ const std::filesystem::path LayerDescription::invalid_path = {};
 LayerDescription::LayerDescription(unsigned int id,
                                    const std::filesystem::path& path,
                                    midiNote note,
-                                   midiNote alphaControl,
+                                   midiNote cc,
                                    //float alpha,
                                    const Layer::BlendMode& blendMode) :
     id(id),
     path(path),
-    alphaControl(alphaControl == invalid_midi ? id + Layer::ALPHA_MIDI_OFFSET : alphaControl),
     note(note == invalid_midi ? id + Layer::MIDI_OFFSET : note),
+    cc(cc == invalid_midi ? id + Layer::ALPHA_MIDI_OFFSET : cc),
     //alpha(alpha),
     blendMode(blendMode)
 {
@@ -25,7 +25,7 @@ bool LayerDescription::fromXml(ofxXmlSettings & config) {
     id = config.getValue("id", -1);
     path = config.getValue("path", invalid_path.string());
     blendMode = static_cast<Layer::BlendMode>(config.getValue("blendMode", static_cast<int>(Layer::BlendMode::Invalid)));
-    alphaControl = config.getValue("alphaControl", static_cast<int>(id + Layer::ALPHA_MIDI_OFFSET));
+    cc = config.getValue("alphaControl", static_cast<int>(id + Layer::ALPHA_MIDI_OFFSET));
     note = config.getValue("midi", invalid_midi);
     retrigger = config.getValue("retrigger", false);
     valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || note == invalid_midi);
@@ -41,14 +41,15 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("id", static_cast<int>(id));
     config.setValue("path", path.string());
     config.setValue("blendMode", static_cast<int>(blendMode));
-    config.setValue("alphaControl", alphaControl);
+    config.setValue("alphaControl", cc);
     config.setValue("midi", note);
     config.setValue("retrigger", retrigger);
 }
 
-EffectDescription::EffectDescription(Effect::Type type, midiNote note) :
+EffectDescription::EffectDescription(Effect::Type type, midiNote note, midiNote cc) :
     type(type),
-    note(note == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : note)
+    note(note == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : note),
+    cc(cc == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : cc)
 {
     valid = !(type == Effect::Type::Invalid || this->note > 127);
     if (!valid)
@@ -107,7 +108,7 @@ ShowDescription::ShowDescription()
 {
     // Create default scene -- show is valid / usable right from the start
     appendScene();
-    for (auto i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
+    for (auto i = 0; i < MAX_EFFECTS; i++) {
         effects_[i] = EffectDescription(static_cast<Effect::Type>(i));
     }
 }
@@ -141,7 +142,8 @@ bool ShowDescription::fromXml(const std::string& filename) {
     config.pushTag("effects");
     if (config.getNumTags("effect") == 0) {
         // create default effects
-        for (auto i = 0; i < static_cast<int>(Effect::Type::Count); i++) {
+        // #TODO revise default effects
+        for (auto i = 0; i < MAX_EFFECTS; i++) {
             effects_[i] = EffectDescription(static_cast<Effect::Type>(i));
         }
     }
