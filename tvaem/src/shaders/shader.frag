@@ -1,6 +1,7 @@
 #version 440
 
 const int n = 8;
+const int nFx = 4;
 
 layout(binding = 0) uniform sampler2DRect layers[n];
 
@@ -10,11 +11,11 @@ uniform bool[n] playing;
 uniform ivec2[n] dimensions;
 uniform int[n] blendingModes;
 uniform float[n] alphas;
+
 uniform float masterAlpha;
-uniform bool invert;
-uniform bool reducePalette;
-uniform bool colorShift;
-uniform bool colorShift2;
+
+uniform int[nFx] fxTypes;
+uniform bool[nFx] fxPlaying;
 
 out vec4 outputColor;
 
@@ -74,12 +75,31 @@ void main()
         blended = masterAlpha * clamp(blended, vec3(0.0), vec3(1.0));
     }
 
-   if (anyPlaying) {
-       blended = mix(blended, vec3(1.0) - blended, invert);
-       blended = mix(blended, round(blended), reducePalette);
-       blended = mix(blended, blended.brg, colorShift);
-       blended = mix(blended, blended.gbr, colorShift2);
-   }
+    for (int i = 0; i < nFx; i++) {
+        if (!anyPlaying)
+            break;
+
+        if (!fxPlaying[i])
+            continue;
+
+        switch (fxTypes[i]) {
+            case 0: // Inverse
+                blended = vec3(1.0) - blended;
+                break;
+            case 1: // ReducePalette
+                blended = round(blended);
+                break;
+            case 2: // ColorShift
+                blended = blended.brg;
+                break;
+            case 3: // ColorShift2
+                blended = blended.gbr;
+                break;
+            default:
+                // do nothing
+                break;
+        }
+    }
 
    outputColor = vec4(blended, 1.0);
 }

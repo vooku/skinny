@@ -27,6 +27,12 @@ public:
     void setAlphaControl(const midiNote& control);
 
 private:
+    struct Uniforms {
+        int fxTypes[MAX_EFFECTS];
+        int fxPlaying[MAX_EFFECTS];
+        float masterAlpha_ = 1.0f;
+    } mutable uniforms_;
+
     void setupUniforms() const;
     bool hasActiveFX() const;
 
@@ -34,10 +40,8 @@ private:
     const int width_, height_;
     ScenePtr currentScene_;
 
-    float masterAlpha_ = 1.0f;
     midiNote masterAlphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
 
     Effects effects_;
-    mutable std::map<Effect::Type, bool> effectUniforms_;
 
 };

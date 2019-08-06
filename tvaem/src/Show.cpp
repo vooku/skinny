@@ -42,7 +42,7 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
     const auto cc = msg.status == MIDI_CONTROL_CHANGE;
 
     if (cc && masterAlphaControl_ == msg.control) {
-        masterAlpha_ = msg.value / 127.0f;
+        uniforms_.masterAlpha_ = msg.value / 127.0f;
         return {};
     }
 
@@ -105,7 +105,7 @@ midiNote Show::getAlphaControl() const
 
 float Show::getAlpha() const
 {
-    return masterAlpha_;
+    return uniforms_.masterAlpha_;
 }
 
 void Show::setAlphaControl(const midiNote & control)
@@ -117,26 +117,22 @@ void Show::setupUniforms() const
 {
     currentScene_->setupUniforms(shader_);
 
-    for (auto i = 0; i < static_cast<int>(Effect::Type::Count); ++i) {
-        effectUniforms_[static_cast<Effect::Type>(i)] = false;
+    for (auto i = 0; i < MAX_EFFECTS; ++i) {
+        uniforms_.fxTypes[i] = static_cast<int>(effects_[i]->type);
+        uniforms_.fxPlaying[i] = effects_[i]->isPlaying();
     }
 
-    for (const auto& effect : effects_) {
-        effectUniforms_[effect->type] = effect->isPlaying() || effectUniforms_[effect->type];
-    }
-
-    shader_.setUniform1f("masterAlpha", masterAlpha_);
+    shader_.setUniform1f("masterAlpha", uniforms_.masterAlpha_);
     shader_.setUniform2iv("screenSize", reinterpret_cast<int*>(&glm::ivec2{ width_, height_ }));
-    shader_.setUniform1i("invert", effectUniforms_[Effect::Type::Inverse]);
-    shader_.setUniform1i("reducePalette", effectUniforms_[Effect::Type::ReducePalette]);
-    shader_.setUniform1i("colorShift", effectUniforms_[Effect::Type::ColorShift]);
-    shader_.setUniform1i("colorShift2", effectUniforms_[Effect::Type::ColorShift2]);
+
+    shader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
+    shader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
 }
 
 bool Show::hasActiveFX() const
 {
-    for (const auto& fu : effectUniforms_) {
-        if (fu.second) {
+    for (auto i = 0; i < MAX_EFFECTS; ++i) {
+        if (uniforms_.fxPlaying[i]) {
             return true;
         }
     }
