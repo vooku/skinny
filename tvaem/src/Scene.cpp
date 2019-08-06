@@ -3,7 +3,6 @@
 void Scene::reload(const SceneDescription & description)
 {
     name_ = description.name;
-    alphaControl_ = description.alphaControl;
     valid_ = true;
 
     for (auto i = 0; i < MAX_LAYERS; ++i) {
@@ -63,11 +62,7 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
     const auto control = msg.control;
     const auto value = msg.value;
 
-    if (!noteOn && !noteOff && !cc)
-        return {};
-
-    if (cc && alphaControl_ ==  control) {
-        setAlpha(value);
+    if (!noteOn && !noteOff && !cc) {
         return {};
     }
 
@@ -117,5 +112,4 @@ void Scene::setupUniforms(ofShader& shader) const
     shader.setUniform2fv("dimensions", reinterpret_cast<float*>(uniforms_.dimensions), MAX_LAYERS);
     shader.setUniform1iv("blendingModes", uniforms_.blendingModes, MAX_LAYERS);
     shader.setUniform1fv("alphas", uniforms_.alphas, MAX_LAYERS);
-    shader.setUniform1f("masterAlpha", uniforms_.masterAlpha);
 }

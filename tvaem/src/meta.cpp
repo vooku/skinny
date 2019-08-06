@@ -73,14 +73,12 @@ void EffectDescription::toXml(ofxXmlSettings & config) const {
 }
 
 
-SceneDescription::SceneDescription(const std::string& name, midiNote alphaControl) :
-    name(name),
-    alphaControl(alphaControl)
+SceneDescription::SceneDescription(const std::string& name) :
+    name(name)
 {}
 
 void SceneDescription::fromXml(ofxXmlSettings & config) {
     name = config.getValue("name", "");
-    alphaControl = config.getValue("masterAlphaControl", DEFAULT_MASTER_ALPHA_CONTROL);
 
     for (auto i = 0; i < config.getNumTags("layer"); i++) {
         config.pushTag("layer", i);
@@ -93,7 +91,6 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
 
 void SceneDescription::toXml(ofxXmlSettings & config) const {
     config.addValue("name", name);
-    config.addValue("masterAlphaControl", alphaControl);
 
     auto validLayers = 0;
     for (const auto& layer : layers) {
@@ -128,6 +125,7 @@ bool ShowDescription::fromXml(const std::string& filename) {
     config.pushTag("head");
     switchNote_ = config.getValue("switchNote", MappableDescription::invalid_midi);
     midiChannel_ = config.getValue("channel", default_channel);
+    alphaControl_ = config.getValue("masterAlphaControl", DEFAULT_MASTER_ALPHA_CONTROL);
     config.popTag(); // head
 
     config.pushTag("show");
@@ -170,6 +168,7 @@ bool ShowDescription::toXml(const std::string& filename) const {
     config.setValue("version", VERSION);
     config.setValue("switchNote", switchNote_);
     config.setValue("channel", midiChannel_);
+    config.addValue("masterAlphaControl", alphaControl_);
     config.popTag(); // head
 
     config.addTag("show");

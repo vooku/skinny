@@ -20,10 +20,6 @@ Show::Show(int width, int height) :
     }
 }
 
-void Show::update()
-{
-}
-
 void Show::draw()
 {
     if (currentScene_->isFrameNew()) {
@@ -43,6 +39,12 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
     const auto noteOn = msg.status == MIDI_NOTE_ON;
     const auto noteOff = msg.status == MIDI_NOTE_OFF;
     const auto note = msg.pitch;
+    const auto cc = msg.status == MIDI_CONTROL_CHANGE;
+
+    if (cc && masterAlphaControl_ == msg.control) {
+        masterAlpha_ = msg.value / 127.0f;
+        return {};
+    }
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         if (effects_[i]->getNote() == note) {
@@ -62,6 +64,8 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
 
 bool Show::reload(const ShowDescription& description)
 {
+    masterAlphaControl_ = description.getAlphaControl();
+
     currentScene_->bind();
 
     shader_.begin();
@@ -83,6 +87,32 @@ void Show::playPauseEffect(int i)
     effects_[i]->playPause();
 }
 
+ScenePtr Show::getCurrentScene() const
+{
+    return currentScene_;
+}
+
+const Show::Effects& Show::getEffects() const
+{
+    return effects_;
+}
+
+
+midiNote Show::getAlphaControl() const
+{
+    return masterAlphaControl_;
+}
+
+float Show::getAlpha() const
+{
+    return masterAlpha_;
+}
+
+void Show::setAlphaControl(const midiNote & control)
+{
+    masterAlphaControl_ = control;
+}
+
 void Show::setupUniforms() const
 {
     currentScene_->setupUniforms(shader_);
@@ -95,6 +125,7 @@ void Show::setupUniforms() const
         effectUniforms_[effect->type] = effect->isPlaying() || effectUniforms_[effect->type];
     }
 
+    shader_.setUniform1f("masterAlpha", masterAlpha_);
     shader_.setUniform2iv("screenSize", reinterpret_cast<int*>(&glm::ivec2{ width_, height_ }));
     shader_.setUniform1i("invert", effectUniforms_[Effect::Type::Inverse]);
     shader_.setUniform1i("reducePalette", effectUniforms_[Effect::Type::ReducePalette]);

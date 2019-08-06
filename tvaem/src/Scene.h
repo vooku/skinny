@@ -29,14 +29,9 @@ public:
 
     void setupUniforms(ofShader& shader) const;
 
-    void setAlpha(int alpha) const { uniforms_.masterAlpha = (alpha < 0 ? 0 : alpha > 127 ? 127 : alpha) / 127.0f; }
-    void setAlphaControl(midiNote control) { alphaControl_ = control; }
-
     const auto& getName() const { return name_; }
     const auto& getLayers() const { return layers_; }
     bool isValid() const { return valid_; }
-    midiNote getAlphaControl() const { return alphaControl_; }
-    float getAlpha() const { return uniforms_.masterAlpha; }
 
 private:
     struct Uniforms {
@@ -44,12 +39,10 @@ private:
         glm::vec2 dimensions[MAX_LAYERS];
         int blendingModes[MAX_LAYERS];
         float alphas[MAX_LAYERS];
-        float masterAlpha = 1.0f;
     } mutable uniforms_;
 
     std::string name_;
     Layers layers_;
     bool valid_;
-    midiNote alphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
 
 };

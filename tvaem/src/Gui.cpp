@@ -59,7 +59,7 @@ void Gui::reload()
 
     sceneNameInput_->setText(show_->getCurrentScene()->getName());
     sceneNameInput_->setLabel("Scene " + std::to_string(showDescription_.getSceneIndex() + 1));
-    masterAlphaInput_->setText(std::to_string(show_->getCurrentScene()->getAlphaControl()));
+    masterAlphaInput_->setText(std::to_string(show_->getAlphaControl()));
     midiChannelInput_->setText(std::to_string(showDescription_.getMidiChannel()));
 
     // layers
@@ -103,7 +103,7 @@ void Gui::update()
     if (!show_)
         return;
 
-    masterAlphaInput_->setLabel(std::to_string(static_cast<int>(show_->getCurrentScene()->getAlpha() * 127)));
+    masterAlphaInput_->setLabel(std::to_string(static_cast<int>(show_->getAlpha() * 127)));
 
     auto& layers = show_->getCurrentScene()->getLayers();
     for (auto i = 0; i < MAX_LAYERS; ++i) {
@@ -234,9 +234,9 @@ void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto control = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_.scenes_[showDescription_.currentIdx_].alphaControl = control;
-    if (show_->getCurrentScene())
-        show_->getCurrentScene()->setAlphaControl(control);
+    showDescription_.alphaControl_ = control;
+    if (show_)
+        show_->setAlphaControl(control);
 }
 
 void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)

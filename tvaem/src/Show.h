@@ -3,6 +3,8 @@
 
 class Gui;
 
+typedef std::shared_ptr<Scene> ScenePtr;
+
 class Show
 {
 public:
@@ -12,24 +14,30 @@ public:
 
     Show(int width, int height);
 
-    void update();
     void draw();
     Scene::FoundMappables newMidiMessage(ofxMidiMessage & msg);
     bool reload(const ShowDescription& description);
     void playPauseEffect(int i);
 
-    auto getCurrentScene() const { return currentScene_; }
-    const auto& getEffects() const { return effects_; }
+    ScenePtr getCurrentScene() const;
+    const Effects& getEffects() const;
+    midiNote getAlphaControl() const;
+    float getAlpha() const;
+
+    void setAlphaControl(const midiNote& control);
 
 private:
-    mutable std::map<Effect::Type, bool> effectUniforms_;
-
     void setupUniforms() const;
     bool hasActiveFX() const;
 
     mutable ofShader shader_;
     const int width_, height_;
-    std::shared_ptr<Scene> currentScene_;
+    ScenePtr currentScene_;
+
+    float masterAlpha_ = 1.0f;
+    midiNote masterAlphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
 
     Effects effects_;
+    mutable std::map<Effect::Type, bool> effectUniforms_;
+
 };

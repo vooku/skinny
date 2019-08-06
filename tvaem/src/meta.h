@@ -48,13 +48,12 @@ struct EffectDescription : public MappableDescription {
 
 struct SceneDescription {
     SceneDescription() = default;
-    SceneDescription(const std::string& name, midiNote alphaControl = DEFAULT_MASTER_ALPHA_CONTROL);
+    SceneDescription(const std::string& name);
 
     void fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
     std::string name;
-    midiNote alphaControl;
     std::array<LayerDescription, MAX_LAYERS> layers;
 };
 
@@ -76,6 +75,7 @@ public:
     auto getSwitchNote() const { return switchNote_; }
     auto getMidiChannel() const { return midiChannel_; }
     const auto& getEffects() const { return effects_; }
+    auto getAlphaControl() const { return alphaControl_; }
 
     void setMidiChannel(int channel) { midiChannel_ = channel; }
 
@@ -88,4 +88,6 @@ private:
     int currentIdx_ = 0;
     midiNote switchNote_ = MappableDescription::invalid_midi;
     int midiChannel_ = default_channel;
+    midiNote alphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
+
 };
