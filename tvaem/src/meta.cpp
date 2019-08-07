@@ -46,7 +46,8 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("retrigger", retrigger);
 }
 
-EffectDescription::EffectDescription(Effect::Type type, midiNote note, midiNote cc) :
+EffectDescription::EffectDescription(int id, Effect::Type type, midiNote note, midiNote cc) :
+    id(id),
     type(type),
     note(note == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : note),
     cc(cc == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : cc)
@@ -57,6 +58,7 @@ EffectDescription::EffectDescription(Effect::Type type, midiNote note, midiNote 
 }
 
 bool EffectDescription::fromXml(ofxXmlSettings & config) {
+    id = config.getValue("id", -1);
     type = static_cast<Effect::Type>(config.getValue("type", static_cast<int>(Effect::Type::Invalid)));
     note = config.getValue("midi", invalid_midi);
     valid = !(type == Effect::Type::Invalid || note == invalid_midi);
@@ -69,6 +71,7 @@ bool EffectDescription::fromXml(ofxXmlSettings & config) {
 }
 
 void EffectDescription::toXml(ofxXmlSettings & config) const {
+    config.setValue("id", id);
     config.setValue("type", static_cast<int>(type));
     config.setValue("midi", note);
 }
@@ -109,7 +112,8 @@ ShowDescription::ShowDescription()
     // Create default scene -- show is valid / usable right from the start
     appendScene();
     for (auto i = 0; i < MAX_EFFECTS; i++) {
-        effects_[i] = EffectDescription(static_cast<Effect::Type>(i));
+        // #TODO revise default effects
+        effects_[i] = EffectDescription(i, static_cast<Effect::Type>(i));
     }
 }
 
@@ -135,7 +139,7 @@ bool ShowDescription::fromXml(const std::string& filename) {
         config.pushTag("scene", i);
         SceneDescription scene;
         scene.fromXml(config);
-        scenes_.push_back(std::move(scene));
+        scenes_.emplace_back(scene);
         config.popTag(); // scene
     }
 
@@ -144,7 +148,7 @@ bool ShowDescription::fromXml(const std::string& filename) {
         // create default effects
         // #TODO revise default effects
         for (auto i = 0; i < MAX_EFFECTS; i++) {
-            effects_[i] = EffectDescription(static_cast<Effect::Type>(i));
+            effects_[i] = EffectDescription(i, static_cast<Effect::Type>(i));
         }
     }
     else {
@@ -152,7 +156,7 @@ bool ShowDescription::fromXml(const std::string& filename) {
             config.pushTag("effect", i);
             EffectDescription effect;
             if (effect.fromXml(config))
-                effects_[i] = std::move(effect);
+                effects_[i] = effect;
             config.popTag(); // effect
         }
     }

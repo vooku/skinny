@@ -15,13 +15,27 @@ char* Effect::c_str(Type type) {
     }
 }
 
-Effect::Effect() :
-    Mappable(),
-    type(Type::Inverse)
+Effect::Effect(int id) :
+    Mappable(MIDI_OFFSET + id, ALPHA_MIDI_OFFSET + id),
+    id_(id),
+    type(static_cast<Type>(id))
 {}
 
-Effect::Effect(Type type, midiNote note, midiNote control, int param) :
-    Mappable(note, control),
+Effect::Effect(int id, Type type, midiNote note, midiNote control, int param) :
+    Mappable(note == -1 ? MIDI_OFFSET + id : note,
+             control == -1 ? ALPHA_MIDI_OFFSET + id : note),
+    id_(id),
     type(type),
     param_(param)
 {}
+
+
+int Effect::getParam() const
+{
+    return param_;
+}
+
+void Effect::setParam(int param)
+{
+    param_ = param;
+}

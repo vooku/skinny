@@ -30,6 +30,7 @@ private:
     struct Uniforms {
         int fxTypes[MAX_EFFECTS];
         int fxPlaying[MAX_EFFECTS];
+        float fxParam[MAX_EFFECTS];
         float masterAlpha_ = 1.0f;
     } mutable uniforms_;
 

@@ -39,10 +39,12 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
     const auto noteOn = msg.status == MIDI_NOTE_ON;
     const auto noteOff = msg.status == MIDI_NOTE_OFF;
     const auto note = msg.pitch;
-    const auto cc = msg.status == MIDI_CONTROL_CHANGE;
+    const auto isCc = msg.status == MIDI_CONTROL_CHANGE;
+    const auto cc = msg.control;
+    const auto value = msg.value;
 
-    if (cc && masterAlphaControl_ == msg.control) {
-        uniforms_.masterAlpha_ = msg.value / 127.0f;
+    if (isCc && masterAlphaControl_ == cc) {
+        uniforms_.masterAlpha_ = value / 127.0f;
         return {};
     }
 
@@ -56,6 +58,9 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
                 effects_[i]->pause();
                 result.effects.emplace_back(i, false);
             }
+        }
+        else if (isCc && effects_[i]->getCc() == cc) {
+            effects_[i]->setParam(value);
         }
     }
 
@@ -73,7 +78,7 @@ bool Show::reload(const ShowDescription& description)
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         const auto& effect = description.getEffects()[i];
-        effects_[i].reset(new Effect(effect.type, effect.note, effect.cc, effect.param));
+        effects_[i].reset(new Effect(i, effect.type, effect.note, effect.cc, effect.param));
     }
 
     shader_.end();
@@ -120,6 +125,7 @@ void Show::setupUniforms() const
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         uniforms_.fxTypes[i] = static_cast<int>(effects_[i]->type);
         uniforms_.fxPlaying[i] = effects_[i]->isPlaying();
+        uniforms_.fxParam[i] = effects_[i]->getParam() / 127.0f;
     }
 
     shader_.setUniform1f("masterAlpha", uniforms_.masterAlpha_);
@@ -127,6 +133,7 @@ void Show::setupUniforms() const
 
     shader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
     shader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
+    shader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
 }
 
 bool Show::hasActiveFX() const

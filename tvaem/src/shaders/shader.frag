@@ -16,8 +16,14 @@ uniform float masterAlpha;
 
 uniform int[nFx] fxTypes;
 uniform bool[nFx] fxPlaying;
+uniform float[nFx] fxParam;
 
 out vec4 outputColor;
+
+vec3 colorShift(vec3 c, float p)
+{
+    return int(p * 127) % 2 == 1 ? c.brg : c.gbr;
+}
 
 void main()
 {
@@ -90,7 +96,7 @@ void main()
                 blended = round(blended);
                 break;
             case 2: // ColorShift
-                blended = blended.brg;
+                blended = colorShift(blended, fxParam[i]);
                 break;
             case 3: // ColorShift2
                 blended = blended.gbr;

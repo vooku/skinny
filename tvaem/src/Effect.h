@@ -16,13 +16,18 @@ public:
     } const type;
 
     static const int MIDI_OFFSET = 8;
+    static const int ALPHA_MIDI_OFFSET = 8;
 
     static char* c_str(Type);
 
-    Effect();
-    Effect(Type type, midiNote note, midiNote control, int param);
+    explicit Effect(int id);
+    Effect(int id, Type type, midiNote note, midiNote control, int param);
+
+    int getParam() const;
+    void setParam(int param);
 
 private:
+    const int id_;
     int param_ = 127;
 
 };

@@ -296,7 +296,7 @@ void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
     const auto param = show_->effects_[idx]->param_;
     showDescription_.effects_[idx].type = type;
     if (show_)
-        show_->effects_[idx].reset(new Effect(type, note, cc, param));
+        show_->effects_[idx].reset(new Effect(idx, type, note, cc, param));
 }
 
 void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)

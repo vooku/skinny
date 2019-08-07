@@ -36,11 +36,12 @@ struct LayerDescription : public MappableDescription {
 
 struct EffectDescription : public MappableDescription {
     EffectDescription() = default;
-    explicit EffectDescription(Effect::Type type, midiNote note = invalid_midi, midiNote cc = invalid_midi);
+    EffectDescription(int id, Effect::Type type, midiNote note = invalid_midi, midiNote cc = invalid_midi);
 
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
+    int id;
     Effect::Type type;
     midiNote note, cc;
     int param = 127;
