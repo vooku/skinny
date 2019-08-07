@@ -20,6 +20,12 @@ uniform float[nFx] fxParam;
 
 out vec4 outputColor;
 
+vec3 posterize(vec3 c, float p)
+{
+    float levels = p * 127;
+    return floor(c * levels) / (levels - 1);
+}
+
 vec3 colorShift(vec3 c, float p)
 {
     return int(p * 127) % 2 == 1 ? c.brg : c.gbr;
@@ -92,8 +98,8 @@ void main()
             case 0: // Inverse
                 blended = vec3(1.0) - blended;
                 break;
-            case 1: // ReducePalette
-                blended = round(blended);
+            case 1: // Posterize
+                blended = posterize(blended, fxParam[i]);
                 break;
             case 2: // ColorShift
                 blended = colorShift(blended, fxParam[i]);

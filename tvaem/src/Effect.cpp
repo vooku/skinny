@@ -4,8 +4,8 @@ char* Effect::c_str(Type type) {
     switch (type)
     {    case Type::Inverse:
         return "Inverse";
-    case Type::ReducePalette:
-        return "Reduce Palette";
+    case Type::Posterize:
+        return "Posterize";
     case Type::ColorShift:
         return "Color Shift";
     case Type::ColorShift2:
