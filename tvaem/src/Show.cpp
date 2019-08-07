@@ -44,7 +44,7 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
     const auto value = msg.value;
 
     if (isCc && masterAlphaControl_ == cc) {
-        uniforms_.masterAlpha_ = value / 127.0f;
+        uniforms_.masterAlpha_ = value / MAX_7BITF;
         return {};
     }
 
@@ -61,6 +61,7 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
         }
         else if (isCc && effects_[i]->getCc() == cc) {
             effects_[i]->setParam(value);
+            
         }
     }
 
@@ -125,7 +126,7 @@ void Show::setupUniforms() const
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         uniforms_.fxTypes[i] = static_cast<int>(effects_[i]->type);
         uniforms_.fxPlaying[i] = effects_[i]->isPlaying();
-        uniforms_.fxParam[i] = effects_[i]->getParam() / 127.0f;
+        uniforms_.fxParam[i] = effects_[i]->getParam() / MAX_7BITF;
     }
 
     shader_.setUniform1f("masterAlpha", uniforms_.masterAlpha_);

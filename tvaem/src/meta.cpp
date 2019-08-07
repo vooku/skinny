@@ -16,7 +16,7 @@ LayerDescription::LayerDescription(unsigned int id,
     //alpha(alpha),
     blendMode(blendMode)
 {
-    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || this->note > 127);
+    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || this->note > MAX_7BITF);
     if (!valid)
         ofLog(OF_LOG_ERROR, "Layer description was initialized with invalid values.");
 }
@@ -52,7 +52,7 @@ EffectDescription::EffectDescription(int id, Effect::Type type, midiNote note, m
     note(note == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : note),
     cc(cc == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : cc)
 {
-    valid = !(type == Effect::Type::Invalid || this->note > 127);
+    valid = !(type == Effect::Type::Invalid || this->note > MAX_7BITF);
     if (!valid)
         ofLog(OF_LOG_ERROR, "Effect description was initialized with invalid values.");
 }
@@ -61,6 +61,8 @@ bool EffectDescription::fromXml(ofxXmlSettings & config) {
     id = config.getValue("id", -1);
     type = static_cast<Effect::Type>(config.getValue("type", static_cast<int>(Effect::Type::Invalid)));
     note = config.getValue("midi", invalid_midi);
+    cc = config.getValue("cc", invalid_midi);
+    param = config.getValue("param", MAX_7BITF);
     valid = !(type == Effect::Type::Invalid || note == invalid_midi);
 
     if (!valid) {
@@ -74,6 +76,8 @@ void EffectDescription::toXml(ofxXmlSettings & config) const {
     config.setValue("id", id);
     config.setValue("type", static_cast<int>(type));
     config.setValue("midi", note);
+    config.setValue("cc", cc);
+    config.setValue("param", param);
 }
 
 

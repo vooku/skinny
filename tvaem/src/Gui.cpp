@@ -120,6 +120,8 @@ void Gui::update()
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         effectParamLabels_[i]->setLabel(std::to_string(show_->effects_[i]->param_));
+        // #TODO This is the wrong place for this!!!
+        showDescription_.effects_[i].param = show_->effects_[i]->param_;
     }
 
 }
