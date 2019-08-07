@@ -1,7 +1,7 @@
 #version 440
 
 const int n = 8;
-const int nFx = 4;
+const int nFx = 5;
 
 layout(binding = 0) uniform sampler2DRect layers[n];
 
