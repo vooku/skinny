@@ -11,7 +11,7 @@ public:
         Inverse       =  0,
         Posterize     =  1,
         ColorShift    =  2,
-        ColorShift2   =  3,
+        Overdrive     =  3,
         Count         =  4
     } const type;
 

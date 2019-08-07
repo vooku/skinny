@@ -8,8 +8,8 @@ char* Effect::c_str(Type type) {
         return "Posterize";
     case Type::ColorShift:
         return "Color Shift";
-    case Type::ColorShift2:
-        return "Double Shift";
+    case Type::Overdrive:
+        return "Overdrive";
     default:
         return "Invalid";
     }

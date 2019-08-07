@@ -31,6 +31,11 @@ vec3 colorShift(vec3 c, float p)
     return int(p * 127) % 2 == 1 ? c.brg : c.gbr;
 }
 
+vec3 overdrive(vec3 c, float p)
+{
+    return mod(c * max(1, p * 127.0f), 1.0f);
+}
+
 void main()
 {
     vec3 blended = vec3(0.0);
@@ -104,8 +109,8 @@ void main()
             case 2: // ColorShift
                 blended = colorShift(blended, fxParam[i]);
                 break;
-            case 3: // ColorShift2
-                blended = blended.gbr;
+            case 3: // Overdrive
+                blended = overdrive(blended,  fxParam[i]);
                 break;
             default:
                 // do nothing
