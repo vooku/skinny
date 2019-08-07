@@ -79,6 +79,7 @@ void ofApp::update()
         Status::instance().reload = false;
     }
 
+    show_->update();
     gui_.update();
 
     if (ofGetFrameNum() % 300 == 0) {

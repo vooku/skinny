@@ -22,7 +22,11 @@ Show::Show(int width, int height) :
 
 void Show::draw()
 {
-    if (currentScene_->isFrameNew()) {
+    // Make sure the first frame is ready before we start drawing.
+    static bool firstFrame = false;
+    firstFrame = firstFrame || currentScene_->isFrameNew();
+
+    if (firstFrame) {
         shader_.begin();
         setupUniforms();
         currentScene_->bind();
@@ -61,7 +65,7 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
         }
         else if (isCc && effects_[i]->getCc() == cc) {
             effects_[i]->setParam(value);
-            
+
         }
     }
 
@@ -91,6 +95,13 @@ bool Show::reload(const ShowDescription& description)
 void Show::playPauseEffect(int i)
 {
     effects_[i]->playPause();
+}
+
+void Show::update()
+{
+    if (currentScene_) {
+        currentScene_->update();
+    }
 }
 
 ScenePtr Show::getCurrentScene() const

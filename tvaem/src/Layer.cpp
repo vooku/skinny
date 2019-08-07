@@ -106,6 +106,10 @@ void Layer::playPause()
 
 bool Layer::isFrameNew()
 {
-    player_.update();
     return player_.isFrameNew();
+}
+
+void Layer::update()
+{
+    player_.update();
 }

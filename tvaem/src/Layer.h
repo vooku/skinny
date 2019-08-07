@@ -36,10 +36,11 @@ public:
     void bind();
     void unbind();
     bool isFrameNew();
+    void update();
 
-    void play() override;
-    void pause() override;
-    void playPause() override;
+    virtual void play() override;
+    virtual void pause() override;
+    virtual void playPause() override;
 
     auto getWidth() const { return player_.getWidth(); }
     auto getHeight() const { return player_.getHeight(); }

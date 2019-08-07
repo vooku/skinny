@@ -54,6 +54,16 @@ bool Scene::isFrameNew()
     return newFrame;
 }
 
+
+void Scene::update()
+{
+    for (auto& layer : layers_) {
+        if (layer) {
+            layer->update();
+        }
+    }
+}
+
 Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
     const auto noteOn = msg.status == MIDI_NOTE_ON;
     const auto noteOff = msg.status == MIDI_NOTE_OFF;

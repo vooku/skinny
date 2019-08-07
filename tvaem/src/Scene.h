@@ -15,6 +15,7 @@ public:
     void bind();
     void unbind();
     bool isFrameNew();
+    void update();
 
     /**
      * Return which layers / effects were (de)activated.

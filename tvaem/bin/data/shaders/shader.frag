@@ -1,6 +1,7 @@
 #version 440
 
 const int n = 8;
+const int nFx = 4;
 
 layout(binding = 0) uniform sampler2DRect layers[n];
 
@@ -10,13 +11,30 @@ uniform bool[n] playing;
 uniform ivec2[n] dimensions;
 uniform int[n] blendingModes;
 uniform float[n] alphas;
+
 uniform float masterAlpha;
-uniform bool invert;
-uniform bool reducePalette;
-uniform bool colorShift;
-uniform bool colorShift2;
+
+uniform int[nFx] fxTypes;
+uniform bool[nFx] fxPlaying;
+uniform float[nFx] fxParam;
 
 out vec4 outputColor;
+
+vec3 posterize(vec3 c, float p)
+{
+    float levels = p * 127;
+    return floor(c * levels) / (levels - 1);
+}
+
+vec3 colorShift(vec3 c, float p)
+{
+    return int(p * 127) % 2 == 1 ? c.brg : c.gbr;
+}
+
+vec3 overdrive(vec3 c, float p)
+{
+    return mod(c * max(1, p * 127.0f), 1.0f);
+}
 
 void main()
 {
@@ -74,12 +92,31 @@ void main()
         blended = masterAlpha * clamp(blended, vec3(0.0), vec3(1.0));
     }
 
-   if (anyPlaying) {
-       blended = mix(blended, vec3(1.0) - blended, invert);
-       blended = mix(blended, round(blended), reducePalette);
-       blended = mix(blended, blended.brg, colorShift);
-       blended = mix(blended, blended.gbr, colorShift2);
-   }
+    for (int i = 0; i < nFx; i++) {
+        if (!anyPlaying)
+            break;
+
+        if (!fxPlaying[i])
+            continue;
+
+        switch (fxTypes[i]) {
+            case 0: // Inverse
+                blended = vec3(1.0) - blended;
+                break;
+            case 1: // Posterize
+                blended = posterize(blended, fxParam[i]);
+                break;
+            case 2: // ColorShift
+                blended = colorShift(blended, fxParam[i]);
+                break;
+            case 3: // Overdrive
+                blended = overdrive(blended,  fxParam[i]);
+                break;
+            default:
+                // do nothing
+                break;
+        }
+    }
 
    outputColor = vec4(blended, 1.0);
 }
