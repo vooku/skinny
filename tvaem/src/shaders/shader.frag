@@ -20,6 +20,16 @@ uniform float[nFx] fxParam;
 
 out vec4 outputColor;
 
+float solarize(float c, float p)
+{
+    return c <= p ? 1 - c : c;
+}
+
+vec3 solarize(vec3 c, float p)
+{
+    return vec3(solarize(c.r, p), solarize(c.g, p), solarize(c.b, p));
+}
+
 vec3 posterize(vec3 c, float p)
 {
     float levels = p * 127;
@@ -100,8 +110,8 @@ void main()
             continue;
 
         switch (fxTypes[i]) {
-            case 0: // Inverse
-                blended = vec3(1.0) - blended;
+            case 0: // Solarize
+                blended = solarize(blended, fxParam[i]);
                 break;
             case 1: // Posterize
                 blended = posterize(blended, fxParam[i]);

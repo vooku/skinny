@@ -2,8 +2,9 @@
 
 char* Effect::c_str(Type type) {
     switch (type)
-    {    case Type::Inverse:
-        return "Inverse";
+    {
+    case Type::Solarize:
+        return "Solarize";
     case Type::Posterize:
         return "Posterize";
     case Type::ColorShift:

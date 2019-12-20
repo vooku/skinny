@@ -8,7 +8,7 @@ class Effect : public Mappable {
 public:
     enum class Type {
         Invalid       = -1,
-        Inverse       =  0,
+        Solarize      =  0,
         Posterize     =  1,
         ColorShift    =  2,
         Overdrive     =  3,
