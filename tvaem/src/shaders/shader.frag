@@ -81,7 +81,7 @@ void main()
                 break;
             }
             case 7: {// Exclusion
-                vec3 tmp = clamp(blended + color + 2.0 * blended * color, 0.0, 1.0);
+                vec3 tmp = clamp(blended + color - 2.0 * blended * color, 0.0, 1.0);
                 blended = mix(blended, tmp, alphas[i]);
                 break;
             }
