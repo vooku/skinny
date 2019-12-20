@@ -8,7 +8,7 @@ layout(binding = 0) uniform sampler2DRect layers[n];
 in vec2[n] uvs;
 
 uniform bool[n] playing;
-uniform ivec2[n] dimensions;
+uniform vec2[n] dimensions;
 uniform int[n] blendingModes;
 uniform float[n] alphas;
 
