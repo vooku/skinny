@@ -1,5 +1,6 @@
 tvaem/bin/*
 !tvaem/bin/data/
+tvaem/bin/data/shaders/*
 tvaem/obj/*
 tvaem/.vs/*
 videos/*
