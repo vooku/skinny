@@ -3,8 +3,8 @@
 namespace skinny {
 
 Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote control) :
-    Mappable(note == -1 ? MIDI_OFFSET + id : note,
-             control == -1 ? ALPHA_MIDI_OFFSET + id : note),
+    Mappable(note == -1 ? LAYER_NOTE_OFFSET + id : note,
+             control == -1 ? LAYER_CC_OFFSET + id : note),
     id_(id),
     name_(path.filename().string()),
     valid_(false),
@@ -23,7 +23,7 @@ Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote 
 }
 
 Layer::Layer(int id, ErrorType error) :
-    Mappable(MIDI_OFFSET + id, ALPHA_MIDI_OFFSET + id),
+    Mappable(LAYER_NOTE_OFFSET + id, LAYER_CC_OFFSET + id),
     id_(id),
     name_(error == ErrorType::Invalid ? "Invalid description." : "Failed to load."),
     valid_(false),

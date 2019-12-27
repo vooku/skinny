@@ -8,9 +8,6 @@ class Effect : public Mappable {
     friend class Gui;
 
 public:
-    static const int MIDI_OFFSET = 8;
-    static const int ALPHA_MIDI_OFFSET = 8;
-
     explicit Effect(int id);
     Effect(int id, EffectType type, midiNote note, midiNote control, int param);
 

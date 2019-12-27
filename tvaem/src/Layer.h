@@ -11,9 +11,6 @@ public:
         Invalid, Failed
     };
 
-    static const int MIDI_OFFSET = 0;
-    static const int ALPHA_MIDI_OFFSET = 0;
-
     // #TODO use layer description?
     Layer(int id, const std::filesystem::path& path, midiNote note = -1, midiNote control = -1);
     Layer(int id, ErrorType error);

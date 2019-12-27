@@ -17,8 +17,8 @@ LayerDescription::LayerDescription(unsigned int id,
                                    //float alpha,
                                    const BlendMode& blendMode) :
     MappableDescription(
-        note == invalid_midi ? id + Layer::MIDI_OFFSET : note,
-        cc == invalid_midi ? id + Layer::ALPHA_MIDI_OFFSET : cc),
+        note == invalid_midi ? id + LAYER_NOTE_OFFSET : note,
+        cc == invalid_midi ? id + LAYER_CC_OFFSET : cc),
     id(id),
     path(path),
     //alpha(alpha),
@@ -33,7 +33,7 @@ bool LayerDescription::fromXml(ofxXmlSettings & config) {
     id = config.getValue("id", -1);
     path = config.getValue("path", invalid_path.string());
     blendMode = static_cast<BlendMode>(config.getValue("blendMode", static_cast<int>(BlendMode::Invalid)));
-    cc = config.getValue("alphaControl", static_cast<int>(id + Layer::ALPHA_MIDI_OFFSET));
+    cc = config.getValue("alphaControl", invalid_midi);
     note = config.getValue("midi", invalid_midi);
     retrigger = config.getValue("retrigger", false);
     valid = !(id >= MAX_LAYERS || path.empty() || blendMode == BlendMode::Invalid || note == invalid_midi);
@@ -56,8 +56,8 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
 
 EffectDescription::EffectDescription(int id, EffectType type, midiNote note, midiNote cc) :
     MappableDescription(
-        note == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : note,
-        cc == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : cc),
+        note == invalid_midi ? static_cast<int>(type) + EFFECT_NOTE_OFFSET : note,
+        cc == invalid_midi ? static_cast<int>(type) + EFFECT_CC_OFFSET : cc),
     id(id),
     type(type)
 {

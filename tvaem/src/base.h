@@ -10,6 +10,10 @@ static const int MAX_EFFECTS = 5;
 static const float MAX_7BITF = 127.0f;
 static constexpr const char * VERSION = "0.6.2-alpha";
 static const midiNote DEFAULT_MASTER_ALPHA_CONTROL = 16;
+static const midiNote LAYER_NOTE_OFFSET = 0;
+static const midiNote LAYER_CC_OFFSET = 0;
+static const midiNote EFFECT_NOTE_OFFSET = 8;
+static const midiNote EFFECT_CC_OFFSET = 8;
 
 // #TODO Create macros for enum strings
 
