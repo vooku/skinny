@@ -88,7 +88,7 @@ private:
     void setupVideoFxPanel(glm::ivec2& pos);
     void setupMidiPanel(glm::ivec2& pos, int w);
     void setupCcPanel(glm::ivec2& pos, int w);
-    void setuAlphaPanel(glm::ivec2& pos);
+    void setupAlphaPanel(glm::ivec2& pos);
     void setupRetriggerPanel(glm::ivec2& pos);
     void setupBlendModePanel(glm::ivec2& pos);
 

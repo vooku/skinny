@@ -32,7 +32,7 @@ void Gui::setup()
     setupVideoFxPanel(pos);
     setupMidiPanel(pos, midiInWidth);
     setupCcPanel(pos, midiInWidth);
-    setuAlphaPanel(pos);
+    setupAlphaPanel(pos);
     setupRetriggerPanel(pos);
     setupBlendModePanel(pos);
 }
@@ -561,7 +561,7 @@ void Gui::setupCcPanel(glm::ivec2& pos, int w)
         effectCCInputs_[i]->setWidth(w, 0); // This doesn't seem to work right
     }
 }
-void Gui::setuAlphaPanel(glm::ivec2& pos)
+void Gui::setupAlphaPanel(glm::ivec2& pos)
 {
     alphaPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
     alphaPanel_->setTheme(&commonTheme_);
