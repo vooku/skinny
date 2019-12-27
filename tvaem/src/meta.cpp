@@ -3,16 +3,22 @@
 const uint8_t MappableDescription::invalid_midi = 255;
 const std::filesystem::path LayerDescription::invalid_path = {};
 
+MappableDescription::MappableDescription(midiNote note, midiNote cc) :
+    note(note),
+    cc(cc)
+{}
+
 LayerDescription::LayerDescription(unsigned int id,
                                    const std::filesystem::path& path,
                                    midiNote note,
                                    midiNote cc,
                                    //float alpha,
                                    const Layer::BlendMode& blendMode) :
+    MappableDescription(
+        note == invalid_midi ? id + Layer::MIDI_OFFSET : note,
+        cc == invalid_midi ? id + Layer::ALPHA_MIDI_OFFSET : cc),
     id(id),
     path(path),
-    note(note == invalid_midi ? id + Layer::MIDI_OFFSET : note),
-    cc(cc == invalid_midi ? id + Layer::ALPHA_MIDI_OFFSET : cc),
     //alpha(alpha),
     blendMode(blendMode)
 {
@@ -47,10 +53,11 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
 }
 
 EffectDescription::EffectDescription(int id, Effect::Type type, midiNote note, midiNote cc) :
+    MappableDescription(
+        note == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : note,
+        cc == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : cc),
     id(id),
-    type(type),
-    note(note == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : note),
-    cc(cc == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : cc)
+    type(type)
 {
     valid = !(type == Effect::Type::Invalid || this->note > MAX_7BITF);
     if (!valid)

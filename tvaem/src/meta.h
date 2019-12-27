@@ -7,8 +7,11 @@
 #include "base.h"
 
 struct MappableDescription {
+    MappableDescription() = default;
+    MappableDescription(midiNote note, midiNote cc);
+
     static const uint8_t invalid_midi;
-    // #TODO actual inheritance?
+    midiNote note, cc;
 };
 
 struct LayerDescription : public MappableDescription {
@@ -27,7 +30,6 @@ struct LayerDescription : public MappableDescription {
 
     unsigned int id;
     std::filesystem::path path;
-    midiNote note, cc;
     //float alpha;
     bool retrigger = false;
     Layer::BlendMode blendMode;
