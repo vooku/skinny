@@ -6,6 +6,8 @@
 #include "Effect.h"
 #include "base.h"
 
+namespace skinny {
+
 struct MappableDescription {
     MappableDescription() = default;
     MappableDescription(midiNote note, midiNote cc);
@@ -95,3 +97,5 @@ private:
     midiNote alphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
 
 };
+
+} // namespace skinny

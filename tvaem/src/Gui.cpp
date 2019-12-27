@@ -1,6 +1,8 @@
 #include "Gui.h"
 #include "Status.h"
 
+namespace skinny {
+
 const std::string Gui::Btn::NEXT = "Next scene";
 const std::string Gui::Btn::PREV = "Previous scene";
 const std::string Gui::Btn::APPEND = "Append scene";
@@ -618,3 +620,5 @@ void Gui::setupBlendModePanel(glm::ivec2& pos)
     }
     blendModePanel_->addBreak();
 }
+
+} // namespace skinny

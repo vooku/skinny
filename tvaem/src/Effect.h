@@ -2,6 +2,8 @@
 
 #include "Mappable.h"
 
+namespace skinny {
+
 class Effect : public Mappable {
     friend class Gui;
 
@@ -31,3 +33,5 @@ private:
     int param_ = 127;
 
 };
+
+} // namespace skinny

@@ -1,6 +1,8 @@
 #pragma once
 #include "Scene.h"
 
+namespace skinny {
+
 class Gui;
 
 typedef std::shared_ptr<Scene> ScenePtr;
@@ -47,3 +49,5 @@ private:
     Effects effects_;
 
 };
+
+} // namespace skinny

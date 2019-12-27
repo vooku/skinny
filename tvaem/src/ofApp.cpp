@@ -2,6 +2,8 @@
 #include "ofApp.h"
 #include "Status.h"
 
+namespace skinny {
+
 ofApp::ofApp(ofxArgs* args) :
     gui_(showDescription_)
 {
@@ -228,3 +230,5 @@ bool ofApp::reload(LoadDir dir)
 
     return true;
 }
+
+} // namespace skinny

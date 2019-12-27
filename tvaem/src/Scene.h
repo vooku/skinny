@@ -3,6 +3,8 @@
 #include "OfxMidi.h"
 #include "meta.h"
 
+namespace skinny {
+
 class Gui;
 
 class Scene {
@@ -47,3 +49,5 @@ private:
     bool valid_;
 
 };
+
+} // namespace skinny

@@ -1,5 +1,7 @@
 #include "meta.h"
 
+namespace skinny {
+
 const uint8_t MappableDescription::invalid_midi = 255;
 const std::filesystem::path LayerDescription::invalid_path = {};
 
@@ -235,3 +237,5 @@ void ShowDescription::appendScene(const std::string& name)
 {
     scenes_.push_back(SceneDescription(name));
 }
+
+} // namespace skinny

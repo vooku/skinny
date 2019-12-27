@@ -7,6 +7,8 @@
 #include "meta.h"
 #include "Gui.h"
 
+namespace skinny {
+
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
     static constexpr const char * NAME = "Triggered Video & FX Mixer";
@@ -52,3 +54,5 @@ private:
 
     Gui gui_;
 };
+
+} // namespace skinny

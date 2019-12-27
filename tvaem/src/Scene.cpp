@@ -1,5 +1,7 @@
 #include "Scene.h"
 
+namespace skinny {
+
 void Scene::reload(const SceneDescription & description)
 {
     name_ = description.name;
@@ -123,3 +125,5 @@ void Scene::setupUniforms(ofShader& shader) const
     shader.setUniform1iv("blendingModes", uniforms_.blendingModes, MAX_LAYERS);
     shader.setUniform1fv("alphas", uniforms_.alphas, MAX_LAYERS);
 }
+
+} // namespace skinny

@@ -1,5 +1,7 @@
 #include "Effect.h"
 
+namespace skinny {
+
 char* Effect::c_str(Type type) {
     switch (type)
     {
@@ -40,3 +42,5 @@ void Effect::setParam(int param)
 {
     param_ = param;
 }
+
+} // namespace skinny

@@ -2,6 +2,8 @@
 
 #include "base.h"
 
+namespace skinny {
+
 class Mappable {
 public:
     Mappable() = default;
@@ -29,3 +31,5 @@ protected:
     midiNote cc_ = 0;
 
 };
+
+} // namespace skinny

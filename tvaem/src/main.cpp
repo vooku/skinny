@@ -17,11 +17,11 @@ int main(int argc, char *argv[]) {
     settings.setSize(1250, 600);
     auto guiWindow = ofCreateWindow(settings);
 
-    shared_ptr<ofApp> mainApp(new ofApp(args.get()));
+    shared_ptr<skinny::ofApp> mainApp(new skinny::ofApp(args.get()));
     mainApp->setupGui();
-    ofAddListener(guiWindow->events().draw, mainApp.get(), &ofApp::drawGui);
-    ofAddListener(guiWindow->events().exit, mainApp.get(), &ofApp::exitGui);
-    ofAddListener(guiWindow->events().keyReleased, mainApp.get(), &ofApp::keyReleasedGui);
+    ofAddListener(guiWindow->events().draw, mainApp.get(), &skinny::ofApp::drawGui);
+    ofAddListener(guiWindow->events().exit, mainApp.get(), &skinny::ofApp::exitGui);
+    ofAddListener(guiWindow->events().keyReleased, mainApp.get(), &skinny::ofApp::keyReleasedGui);
 
     ofRunApp(mainWindow, mainApp);
     ofRunMainLoop();

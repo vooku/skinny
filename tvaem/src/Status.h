@@ -1,5 +1,7 @@
 #pragma once
 
+namespace skinny {
+
 class Status
 {
 public:
@@ -21,3 +23,5 @@ private:
     Status() = default;
 
 };
+
+} // namespace skinny

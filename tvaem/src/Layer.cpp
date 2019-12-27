@@ -1,5 +1,7 @@
 #include "Layer.h"
 
+namespace skinny {
+
 char * Layer::c_str(BlendMode blendMode)
 {
     switch (blendMode)
@@ -113,3 +115,5 @@ void Layer::update()
 {
     player_.update();
 }
+
+} // namespace skinny

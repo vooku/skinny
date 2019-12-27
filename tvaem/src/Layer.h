@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "Mappable.h"
 
+namespace skinny {
+
 class Layer : public Mappable {
 public:
     enum class BlendMode {
@@ -64,3 +66,5 @@ private:
     BlendMode blendMode_;
     float alpha_;
 };
+
+} // namespace skinny

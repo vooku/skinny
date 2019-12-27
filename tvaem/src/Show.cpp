@@ -1,6 +1,8 @@
 #include "Show.h"
 #include "Status.h"
 
+namespace skinny {
+
 Show::Show(int width, int height) :
     width_(width),
     height_(height),
@@ -158,3 +160,5 @@ bool Show::hasActiveFX() const
 
     return false;
 }
+
+} // namespace skinny

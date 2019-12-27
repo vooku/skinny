@@ -7,6 +7,8 @@
 #include <experimental/filesystem>
 #include <chrono>
 
+namespace skinny {
+
 class Gui {
 public:
     static const ofColor BACKGROUND_COLOR;
@@ -127,3 +129,5 @@ private:
         std::chrono::system_clock::time_point start;
     } msg_;
 };
+
+} // namespace skinny
