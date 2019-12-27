@@ -2,31 +2,6 @@
 
 namespace skinny {
 
-char * Layer::c_str(BlendMode blendMode)
-{
-    switch (blendMode)
-    {
-    case BlendMode::Normal:
-        return "Normal";
-    case BlendMode::Multiply:
-        return "Multiply";
-    case BlendMode::Screen:
-        return "Screen";
-    case BlendMode::Darken:
-        return "Darken";
-    case BlendMode::Lighten:
-        return "Lighten";
-    case BlendMode::LinearDodge:
-        return "LinearDodge";
-    case BlendMode::Difference:
-        return "Difference";
-    case BlendMode::Exclusion:
-        return "Exclusion";
-    default:
-        return "Invalid";
-    }
-}
-
 Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote control) :
     Mappable(note == -1 ? MIDI_OFFSET + id : note,
              control == -1 ? ALPHA_MIDI_OFFSET + id : note),

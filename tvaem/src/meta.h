@@ -25,7 +25,7 @@ struct LayerDescription : public MappableDescription {
                      midiNote note = invalid_midi,
                      midiNote cc = invalid_midi,
                      //float alpha = 1.0f,
-                     const Layer::BlendMode& blendMode = Layer::BlendMode::Normal);
+                     const BlendMode& blendMode = BlendMode::Normal);
 
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
@@ -34,19 +34,19 @@ struct LayerDescription : public MappableDescription {
     std::filesystem::path path;
     //float alpha;
     bool retrigger = false;
-    Layer::BlendMode blendMode;
+    BlendMode blendMode;
     bool valid = false;
 };
 
 struct EffectDescription : public MappableDescription {
     EffectDescription() = default;
-    EffectDescription(int id, Effect::Type type, midiNote note = invalid_midi, midiNote cc = invalid_midi);
+    EffectDescription(int id, EffectType type, midiNote note = invalid_midi, midiNote cc = invalid_midi);
 
     bool fromXml(ofxXmlSettings& config);
     void toXml(ofxXmlSettings& config) const;
 
     int id;
-    Effect::Type type;
+    EffectType type;
     midiNote note, cc;
     int param = 127;
     bool valid = false;

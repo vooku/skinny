@@ -7,27 +7,12 @@ namespace skinny {
 
 class Layer : public Mappable {
 public:
-    enum class BlendMode {
-        Invalid     = -1,
-        Normal      =  0, // s
-        Multiply    =  1, // b * s
-        Screen      =  2, // 1 - ((1 - b) * (1 - s))
-        Darken      =  3, // min(b, s)
-        Lighten     =  4, // max(b, s)
-        LinearDodge =  5, // s + b
-        Difference  =  6, // |b - s|
-        Exclusion   =  7, // b + s - 2 * b * s
-        Count       =  8  // Used for iteration
-    };
-
     enum class ErrorType {
         Invalid, Failed
     };
 
     static const int MIDI_OFFSET = 0;
     static const int ALPHA_MIDI_OFFSET = 0;
-
-    static char* c_str(BlendMode blendMode);
 
     // #TODO use layer description?
     Layer(int id, const std::filesystem::path& path, midiNote note = -1, midiNote control = -1);

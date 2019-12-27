@@ -15,7 +15,7 @@ LayerDescription::LayerDescription(unsigned int id,
                                    midiNote note,
                                    midiNote cc,
                                    //float alpha,
-                                   const Layer::BlendMode& blendMode) :
+                                   const BlendMode& blendMode) :
     MappableDescription(
         note == invalid_midi ? id + Layer::MIDI_OFFSET : note,
         cc == invalid_midi ? id + Layer::ALPHA_MIDI_OFFSET : cc),
@@ -24,7 +24,7 @@ LayerDescription::LayerDescription(unsigned int id,
     //alpha(alpha),
     blendMode(blendMode)
 {
-    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || this->note > MAX_7BITF);
+    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == BlendMode::Invalid || this->note > MAX_7BITF);
     if (!valid)
         ofLog(OF_LOG_ERROR, "Layer description was initialized with invalid values.");
 }
@@ -32,11 +32,11 @@ LayerDescription::LayerDescription(unsigned int id,
 bool LayerDescription::fromXml(ofxXmlSettings & config) {
     id = config.getValue("id", -1);
     path = config.getValue("path", invalid_path.string());
-    blendMode = static_cast<Layer::BlendMode>(config.getValue("blendMode", static_cast<int>(Layer::BlendMode::Invalid)));
+    blendMode = static_cast<BlendMode>(config.getValue("blendMode", static_cast<int>(BlendMode::Invalid)));
     cc = config.getValue("alphaControl", static_cast<int>(id + Layer::ALPHA_MIDI_OFFSET));
     note = config.getValue("midi", invalid_midi);
     retrigger = config.getValue("retrigger", false);
-    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == Layer::BlendMode::Invalid || note == invalid_midi);
+    valid = !(id >= MAX_LAYERS || path.empty() || blendMode == BlendMode::Invalid || note == invalid_midi);
 
     if (!valid) {
         ofLog(OF_LOG_ERROR, "Layer description contains invalid values and will be skipped.");
@@ -54,25 +54,25 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("retrigger", retrigger);
 }
 
-EffectDescription::EffectDescription(int id, Effect::Type type, midiNote note, midiNote cc) :
+EffectDescription::EffectDescription(int id, EffectType type, midiNote note, midiNote cc) :
     MappableDescription(
         note == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : note,
         cc == invalid_midi ? static_cast<int>(type) + Effect::MIDI_OFFSET : cc),
     id(id),
     type(type)
 {
-    valid = !(type == Effect::Type::Invalid || this->note > MAX_7BITF);
+    valid = !(type == EffectType::Invalid || this->note > MAX_7BITF);
     if (!valid)
         ofLog(OF_LOG_ERROR, "Effect description was initialized with invalid values.");
 }
 
 bool EffectDescription::fromXml(ofxXmlSettings & config) {
     id = config.getValue("id", -1);
-    type = static_cast<Effect::Type>(config.getValue("type", static_cast<int>(Effect::Type::Invalid)));
+    type = static_cast<EffectType>(config.getValue("type", static_cast<int>(EffectType::Invalid)));
     note = config.getValue("midi", invalid_midi);
     cc = config.getValue("cc", invalid_midi);
     param = config.getValue("param", MAX_7BITF);
-    valid = !(type == Effect::Type::Invalid || note == invalid_midi);
+    valid = !(type == EffectType::Invalid || note == invalid_midi);
 
     if (!valid) {
         ofLog(OF_LOG_ERROR, "Effect description contains invalid values and will be skipped.");
@@ -126,7 +126,7 @@ ShowDescription::ShowDescription()
     appendScene();
     for (auto i = 0; i < MAX_EFFECTS; i++) {
         // #TODO revise default effects
-        effects_[i] = EffectDescription(i, static_cast<Effect::Type>(i));
+        effects_[i] = EffectDescription(i, static_cast<EffectType>(i));
     }
 }
 
@@ -161,7 +161,7 @@ bool ShowDescription::fromXml(const std::string& filename) {
         // create default effects
         // #TODO revise default effects
         for (auto i = 0; i < MAX_EFFECTS; i++) {
-            effects_[i] = EffectDescription(i, static_cast<Effect::Type>(i));
+            effects_[i] = EffectDescription(i, static_cast<EffectType>(i));
         }
     }
     else {

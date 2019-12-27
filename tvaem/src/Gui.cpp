@@ -285,7 +285,7 @@ void Gui::onMidiChannelInput(ofxDatGuiTextInputEvent e)
 void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
-    const auto blendMode = static_cast<Layer::BlendMode>(e.child);
+    const auto blendMode = static_cast<BlendMode>(e.child);
     showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].blendMode = blendMode;
     if (show_ && show_->getCurrentScene()->layers_[idx])
         show_->getCurrentScene()->layers_[idx]->setBlendMode(blendMode);
@@ -294,7 +294,7 @@ void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
-    const auto type = static_cast<Effect::Type>(e.child);
+    const auto type = static_cast<EffectType>(e.child);
     const auto note = show_->effects_[idx]->getNote();
     const auto cc = show_->effects_[idx]->getCc();
     const auto param = show_->effects_[idx]->param_;
@@ -494,7 +494,7 @@ void Gui::setupVideoFxPanel(glm::ivec2& pos)
 
     std::vector<string> options;
     for (auto i = 0u; i < MAX_EFFECTS; ++i)
-        options.push_back(Effect::c_str(static_cast<Effect::Type>(i)));
+        options.push_back(c_str(static_cast<EffectType>(i)));
 
     for (auto i = 0; i < effectDropdowns_.size(); ++i) {
         effectDropdowns_[i] = videoFxPanel_->addDropdown("Select...", options);
@@ -609,13 +609,13 @@ void Gui::setupBlendModePanel(glm::ivec2& pos)
     blendModePanel_->addBreak();
 
     std::vector<string> options;
-    for (auto i = static_cast<int>(Layer::BlendMode::Normal); i < static_cast<int>(Layer::BlendMode::Count); ++i)
-        options.push_back(Layer::c_str(static_cast<Layer::BlendMode>(i)));
+    for (auto i = static_cast<int>(BlendMode::Normal); i < static_cast<int>(BlendMode::Count); ++i)
+        options.push_back(c_str(static_cast<BlendMode>(i)));
 
     for (int i = 0; i < blendModeDropdowns_.size(); ++i) {
         blendModeDropdowns_[i] = blendModePanel_->addDropdown("Select...", options);
         blendModeDropdowns_[i]->setName(std::to_string(i));
-        blendModeDropdowns_[i]->select(static_cast<int>(Layer::BlendMode::Normal));
+        blendModeDropdowns_[i]->select(static_cast<int>(BlendMode::Normal));
         blendModeDropdowns_[i]->onDropdownEvent(this, &Gui::onBlendModeDropdown);
     }
     blendModePanel_->addBreak();
