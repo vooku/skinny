@@ -14,6 +14,9 @@ static const midiNote LAYER_NOTE_OFFSET = 0;
 static const midiNote LAYER_CC_OFFSET = 0;
 static const midiNote EFFECT_NOTE_OFFSET = 8;
 static const midiNote EFFECT_CC_OFFSET = 8;
+static const int MAX_LABEL_LENGTH = 36;
+static constexpr const char * FONT_REGULAR = "fonts/IBMPlexMono-Regular.ttf";
+static constexpr const char * FONT_ITALIC = "fonts/IBMPlexSerif-Italic.ttf";
 
 // #TODO Create macros for enum strings
 

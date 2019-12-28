@@ -19,8 +19,8 @@ Gui::Gui(ShowDescription& showDescription) :
 
 void Gui::setup()
 {
-    fonts_.regular.load("fonts/IBMPlexSans-Regular.ttf", fonts_.sizeRegular, true, false);
-    fonts_.italic.load("fonts/IBMPlexSerif-Italic.ttf", fonts_.sizeItalic, true, false);
+    fonts_.regular.load(FONT_REGULAR, fonts_.sizeRegular, true, false);
+    fonts_.italic.load(FONT_ITALIC, fonts_.sizeItalic, true, false);
 
     glm::ivec2 pos{ DELTA, DELTA };
     const auto toggleWidth = 2 * DELTA;
@@ -73,7 +73,12 @@ void Gui::reload()
         layerMuteToggles_[i]->setChecked(false);
 
         if (layers[i]) {
-            layerButtons_[i]->setLabel(layers[i]->getName());
+            const auto name = layers[i]->getName();
+            const auto label =
+                name.length() > MAX_LABEL_LENGTH ?
+                name.substr(0, MAX_LABEL_LENGTH - 3) + "..." :
+                name;
+            layerButtons_[i]->setLabel(label);
             layerMidiInputs_[i]->setText(std::to_string(layers[i]->getNote()));
             layerCCInputs_[i]->setText(std::to_string(layers[i]->getCc()));
             layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
@@ -363,7 +368,7 @@ Gui::CommonTheme::CommonTheme() :
     color.label = ofColor::antiqueWhite;
     stripe.visible = false;
     font.size = Gui::Fonts::sizeRegular;
-    font.file = "fonts/IBMPlexSans-Regular.ttf";
+    font.file = FONT_REGULAR;
 
     init();
 }
@@ -373,7 +378,7 @@ Gui::HeaderTheme::HeaderTheme() :
 {
     layout.height *= 1.4;
     font.size = Gui::Fonts::sizeItalic;
-    font.file = "fonts/IBMPlexSerif-Italic.ttf";
+    font.file = FONT_ITALIC;
 
     init();
 }
