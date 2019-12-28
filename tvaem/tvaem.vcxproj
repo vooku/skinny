@@ -188,6 +188,7 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\base.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\Gui.cpp" />
     <ClCompile Include="src\Layer.cpp" />
@@ -273,6 +274,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="ClassDiagram.cd" />
     <None Include="src\shaders\shader.frag" />
     <None Include="src\shaders\shader.vert" />
   </ItemGroup>

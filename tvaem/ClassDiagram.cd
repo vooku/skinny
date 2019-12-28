@@ -1,0 +1,272 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="skinny::Effect">
+    <Position X="13.5" Y="5" Width="1.5" />
+    <Members>
+      <Method Name="Effect" Hidden="true" />
+      <Field Name="id_" Hidden="true" />
+      <Field Name="type" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgCAAAAAAAAAAAAAAABAAAACIAAAAAAAgA=</HashCode>
+      <FileName>src\Effect.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="skinny::Gui">
+    <Position X="18.25" Y="0.5" Width="2.25" />
+    <Members>
+      <Field Name="BACKGROUND_COLOR" Hidden="true" />
+      <Field Name="DELTA" Hidden="true" />
+      <Method Name="Gui" Hidden="true" />
+      <Field Name="MAX_CHARS" Hidden="true" />
+      <Method Name="onBlendModeDropdown" Hidden="true" />
+      <Method Name="onControlButton" Hidden="true" />
+      <Method Name="onEffectCcInput" Hidden="true" />
+      <Method Name="onEffectDropdown" Hidden="true" />
+      <Method Name="onEffectMidiInput" Hidden="true" />
+      <Method Name="onEffectMuteToggle" Hidden="true" />
+      <Method Name="onEffectPlayToggle" Hidden="true" />
+      <Method Name="onLayerButton" Hidden="true" />
+      <Method Name="onLayerCcInput" Hidden="true" />
+      <Method Name="onLayerMidiInput" Hidden="true" />
+      <Method Name="onLayerMuteToggle" Hidden="true" />
+      <Method Name="onLayerPlayToggle" Hidden="true" />
+      <Method Name="onLayerRetriggerToggle" Hidden="true" />
+      <Method Name="onMasterAlphaCcInput" Hidden="true" />
+      <Method Name="onMidiChannelInput" Hidden="true" />
+      <Method Name="onSceneNameInput" Hidden="true" />
+      <Method Name="setupAlphaPanel" Hidden="true" />
+      <Method Name="setupBlendModePanel" Hidden="true" />
+      <Method Name="setupCcPanel" Hidden="true" />
+      <Method Name="setupControlPanel" Hidden="true" />
+      <Method Name="setupMidiPanel" Hidden="true" />
+      <Method Name="setupMutePanel" Hidden="true" />
+      <Method Name="setupPlayPanel" Hidden="true" />
+      <Method Name="setupRetriggerPanel" Hidden="true" />
+      <Method Name="setupVideoFxPanel" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Struct Name="skinny::Gui::Btn" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Gui.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Class Name="skinny::Gui::CommonTheme" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Gui.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="skinny::Gui::HeaderTheme" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Gui.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Struct Name="skinny::Gui::Fonts" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Gui.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="skinny::Gui::Message" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Gui.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>IGGEEJQSBshEB+nEUBKhAACNgCwpCIAA0IoCJBBUgkk=</HashCode>
+      <FileName>src\Gui.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="skinny::Layer">
+    <Position X="11.75" Y="5" Width="1.5" />
+    <Members>
+      <Method Name="~Layer" Hidden="true" />
+      <Field Name="id_" Hidden="true" />
+      <Method Name="Layer" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="skinny::Layer::ErrorType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Layer.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>wgCAAAQQAIABCAAAAAACAAAAAACIQAAEAAAUIEAEJgQ=</HashCode>
+      <FileName>src\Layer.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="skinny::Mappable">
+    <Position X="12.5" Y="0.5" Width="1.5" />
+    <Members>
+      <Method Name="~Mappable" Hidden="true" />
+      <Method Name="Mappable" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>ACAAEAACAAAEAAAAAAABAAAAAACAABAEgAEAEAARIAA=</HashCode>
+      <FileName>src\Mappable.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="skinny::ShowDescription">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Members>
+      <Field Name="default_channel" Hidden="true" />
+      <Method Name="ShowDescription" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEBAAAApQIAAAAgMQAEICACEAEIAIAQAAAAABAAAAAA=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="skinny::Scene">
+    <Position X="9.75" Y="0.5" Width="1.75" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Typedef Name="skinny::Scene::Layers" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Scene.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Struct Name="skinny::Scene::FoundMappables" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Scene.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="skinny::Scene::Uniforms" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Scene.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAIAACAAAAAAgAAAAAAEKAAQAAAAEAAAkZAQ=</HashCode>
+      <FileName>src\Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="skinny::Show">
+    <Position X="7.75" Y="0.5" Width="1.75" />
+    <Members>
+      <Method Name="Show" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Typedef Name="skinny::Show::Effects" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Show.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Typedef>
+      <Struct Name="skinny::Show::Uniforms" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\Show.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AEBAAQQQACAAAABgQAogABCAAQEMAAQAAAAAAAAEAAA=</HashCode>
+      <FileName>src\Show.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="skinny::Status">
+    <Position X="20.75" Y="0.5" Width="1.5" />
+    <Members>
+      <Method Name="operator=" Hidden="true" />
+      <Method Name="Status" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAEAAAAgAAAAAAAAAAAAABIAAAAAAAgACAAAAA=</HashCode>
+      <FileName>src\Status.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="skinny::ofApp">
+    <Position X="16" Y="0.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Struct Name="skinny::ofApp::__unnamed_struct_0040_1" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>src\ofApp.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Enum Name="skinny::ofApp::LoadDir">
+        <TypeIdentifier>
+          <NewMemberFileName>src\ofApp.h</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ECACAAAAAAAABAgAAAZgAAAACAiIAAQAgkAIACAEAEA=</HashCode>
+      <FileName>src\ofApp.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="skinny::SceneDescription">
+    <Position X="0.5" Y="5.75" Width="1.5" />
+    <Members>
+      <Method Name="SceneDescription" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEIAAAAAAABAAAAAg=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="skinny::MappableDescription">
+    <Position X="3.5" Y="0.5" Width="1.75" />
+    <Members>
+      <Field Name="invalid_midi" Hidden="true" />
+      <Method Name="MappableDescription" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AQAAEAAAAAAAAAAAAAAAAAAAAAAAEAABAAAAAAAAAAA=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="skinny::LayerDescription">
+    <Position X="2.5" Y="3.25" Width="1.5" />
+    <Members>
+      <Field Name="invalid_path" Hidden="true" />
+      <Method Name="LayerDescription" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAACAAAAAABAIAAAAAAARAAAAgQ=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="skinny::EffectDescription">
+    <Position X="4.75" Y="3.25" Width="1.5" />
+    <Members>
+      <Method Name="EffectDescription" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AQAAEAAAAAACAAAAAAAAAAAAAAABIABAAAAABAAAAgQ=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="skinny::BlendMode">
+    <Position X="7.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAEAAAAEAAAAAAABAABAAQAQgAIAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>src\base.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="skinny::EffectType">
+    <Position X="9.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAEAAAAAIAAAAAAAQEAAAAAAAABABAAAAAAAA=</HashCode>
+      <FileName>src\base.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
