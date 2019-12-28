@@ -8,12 +8,21 @@
 
 namespace skinny {
 
-struct MappableDescription {
+struct Serialiazable {
+    virtual bool fromXml(ofxXmlSettings& config) = 0;
+    virtual void toXml(ofxXmlSettings& config) const = 0;
+};
+
+struct MappableDescription : public Serialiazable {
     MappableDescription() = default;
     MappableDescription(midiNote note, midiNote cc);
 
+    bool fromXml(ofxXmlSettings& config) override = 0;
+    void toXml(ofxXmlSettings& config) const override = 0;
+
     static const uint8_t invalid_midi;
     midiNote note, cc;
+    bool valid = false;
 };
 
 struct LayerDescription : public MappableDescription {
@@ -27,50 +36,47 @@ struct LayerDescription : public MappableDescription {
                      //float alpha = 1.0f,
                      const BlendMode& blendMode = BlendMode::Normal);
 
-    bool fromXml(ofxXmlSettings& config);
-    void toXml(ofxXmlSettings& config) const;
+    bool fromXml(ofxXmlSettings& config) override;
+    void toXml(ofxXmlSettings& config) const override;
 
     unsigned int id;
     std::filesystem::path path;
     //float alpha;
     bool retrigger = false;
     BlendMode blendMode;
-    bool valid = false;
 };
 
 struct EffectDescription : public MappableDescription {
     EffectDescription() = default;
     EffectDescription(int id, EffectType type, midiNote note = invalid_midi, midiNote cc = invalid_midi);
 
-    bool fromXml(ofxXmlSettings& config);
-    void toXml(ofxXmlSettings& config) const;
+    bool fromXml(ofxXmlSettings& config) override;
+    void toXml(ofxXmlSettings& config) const override;
 
     int id;
     EffectType type;
-    midiNote note, cc;
     int param = 127;
-    bool valid = false;
 };
 
-struct SceneDescription {
+struct SceneDescription : public Serialiazable {
     SceneDescription() = default;
     SceneDescription(const std::string& name);
 
-    void fromXml(ofxXmlSettings& config);
-    void toXml(ofxXmlSettings& config) const;
+    bool fromXml(ofxXmlSettings& config) override;
+    void toXml(ofxXmlSettings& config) const override;
 
     std::string name;
     std::array<LayerDescription, MAX_LAYERS> layers;
 };
 
-class ShowDescription {
+class ShowDescription : public Serialiazable {
 public:
     friend class Gui;
 
     ShowDescription();
 
-    bool fromXml(const std::string& filename);
-    bool toXml(const std::string& filename) const;
+    bool fromXml(ofxXmlSettings& config) override;
+    void toXml(ofxXmlSettings& config) const override;
     ShowDescription& operator++();
     ShowDescription& operator--();
     void appendScene(const std::string& name = "New scene");

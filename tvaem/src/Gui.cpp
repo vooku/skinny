@@ -182,7 +182,9 @@ void Gui::onLayerButton(ofxDatGuiButtonEvent e)
 void Gui::onControlButton(ofxDatGuiButtonEvent e)
 {
     auto save = [&](const std::string& path) {
-        if (!showDescription_.toXml(path)) {
+        ofxXmlSettings config;
+        showDescription_.toXml(config);
+        if (!config.saveFile(path)) {
             ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
             displayMessage("Cannot save config file to " + path, 1000);
         } else {
@@ -198,6 +200,21 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
         }
     };
 
+    auto load = [&]() {
+        auto openFileResult = ofSystemLoadDialog("Select config file");
+        if (openFileResult.bSuccess) {
+            ofxXmlSettings config;
+            if (config.loadFile(openFileResult.filePath) && showDescription_.fromXml(config)) {
+                configPath_ = openFileResult.filePath;
+            }
+            else {
+                ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
+                showDescription_.appendScene();
+            }
+            Status::instance().reload = true;
+        }
+    };
+
     const auto name = e.target->getName();
     if (name == Btn::NEXT) {
         Status::instance().forward = true;
@@ -206,16 +223,7 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
     } else if (name == Btn::APPEND) {
         showDescription_.appendScene();
     } else if (name == Btn::LOAD) {
-        auto openFileResult = ofSystemLoadDialog("Select config file");
-        if (openFileResult.bSuccess) {
-            if (!showDescription_.fromXml(openFileResult.filePath)) {
-                ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
-                showDescription_.appendScene();
-            } else {
-                configPath_ = openFileResult.filePath;
-            }
-            Status::instance().reload = true;
-        }
+        load();
     } else if (name == Btn::SAVE) {
         if (!configPath_.empty()) {
             save(configPath_);

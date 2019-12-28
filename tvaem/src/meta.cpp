@@ -94,7 +94,7 @@ SceneDescription::SceneDescription(const std::string& name) :
     name(name)
 {}
 
-void SceneDescription::fromXml(ofxXmlSettings & config) {
+bool SceneDescription::fromXml(ofxXmlSettings & config) {
     name = config.getValue("name", "");
 
     for (auto i = 0; i < config.getNumTags("layer"); i++) {
@@ -104,6 +104,8 @@ void SceneDescription::fromXml(ofxXmlSettings & config) {
             layers[layer.id] = std::move(layer);
         config.popTag(); // layer
     }
+
+    return true; // #TODO check this somehow
 }
 
 void SceneDescription::toXml(ofxXmlSettings & config) const {
@@ -130,15 +132,10 @@ ShowDescription::ShowDescription()
     }
 }
 
-bool ShowDescription::fromXml(const std::string& filename) {
-    ofxXmlSettings config;
-    if (!config.loadFile(filename)) {
-        return false;
-    }
-
+bool ShowDescription::fromXml(ofxXmlSettings& config) {
     currentIdx_ = 0;
     scenes_.clear();
-    // TODO check for pushTag() etc return values
+    // #TODO check for pushTag() etc return values
 
     config.pushTag("head");
     switchNote_ = config.getValue("switchNote", MappableDescription::invalid_midi);
@@ -180,8 +177,7 @@ bool ShowDescription::fromXml(const std::string& filename) {
     return true;
 }
 
-bool ShowDescription::toXml(const std::string& filename) const {
-    ofxXmlSettings config;
+void ShowDescription::toXml(ofxXmlSettings& config) const {
     config.addTag("head");
     config.pushTag("head");
     config.setValue("version", VERSION);
@@ -214,8 +210,6 @@ bool ShowDescription::toXml(const std::string& filename) const {
     }
 
     config.popTag(); // show
-
-    return config.saveFile(filename);
 }
 
 ShowDescription & ShowDescription::operator++() {

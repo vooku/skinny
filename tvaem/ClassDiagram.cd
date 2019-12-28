@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="skinny::Effect">
-    <Position X="13.5" Y="5" Width="1.5" />
+    <Position X="16.25" Y="5" Width="1.5" />
     <Members>
       <Method Name="Effect" Hidden="true" />
       <Field Name="id_" Hidden="true" />
@@ -16,7 +16,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="skinny::Gui">
-    <Position X="18.25" Y="0.5" Width="2.25" />
+    <Position X="21" Y="0.5" Width="2.25" />
     <Members>
       <Field Name="BACKGROUND_COLOR" Hidden="true" />
       <Field Name="DELTA" Hidden="true" />
@@ -84,7 +84,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="skinny::Layer">
-    <Position X="11.75" Y="5" Width="1.5" />
+    <Position X="14.5" Y="5" Width="1.5" />
     <Members>
       <Method Name="~Layer" Hidden="true" />
       <Field Name="id_" Hidden="true" />
@@ -106,7 +106,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="skinny::Mappable">
-    <Position X="12.5" Y="0.5" Width="1.5" />
+    <Position X="15.25" Y="0.5" Width="1.5" />
     <Members>
       <Method Name="~Mappable" Hidden="true" />
       <Method Name="Mappable" Hidden="true" />
@@ -116,19 +116,8 @@
       <FileName>src\Mappable.h</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="skinny::ShowDescription">
-    <Position X="0.5" Y="0.5" Width="1.5" />
-    <Members>
-      <Field Name="default_channel" Hidden="true" />
-      <Method Name="ShowDescription" Hidden="true" />
-    </Members>
-    <TypeIdentifier>
-      <HashCode>AEBAAAApQIAAAAgMQAEICACEAEIAIAQAAAAABAAAAAA=</HashCode>
-      <FileName>src\meta.h</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="skinny::Scene">
-    <Position X="9.75" Y="0.5" Width="1.75" />
+    <Position X="12.5" Y="0.5" Width="1.75" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
@@ -155,7 +144,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="skinny::Show">
-    <Position X="7.75" Y="0.5" Width="1.75" />
+    <Position X="10.5" Y="0.5" Width="1.75" />
     <Members>
       <Method Name="Show" Hidden="true" />
     </Members>
@@ -180,7 +169,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="skinny::Status">
-    <Position X="20.75" Y="0.5" Width="1.5" />
+    <Position X="23.5" Y="0.5" Width="1.5" />
     <Members>
       <Method Name="operator=" Hidden="true" />
       <Method Name="Status" Hidden="true" />
@@ -191,7 +180,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="skinny::ofApp">
-    <Position X="16" Y="0.5" Width="2" />
+    <Position X="18.75" Y="0.5" Width="2" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
@@ -212,8 +201,58 @@
       <FileName>src\ofApp.h</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="skinny::ShowDescription">
+    <Position X="6.25" Y="2.75" Width="1.5" />
+    <Members>
+      <Field Name="default_channel" Hidden="true" />
+      <Method Name="ShowDescription" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEBAAAApQIAAAAgMQAEICACEAEIAIAQAAAAABAAAAAA=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="skinny::Serialiazable">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAABAAAAAA=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="skinny::MappableDescription">
+    <Position X="1.5" Y="2.75" Width="1.75" />
+    <Members>
+      <Field Name="invalid_midi" Hidden="true" />
+      <Method Name="MappableDescription" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AQAAEAAAAAAAAAAAAAAAAAAAAAAAMAABAAAABAAAAAQ=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="skinny::LayerDescription">
+    <Position X="2.75" Y="6" Width="1.5" />
+    <Members>
+      <Field Name="invalid_path" Hidden="true" />
+      <Method Name="LayerDescription" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAACAAAAAABAIAAAAAAARAAAAgA=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="skinny::EffectDescription">
+    <Position X="0.5" Y="6" Width="1.5" />
+    <Members>
+      <Method Name="EffectDescription" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAABIABAAAAABAAAAgA=</HashCode>
+      <FileName>src\meta.h</FileName>
+    </TypeIdentifier>
+  </Struct>
   <Struct Name="skinny::SceneDescription">
-    <Position X="0.5" Y="5.75" Width="1.5" />
+    <Position X="4" Y="2.75" Width="1.5" />
     <Members>
       <Method Name="SceneDescription" Hidden="true" />
     </Members>
@@ -222,47 +261,15 @@
       <FileName>src\meta.h</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="skinny::MappableDescription">
-    <Position X="3.5" Y="0.5" Width="1.75" />
-    <Members>
-      <Field Name="invalid_midi" Hidden="true" />
-      <Method Name="MappableDescription" Hidden="true" />
-    </Members>
-    <TypeIdentifier>
-      <HashCode>AQAAEAAAAAAAAAAAAAAAAAAAAAAAEAABAAAAAAAAAAA=</HashCode>
-      <FileName>src\meta.h</FileName>
-    </TypeIdentifier>
-  </Struct>
-  <Struct Name="skinny::LayerDescription">
-    <Position X="2.5" Y="3.25" Width="1.5" />
-    <Members>
-      <Field Name="invalid_path" Hidden="true" />
-      <Method Name="LayerDescription" Hidden="true" />
-    </Members>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAEAACAAAAAABAIAAAAAAARAAAAgQ=</HashCode>
-      <FileName>src\meta.h</FileName>
-    </TypeIdentifier>
-  </Struct>
-  <Struct Name="skinny::EffectDescription">
-    <Position X="4.75" Y="3.25" Width="1.5" />
-    <Members>
-      <Method Name="EffectDescription" Hidden="true" />
-    </Members>
-    <TypeIdentifier>
-      <HashCode>AQAAEAAAAAACAAAAAAAAAAAAAAABIABAAAAABAAAAgQ=</HashCode>
-      <FileName>src\meta.h</FileName>
-    </TypeIdentifier>
-  </Struct>
   <Enum Name="skinny::BlendMode">
-    <Position X="7.75" Y="7.25" Width="1.5" />
+    <Position X="10.5" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAEAAAAEAAAAAAABAABAAQAQgAIAAAAAAAAAAAAAAE=</HashCode>
       <FileName>src\base.h</FileName>
     </TypeIdentifier>
   </Enum>
   <Enum Name="skinny::EffectType">
-    <Position X="9.5" Y="7.25" Width="1.5" />
+    <Position X="12.25" Y="7.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAEAAAAAIAAAAAAAQEAAAAAAAABABAAAAAAAA=</HashCode>
       <FileName>src\base.h</FileName>
