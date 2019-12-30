@@ -1,8 +1,8 @@
-tvaem/bin/*
-!tvaem/bin/data/
-tvaem/bin/data/shaders/*
-tvaem/obj/*
-tvaem/.vs/*
+skinny/bin/*
+!skinny/bin/data/
+skinny/bin/data/shaders/*
+skinny/obj/*
+skinny/.vs/*
 videos/*
 *.log
 
