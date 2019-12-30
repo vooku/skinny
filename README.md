@@ -1,4 +1,4 @@
-# TVAEM – Triggered Video & FX Mixer
+# Skinny Mixer
 
 Mix video loops and apply simple effects triggered by MIDI events.
 

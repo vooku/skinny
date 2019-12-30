@@ -25,14 +25,14 @@ void ofApp::setup()
     if (settings_.console)
         ofLogToConsole();
     else
-        ofLogToFile("tvaem.log", true);
+        ofLogToFile("skinny.log", true);
     ofSetLogLevel(settings_.verbose ? OF_LOG_VERBOSE : OF_LOG_NOTICE);
     ofSetFrameRate(30);
     ofBackground(ofColor::black);
     ofSetVerticalSync(true);
 
-    ofLog(OF_LOG_NOTICE, "TRIGERRED VIDEO & FX MIXER %s", VERSION);
-    ofLog(OF_LOG_NOTICE, "Designed by Vadim Vooku Petrov.");
+    ofLog(OF_LOG_NOTICE, "%s %s", NAME, VERSION);
+    ofLog(OF_LOG_NOTICE, "Designed by %s.", AUTHOR);
 
     const auto major = ofGetGLRenderer()->getGLversionMajor();
     const auto minor = ofGetGLRenderer()->getGLversionMinor();
