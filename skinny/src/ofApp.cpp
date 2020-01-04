@@ -1,6 +1,7 @@
 #include <ctime>
 #include "ofApp.h"
 #include "Status.h"
+#include <chrono>
 
 namespace skinny {
 
@@ -205,6 +206,7 @@ bool ofApp::reload(LoadDir dir)
     }
 
     gui_.displayMessage("Loading...");
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     switch (dir)
     {
@@ -224,9 +226,12 @@ bool ofApp::reload(LoadDir dir)
         gui_.reload();
     }
     else {
-        // TODO display in gui
+        // #TODO display in gui
         ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", showDescription_.currentScene().name.c_str());
     }
+
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+    std::cout << "Time difference = " << std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "[ms]" << std::endl;
 
     return true;
 }
