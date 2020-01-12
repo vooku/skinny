@@ -212,19 +212,36 @@ void ShowDescription::toXml(ofxXmlSettings& config) const {
     config.popTag(); // show
 }
 
-ShowDescription & ShowDescription::operator++() {
-    currentIdx_ = ++currentIdx_ % scenes_.size();
-    return *this;
-}
-
-ShowDescription & ShowDescription::operator--()
+bool ShowDescription::shift(LoadDir dir, int idx)
 {
-    --currentIdx_;
-    if (currentIdx_ < 0)
-        currentIdx_ = currentIdx_ + static_cast<int>(scenes_.size());
-    else
-        currentIdx_ = currentIdx_ % static_cast<int>(scenes_.size());
-    return *this;
+    const auto prevIdx = currentIdx_;
+    switch (dir)
+    {
+    case LoadDir::Current:
+        // nothing
+        break;
+    case LoadDir::Forward:
+        currentIdx_ = ++currentIdx_ % scenes_.size();
+        break;
+    case LoadDir::Backward:
+        --currentIdx_;
+        if (currentIdx_ < 0)
+            currentIdx_ = currentIdx_ + static_cast<int>(scenes_.size());
+        else
+            currentIdx_ = currentIdx_ % static_cast<int>(scenes_.size());
+        break;
+    case LoadDir::Jump:
+        if (idx >= 0 && idx < scenes_.size()) {
+            currentIdx_ = idx;
+            return true;
+        }
+        break;
+    default:
+        ofLog(ofLogLevel::OF_LOG_ERROR, "Tried to shift description with invalid enum.");
+        return false;
+    }
+
+    return prevIdx != currentIdx_;
 }
 
 void ShowDescription::appendScene(const std::string& name)

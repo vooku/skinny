@@ -5,6 +5,7 @@ namespace skinny {
 
 const std::string Gui::Btn::NEXT = "Next scene";
 const std::string Gui::Btn::PREV = "Previous scene";
+const std::string Gui::Btn::JUMP = "Jump to scene";
 const std::string Gui::Btn::APPEND = "Append scene";
 const std::string Gui::Btn::SAVE = "Save";
 const std::string Gui::Btn::SAVE_AS = "Save as";
@@ -54,13 +55,20 @@ void Gui::draw() const
     //if (blendModePanel_) blendModePanel_->draw();
 }
 
+std::string buildJumpToLabel(int idx, int size)
+{
+    return std::to_string(idx) + "/" + std::to_string(size);
+}
+
 void Gui::reload()
 {
     if (!show_)
         return;
 
     sceneNameInput_->setText(show_->getCurrentScene()->getName());
-    sceneNameInput_->setLabel("Scene " + std::to_string(showDescription_.getSceneIndex() + 1));
+    sceneNameInput_->setLabel("Scene");
+    jumpToInput_->setLabel(buildJumpToLabel(showDescription_.currentIdx_ + 1, showDescription_.getSize()));
+    jumpToInput_->setText(std::to_string(showDescription_.currentIdx_ + 1));
     masterAlphaInput_->setText(std::to_string(show_->getAlphaControl()));
     midiChannelInput_->setText(std::to_string(showDescription_.getMidiChannel()));
 
@@ -126,9 +134,11 @@ void Gui::update()
     }
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
-        effectParamLabels_[i]->setLabel(std::to_string(show_->effects_[i]->param_));
-        // #TODO This is the wrong place for this!!!
-        showDescription_.effects_[i].param = show_->effects_[i]->param_;
+        if (show_->effects_[i]) {
+            effectParamLabels_[i]->setLabel(std::to_string(show_->effects_[i]->param_));
+            // #TODO This is the wrong place for this!!!
+            showDescription_.effects_[i].param = show_->effects_[i]->param_;
+        }
     }
 
 }
@@ -158,6 +168,16 @@ void Gui::setActiveEffect(int idx, bool active)
     }
 }
 
+int Gui::getJumpToIndex() const
+{
+    return std::stoi(jumpToInput_->getText()) - 1;
+}
+
+void Gui::resetJumpToIndex()
+{
+    jumpToInput_->setText(std::to_string(showDescription_.currentIdx_ + 1));
+}
+
 void Gui::displayMessage(const std::string& msg, int duration)
 {
     msg_.msg = msg;
@@ -175,7 +195,8 @@ void Gui::onLayerButton(ofxDatGuiButtonEvent e)
             layerDescription.path = openFileResult.getPath();
         else
             layerDescription = { static_cast<unsigned int>(idx), openFileResult.getPath() };
-        Status::instance().reload = true;
+        Status::instance().load = true;
+        Status::instance().loadDir = LoadDir::Current;
     }
 }
 
@@ -211,17 +232,26 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
                 ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
                 showDescription_.appendScene();
             }
-            Status::instance().reload = true;
+            Status::instance().load = true;
+            Status::instance().loadDir = LoadDir::Current;
         }
     };
 
     const auto name = e.target->getName();
     if (name == Btn::NEXT) {
-        Status::instance().forward = true;
+        Status::instance().load = true;
+        Status::instance().loadDir = LoadDir::Forward;
     } else if (name == Btn::PREV) {
-        Status::instance().backward = true;
-    } else if (name == Btn::APPEND) {
+        Status::instance().load = true;
+        Status::instance().loadDir = LoadDir::Backward;
+    } else if (name == Btn::JUMP) {
+        Status::instance().load = true;
+        Status::instance().loadDir = LoadDir::Jump;
+        // # TODO jump to
+    }
+    else if (name == Btn::APPEND) {
         showDescription_.appendScene();
+        jumpToInput_->setLabel(buildJumpToLabel(showDescription_.currentIdx_ + 1, showDescription_.getSize()));
     } else if (name == Btn::LOAD) {
         load();
     } else if (name == Btn::SAVE) {
@@ -403,6 +433,11 @@ void Gui::setupControlPanel(glm::ivec2& pos)
 
     controlButtons_.push_back(controlPanel_->addButton(Btn::NEXT));
     controlButtons_.push_back(controlPanel_->addButton(Btn::PREV));
+    jumpToInput_ = controlPanel_->addTextInput("");
+    jumpToInput_->setInputType(ofxDatGuiInputType::NUMERIC);
+    jumpToInput_->setLabel(buildJumpToLabel(0, 0));
+    jumpToInput_->setText("0");
+    controlButtons_.push_back(controlPanel_->addButton(Btn::JUMP));
     controlButtons_.push_back(controlPanel_->addButton(Btn::APPEND));
     controlPanel_->addBreak();
     controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE));

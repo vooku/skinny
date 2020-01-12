@@ -1,5 +1,7 @@
 #pragma once
 
+#include "base.h"
+
 namespace skinny {
 
 class Status
@@ -14,10 +16,15 @@ public:
         return status;
     }
 
-    bool exit = false;     //!< The app should exit.
-    bool forward = false;  //!< Next scene should be loaded.
-    bool backward = false; //!< Previous scene should be loaded.
-    bool reload = false;   //!< Current scene should be reloaded.
+    void resetLoad()
+    {
+        load = false;
+        loadDir = LoadDir::None;
+    }
+
+    bool exit = false;    //!< The app should exit.
+    bool load = false;    //!< Load a scene according to loadDir.
+    LoadDir loadDir = LoadDir::None;
 
 private:
     Status() = default;

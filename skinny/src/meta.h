@@ -77,8 +77,11 @@ public:
 
     bool fromXml(ofxXmlSettings& config) override;
     void toXml(ofxXmlSettings& config) const override;
-    ShowDescription& operator++();
-    ShowDescription& operator--();
+
+    /**
+     * @return True if the current scene index was changed.
+     */
+    bool shift(LoadDir dir, int idx = -1);
     void appendScene(const std::string& name = "New scene");
 
     const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }

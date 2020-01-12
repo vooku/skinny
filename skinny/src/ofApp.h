@@ -41,11 +41,7 @@ private:
     void parseArgs(ofxArgs* args);
     void setupMidi();
 
-    enum class LoadDir {
-        Current, Forward, Backward
-    };
-
-    bool reload(LoadDir dir);
+    bool reload();
 
     std::shared_ptr<Show> show_;
     ShowDescription showDescription_;

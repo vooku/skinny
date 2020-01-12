@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
     settings.setSize(1920, 1080);
     auto mainWindow = ofCreateWindow(settings);
 
-    settings.setSize(1250, 600);
+    settings.setSize(1250, 700);
     auto guiWindow = ofCreateWindow(settings);
 
     shared_ptr<skinny::ofApp> mainApp(new skinny::ofApp(args.get()));

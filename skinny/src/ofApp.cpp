@@ -50,7 +50,8 @@ void ofApp::setup()
     show_ = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
     gui_.setShow(show_);
 
-    reload(LoadDir::Current);
+    Status::instance().loadDir = LoadDir::Current;
+    reload();
 }
 
 void ofApp::setupGui()
@@ -68,17 +69,9 @@ void ofApp::update()
         //return;
     }
 
-    if (Status::instance().forward) {
-        reload(LoadDir::Forward);
-        Status::instance().forward = false;
-    }
-    else if (Status::instance().backward) {
-        reload(LoadDir::Backward);
-        Status::instance().backward = false;
-    }
-    else if (Status::instance().reload) {
-        reload(LoadDir::Current);
-        Status::instance().reload = false;
+    if (Status::instance().load) {
+        reload();
+        Status::instance().resetLoad();
     }
 
     show_->update();
@@ -138,8 +131,10 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
         return;
     }
 
-    if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription_.getSwitchNote())
-        Status::instance().forward = true;
+    if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription_.getSwitchNote()) {
+        Status::instance().load = true;
+        Status::instance().loadDir = LoadDir::Forward;
+    }
     else {
         auto foundMappables = show_->newMidiMessage(msg);
 
@@ -197,7 +192,7 @@ void ofApp::setupMidi()
     }
 }
 
-bool ofApp::reload(LoadDir dir)
+bool ofApp::reload()
 {
     if (showDescription_.getSize() < 1) {
         ofLog(OF_LOG_ERROR, "Cannot load a scene from and empty show.");
@@ -206,17 +201,10 @@ bool ofApp::reload(LoadDir dir)
 
     gui_.displayMessage("Loading...");
 
-    switch (dir)
-    {
-    case LoadDir::Forward:
-        ++showDescription_;
-        break;
-    case LoadDir::Backward:
-        --showDescription_;
-        break;
-    default:
-        // do nothing
-        break;
+    const auto shifted = showDescription_.shift(Status::instance().loadDir, gui_.getJumpToIndex());
+    if (!shifted && Status::instance().loadDir != LoadDir::Current) {
+        gui_.resetJumpToIndex();
+        return false;
     }
 
     if (show_->reload(showDescription_)) {

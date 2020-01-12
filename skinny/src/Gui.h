@@ -24,6 +24,9 @@ public:
     void setActiveLayer(int idx, bool active);
     void setActiveEffect(int idx, bool active);
 
+    int getJumpToIndex() const;
+    void resetJumpToIndex();
+
     /**
      * @brief Display a single line message in the GUI.
      *
@@ -60,6 +63,7 @@ private:
     struct Btn {
         static const std::string NEXT;
         static const std::string PREV;
+        static const std::string JUMP;
         static const std::string APPEND;
         static const std::string SAVE;
         static const std::string SAVE_AS;
@@ -102,6 +106,7 @@ private:
     ofxDatGuiTextInput* sceneNameInput_;
     ofxDatGuiTextInput* masterAlphaInput_;
     ofxDatGuiTextInput* midiChannelInput_;
+    ofxDatGuiTextInput* jumpToInput_;
     std::vector<ofxDatGuiButton*> controlButtons_;
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
