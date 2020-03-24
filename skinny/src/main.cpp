@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
 
     ofGLWindowSettings settings;
 
-    settings.setGLversion(4, 3);
+    settings.setGLVersion(4, 3);
     settings.setSize(1920, 1080);
     auto mainWindow = ofCreateWindow(settings);
 

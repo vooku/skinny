@@ -34,8 +34,8 @@ void ofApp::setup()
     ofLog(OF_LOG_NOTICE, "%s %s", NAME, VERSION);
     ofLog(OF_LOG_NOTICE, "Designed by %s.", AUTHOR);
 
-    const auto major = ofGetGLRenderer()->getGLversionMajor();
-    const auto minor = ofGetGLRenderer()->getGLversionMinor();
+    const auto major = ofGetGLRenderer()->getGLVersionMajor();
+    const auto minor = ofGetGLRenderer()->getGLVersionMinor();
     const auto vendor = glGetString(GL_VENDOR);
     const auto renderer = glGetString(GL_RENDERER);
     ofLog(OF_LOG_NOTICE, "Using OpenGL v%d.%d, GPU: %s %s.", major, minor, vendor, renderer);
