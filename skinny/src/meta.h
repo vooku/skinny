@@ -34,7 +34,7 @@ struct LayerDescription : public MappableDescription {
                      midiNote note = invalid_midi,
                      midiNote cc = invalid_midi,
                      //float alpha = 1.0f,
-                     const BlendMode& blendMode = BlendMode::Normal);
+                     const BlendMode& blendMode = DEFAULT_BLEND_MODE);
 
     bool fromXml(ofxXmlSettings& config) override;
     void toXml(ofxXmlSettings& config) const override;

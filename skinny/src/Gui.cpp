@@ -98,7 +98,7 @@ void Gui::reload()
             layerMidiInputs_[i]->setText("");
             layerCCInputs_[i]->setText("");
             layerRetriggerToggles_[i]->setChecked(false);
-            blendModeDropdowns_[i]->select(0);
+            blendModeDropdowns_[i]->select(static_cast<int>(DEFAULT_BLEND_MODE));
         }
     }
 
@@ -657,13 +657,12 @@ void Gui::setupBlendModePanel(glm::ivec2& pos)
     blendModePanel_->addBreak();
 
     std::vector<string> options;
-    for (auto i = static_cast<int>(BlendMode::Normal); i < static_cast<int>(BlendMode::Count); ++i)
+    for (auto i = static_cast<int>(BlendMode::Overlay); i < static_cast<int>(BlendMode::Count); ++i)
         options.push_back(c_str(static_cast<BlendMode>(i)));
 
     for (int i = 0; i < blendModeDropdowns_.size(); ++i) {
         blendModeDropdowns_[i] = blendModePanel_->addDropdown("Select...", options);
         blendModeDropdowns_[i]->setName(std::to_string(i));
-        blendModeDropdowns_[i]->select(static_cast<int>(BlendMode::Normal));
         blendModeDropdowns_[i]->onDropdownEvent(this, &Gui::onBlendModeDropdown);
     }
     blendModePanel_->addBreak();

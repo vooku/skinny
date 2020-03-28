@@ -24,7 +24,7 @@ static constexpr const char * FONT_ITALIC = "fonts/IBMPlexSerif-Italic.ttf";
 
 enum class BlendMode {
     Invalid     = -1,
-    Normal      = 0, // s
+    Overlay      = 0, // s
     Multiply    = 1, // b * s
     Screen      = 2, // 1 - ((1 - b) * (1 - s))
     Darken      = 3, // min(b, s)
@@ -36,6 +36,8 @@ enum class BlendMode {
 };
 
 const char* c_str(BlendMode blendMode);
+
+static const BlendMode DEFAULT_BLEND_MODE = BlendMode::LinearDodge;
 
 enum class EffectType {
     Invalid     = -1,

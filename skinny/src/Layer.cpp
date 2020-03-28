@@ -27,7 +27,7 @@ Layer::Layer(int id, ErrorType error) :
     id_(id),
     name_(error == ErrorType::Invalid ? "Invalid description." : "Failed to load."),
     valid_(false),
-    blendMode_(BlendMode::Normal),
+    blendMode_(DEFAULT_BLEND_MODE),
     alpha_(0)
 {
 }
