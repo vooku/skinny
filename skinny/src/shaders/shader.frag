@@ -20,14 +20,11 @@ uniform float[nFx] fxParam;
 
 out vec4 outputColor;
 
-float solarize(float c, float p)
-{
-    return c <= p ? 1 - c : c;
-}
-
 vec3 solarize(vec3 c, float p)
 {
-    return vec3(solarize(c.r, p), solarize(c.g, p), solarize(c.b, p));
+    const vec3 lum = { 0.2126, 0.7152, 0.0722 };
+    const bool invert = dot(c, lum) <= p;
+    return invert ? 1 - c : c;
 }
 
 vec3 posterize(vec3 c, float p)
