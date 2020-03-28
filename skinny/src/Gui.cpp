@@ -6,7 +6,7 @@ namespace skinny {
 const std::string Gui::Btn::NEXT = "Next scene";
 const std::string Gui::Btn::PREV = "Previous scene";
 const std::string Gui::Btn::JUMP = "Jump to scene";
-const std::string Gui::Btn::APPEND = "Append scene";
+const std::string Gui::Btn::NEW = "New scene";
 const std::string Gui::Btn::SAVE = "Save";
 const std::string Gui::Btn::SAVE_AS = "Save as";
 const std::string Gui::Btn::LOAD = "Load";
@@ -195,7 +195,6 @@ void Gui::onLayerButton(ofxDatGuiButtonEvent e)
             layerDescription.path = openFileResult.getPath();
         else
             layerDescription = { static_cast<unsigned int>(idx), openFileResult.getPath() };
-        Status::instance().load = true;
         Status::instance().loadDir = LoadDir::Current;
     }
 }
@@ -232,26 +231,24 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
                 ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
                 showDescription_.appendScene();
             }
-            Status::instance().load = true;
             Status::instance().loadDir = LoadDir::Current;
         }
     };
 
     const auto name = e.target->getName();
     if (name == Btn::NEXT) {
-        Status::instance().load = true;
         Status::instance().loadDir = LoadDir::Forward;
     } else if (name == Btn::PREV) {
-        Status::instance().load = true;
         Status::instance().loadDir = LoadDir::Backward;
     } else if (name == Btn::JUMP) {
-        Status::instance().load = true;
         Status::instance().loadDir = LoadDir::Jump;
-        // # TODO jump to
+        Status::instance().jumpToIndex = getJumpToIndex();
     }
-    else if (name == Btn::APPEND) {
+    else if (name == Btn::NEW) {
         showDescription_.appendScene();
         jumpToInput_->setLabel(buildJumpToLabel(showDescription_.currentIdx_ + 1, showDescription_.getSize()));
+        Status::instance().loadDir = LoadDir::Jump;
+        Status::instance().jumpToIndex = showDescription_.getSize() - 1;
     } else if (name == Btn::LOAD) {
         load();
     } else if (name == Btn::SAVE) {
@@ -438,7 +435,7 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     jumpToInput_->setLabel(buildJumpToLabel(0, 0));
     jumpToInput_->setText("0");
     controlButtons_.push_back(controlPanel_->addButton(Btn::JUMP));
-    controlButtons_.push_back(controlPanel_->addButton(Btn::APPEND));
+    controlButtons_.push_back(controlPanel_->addButton(Btn::NEW));
     controlPanel_->addBreak();
     controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE));
     controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE_AS));

@@ -16,15 +16,9 @@ public:
         return status;
     }
 
-    void resetLoad()
-    {
-        load = false;
-        loadDir = LoadDir::None;
-    }
-
     bool exit = false;    //!< The app should exit.
-    bool load = false;    //!< Load a scene according to loadDir.
     LoadDir loadDir = LoadDir::None;
+    int jumpToIndex = 0;  //!< In the case of LoadDir::Jump
 
 private:
     Status() = default;

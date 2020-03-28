@@ -64,7 +64,7 @@ private:
         static const std::string NEXT;
         static const std::string PREV;
         static const std::string JUMP;
-        static const std::string APPEND;
+        static const std::string NEW;
         static const std::string SAVE;
         static const std::string SAVE_AS;
         static const std::string LOAD;

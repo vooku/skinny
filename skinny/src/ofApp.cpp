@@ -69,9 +69,8 @@ void ofApp::update()
         //return;
     }
 
-    if (Status::instance().load) {
+    if (Status::instance().loadDir != LoadDir::None) {
         reload();
-        Status::instance().resetLoad();
     }
 
     show_->update();
@@ -132,7 +131,6 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
     }
 
     if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription_.getSwitchNote()) {
-        Status::instance().load = true;
         Status::instance().loadDir = LoadDir::Forward;
     }
     else {
@@ -201,7 +199,7 @@ bool ofApp::reload()
 
     gui_.displayMessage("Loading...");
 
-    const auto shifted = showDescription_.shift(Status::instance().loadDir, gui_.getJumpToIndex());
+    const auto shifted = showDescription_.shift(Status::instance().loadDir, Status::instance().jumpToIndex);
     if (!shifted && Status::instance().loadDir != LoadDir::Current) {
         gui_.resetJumpToIndex();
         return false;
@@ -216,6 +214,7 @@ bool ofApp::reload()
         ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", showDescription_.currentScene().name.c_str());
     }
 
+    Status::instance().loadDir = LoadDir::None;
     return true;
 }
 
