@@ -1,6 +1,8 @@
 #include "Gui.h"
 #include "Status.h"
 
+#include <filesystem>
+
 namespace skinny {
 
 const std::string Gui::Btn::NEXT = "Next scene";
@@ -121,6 +123,10 @@ void Gui::update()
     if (!show_)
         return;
 
+    if (!configName_.empty()) {
+      ofSetWindowTitle(configName_);
+    }
+    
     masterAlphaInput_->setLabel(std::to_string(static_cast<int>(show_->getAlpha() * 127)));
 
     const auto& layers = show_->getCurrentScene()->getLayers();
@@ -140,7 +146,6 @@ void Gui::update()
             showDescription_.effects_[i].param = show_->effects_[i]->param_;
         }
     }
-
 }
 
 void Gui::setShow(std::shared_ptr<Show> show)
@@ -209,6 +214,7 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
             displayMessage("Cannot save config file to " + path, 1000);
         } else {
             configPath_ = path;
+            configName_ = std::filesystem::path(configPath_).filename().string();
             displayMessage("Saved!", 1000);
         }
     };
@@ -226,6 +232,7 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
             ofxXmlSettings config;
             if (config.loadFile(openFileResult.filePath) && showDescription_.fromXml(config)) {
                 configPath_ = openFileResult.filePath;
+                configName_ = std::filesystem::path(configPath_).filename().string();
             }
             else {
                 ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());

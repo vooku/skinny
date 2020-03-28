@@ -127,6 +127,7 @@ private:
     ShowDescription& showDescription_;
 
     std::string configPath_;
+    std::string configName_;
 
     struct Message {
         std::string msg;

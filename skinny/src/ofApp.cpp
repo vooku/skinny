@@ -74,11 +74,15 @@ void ofApp::update()
     }
 
     show_->update();
-    gui_.update();
 
     if (ofGetFrameNum() % 300 == 0) {
         ofLog(OF_LOG_NOTICE, "fps: %f", ofGetFrameRate());
     }
+}
+
+void ofApp::updateGui(ofEventArgs& args)
+{
+  gui_.update();
 }
 
 //--------------------------------------------------------------

@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
     shared_ptr<skinny::ofApp> mainApp(new skinny::ofApp(args.get()));
     mainApp->setupGui();
     ofAddListener(guiWindow->events().draw, mainApp.get(), &skinny::ofApp::drawGui);
+    ofAddListener(guiWindow->events().update, mainApp.get(), &skinny::ofApp::updateGui);
     ofAddListener(guiWindow->events().exit, mainApp.get(), &skinny::ofApp::exitGui);
     ofAddListener(guiWindow->events().keyReleased, mainApp.get(), &skinny::ofApp::keyReleasedGui);
 

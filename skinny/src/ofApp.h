@@ -18,6 +18,7 @@ public:
     void setup() override;
     void setupGui();
     void update() override;
+    void updateGui(ofEventArgs& args);
     void draw() override;
     void drawGui(ofEventArgs& args);
     void exit() override;
