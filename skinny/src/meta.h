@@ -82,7 +82,7 @@ public:
      * @return True if the current scene index was changed.
      */
     bool shift(LoadDir dir, int idx = -1);
-    void appendScene(const std::string& name = "New scene");
+    void appendScene(const std::string& name = "Enter name");
 
     const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }
     auto getSceneIndex() const { return currentIdx_; }
