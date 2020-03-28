@@ -2,6 +2,7 @@
 
 namespace skinny {
 
+//--------------------------------------------------------------
 Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote control) :
     Mappable(note == -1 ? LAYER_NOTE_OFFSET + id : note,
              control == -1 ? LAYER_CC_OFFSET + id : note),
@@ -22,6 +23,7 @@ Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote 
         ofLog(OF_LOG_VERBOSE, "Loaded %s.", name_.c_str());
 }
 
+//--------------------------------------------------------------
 Layer::Layer(int id, ErrorType error) :
     Mappable(LAYER_NOTE_OFFSET + id, LAYER_CC_OFFSET + id),
     id_(id),
@@ -32,11 +34,13 @@ Layer::Layer(int id, ErrorType error) :
 {
 }
 
+//--------------------------------------------------------------
 Layer::~Layer()
 {
     player_.closeMovie();
 }
 
+//--------------------------------------------------------------
 bool Layer::reload(const std::filesystem::path& path)
 {
     player_.closeMovie();
@@ -45,13 +49,14 @@ bool Layer::reload(const std::filesystem::path& path)
     return success;
 }
 
+//--------------------------------------------------------------
 void Layer::bind() {
     if (!valid_)
         return;
     player_.getTexture().bind(id_);
 }
 
-
+//--------------------------------------------------------------
 void Layer::unbind()
 {
     if (!valid_)
@@ -59,12 +64,14 @@ void Layer::unbind()
     player_.getTexture().unbind(id_);
 }
 
+//--------------------------------------------------------------
 void Layer::play()
 {
     active_ = !mute_;
     player_.setPaused(!active_);
 }
 
+//--------------------------------------------------------------
 void Layer::pause()
 {
     active_ = false;
@@ -73,6 +80,7 @@ void Layer::pause()
     player_.setPaused(!active_);
 }
 
+//--------------------------------------------------------------
 void Layer::playPause()
 {
     active_ = !active_ && !mute_;
@@ -81,11 +89,13 @@ void Layer::playPause()
     player_.setPaused(!active_);
 }
 
+//--------------------------------------------------------------
 bool Layer::isFrameNew()
 {
     return player_.isFrameNew();
 }
 
+//--------------------------------------------------------------
 void Layer::update()
 {
     player_.update();

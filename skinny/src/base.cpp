@@ -2,6 +2,7 @@
 
 namespace skinny {
 
+//--------------------------------------------------------------
 const char * c_str(BlendMode blendMode)
 {
     switch (blendMode)
@@ -27,6 +28,7 @@ const char * c_str(BlendMode blendMode)
     }
 }
 
+//--------------------------------------------------------------
 const char* c_str(EffectType type) {
     switch (type)
     {

@@ -4,12 +4,14 @@
 
 namespace skinny {
 
+//--------------------------------------------------------------
 ofApp::ofApp(ofxArgs* args) :
     gui_(showDescription_)
 {
     parseArgs(args);
 }
 
+//--------------------------------------------------------------
 void ofApp::setup()
 {
     if (settings_.cancelSetup) {
@@ -54,6 +56,7 @@ void ofApp::setup()
     reload();
 }
 
+//--------------------------------------------------------------
 void ofApp::setupGui()
 {
     ofSetWindowTitle(NAME);
@@ -80,6 +83,7 @@ void ofApp::update()
     }
 }
 
+//--------------------------------------------------------------
 void ofApp::updateGui(ofEventArgs& args)
 {
   gui_.update();
@@ -92,12 +96,13 @@ void ofApp::draw()
     show_->draw();
 }
 
-
+//--------------------------------------------------------------
 void ofApp::drawGui(ofEventArgs&) {
 
     gui_.draw();
 }
 
+//--------------------------------------------------------------
 void ofApp::exit()
 {
     for (auto& midiInput : midiInputs_) {
@@ -105,6 +110,7 @@ void ofApp::exit()
     }
 }
 
+//--------------------------------------------------------------
 void ofApp::exitGui(ofEventArgs&) {
     Status::instance().exit = true;
 }
@@ -122,11 +128,13 @@ void ofApp::keyReleased(ofKeyEventArgs& key)
     }
 }
 
+//--------------------------------------------------------------
 void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 {
     keyReleased(args);
 }
 
+//--------------------------------------------------------------
 void ofApp::newMidiMessage(ofxMidiMessage & msg)
 {
     if (msg.channel != showDescription_.getMidiChannel()) {
@@ -149,6 +157,7 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
     }
 }
 
+//--------------------------------------------------------------
 void ofApp::usage()
 {
     std::cout <<
@@ -160,6 +169,7 @@ void ofApp::usage()
         << std::endl;
 }
 
+//--------------------------------------------------------------
 void ofApp::parseArgs(ofxArgs* args)
 {
     if (args->contains("-h") || args->contains("--help") || args->contains("--usage")) {
@@ -180,6 +190,7 @@ void ofApp::parseArgs(ofxArgs* args)
     settings_.console = args->contains("--console");
 }
 
+//--------------------------------------------------------------
 void ofApp::setupMidi()
 {
     if (settings_.verbose) {
@@ -194,6 +205,7 @@ void ofApp::setupMidi()
     }
 }
 
+//--------------------------------------------------------------
 bool ofApp::reload()
 {
     if (showDescription_.getSize() < 1) {

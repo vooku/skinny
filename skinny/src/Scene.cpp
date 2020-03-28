@@ -2,6 +2,7 @@
 
 namespace skinny {
 
+//--------------------------------------------------------------
 void Scene::reload(const SceneDescription & description)
 {
     name_ = description.name;
@@ -29,6 +30,7 @@ void Scene::reload(const SceneDescription & description)
     }
 }
 
+//--------------------------------------------------------------
 void Scene::bind()
 {
     for (auto& layer : layers_) {
@@ -37,7 +39,7 @@ void Scene::bind()
     }
 }
 
-
+//--------------------------------------------------------------
 void Scene::unbind()
 {
     for (auto& layer : layers_) {
@@ -46,6 +48,7 @@ void Scene::unbind()
     }
 }
 
+//--------------------------------------------------------------
 bool Scene::isFrameNew()
 {
     auto newFrame = false;
@@ -56,7 +59,7 @@ bool Scene::isFrameNew()
     return newFrame;
 }
 
-
+//--------------------------------------------------------------
 void Scene::update()
 {
     for (auto& layer : layers_) {
@@ -66,6 +69,7 @@ void Scene::update()
     }
 }
 
+//--------------------------------------------------------------
 ActiveMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
     const auto noteOn = msg.status == MIDI_NOTE_ON;
     const auto noteOff = msg.status == MIDI_NOTE_OFF;
@@ -101,12 +105,14 @@ ActiveMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
     return result;
 }
 
+//--------------------------------------------------------------
 void Scene::playPauseLayer(int idx)
 {
     if (idx < layers_.size() && layers_[idx])
         layers_[idx]->playPause();
 }
 
+//--------------------------------------------------------------
 void Scene::setupUniforms(ofShader& shader) const
 {
     for (auto i = 0; i < layers_.size(); ++i) {

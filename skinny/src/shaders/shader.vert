@@ -10,6 +10,7 @@ uniform mat4 modelViewProjectionMatrix;
 
 out vec2[n] uvs;
 
+//--------------------------------------------------------------
 void main(){
     for (int i = 0; i < n; i++)
     {
