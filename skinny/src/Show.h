@@ -17,7 +17,7 @@ public:
     Show(int width, int height);
 
     void draw();
-    Scene::FoundMappables newMidiMessage(ofxMidiMessage & msg);
+    ActiveMappables newMidiMessage(ofxMidiMessage & msg);
     bool reload(const ShowDescription& description);
     void playPauseEffect(int i);
     void update();

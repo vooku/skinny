@@ -134,12 +134,12 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
         Status::instance().loadDir = LoadDir::Forward;
     }
     else {
-        auto foundMappables = show_->newMidiMessage(msg);
+        auto activeMappables = show_->newMidiMessage(msg);
 
-        for (const auto& layer : foundMappables.layers) {
+        for (const auto& layer : activeMappables.layers) {
             gui_.setActiveLayer(layer.first, layer.second);
         }
-        for (const auto& effect : foundMappables.effects) {
+        for (const auto& effect : activeMappables.effects) {
             gui_.setActiveEffect(effect.first, effect.second);
         }
     }

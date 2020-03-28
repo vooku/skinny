@@ -66,7 +66,7 @@ void Scene::update()
     }
 }
 
-Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
+ActiveMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
     const auto noteOn = msg.status == MIDI_NOTE_ON;
     const auto noteOff = msg.status == MIDI_NOTE_OFF;
     const auto note = msg.pitch;
@@ -78,7 +78,7 @@ Scene::FoundMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
         return {};
     }
 
-    FoundMappables result;
+    ActiveMappables result;
     for (auto& layer : layers_) {
         if (!layer)
             continue;

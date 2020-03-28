@@ -38,7 +38,7 @@ void Show::draw()
     }
 }
 
-Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
+ActiveMappables Show::newMidiMessage(ofxMidiMessage& msg)
 {
     auto result = currentScene_->newMidiMessage(msg);
 
