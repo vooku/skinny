@@ -2,6 +2,7 @@
 
 const int n = 8;
 const int nFx = 5;
+const float eps = 0.0001f;
 
 layout(binding = 0) uniform sampler2DRect layers[n];
 
@@ -40,7 +41,7 @@ vec3 colorShift(vec3 c, float p)
 
 vec3 overdrive(vec3 c, float p)
 {
-    return mod(c * max(1, p * 127.0f), 1.0f);
+    return mod(c * max(1, p * 127.0f), 1.0f + eps);
 }
 
 void main()
