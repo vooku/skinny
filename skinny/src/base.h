@@ -20,6 +20,7 @@ static const int MAX_LABEL_LENGTH = 34;
 static constexpr const char* FONT_REGULAR = "fonts/IBMPlexMono-Regular.ttf";
 static constexpr const char* FONT_ITALIC = "fonts/IBMPlexSerif-Italic.ttf";
 static constexpr const char* DEFAULT_FILENAME = "config.xml";
+static constexpr const char* DEFAULT_EXTENSION = ".xml";
 
 // #TODO Create macros for enum strings
 

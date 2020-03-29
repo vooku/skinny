@@ -13,7 +13,7 @@ public:
 		explicit Context(IndexType index);
 
 		const IndexType index;
-		std::string path;
+		std::filesystem::path path;
 	};
 
 	explicit VideoSelector(IndexType index);

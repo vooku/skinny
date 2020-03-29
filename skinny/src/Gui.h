@@ -6,7 +6,7 @@
 #include "VideoSelector.h"
 #include "FileSelector.h"
 #include <array>
-#include <experimental/filesystem>
+#include <filesystem>
 #include <chrono>
 
 namespace skinny {
@@ -100,7 +100,7 @@ private:
 
     void addBlank(ofxDatGui* panel);
 
-    void save(const std::string& path);
+    void save(std::filesystem::path path);
 
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
                                videoFxPanel_, midiPanel_, ccPanel_,
@@ -130,7 +130,7 @@ private:
     std::shared_ptr<Show> show_;
     ShowDescription& showDescription_;
 
-    std::string configPath_;
+    std::filesystem::path configPath_;
     std::string configName_;
 
     struct Message {

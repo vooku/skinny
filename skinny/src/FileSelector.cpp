@@ -13,7 +13,7 @@ FileSelector::FileSelector(const std::string& message, bool load) :
 }
 
 //--------------------------------------------------------------
-const std::string& FileSelector::getPath() const
+const std::filesystem::path& FileSelector::getPath() const
 {
     return path_;
 }

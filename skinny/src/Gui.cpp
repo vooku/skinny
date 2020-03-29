@@ -1,8 +1,6 @@
 #include "Gui.h"
 #include "Status.h"
 
-#include <filesystem>
-
 namespace skinny {
 
 const std::string Gui::Btn::NEXT = "Next scene";
@@ -176,9 +174,9 @@ void Gui::update()
         if (fileSelector_->isLoading()) {
             ofxXmlSettings config;
 
-            if (config.loadFile(path) && showDescription_.fromXml(config)) {
+            if (config.loadFile(path.string()) && showDescription_.fromXml(config)) {
                 configPath_ = path;
-                configName_ = std::filesystem::path(configPath_).filename().string();
+                configName_ = configPath_.filename().string();
             }
             else {
                 ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", path.c_str());
@@ -256,17 +254,21 @@ void Gui::onLayerButton(ofxDatGuiButtonEvent e)
 }
 
 //--------------------------------------------------------------
-void Gui::save(const std::string& path)
+void Gui::save(std::filesystem::path path)
 {
+    if (path.extension().string() != DEFAULT_EXTENSION) {
+        path += DEFAULT_EXTENSION;
+    }
+
     ofxXmlSettings config;
     showDescription_.toXml(config);
-    if (!config.saveFile(path)) {
+    if (!config.saveFile(path.string())) {
         ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
-        displayMessage("Cannot save config file to " + path, 1000);
+        displayMessage("Cannot save config file to " + path.string(), 1000);
     }
     else {
         configPath_ = path;
-        configName_ = std::filesystem::path(configPath_).filename().string();
+        configName_ = configPath_.filename().string();
         displayMessage("Saved!", 1000);
     }
 }
