@@ -152,6 +152,19 @@ void Gui::update()
             showDescription_.effects_[i].param = show_->effects_[i]->param_;
         }
     }
+
+    if (videoSelector_ != nullptr && !videoSelector_->isThreadRunning()) {
+        const auto& ctx = videoSelector_->getContext();
+
+        auto& layerDescription = showDescription_.scenes_[showDescription_.currentIdx_].layers[ctx.index];
+        if (layerDescription.valid)
+            layerDescription.path = ctx.path;
+        else
+            layerDescription = { ctx.index, ctx.path };
+        Status::instance().loadDir = LoadDir::Current;
+
+        videoSelector_.release();
+    }
 }
 
 //--------------------------------------------------------------
@@ -205,16 +218,12 @@ void Gui::displayMessage(const std::string& msg, int duration)
 //--------------------------------------------------------------
 void Gui::onLayerButton(ofxDatGuiButtonEvent e)
 {
-    auto openFileResult = ofSystemLoadDialog("Select a video on layer " + e.target->getName());
-    if (openFileResult.bSuccess) {
-        auto idx = std::stoi(e.target->getName());
-        auto& layerDescription = showDescription_.scenes_[showDescription_.currentIdx_].layers[idx];
-        if (layerDescription.valid)
-            layerDescription.path = openFileResult.getPath();
-        else
-            layerDescription = { static_cast<unsigned int>(idx), openFileResult.getPath() };
-        Status::instance().loadDir = LoadDir::Current;
-    }
+    const auto index = std::stoi(e.target->getName());
+
+    assert(videoSelector_ == nullptr);
+
+    videoSelector_ = std::make_unique<VideoSelector>(index);
+    videoSelector_->startThread();
 }
 
 //--------------------------------------------------------------

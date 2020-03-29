@@ -79,6 +79,9 @@
     <ClCompile Include="src\base.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\VideoSelector.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -273,6 +276,9 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\Show.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VideoSelector.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>

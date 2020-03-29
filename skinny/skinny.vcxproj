@@ -216,6 +216,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Show.cpp" />
+    <ClCompile Include="src\VideoSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\base.h" />
@@ -262,6 +263,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Show.h" />
     <ClInclude Include="src\Status.h" />
+    <ClInclude Include="src\VideoSelector.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(OF_ROOT)\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">

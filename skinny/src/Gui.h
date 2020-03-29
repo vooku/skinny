@@ -3,6 +3,7 @@
 #include "ofMain.h"
 #include "ofxDatGui.h"
 #include "Show.h"
+#include "VideoSelector.h"
 #include <array>
 #include <experimental/filesystem>
 #include <chrono>
@@ -134,6 +135,8 @@ private:
         std::chrono::milliseconds duration;
         std::chrono::system_clock::time_point start;
     } msg_;
+
+    std::unique_ptr<VideoSelector> videoSelector_;
 };
 
 } // namespace skinny
