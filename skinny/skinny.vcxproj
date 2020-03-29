@@ -183,7 +183,8 @@
     </Link>
     <PostBuildEvent />
     <CustomBuildStep>
-      <Command>copy src\shaders\* bin\data\shaders</Command>
+      <Command>mkdir bin\data\shaders;
+copy src\shaders\* bin\data\shaders</Command>
       <Outputs>bin\data\shaders</Outputs>
       <TreatOutputAsContent>true</TreatOutputAsContent>
     </CustomBuildStep>
