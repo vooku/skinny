@@ -153,17 +153,38 @@ void Gui::update()
         }
     }
 
+    // load video
     if (videoSelector_ != nullptr && !videoSelector_->isThreadRunning()) {
         const auto& ctx = videoSelector_->getContext();
 
         auto& layerDescription = showDescription_.scenes_[showDescription_.currentIdx_].layers[ctx.index];
-        if (layerDescription.valid)
+        if (layerDescription.valid) {
             layerDescription.path = ctx.path;
-        else
+        }
+        else {
             layerDescription = { ctx.index, ctx.path };
-        Status::instance().loadDir = LoadDir::Current;
+        }
 
+        Status::instance().loadDir = LoadDir::Current;
         videoSelector_.release();
+    }
+
+    // load config
+    if (fileSelector_ != nullptr && !fileSelector_->isThreadRunning()) {
+        const auto& path = fileSelector_->getPath();
+        ofxXmlSettings config;
+
+        if (config.loadFile(path) && showDescription_.fromXml(config)) {
+            configPath_ = path;
+            configName_ = std::filesystem::path(configPath_).filename().string();
+        }
+        else {
+            ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", path.c_str());
+            showDescription_ = {};
+        }
+        
+        Status::instance().loadDir = LoadDir::Current;
+        fileSelector_.release();
     }
 }
 
@@ -249,22 +270,6 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
         }
     };
 
-    auto load = [&]() {
-        auto openFileResult = ofSystemLoadDialog("Select config file");
-        if (openFileResult.bSuccess) {
-            ofxXmlSettings config;
-            if (config.loadFile(openFileResult.filePath) && showDescription_.fromXml(config)) {
-                configPath_ = openFileResult.filePath;
-                configName_ = std::filesystem::path(configPath_).filename().string();
-            }
-            else {
-                ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
-                showDescription_.appendScene();
-            }
-            Status::instance().loadDir = LoadDir::Current;
-        }
-    };
-
     const auto name = e.target->getName();
     if (name == Btn::NEXT) {
         Status::instance().loadDir = LoadDir::Forward;
@@ -280,7 +285,9 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
         Status::instance().loadDir = LoadDir::Jump;
         Status::instance().jumpToIndex = showDescription_.getSize() - 1;
     } else if (name == Btn::LOAD) {
-        load();
+        assert(fileSelector_ == nullptr);
+        fileSelector_ = std::make_unique<FileSelector>("Select config file");
+        fileSelector_->startThread();
     } else if (name == Btn::SAVE) {
         if (!configPath_.empty()) {
             save(configPath_);

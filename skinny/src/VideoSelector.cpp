@@ -5,8 +5,8 @@
 namespace skinny {
 
 //--------------------------------------------------------------
-VideoSelector::Context::Context(IndexType index)
-    : index(index)
+VideoSelector::Context::Context(IndexType index) :
+    index(index)
 {
 }
 

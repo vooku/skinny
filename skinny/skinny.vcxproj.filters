@@ -82,6 +82,7 @@
     <ClCompile Include="src\VideoSelector.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\FileSelector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -281,6 +282,7 @@
     <ClInclude Include="src\VideoSelector.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="src\FileSelector.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

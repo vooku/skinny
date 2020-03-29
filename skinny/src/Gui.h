@@ -4,6 +4,7 @@
 #include "ofxDatGui.h"
 #include "Show.h"
 #include "VideoSelector.h"
+#include "FileSelector.h"
 #include <array>
 #include <experimental/filesystem>
 #include <chrono>
@@ -137,6 +138,7 @@ private:
     } msg_;
 
     std::unique_ptr<VideoSelector> videoSelector_;
+    std::unique_ptr<FileSelector> fileSelector_;
 };
 
 } // namespace skinny

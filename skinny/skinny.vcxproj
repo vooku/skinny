@@ -192,6 +192,7 @@ copy src\shaders\* bin\data\shaders</Command>
   <ItemGroup>
     <ClCompile Include="src\base.cpp" />
     <ClCompile Include="src\Effect.cpp" />
+    <ClCompile Include="src\FileSelector.cpp" />
     <ClCompile Include="src\Gui.cpp" />
     <ClCompile Include="src\Layer.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -221,6 +222,7 @@ copy src\shaders\* bin\data\shaders</Command>
   <ItemGroup>
     <ClInclude Include="src\base.h" />
     <ClInclude Include="src\Effect.h" />
+    <ClInclude Include="src\FileSelector.h" />
     <ClInclude Include="src\Gui.h" />
     <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\Mappable.h" />
