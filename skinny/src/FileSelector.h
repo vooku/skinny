@@ -10,6 +10,7 @@ public:
 	explicit FileSelector(const std::string& message, bool load = true);
 
 	const std::string& getPath() const;
+	bool isLoading() const;
 
 private:
 	virtual void threadedFunction() override;

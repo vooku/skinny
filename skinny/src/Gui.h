@@ -100,6 +100,8 @@ private:
 
     void addBlank(ofxDatGui* panel);
 
+    void save(const std::string& path);
+
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
                                videoFxPanel_, midiPanel_, ccPanel_,
                                alphaPanel_, retriggerPanel_, blendModePanel_;

@@ -169,21 +169,28 @@ void Gui::update()
         videoSelector_.release();
     }
 
-    // load config
+    // save & load config
     if (fileSelector_ != nullptr && !fileSelector_->isThreadRunning()) {
         const auto& path = fileSelector_->getPath();
-        ofxXmlSettings config;
 
-        if (config.loadFile(path) && showDescription_.fromXml(config)) {
-            configPath_ = path;
-            configName_ = std::filesystem::path(configPath_).filename().string();
+        if (fileSelector_->isLoading()) {
+            ofxXmlSettings config;
+
+            if (config.loadFile(path) && showDescription_.fromXml(config)) {
+                configPath_ = path;
+                configName_ = std::filesystem::path(configPath_).filename().string();
+            }
+            else {
+                ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", path.c_str());
+                showDescription_ = {};
+            }
+
+            Status::instance().loadDir = LoadDir::Current;
         }
         else {
-            ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", path.c_str());
-            showDescription_ = {};
+            save(path);
         }
-        
-        Status::instance().loadDir = LoadDir::Current;
+
         fileSelector_.release();
     }
 }
@@ -239,35 +246,41 @@ void Gui::displayMessage(const std::string& msg, int duration)
 //--------------------------------------------------------------
 void Gui::onLayerButton(ofxDatGuiButtonEvent e)
 {
+    if (videoSelector_ != nullptr) {
+        return;
+    }        
+
     const auto index = std::stoi(e.target->getName());
-
-    assert(videoSelector_ == nullptr);
-
     videoSelector_ = std::make_unique<VideoSelector>(index);
     videoSelector_->startThread();
 }
 
 //--------------------------------------------------------------
+void Gui::save(const std::string& path)
+{
+    ofxXmlSettings config;
+    showDescription_.toXml(config);
+    if (!config.saveFile(path)) {
+        ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
+        displayMessage("Cannot save config file to " + path, 1000);
+    }
+    else {
+        configPath_ = path;
+        configName_ = std::filesystem::path(configPath_).filename().string();
+        displayMessage("Saved!", 1000);
+    }
+}
+
+//--------------------------------------------------------------
 void Gui::onControlButton(ofxDatGuiButtonEvent e)
 {
-    auto save = [&](const std::string& path) {
-        ofxXmlSettings config;
-        showDescription_.toXml(config);
-        if (!config.saveFile(path)) {
-            ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
-            displayMessage("Cannot save config file to " + path, 1000);
-        } else {
-            configPath_ = path;
-            configName_ = std::filesystem::path(configPath_).filename().string();
-            displayMessage("Saved!", 1000);
-        }
-    };
-
     auto saveAs = [&]() {
-        auto openFileResult = ofSystemSaveDialog("config.xml", "Save config as");
-        if (openFileResult.bSuccess) {
-            save(openFileResult.filePath);
+        if (fileSelector_ != nullptr) {
+            return;
         }
+
+        fileSelector_ = std::make_unique<FileSelector>("Save config as", false);
+        fileSelector_->startThread();
     };
 
     const auto name = e.target->getName();
@@ -285,7 +298,10 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
         Status::instance().loadDir = LoadDir::Jump;
         Status::instance().jumpToIndex = showDescription_.getSize() - 1;
     } else if (name == Btn::LOAD) {
-        assert(fileSelector_ == nullptr);
+        if (fileSelector_ != nullptr) {
+            return;
+        }
+
         fileSelector_ = std::make_unique<FileSelector>("Select config file");
         fileSelector_->startThread();
     } else if (name == Btn::SAVE) {

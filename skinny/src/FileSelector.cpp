@@ -19,6 +19,12 @@ const std::string& FileSelector::getPath() const
 }
 
 //--------------------------------------------------------------
+bool FileSelector::isLoading() const
+{
+    return load_;
+}
+
+//--------------------------------------------------------------
 void FileSelector::threadedFunction()
 {
     assert(isThreadRunning());
