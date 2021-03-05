@@ -170,7 +170,8 @@ void ofApp::parseArgs(ofxArgs* args)
         settings_.midiPorts.push_back(args->getInt("--midiport", 0));
     }
     else { // --midiports-all
-        for (auto i = 0; i < ofxMidiIn::getNumPorts(); ++i)
+        ofxMidiIn tmpMidiIn;
+        for (auto i = 0; i < tmpMidiIn.getNumInPorts(); ++i)
             settings_.midiPorts.push_back(i);
     }
 
@@ -181,7 +182,8 @@ void ofApp::parseArgs(ofxArgs* args)
 void ofApp::setupMidi()
 {
     if (settings_.verbose) {
-        ofxMidiIn::listPorts();
+        ofxMidiIn tmpMidiIn;
+        tmpMidiIn.listInPorts();
     }
 
     for (auto portNumber : settings_.midiPorts) {
