@@ -3,6 +3,8 @@
 #include "ofMain.h"
 #include "ofxDatGui.h"
 #include "Show.h"
+#include "VideoSelector.h"
+#include "FileSelector.h"
 #include <array>
 #include <filesystem>
 #include <chrono>
@@ -64,7 +66,7 @@ private:
         static const std::string NEXT;
         static const std::string PREV;
         static const std::string JUMP;
-        static const std::string APPEND;
+        static const std::string NEW;
         static const std::string SAVE;
         static const std::string SAVE_AS;
         static const std::string LOAD;
@@ -98,6 +100,8 @@ private:
 
     void addBlank(ofxDatGui* panel);
 
+    void save(std::filesystem::path path);
+
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
                                videoFxPanel_, midiPanel_, ccPanel_,
                                alphaPanel_, retriggerPanel_, blendModePanel_;
@@ -126,13 +130,17 @@ private:
     std::shared_ptr<Show> show_;
     ShowDescription& showDescription_;
 
-    std::string configPath_;
+    std::filesystem::path configPath_;
+    std::string configName_;
 
     struct Message {
         std::string msg;
         std::chrono::milliseconds duration;
         std::chrono::system_clock::time_point start;
     } msg_;
+
+    std::unique_ptr<VideoSelector> videoSelector_;
+    std::unique_ptr<FileSelector> fileSelector_;
 };
 
 } // namespace skinny

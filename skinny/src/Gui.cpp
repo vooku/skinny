@@ -6,18 +6,20 @@ namespace skinny {
 const std::string Gui::Btn::NEXT = "Next scene";
 const std::string Gui::Btn::PREV = "Previous scene";
 const std::string Gui::Btn::JUMP = "Jump to scene";
-const std::string Gui::Btn::APPEND = "Append scene";
+const std::string Gui::Btn::NEW = "New scene";
 const std::string Gui::Btn::SAVE = "Save";
 const std::string Gui::Btn::SAVE_AS = "Save as";
 const std::string Gui::Btn::LOAD = "Load";
 
 const ofColor Gui::BACKGROUND_COLOR = { 45, 45, 48 };
 
+//--------------------------------------------------------------
 Gui::Gui(ShowDescription& showDescription) :
     showDescription_(showDescription)
 {
 }
 
+//--------------------------------------------------------------
 void Gui::setup()
 {
     fonts_.regular.load(FONT_REGULAR, fonts_.sizeRegular, true, false);
@@ -38,6 +40,7 @@ void Gui::setup()
     setupBlendModePanel(pos);
 }
 
+//--------------------------------------------------------------
 void Gui::draw() const
 {
     ofBackground(BACKGROUND_COLOR);
@@ -55,11 +58,13 @@ void Gui::draw() const
     //if (blendModePanel_) blendModePanel_->draw();
 }
 
+//--------------------------------------------------------------
 std::string buildJumpToLabel(int idx, int size)
 {
     return std::to_string(idx) + "/" + std::to_string(size);
 }
 
+//--------------------------------------------------------------
 void Gui::reload()
 {
     if (!show_)
@@ -98,7 +103,7 @@ void Gui::reload()
             layerMidiInputs_[i]->setText("");
             layerCCInputs_[i]->setText("");
             layerRetriggerToggles_[i]->setChecked(false);
-            blendModeDropdowns_[i]->select(0);
+            blendModeDropdowns_[i]->select(static_cast<int>(DEFAULT_BLEND_MODE));
         }
     }
 
@@ -116,11 +121,16 @@ void Gui::reload()
     draw();
 }
 
+//--------------------------------------------------------------
 void Gui::update()
 {
     if (!show_)
         return;
 
+    if (!configName_.empty()) {
+      ofSetWindowTitle(configName_);
+    }
+    
     masterAlphaInput_->setLabel(std::to_string(static_cast<int>(show_->getAlpha() * 127)));
 
     const auto& layers = show_->getCurrentScene()->getLayers();
@@ -141,13 +151,55 @@ void Gui::update()
         }
     }
 
+    // load video
+    if (videoSelector_ != nullptr && !videoSelector_->isThreadRunning()) {
+        const auto& ctx = videoSelector_->getContext();
+
+        auto& layerDescription = showDescription_.scenes_[showDescription_.currentIdx_].layers[ctx.index];
+        if (layerDescription.valid) {
+            layerDescription.path = ctx.path;
+        }
+        else {
+            layerDescription = { ctx.index, ctx.path };
+        }
+
+        Status::instance().loadDir = LoadDir::Current;
+        videoSelector_.release();
+    }
+
+    // save & load config
+    if (fileSelector_ != nullptr && !fileSelector_->isThreadRunning()) {
+        const auto& path = fileSelector_->getPath();
+
+        if (fileSelector_->isLoading()) {
+            ofxXmlSettings config;
+
+            if (config.loadFile(path.string()) && showDescription_.fromXml(config)) {
+                configPath_ = path;
+                configName_ = configPath_.filename().string();
+            }
+            else {
+                ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", path.c_str());
+                showDescription_ = {};
+            }
+
+            Status::instance().loadDir = LoadDir::Current;
+        }
+        else {
+            save(path);
+        }
+
+        fileSelector_.release();
+    }
 }
 
+//--------------------------------------------------------------
 void Gui::setShow(std::shared_ptr<Show> show)
 {
     show_ = show;
 }
 
+//--------------------------------------------------------------
 void Gui::setActiveLayer(int idx, bool active)
 {
     if (idx < layerPlayToggles_.size()) {
@@ -158,6 +210,7 @@ void Gui::setActiveLayer(int idx, bool active)
     }
 }
 
+//--------------------------------------------------------------
 void Gui::setActiveEffect(int idx, bool active)
 {
     if (idx < effectPlayToggles_.size()) {
@@ -168,16 +221,19 @@ void Gui::setActiveEffect(int idx, bool active)
     }
 }
 
+//--------------------------------------------------------------
 int Gui::getJumpToIndex() const
 {
     return std::stoi(jumpToInput_->getText()) - 1;
 }
 
+//--------------------------------------------------------------
 void Gui::resetJumpToIndex()
 {
     jumpToInput_->setText(std::to_string(showDescription_.currentIdx_ + 1));
 }
 
+//--------------------------------------------------------------
 void Gui::displayMessage(const std::string& msg, int duration)
 {
     msg_.msg = msg;
@@ -185,75 +241,71 @@ void Gui::displayMessage(const std::string& msg, int duration)
     msg_.start = std::chrono::system_clock::now();
 }
 
+//--------------------------------------------------------------
 void Gui::onLayerButton(ofxDatGuiButtonEvent e)
 {
-    auto openFileResult = ofSystemLoadDialog("Select a video on layer " + e.target->getName());
-    if (openFileResult.bSuccess) {
-        auto idx = std::stoi(e.target->getName());
-        auto& layerDescription = showDescription_.scenes_[showDescription_.currentIdx_].layers[idx];
-        if (layerDescription.valid)
-            layerDescription.path = openFileResult.getPath();
-        else
-            layerDescription = { static_cast<unsigned int>(idx), openFileResult.getPath() };
-        Status::instance().load = true;
-        Status::instance().loadDir = LoadDir::Current;
+    if (videoSelector_ != nullptr) {
+        return;
+    }        
+
+    const auto index = std::stoi(e.target->getName());
+    videoSelector_ = std::make_unique<VideoSelector>(index);
+    videoSelector_->startThread();
+}
+
+//--------------------------------------------------------------
+void Gui::save(std::filesystem::path path)
+{
+    if (path.extension().string() != DEFAULT_EXTENSION) {
+        path += DEFAULT_EXTENSION;
+    }
+
+    ofxXmlSettings config;
+    showDescription_.toXml(config);
+    if (!config.saveFile(path.string())) {
+        ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
+        displayMessage("Cannot save config file to " + path.string(), 1000);
+    }
+    else {
+        configPath_ = path;
+        configName_ = configPath_.filename().string();
+        displayMessage("Saved!", 1000);
     }
 }
 
+//--------------------------------------------------------------
 void Gui::onControlButton(ofxDatGuiButtonEvent e)
 {
-    auto save = [&](const std::string& path) {
-        ofxXmlSettings config;
-        showDescription_.toXml(config);
-        if (!config.saveFile(path)) {
-            ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
-            displayMessage("Cannot save config file to " + path, 1000);
-        } else {
-            configPath_ = path;
-            displayMessage("Saved!", 1000);
-        }
-    };
-
     auto saveAs = [&]() {
-        auto openFileResult = ofSystemSaveDialog("config.xml", "Save config as");
-        if (openFileResult.bSuccess) {
-            save(openFileResult.filePath);
+        if (fileSelector_ != nullptr) {
+            return;
         }
-    };
 
-    auto load = [&]() {
-        auto openFileResult = ofSystemLoadDialog("Select config file");
-        if (openFileResult.bSuccess) {
-            ofxXmlSettings config;
-            if (config.loadFile(openFileResult.filePath) && showDescription_.fromXml(config)) {
-                configPath_ = openFileResult.filePath;
-            }
-            else {
-                ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", openFileResult.fileName.c_str());
-                showDescription_.appendScene();
-            }
-            Status::instance().load = true;
-            Status::instance().loadDir = LoadDir::Current;
-        }
+        fileSelector_ = std::make_unique<FileSelector>("Save config as", false);
+        fileSelector_->startThread();
     };
 
     const auto name = e.target->getName();
     if (name == Btn::NEXT) {
-        Status::instance().load = true;
         Status::instance().loadDir = LoadDir::Forward;
     } else if (name == Btn::PREV) {
-        Status::instance().load = true;
         Status::instance().loadDir = LoadDir::Backward;
     } else if (name == Btn::JUMP) {
-        Status::instance().load = true;
         Status::instance().loadDir = LoadDir::Jump;
-        // # TODO jump to
+        Status::instance().jumpToIndex = getJumpToIndex();
     }
-    else if (name == Btn::APPEND) {
+    else if (name == Btn::NEW) {
         showDescription_.appendScene();
         jumpToInput_->setLabel(buildJumpToLabel(showDescription_.currentIdx_ + 1, showDescription_.getSize()));
+        Status::instance().loadDir = LoadDir::Jump;
+        Status::instance().jumpToIndex = showDescription_.getSize() - 1;
     } else if (name == Btn::LOAD) {
-        load();
+        if (fileSelector_ != nullptr) {
+            return;
+        }
+
+        fileSelector_ = std::make_unique<FileSelector>("Select config file");
+        fileSelector_->startThread();
     } else if (name == Btn::SAVE) {
         if (!configPath_.empty()) {
             save(configPath_);
@@ -267,6 +319,7 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
     }
 }
 
+//--------------------------------------------------------------
 void Gui::onLayerMidiInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
@@ -276,6 +329,7 @@ void Gui::onLayerMidiInput(ofxDatGuiTextInputEvent e)
         show_->getCurrentScene()->layers_[idx]->setNote(note);
 }
 
+//--------------------------------------------------------------
 void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
@@ -285,6 +339,7 @@ void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
         show_->getCurrentScene()->layers_[idx]->setCc(control);
 }
 
+//--------------------------------------------------------------
 void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto control = static_cast<midiNote>(std::stoi(e.text));
@@ -293,6 +348,7 @@ void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
         show_->setAlphaControl(control);
 }
 
+//--------------------------------------------------------------
 void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
 {
     auto idx = std::stoi(e.target->getName());
@@ -301,7 +357,7 @@ void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
     show_->effects_[idx]->setNote(note);
 }
 
-
+//--------------------------------------------------------------
 void Gui::onEffectCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
@@ -311,6 +367,7 @@ void Gui::onEffectCcInput(ofxDatGuiTextInputEvent e)
         show_->effects_[idx]->setCc(cc);
 }
 
+//--------------------------------------------------------------
 void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
 {
     showDescription_.scenes_[showDescription_.currentIdx_].name = e.text;
@@ -318,6 +375,7 @@ void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
         show_->getCurrentScene()->name_ = e.text;
 }
 
+//--------------------------------------------------------------
 void Gui::onMidiChannelInput(ofxDatGuiTextInputEvent e)
 {
     auto channel = std::min(std::max(std::stoi(e.text), 1), 16);
@@ -325,6 +383,7 @@ void Gui::onMidiChannelInput(ofxDatGuiTextInputEvent e)
     midiChannelInput_->setText(std::to_string(channel));
 }
 
+//--------------------------------------------------------------
 void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
@@ -334,6 +393,7 @@ void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
         show_->getCurrentScene()->layers_[idx]->setBlendMode(blendMode);
 }
 
+//--------------------------------------------------------------
 void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
@@ -346,6 +406,7 @@ void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
         show_->effects_[idx].reset(new Effect(idx, type, note, cc, param));
 }
 
+//--------------------------------------------------------------
 void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
@@ -354,12 +415,14 @@ void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
     }
 }
 
+//--------------------------------------------------------------
 void Gui::onEffectPlayToggle(ofxDatGuiToggleEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
     show_->playPauseEffect(idx);
 }
 
+//--------------------------------------------------------------
 void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 {
     const auto mute = e.checked;
@@ -370,6 +433,7 @@ void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
         layerPlayToggles_[idx]->setChecked(false);
 }
 
+//--------------------------------------------------------------
 void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 {
     const auto mute = e.checked;
@@ -379,6 +443,7 @@ void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
     //    effectPlayToggles_[idx]->setChecked(false);
 }
 
+//--------------------------------------------------------------
 void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
 {
     const auto retrigger = e.checked;
@@ -388,6 +453,7 @@ void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
         show_->getCurrentScene()->layers_[idx]->setRetrigger(retrigger);
 }
 
+//--------------------------------------------------------------
 void Gui::addBlank(ofxDatGui * panel)
 {
     auto blank = panel->addButton({});
@@ -396,6 +462,7 @@ void Gui::addBlank(ofxDatGui * panel)
     //blank->setStripeColor(bgColor);
 }
 
+//--------------------------------------------------------------
 Gui::CommonTheme::CommonTheme() :
     ofxDatGuiTheme(false)
 {
@@ -411,6 +478,7 @@ Gui::CommonTheme::CommonTheme() :
     init();
 }
 
+//--------------------------------------------------------------
 Gui::HeaderTheme::HeaderTheme() :
     CommonTheme()
 {
@@ -421,6 +489,7 @@ Gui::HeaderTheme::HeaderTheme() :
     init();
 }
 
+//--------------------------------------------------------------
 void Gui::setupControlPanel(glm::ivec2& pos)
 {
     controlPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
@@ -438,7 +507,7 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     jumpToInput_->setLabel(buildJumpToLabel(0, 0));
     jumpToInput_->setText("0");
     controlButtons_.push_back(controlPanel_->addButton(Btn::JUMP));
-    controlButtons_.push_back(controlPanel_->addButton(Btn::APPEND));
+    controlButtons_.push_back(controlPanel_->addButton(Btn::NEW));
     controlPanel_->addBreak();
     controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE));
     controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE_AS));
@@ -464,6 +533,7 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     controlPanel_->addFRM()->setLabel("fps");
 }
 
+//--------------------------------------------------------------
 void Gui::setupPlayPanel(glm::ivec2& pos, int w)
 {
     playPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
@@ -492,6 +562,7 @@ void Gui::setupPlayPanel(glm::ivec2& pos, int w)
     }
 }
 
+//--------------------------------------------------------------
 void Gui::setupMutePanel(glm::ivec2& pos, int w)
 {
     mutePanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
@@ -520,6 +591,7 @@ void Gui::setupMutePanel(glm::ivec2& pos, int w)
     }
 }
 
+//--------------------------------------------------------------
 void Gui::setupVideoFxPanel(glm::ivec2& pos)
 {
     // Videos & FX panel
@@ -552,6 +624,7 @@ void Gui::setupVideoFxPanel(glm::ivec2& pos)
     }
 }
 
+//--------------------------------------------------------------
 void Gui::setupMidiPanel(glm::ivec2& pos, int w)
 {
     midiPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
@@ -581,6 +654,7 @@ void Gui::setupMidiPanel(glm::ivec2& pos, int w)
     }
 }
 
+//--------------------------------------------------------------
 void Gui::setupCcPanel(glm::ivec2& pos, int w)
 {
     ccPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
@@ -609,6 +683,8 @@ void Gui::setupCcPanel(glm::ivec2& pos, int w)
         effectCCInputs_[i]->setWidth(w, 0); // This doesn't seem to work right
     }
 }
+
+//--------------------------------------------------------------
 void Gui::setupAlphaPanel(glm::ivec2& pos)
 {
     alphaPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
@@ -630,6 +706,7 @@ void Gui::setupAlphaPanel(glm::ivec2& pos)
     }
 }
 
+//--------------------------------------------------------------
 void Gui::setupRetriggerPanel(glm::ivec2 & pos)
 {
     retriggerPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
@@ -647,6 +724,7 @@ void Gui::setupRetriggerPanel(glm::ivec2 & pos)
     retriggerPanel_->addBreak();
 }
 
+//--------------------------------------------------------------
 void Gui::setupBlendModePanel(glm::ivec2& pos)
 {
     blendModePanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
@@ -657,13 +735,12 @@ void Gui::setupBlendModePanel(glm::ivec2& pos)
     blendModePanel_->addBreak();
 
     std::vector<string> options;
-    for (auto i = static_cast<int>(BlendMode::Normal); i < static_cast<int>(BlendMode::Count); ++i)
+    for (auto i = static_cast<int>(BlendMode::Overlay); i < static_cast<int>(BlendMode::Count); ++i)
         options.push_back(c_str(static_cast<BlendMode>(i)));
 
     for (int i = 0; i < blendModeDropdowns_.size(); ++i) {
         blendModeDropdowns_[i] = blendModePanel_->addDropdown("Select...", options);
         blendModeDropdowns_[i]->setName(std::to_string(i));
-        blendModeDropdowns_[i]->select(static_cast<int>(BlendMode::Normal));
         blendModeDropdowns_[i]->onDropdownEvent(this, &Gui::onBlendModeDropdown);
     }
     blendModePanel_->addBreak();

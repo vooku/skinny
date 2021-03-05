@@ -127,7 +127,7 @@
           <NewMemberFileName>src\Scene.h</NewMemberFileName>
         </TypeIdentifier>
       </Typedef>
-      <Struct Name="skinny::Scene::FoundMappables" Collapsed="true">
+      <Struct Name="skinny::ActiveMappables" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>src\Scene.h</NewMemberFileName>
         </TypeIdentifier>

@@ -5,11 +5,13 @@ namespace skinny {
 const uint8_t MappableDescription::invalid_midi = 255;
 const std::filesystem::path LayerDescription::invalid_path = {};
 
+//--------------------------------------------------------------
 MappableDescription::MappableDescription(midiNote note, midiNote cc) :
     note(note),
     cc(cc)
 {}
 
+//--------------------------------------------------------------
 LayerDescription::LayerDescription(unsigned int id,
                                    const std::filesystem::path& path,
                                    midiNote note,
@@ -29,6 +31,7 @@ LayerDescription::LayerDescription(unsigned int id,
         ofLog(OF_LOG_ERROR, "Layer description was initialized with invalid values.");
 }
 
+//--------------------------------------------------------------
 bool LayerDescription::fromXml(ofxXmlSettings & config) {
     id = config.getValue("id", -1);
     path = config.getValue("path", invalid_path.string());
@@ -45,6 +48,7 @@ bool LayerDescription::fromXml(ofxXmlSettings & config) {
     return valid;
 }
 
+//--------------------------------------------------------------
 void LayerDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("id", static_cast<int>(id));
     config.setValue("path", path.string());
@@ -54,6 +58,7 @@ void LayerDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("retrigger", retrigger);
 }
 
+//--------------------------------------------------------------
 EffectDescription::EffectDescription(int id, EffectType type, midiNote note, midiNote cc) :
     MappableDescription(
         note == invalid_midi ? static_cast<int>(type) + EFFECT_NOTE_OFFSET : note,
@@ -66,6 +71,7 @@ EffectDescription::EffectDescription(int id, EffectType type, midiNote note, mid
         ofLog(OF_LOG_ERROR, "Effect description was initialized with invalid values.");
 }
 
+//--------------------------------------------------------------
 bool EffectDescription::fromXml(ofxXmlSettings & config) {
     id = config.getValue("id", -1);
     type = static_cast<EffectType>(config.getValue("type", static_cast<int>(EffectType::Invalid)));
@@ -81,6 +87,7 @@ bool EffectDescription::fromXml(ofxXmlSettings & config) {
     return valid;
 }
 
+//--------------------------------------------------------------
 void EffectDescription::toXml(ofxXmlSettings & config) const {
     config.setValue("id", id);
     config.setValue("type", static_cast<int>(type));
@@ -89,7 +96,7 @@ void EffectDescription::toXml(ofxXmlSettings & config) const {
     config.setValue("param", param);
 }
 
-
+//--------------------------------------------------------------
 SceneDescription::SceneDescription(const std::string& name) :
     name(name)
 {}
@@ -108,6 +115,7 @@ bool SceneDescription::fromXml(ofxXmlSettings & config) {
     return true; // #TODO check this somehow
 }
 
+//--------------------------------------------------------------
 void SceneDescription::toXml(ofxXmlSettings & config) const {
     config.addValue("name", name);
 
@@ -122,6 +130,7 @@ void SceneDescription::toXml(ofxXmlSettings & config) const {
     }
 }
 
+//--------------------------------------------------------------
 ShowDescription::ShowDescription()
 {
     // Create default scene -- show is valid / usable right from the start
@@ -132,6 +141,7 @@ ShowDescription::ShowDescription()
     }
 }
 
+//--------------------------------------------------------------
 bool ShowDescription::fromXml(ofxXmlSettings& config) {
     currentIdx_ = 0;
     scenes_.clear();
@@ -177,6 +187,7 @@ bool ShowDescription::fromXml(ofxXmlSettings& config) {
     return true;
 }
 
+//--------------------------------------------------------------
 void ShowDescription::toXml(ofxXmlSettings& config) const {
     config.addTag("head");
     config.pushTag("head");
@@ -212,6 +223,7 @@ void ShowDescription::toXml(ofxXmlSettings& config) const {
     config.popTag(); // show
 }
 
+//--------------------------------------------------------------
 bool ShowDescription::shift(LoadDir dir, int idx)
 {
     const auto prevIdx = currentIdx_;
@@ -244,6 +256,7 @@ bool ShowDescription::shift(LoadDir dir, int idx)
     return prevIdx != currentIdx_;
 }
 
+//--------------------------------------------------------------
 void ShowDescription::appendScene(const std::string& name)
 {
     scenes_.push_back(SceneDescription(name));

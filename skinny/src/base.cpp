@@ -2,12 +2,13 @@
 
 namespace skinny {
 
+//--------------------------------------------------------------
 const char * c_str(BlendMode blendMode)
 {
     switch (blendMode)
     {
-    case BlendMode::Normal:
-        return "Normal";
+    case BlendMode::Overlay:
+        return "Overlay";
     case BlendMode::Multiply:
         return "Multiply";
     case BlendMode::Screen:
@@ -27,6 +28,7 @@ const char * c_str(BlendMode blendMode)
     }
 }
 
+//--------------------------------------------------------------
 const char* c_str(EffectType type) {
     switch (type)
     {

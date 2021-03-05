@@ -2,6 +2,7 @@
 
 const int n = 8;
 const int nFx = 5;
+const float eps = 0.0001f;
 
 layout(binding = 0) uniform sampler2DRect layers[n];
 
@@ -20,32 +21,34 @@ uniform float[nFx] fxParam;
 
 out vec4 outputColor;
 
-float solarize(float c, float p)
-{
-    return c <= p ? 1 - c : c;
-}
-
+//--------------------------------------------------------------
 vec3 solarize(vec3 c, float p)
 {
-    return vec3(solarize(c.r, p), solarize(c.g, p), solarize(c.b, p));
+    const vec3 lum = { 0.2126, 0.7152, 0.0722 };
+    const bool invert = dot(c, lum) <= p;
+    return invert ? 1 - c : c;
 }
 
+//--------------------------------------------------------------
 vec3 posterize(vec3 c, float p)
 {
     float levels = p * 127;
     return floor(c * levels) / (levels - 1);
 }
 
+//--------------------------------------------------------------
 vec3 colorShift(vec3 c, float p)
 {
     return int(p * 127) % 2 == 1 ? c.brg : c.gbr;
 }
 
+//--------------------------------------------------------------
 vec3 overdrive(vec3 c, float p)
 {
-    return mod(c * max(1, p * 127.0f), 1.0f);
+    return mod(c * max(1, p * 127.0f), 1.0f + eps);
 }
 
+//--------------------------------------------------------------
 void main()
 {
     vec3 blended = vec3(0.0);

@@ -8,23 +8,25 @@ typedef uint8_t midiNote;
 static const int MAX_LAYERS = 8;
 static const int MAX_EFFECTS = 5;
 static const float MAX_7BITF = 127.0f;
-static constexpr const char * VERSION = "0.7.1-alpha";
-static constexpr const char * NAME = "Skinny Mixer";
-static constexpr const char * AUTHOR = "Vadim Vooku Petrov";
+static constexpr const char* VERSION = "0.7.3-alpha";
+static constexpr const char* NAME = "Skinny Mixer";
+static constexpr const char* AUTHOR = "Vadim Vooku Petrov";
 static const midiNote DEFAULT_MASTER_ALPHA_CONTROL = 16;
 static const midiNote LAYER_NOTE_OFFSET = 0;
 static const midiNote LAYER_CC_OFFSET = 0;
 static const midiNote EFFECT_NOTE_OFFSET = 8;
 static const midiNote EFFECT_CC_OFFSET = 8;
 static const int MAX_LABEL_LENGTH = 34;
-static constexpr const char * FONT_REGULAR = "fonts/IBMPlexMono-Regular.ttf";
-static constexpr const char * FONT_ITALIC = "fonts/IBMPlexSerif-Italic.ttf";
+static constexpr const char* FONT_REGULAR = "fonts/IBMPlexMono-Regular.ttf";
+static constexpr const char* FONT_ITALIC = "fonts/IBMPlexSerif-Italic.ttf";
+static constexpr const char* DEFAULT_FILENAME = "config.xml";
+static constexpr const char* DEFAULT_EXTENSION = ".xml";
 
 // #TODO Create macros for enum strings
 
 enum class BlendMode {
     Invalid     = -1,
-    Normal      = 0, // s
+    Overlay      = 0, // s
     Multiply    = 1, // b * s
     Screen      = 2, // 1 - ((1 - b) * (1 - s))
     Darken      = 3, // min(b, s)
@@ -36,6 +38,8 @@ enum class BlendMode {
 };
 
 const char* c_str(BlendMode blendMode);
+
+static const BlendMode DEFAULT_BLEND_MODE = BlendMode::LinearDodge;
 
 enum class EffectType {
     Invalid     = -1,

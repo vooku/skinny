@@ -3,6 +3,7 @@
 
 namespace skinny {
 
+//--------------------------------------------------------------
 Show::Show(int width, int height) :
     width_(width),
     height_(height),
@@ -22,6 +23,7 @@ Show::Show(int width, int height) :
     }
 }
 
+//--------------------------------------------------------------
 void Show::draw()
 {
     // Make sure the first frame is ready before we start drawing.
@@ -38,7 +40,8 @@ void Show::draw()
     }
 }
 
-Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
+//--------------------------------------------------------------
+ActiveMappables Show::newMidiMessage(ofxMidiMessage& msg)
 {
     auto result = currentScene_->newMidiMessage(msg);
 
@@ -74,6 +77,7 @@ Scene::FoundMappables Show::newMidiMessage(ofxMidiMessage& msg)
     return result;
 }
 
+//--------------------------------------------------------------
 bool Show::reload(const ShowDescription& description)
 {
     masterAlphaControl_ = description.getAlphaControl();
@@ -94,11 +98,13 @@ bool Show::reload(const ShowDescription& description)
     return currentScene_->isValid();
 }
 
+//--------------------------------------------------------------
 void Show::playPauseEffect(int i)
 {
     effects_[i]->playPause();
 }
 
+//--------------------------------------------------------------
 void Show::update()
 {
     if (currentScene_) {
@@ -106,32 +112,37 @@ void Show::update()
     }
 }
 
+//--------------------------------------------------------------
 ScenePtr Show::getCurrentScene() const
 {
     return currentScene_;
 }
 
+//--------------------------------------------------------------
 const Show::Effects& Show::getEffects() const
 {
     return effects_;
 }
 
-
+//--------------------------------------------------------------
 midiNote Show::getAlphaControl() const
 {
     return masterAlphaControl_;
 }
 
+//--------------------------------------------------------------
 float Show::getAlpha() const
 {
     return uniforms_.masterAlpha_;
 }
 
+//--------------------------------------------------------------
 void Show::setAlphaControl(const midiNote & control)
 {
     masterAlphaControl_ = control;
 }
 
+//--------------------------------------------------------------
 void Show::setupUniforms() const
 {
     currentScene_->setupUniforms(shader_);
@@ -150,6 +161,7 @@ void Show::setupUniforms() const
     shader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
 }
 
+//--------------------------------------------------------------
 bool Show::hasActiveFX() const
 {
     for (auto i = 0; i < MAX_EFFECTS; ++i) {

@@ -34,7 +34,7 @@ struct LayerDescription : public MappableDescription {
                      midiNote note = invalid_midi,
                      midiNote cc = invalid_midi,
                      //float alpha = 1.0f,
-                     const BlendMode& blendMode = BlendMode::Normal);
+                     const BlendMode& blendMode = DEFAULT_BLEND_MODE);
 
     bool fromXml(ofxXmlSettings& config) override;
     void toXml(ofxXmlSettings& config) const override;
@@ -82,7 +82,7 @@ public:
      * @return True if the current scene index was changed.
      */
     bool shift(LoadDir dir, int idx = -1);
-    void appendScene(const std::string& name = "New scene");
+    void appendScene(const std::string& name = "Enter name");
 
     const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }
     auto getSceneIndex() const { return currentIdx_; }

@@ -4,12 +4,14 @@
 
 namespace skinny {
 
+//--------------------------------------------------------------
 ofApp::ofApp(ofxArgs* args) :
     gui_(showDescription_)
 {
     parseArgs(args);
 }
 
+//--------------------------------------------------------------
 void ofApp::setup()
 {
     if (settings_.cancelSetup) {
@@ -34,8 +36,8 @@ void ofApp::setup()
     ofLog(OF_LOG_NOTICE, "%s %s", NAME, VERSION);
     ofLog(OF_LOG_NOTICE, "Designed by %s.", AUTHOR);
 
-    const auto major = ofGetGLRenderer()->getGLversionMajor();
-    const auto minor = ofGetGLRenderer()->getGLversionMinor();
+    const auto major = ofGetGLRenderer()->getGLVersionMajor();
+    const auto minor = ofGetGLRenderer()->getGLVersionMinor();
     const auto vendor = glGetString(GL_VENDOR);
     const auto renderer = glGetString(GL_RENDERER);
     ofLog(OF_LOG_NOTICE, "Using OpenGL v%d.%d, GPU: %s %s.", major, minor, vendor, renderer);
@@ -54,6 +56,7 @@ void ofApp::setup()
     reload();
 }
 
+//--------------------------------------------------------------
 void ofApp::setupGui()
 {
     ofSetWindowTitle(NAME);
@@ -69,17 +72,21 @@ void ofApp::update()
         //return;
     }
 
-    if (Status::instance().load) {
+    if (Status::instance().loadDir != LoadDir::None) {
         reload();
-        Status::instance().resetLoad();
     }
 
     show_->update();
-    gui_.update();
 
     if (ofGetFrameNum() % 300 == 0) {
         ofLog(OF_LOG_NOTICE, "fps: %f", ofGetFrameRate());
     }
+}
+
+//--------------------------------------------------------------
+void ofApp::updateGui(ofEventArgs& args)
+{
+  gui_.update();
 }
 
 //--------------------------------------------------------------
@@ -89,12 +96,13 @@ void ofApp::draw()
     show_->draw();
 }
 
-
+//--------------------------------------------------------------
 void ofApp::drawGui(ofEventArgs&) {
 
     gui_.draw();
 }
 
+//--------------------------------------------------------------
 void ofApp::exit()
 {
     for (auto& midiInput : midiInputs_) {
@@ -102,6 +110,7 @@ void ofApp::exit()
     }
 }
 
+//--------------------------------------------------------------
 void ofApp::exitGui(ofEventArgs&) {
     Status::instance().exit = true;
 }
@@ -119,11 +128,13 @@ void ofApp::keyReleased(ofKeyEventArgs& key)
     }
 }
 
+//--------------------------------------------------------------
 void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 {
     keyReleased(args);
 }
 
+//--------------------------------------------------------------
 void ofApp::newMidiMessage(ofxMidiMessage & msg)
 {
     if (msg.channel != showDescription_.getMidiChannel()) {
@@ -132,21 +143,21 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
     }
 
     if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription_.getSwitchNote()) {
-        Status::instance().load = true;
         Status::instance().loadDir = LoadDir::Forward;
     }
     else {
-        auto foundMappables = show_->newMidiMessage(msg);
+        auto activeMappables = show_->newMidiMessage(msg);
 
-        for (const auto& layer : foundMappables.layers) {
+        for (const auto& layer : activeMappables.layers) {
             gui_.setActiveLayer(layer.first, layer.second);
         }
-        for (const auto& effect : foundMappables.effects) {
+        for (const auto& effect : activeMappables.effects) {
             gui_.setActiveEffect(effect.first, effect.second);
         }
     }
 }
 
+//--------------------------------------------------------------
 void ofApp::usage()
 {
     std::cout <<
@@ -158,6 +169,7 @@ void ofApp::usage()
         << std::endl;
 }
 
+//--------------------------------------------------------------
 void ofApp::parseArgs(ofxArgs* args)
 {
     if (args->contains("-h") || args->contains("--help") || args->contains("--usage")) {
@@ -179,6 +191,7 @@ void ofApp::parseArgs(ofxArgs* args)
     settings_.console = args->contains("--console");
 }
 
+//--------------------------------------------------------------
 void ofApp::setupMidi()
 {
     if (settings_.verbose) {
@@ -194,6 +207,7 @@ void ofApp::setupMidi()
     }
 }
 
+//--------------------------------------------------------------
 bool ofApp::reload()
 {
     if (showDescription_.getSize() < 1) {
@@ -203,7 +217,7 @@ bool ofApp::reload()
 
     gui_.displayMessage("Loading...");
 
-    const auto shifted = showDescription_.shift(Status::instance().loadDir, gui_.getJumpToIndex());
+    const auto shifted = showDescription_.shift(Status::instance().loadDir, Status::instance().jumpToIndex);
     if (!shifted && Status::instance().loadDir != LoadDir::Current) {
         gui_.resetJumpToIndex();
         return false;
@@ -218,6 +232,7 @@ bool ofApp::reload()
         ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", showDescription_.currentScene().name.c_str());
     }
 
+    Status::instance().loadDir = LoadDir::None;
     return true;
 }
 
