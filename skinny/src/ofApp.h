@@ -11,8 +11,6 @@ namespace skinny {
 
 class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
-    static constexpr const char * NAME = "Triggered Video & FX Mixer";
-
     explicit ofApp(ofxArgs* args);
 
     void setup() override;
