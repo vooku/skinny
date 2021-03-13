@@ -40,6 +40,12 @@ const char* c_str(EffectType type) {
         return "Color Shift";
     case EffectType::Overdrive:
         return "Overdrive";
+    case EffectType::HOffset:
+        return "Horizontal Offset";
+    case EffectType::VOffset:
+        return "Vertical Offset";
+    case EffectType::Fisheye:
+        return "Fisheye";
     default:
         return "Invalid";
     }

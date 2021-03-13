@@ -1,8 +1,10 @@
 #version 440
 
 const int n = 8;
-const int nFx = 5;
+const int nFx = 8;
+
 const float eps = 0.0001f;
+const float pi = 3.14159;
 
 layout(binding = 0) uniform sampler2DRect layers[n];
 
@@ -17,9 +19,52 @@ uniform float masterAlpha;
 
 uniform int[nFx] fxTypes;
 uniform bool[nFx] fxPlaying;
-uniform float[nFx] fxParam;
+uniform float[nFx] fxParam; 
 
 out vec4 outputColor;
+
+//--------------------------------------------------------------
+vec2 horizontalOffset(vec2 uv, float p, vec2 dimensions)
+{
+    const float A = 0.075 * p *dimensions.x;
+    const float f = 2 * pi * 5 * p * p / dimensions.y;
+    vec2 offset = vec2(A * sin(f * uv.y), 0);
+    return uv + offset;
+}
+
+//--------------------------------------------------------------
+vec2 verticalOffset(vec2 uv, float p, vec2 dimensions)
+{
+    const float A = 0.1 * p * dimensions.y;
+    const float f = 2 * pi * 10 * p * p / dimensions.x;
+    vec2 offset = vec2(0, A * sin(f * uv.x));
+    return uv + offset;
+}
+
+//--------------------------------------------------------------
+vec2 distort(vec2 uv, vec2 dimensions) // <0,1> coords
+{
+    for (int i = 0; i < nFx; i++) {
+        if (!fxPlaying[i])
+            continue;
+       
+        switch (fxTypes[i]) {
+            case 4: // Horizontal Offset
+                uv = horizontalOffset(uv, fxParam[i], dimensions);
+                break;
+            case 5: // Vertical Offset
+                uv = verticalOffset(uv, fxParam[i], dimensions);
+                break;
+            case 6: // Fisheye
+//                uv = fisheye(uv, fxParam[i], dimensions);
+                break;
+        }
+    }
+
+    uv = mod(uv, dimensions); // because who knows where to set GL_REPEAT in a ofVideoPlayer
+
+    return uv;
+}
 
 //--------------------------------------------------------------
 vec3 solarize(vec3 c, float p)
@@ -59,7 +104,8 @@ void main()
         if (!playing[i])
             continue;
 
-        vec3 color = texture(layers[i], uvs[i]).rgb;
+        vec2 uvDist = distort(uvs[i], dimensions[i]);
+        vec3 color = texture(layers[i], uvDist).rgb; // texture pixel coords
         anyPlaying = true;
 
         switch(blendingModes[i]) {
