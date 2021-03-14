@@ -155,15 +155,18 @@ void Gui::update()
     if (videoSelector_ != nullptr && !videoSelector_->isThreadRunning()) {
         const auto& ctx = videoSelector_->getContext();
 
-        auto& layerDescription = showDescription_.scenes_[showDescription_.currentIdx_].layers[ctx.index];
-        if (layerDescription.valid) {
-            layerDescription.path = ctx.path;
-        }
-        else {
-            layerDescription = { ctx.index, ctx.path };
+        if (!ctx.path.empty()) {
+            auto& layerDescription = showDescription_.scenes_[showDescription_.currentIdx_].layers[ctx.index];
+            if (layerDescription.valid) {
+              layerDescription.path = ctx.path;
+            }
+            else {
+              layerDescription = { ctx.index, ctx.path };
+            }
+
+            Status::instance().loadDir = LoadDir::Current;
         }
 
-        Status::instance().loadDir = LoadDir::Current;
         videoSelector_.release();
     }
 
