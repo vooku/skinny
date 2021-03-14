@@ -29,7 +29,7 @@ vec2 horizontalOffset(vec2 uv, float p, vec2 dimensions)
     const float A = 0.075 * p *dimensions.x;
     const float f = 2 * pi * 5 * p * p / dimensions.y;
     vec2 offset = vec2(A * sin(f * uv.y), 0);
-    return uv + offset;
+    return mod(uv + offset, dimensions);
 }
 
 //--------------------------------------------------------------
@@ -38,7 +38,7 @@ vec2 verticalOffset(vec2 uv, float p, vec2 dimensions)
     const float A = 0.1 * p * dimensions.y;
     const float f = 2 * pi * 10 * p * p / dimensions.x;
     vec2 offset = vec2(0, A * sin(f * uv.x));
-    return uv + offset;
+    return mod(uv + offset, dimensions);
 }
 
 //--------------------------------------------------------------
@@ -60,8 +60,6 @@ vec2 distort(vec2 uv, vec2 dimensions) // <0,1> coords
                 break;
         }
     }
-
-    uv = mod(uv, dimensions); // because who knows where to set GL_REPEAT in a ofVideoPlayer
 
     return uv;
 }
