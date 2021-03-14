@@ -174,22 +174,24 @@ void Gui::update()
     if (fileSelector_ != nullptr && !fileSelector_->isThreadRunning()) {
         const auto& path = fileSelector_->getPath();
 
-        if (fileSelector_->isLoading()) {
-            ofxXmlSettings config;
+        if (!path.empty()) {
+            if (fileSelector_->isLoading()) {
+                ofxXmlSettings config;
 
-            if (config.loadFile(path.string()) && showDescription_.fromXml(config)) {
-                configPath_ = path;
-                configName_ = configPath_.filename().string();
+                if (config.loadFile(path.string()) && showDescription_.fromXml(config)) {
+                    configPath_ = path;
+                    configName_ = configPath_.filename().string();
+                }
+                else {
+                    ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", path.c_str());
+                    showDescription_ = {};
+                }
+
+                Status::instance().loadDir = LoadDir::Current;
             }
             else {
-                ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", path.c_str());
-                showDescription_ = {};
+                save(path);
             }
-
-            Status::instance().loadDir = LoadDir::Current;
-        }
-        else {
-            save(path);
         }
 
         fileSelector_.release();
