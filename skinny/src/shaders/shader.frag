@@ -16,6 +16,7 @@ uniform int[n] blendingModes;
 uniform float[n] alphas;
 
 uniform float masterAlpha;
+uniform float timeShift;
 
 uniform int[nFx] fxTypes;
 uniform bool[nFx] fxPlaying;
@@ -26,9 +27,11 @@ out vec4 outputColor;
 //--------------------------------------------------------------
 vec2 horizontalOffset(vec2 uv, float p, vec2 dimensions)
 {
-    const float A = 0.075 * p *dimensions.x;
-    const float f = 2 * pi * 5 * p * p / dimensions.y;
-    vec2 offset = vec2(A * sin(f * uv.y), 0);
+    const float A = 0.075 * p * dimensions.x;
+    const float p2 = p * p;
+    const float f = 2 * pi * 5 * p2 / dimensions.y;
+    const float timeOffset = 10 * p2 * timeShift;
+    vec2 offset = vec2(A * sin(f * uv.y + timeOffset), 0);
     return mod(uv + offset, dimensions);
 }
 
@@ -36,8 +39,10 @@ vec2 horizontalOffset(vec2 uv, float p, vec2 dimensions)
 vec2 verticalOffset(vec2 uv, float p, vec2 dimensions)
 {
     const float A = 0.1 * p * dimensions.y;
-    const float f = 2 * pi * 10 * p * p / dimensions.x;
-    vec2 offset = vec2(0, A * sin(f * uv.x));
+    const float p2 = p * p;
+    const float f = 2 * pi * 10 * p2 / dimensions.x;
+    const float timeOffset = 20 * p2 * timeShift;
+    vec2 offset = vec2(0, A * sin(f * uv.x + timeOffset));
     return mod(uv + offset, dimensions);
 }
 

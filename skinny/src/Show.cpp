@@ -1,6 +1,9 @@
 #include "Show.h"
 #include "Status.h"
 
+#include <chrono>
+#include <ctime>
+
 namespace skinny {
 
 //--------------------------------------------------------------
@@ -141,6 +144,12 @@ void Show::setAlphaControl(const midiNote & control)
 {
     masterAlphaControl_ = control;
 }
+//--------------------------------------------------------------
+float getTimeshift()
+{
+  using namespace std::chrono;
+  return std::fmod(duration<float>(steady_clock::now().time_since_epoch()).count(), 2.0f * 3.1459f);
+}
 
 //--------------------------------------------------------------
 void Show::setupUniforms() const
@@ -154,6 +163,7 @@ void Show::setupUniforms() const
     }
 
     shader_.setUniform1f("masterAlpha", uniforms_.masterAlpha_);
+    shader_.setUniform1f("timeShift", getTimeshift());
     shader_.setUniform2iv("screenSize", reinterpret_cast<int*>(&glm::ivec2{ width_, height_ }));
 
     shader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
