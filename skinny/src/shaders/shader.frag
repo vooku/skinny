@@ -98,7 +98,7 @@ vec3 desaturate(vec3 c, float p)
 {
     const vec3 weights = vec3(0.299f, 0.587f, 0.114f);
     float lum = dot(weights, c);
-    return mix(vec3(lum), c, p);
+    return mix(vec3(lum), c, 1.f - p);
 }
 
 //--------------------------------------------------------------
