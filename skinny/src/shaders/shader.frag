@@ -94,6 +94,14 @@ vec3 overdrive(vec3 c, float p)
 }
 
 //--------------------------------------------------------------
+vec3 desaturate(vec3 c, float p)
+{
+    const vec3 weights = vec3(0.299f, 0.587f, 0.114f);
+    float lum = dot(weights, c);
+    return mix(vec3(lum), c, p);
+}
+
+//--------------------------------------------------------------
 void main()
 {
     vec3 blended = vec3(0.0);
@@ -170,6 +178,9 @@ void main()
                 break;
             case 3: // Overdrive
                 blended = overdrive(blended,  fxParam[i]);
+                break;
+            case 6: // Desaturate
+                blended = desaturate(blended,  fxParam[i]);
                 break;
             default:
                 // do nothing

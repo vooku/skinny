@@ -5,6 +5,7 @@ namespace skinny {
 //--------------------------------------------------------------
 const char * c_str(BlendMode blendMode)
 {
+    static_assert(static_cast<int>(BlendMode::Count) == 8, "Do not forget to add new values here.");
     switch (blendMode)
     {
     case BlendMode::Overlay:
@@ -30,6 +31,8 @@ const char * c_str(BlendMode blendMode)
 
 //--------------------------------------------------------------
 const char* c_str(EffectType type) {
+    static_assert(static_cast<int>(EffectType::Count) == 7, "Do not forget to add new values here.");
+
     switch (type)
     {
     case EffectType::Solarize:
@@ -44,6 +47,8 @@ const char* c_str(EffectType type) {
         return "Horizontal Offset";
     case EffectType::VOffset:
         return "Vertical Offset";
+    case EffectType::Desaturate:
+        return "Desaturate";
     default:
         return "Invalid";
     }
