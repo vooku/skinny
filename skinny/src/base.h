@@ -49,8 +49,7 @@ enum class EffectType {
     Overdrive   = 3,
     HOffset     = 4,
     VOffset     = 5,
-    Fisheye     = 6,
-    Count       = 7
+    Count       = 6,
 };
 
 const char* c_str(EffectType type);

@@ -44,8 +44,6 @@ const char* c_str(EffectType type) {
         return "Horizontal Offset";
     case EffectType::VOffset:
         return "Vertical Offset";
-    case EffectType::Fisheye:
-        return "Fisheye";
     default:
         return "Invalid";
     }

@@ -618,8 +618,10 @@ void Gui::setupVideoFxPanel(glm::ivec2& pos)
     videoFxPanel_->addBreak();
 
     std::vector<string> options;
-    for (auto i = 0u; i < MAX_EFFECTS; ++i)
-        options.push_back(c_str(static_cast<EffectType>(i)));
+    for (auto i = 0u; i < MAX_EFFECTS; ++i) {
+        if (i < static_cast<unsigned>(EffectType::Count))
+            options.push_back(c_str(static_cast<EffectType>(i)));
+    }
 
     for (auto i = 0; i < effectDropdowns_.size(); ++i) {
         effectDropdowns_[i] = videoFxPanel_->addDropdown("Select...", options);

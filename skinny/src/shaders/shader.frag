@@ -60,9 +60,6 @@ vec2 distort(vec2 uv, vec2 dimensions) // <0,1> coords
             case 5: // Vertical Offset
                 uv = verticalOffset(uv, fxParam[i], dimensions);
                 break;
-            case 6: // Fisheye
-//                uv = fisheye(uv, fxParam[i], dimensions);
-                break;
         }
     }
 
