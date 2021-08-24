@@ -61,6 +61,9 @@ ActiveMappables Show::newMidiMessage(ofxMidiMessage& msg)
     }
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
+        if (!effects_[i])
+            continue;
+
         if (effects_[i]->getNote() == note) {
             if (noteOn) {
                 effects_[i]->play();
