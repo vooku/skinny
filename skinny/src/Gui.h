@@ -15,14 +15,10 @@ class Gui {
 public:
     static const ofColor BACKGROUND_COLOR;
 
-    Gui() = delete;
-    Gui(ShowDescription& showDescription);
-
     void setup();
     void draw() const;
     void reload();
     void update();
-    void setShow(std::shared_ptr<Show> show);
     void setActiveLayer(int idx, bool active);
     void setActiveEffect(int idx, bool active);
 
@@ -126,9 +122,6 @@ private:
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectMuteToggles_;
     std::array<ofxDatGuiLabel*,     MAX_EFFECTS> effectParamLabels_;
-
-    std::shared_ptr<Show> show_;
-    ShowDescription& showDescription_;
 
     std::filesystem::path configPath_;
     std::string configName_;

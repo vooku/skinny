@@ -15,4 +15,10 @@ Status::ShowPtr& Status::show()
 	return show_;
 }
 
+//--------------------------------------------------------------
+ShowDescription& Status::showDescription()
+{
+	return showDescription_;
+}
+
 }

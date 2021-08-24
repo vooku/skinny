@@ -14,7 +14,8 @@ public:
     static Status& instance();
 
     using ShowPtr = std::shared_ptr<Show>;
-    ShowPtr& show();
+    ShowPtr&          show();
+    ShowDescription&  showDescription();
 
     bool exit = false;    //!< The app should exit.
     LoadDir loadDir = LoadDir::None;
@@ -24,6 +25,7 @@ private:
     Status() = default;
 
     ShowPtr show_;
+		ShowDescription showDescription_;
 
 };
 

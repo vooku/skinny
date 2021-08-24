@@ -5,8 +5,7 @@
 namespace skinny {
 
 //--------------------------------------------------------------
-ofApp::ofApp(ofxArgs* args) :
-    gui_(showDescription_)
+ofApp::ofApp(ofxArgs* args)
 {
     parseArgs(args);
 }
@@ -50,8 +49,6 @@ void ofApp::setup()
     setupMidi();
 
     Status::instance().show() = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
-    gui_.setShow(Status::instance().show());
-
     Status::instance().loadDir = LoadDir::Current;
     reload();
 }
@@ -137,12 +134,13 @@ void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 //--------------------------------------------------------------
 void ofApp::newMidiMessage(ofxMidiMessage & msg)
 {
-    if (msg.channel != showDescription_.getMidiChannel()) {
+    const auto& showDescription = Status::instance().showDescription();
+    if (msg.channel != showDescription.getMidiChannel()) {
         ofLog(OF_LOG_WARNING, "Received a MIDI message on an incorrect channel: %d %d %d.", msg.channel, msg.status, msg.pitch);
         return;
     }
 
-    if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription_.getSwitchNote()) {
+    if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription.getSwitchNote()) {
         Status::instance().loadDir = LoadDir::Forward;
     }
     else {
@@ -210,26 +208,27 @@ void ofApp::setupMidi()
 //--------------------------------------------------------------
 bool ofApp::reload()
 {
-    if (showDescription_.getSize() < 1) {
+    auto& showDescription = Status::instance().showDescription();
+    if (showDescription.getSize() < 1) {
         ofLog(OF_LOG_ERROR, "Cannot load a scene from and empty show.");
         return false;
     }
 
     gui_.displayMessage("Loading...");
 
-    const auto shifted = showDescription_.shift(Status::instance().loadDir, Status::instance().jumpToIndex);
+    const auto shifted = showDescription.shift(Status::instance().loadDir, Status::instance().jumpToIndex);
     if (!shifted && Status::instance().loadDir != LoadDir::Current) {
         gui_.resetJumpToIndex();
         return false;
     }
 
-    if (Status::instance().show()->reload(showDescription_)) {
-        ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription_.currentScene().name.c_str());
+    if (Status::instance().show()->reload(showDescription)) {
+        ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription.currentScene().name.c_str());
         gui_.reload();
     }
     else {
         // TODO display in gui
-        ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", showDescription_.currentScene().name.c_str());
+        ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", showDescription.currentScene().name.c_str());
     }
 
     Status::instance().loadDir = LoadDir::None;

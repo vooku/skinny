@@ -41,8 +41,6 @@ private:
 
     bool reload();
 
-		ShowDescription showDescription_;
-
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
 
     Gui gui_;

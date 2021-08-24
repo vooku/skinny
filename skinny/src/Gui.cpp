@@ -14,12 +14,6 @@ const std::string Gui::Btn::LOAD = "Load";
 const ofColor Gui::BACKGROUND_COLOR = { 45, 45, 48 };
 
 //--------------------------------------------------------------
-Gui::Gui(ShowDescription& showDescription) :
-    showDescription_(showDescription)
-{
-}
-
-//--------------------------------------------------------------
 void Gui::setup()
 {
     fonts_.regular.load(FONT_REGULAR, fonts_.sizeRegular, true, false);
@@ -67,18 +61,21 @@ std::string buildJumpToLabel(int idx, int size)
 //--------------------------------------------------------------
 void Gui::reload()
 {
-    if (!show_)
+    const auto& show = Status::instance().show();
+    if (!show)
         return;
 
-    sceneNameInput_->setText(show_->getCurrentScene()->getName());
+    const auto& showDesc = Status::instance().showDescription();
+
+    sceneNameInput_->setText(show->getCurrentScene()->getName());
     sceneNameInput_->setLabel("Scene");
-    jumpToInput_->setLabel(buildJumpToLabel(showDescription_.currentIdx_ + 1, showDescription_.getSize()));
-    jumpToInput_->setText(std::to_string(showDescription_.currentIdx_ + 1));
-    masterAlphaInput_->setText(std::to_string(show_->getAlphaControl()));
-    midiChannelInput_->setText(std::to_string(showDescription_.getMidiChannel()));
+    jumpToInput_->setLabel(buildJumpToLabel(showDesc.currentIdx_ + 1, showDesc.getSize()));
+    jumpToInput_->setText(std::to_string(showDesc.currentIdx_ + 1));
+    masterAlphaInput_->setText(std::to_string(show->getAlphaControl()));
+    midiChannelInput_->setText(std::to_string(showDesc.getMidiChannel()));
 
     // layers
-    const auto& layers = show_->getCurrentScene()->getLayers();
+    const auto& layers = show->getCurrentScene()->getLayers();
     assert(layerButtons_.size() == layers.size());
 
     for (auto i = 0; i < MAX_LAYERS; ++i) {
@@ -108,7 +105,7 @@ void Gui::reload()
     }
 
     // effects
-    const auto& effects = show_->effects_;
+    const auto& effects = show->effects_;
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         effectPlayToggles_[i]->setChecked(false);
         effectMuteToggles_[i]->setChecked(false);
@@ -124,16 +121,18 @@ void Gui::reload()
 //--------------------------------------------------------------
 void Gui::update()
 {
-    if (!show_)
+    auto& showDescription = Status::instance().showDescription();
+    const auto& show = Status::instance().show();
+    if (!show)
         return;
 
     if (!configName_.empty()) {
       ofSetWindowTitle(configName_);
     }
     
-    masterAlphaInput_->setLabel(std::to_string(static_cast<int>(show_->getAlpha() * 127)));
+    masterAlphaInput_->setLabel(std::to_string(static_cast<int>(show->getAlpha() * 127)));
 
-    const auto& layers = show_->getCurrentScene()->getLayers();
+    const auto& layers = show->getCurrentScene()->getLayers();
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (layers[i]) {
             layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
@@ -144,10 +143,10 @@ void Gui::update()
     }
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
-        if (show_->effects_[i]) {
-            effectParamLabels_[i]->setLabel(std::to_string(show_->effects_[i]->param_));
+        if (show->effects_[i]) {
+            effectParamLabels_[i]->setLabel(std::to_string(show->effects_[i]->param_));
             // #TODO This is the wrong place for this!!!
-            showDescription_.effects_[i].param = show_->effects_[i]->param_;
+            showDescription.effects_[i].param = show->effects_[i]->param_;
         }
     }
 
@@ -156,7 +155,7 @@ void Gui::update()
         const auto& ctx = videoSelector_->getContext();
 
         if (!ctx.path.empty()) {
-            auto& layerDescription = showDescription_.scenes_[showDescription_.currentIdx_].layers[ctx.index];
+            auto& layerDescription = showDescription.scenes_[showDescription.currentIdx_].layers[ctx.index];
             if (layerDescription.valid) {
               layerDescription.path = ctx.path;
             }
@@ -178,13 +177,13 @@ void Gui::update()
             if (fileSelector_->isLoading()) {
                 ofxXmlSettings config;
 
-                if (config.loadFile(path.string()) && showDescription_.fromXml(config)) {
+                if (config.loadFile(path.string()) && showDescription.fromXml(config)) {
                     configPath_ = path;
                     configName_ = configPath_.filename().string();
                 }
                 else {
                     ofLog(OF_LOG_WARNING, "Cannot load config file %s, creating default scene instead.", path.c_str());
-                    showDescription_ = {};
+                    showDescription = {};
                 }
 
                 Status::instance().loadDir = LoadDir::Current;
@@ -196,12 +195,6 @@ void Gui::update()
 
         fileSelector_.release();
     }
-}
-
-//--------------------------------------------------------------
-void Gui::setShow(std::shared_ptr<Show> show)
-{
-    show_ = show;
 }
 
 //--------------------------------------------------------------
@@ -235,7 +228,8 @@ int Gui::getJumpToIndex() const
 //--------------------------------------------------------------
 void Gui::resetJumpToIndex()
 {
-    jumpToInput_->setText(std::to_string(showDescription_.currentIdx_ + 1));
+    auto& showDescription = Status::instance().showDescription();
+    jumpToInput_->setText(std::to_string(showDescription.currentIdx_ + 1));
 }
 
 //--------------------------------------------------------------
@@ -265,8 +259,9 @@ void Gui::save(std::filesystem::path path)
         path += DEFAULT_EXTENSION;
     }
 
-    ofxXmlSettings config;
-    showDescription_.toXml(config);
+		ofxXmlSettings config;
+		auto& showDescription = Status::instance().showDescription();
+    showDescription.toXml(config);
     if (!config.saveFile(path.string())) {
         ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
         displayMessage("Cannot save config file to " + path.string(), 1000);
@@ -299,11 +294,12 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
         Status::instance().loadDir = LoadDir::Jump;
         Status::instance().jumpToIndex = getJumpToIndex();
     }
-    else if (name == Btn::NEW) {
-        showDescription_.appendScene();
-        jumpToInput_->setLabel(buildJumpToLabel(showDescription_.currentIdx_ + 1, showDescription_.getSize()));
+		else if (name == Btn::NEW) {
+		    auto& showDescription = Status::instance().showDescription();
+        showDescription.appendScene();
+        jumpToInput_->setLabel(buildJumpToLabel(showDescription.currentIdx_ + 1, showDescription.getSize()));
         Status::instance().loadDir = LoadDir::Jump;
-        Status::instance().jumpToIndex = showDescription_.getSize() - 1;
+        Status::instance().jumpToIndex = showDescription.getSize() - 1;
     } else if (name == Btn::LOAD) {
         if (fileSelector_ != nullptr) {
             return;
@@ -328,63 +324,76 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
 void Gui::onLayerMidiInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
-    const auto note = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].note = note ;
-    if (show_ && show_->getCurrentScene()->layers_[idx])
-        show_->getCurrentScene()->layers_[idx]->setNote(note);
+		const auto note = static_cast<midiNote>(std::stoi(e.text));
+		auto& showDescription = Status::instance().showDescription();
+    showDescription.scenes_[showDescription.currentIdx_].layers[idx].note = note;
+    auto& show = Status::instance().show();
+    if (show && show->getCurrentScene()->layers_[idx])
+        show->getCurrentScene()->layers_[idx]->setNote(note);
 }
 
 //--------------------------------------------------------------
 void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
-    const auto control = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].cc = control;
-    if (show_ && show_->getCurrentScene()->layers_[idx])
-        show_->getCurrentScene()->layers_[idx]->setCc(control);
+		const auto control = static_cast<midiNote>(std::stoi(e.text));
+		auto& showDescription = Status::instance().showDescription();
+    showDescription.scenes_[showDescription.currentIdx_].layers[idx].cc = control;
+    auto& show = Status::instance().show();
+    if (show && show->getCurrentScene()->layers_[idx])
+        show->getCurrentScene()->layers_[idx]->setCc(control);
 }
 
 //--------------------------------------------------------------
 void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto control = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_.alphaControl_ = control;
-    if (show_)
-        show_->setAlphaControl(control);
+    auto& showDescription = Status::instance().showDescription();
+    showDescription.alphaControl_ = control;
+    auto& show = Status::instance().show();
+    if (show)
+        show->setAlphaControl(control);
 }
 
 //--------------------------------------------------------------
 void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
 {
     auto idx = std::stoi(e.target->getName());
-    auto note = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_.effects_[idx].note = note;
-    show_->effects_[idx]->setNote(note);
+		auto note = static_cast<midiNote>(std::stoi(e.text));
+		auto& showDescription = Status::instance().showDescription();
+    showDescription.effects_[idx].note = note;
+    auto& show = Status::instance().show();
+    show->effects_[idx]->setNote(note);
 }
 
 //--------------------------------------------------------------
 void Gui::onEffectCcInput(ofxDatGuiTextInputEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
-    const auto cc = static_cast<midiNote>(std::stoi(e.text));
-    showDescription_.effects_[idx].cc = cc;
-    if (show_)
-        show_->effects_[idx]->setCc(cc);
+		const auto cc = static_cast<midiNote>(std::stoi(e.text));
+		auto& showDescription = Status::instance().showDescription();
+    showDescription.effects_[idx].cc = cc;
+    auto& show = Status::instance().show();
+    if (show)
+        show->effects_[idx]->setCc(cc);
 }
 
 //--------------------------------------------------------------
 void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
 {
-    showDescription_.scenes_[showDescription_.currentIdx_].name = e.text;
-    if (show_->getCurrentScene())
-        show_->getCurrentScene()->name_ = e.text;
+    auto& showDescription = Status::instance().showDescription();
+    showDescription.scenes_[showDescription.currentIdx_].name = e.text;
+    auto& show = Status::instance().show();
+    if (show->getCurrentScene())
+        show->getCurrentScene()->name_ = e.text;
 }
 
 //--------------------------------------------------------------
 void Gui::onMidiChannelInput(ofxDatGuiTextInputEvent e)
 {
     auto channel = std::min(std::max(std::stoi(e.text), 1), 16);
-    showDescription_.setMidiChannel(channel);
+    auto& showDescription = Status::instance().showDescription();
+    showDescription.setMidiChannel(channel);
     midiChannelInput_->setText(std::to_string(channel));
 }
 
@@ -392,31 +401,37 @@ void Gui::onMidiChannelInput(ofxDatGuiTextInputEvent e)
 void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
-    const auto blendMode = static_cast<BlendMode>(e.child);
-    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].blendMode = blendMode;
-    if (show_ && show_->getCurrentScene()->layers_[idx])
-        show_->getCurrentScene()->layers_[idx]->setBlendMode(blendMode);
+		const auto blendMode = static_cast<BlendMode>(e.child);
+		auto& showDescription = Status::instance().showDescription();
+    showDescription.scenes_[showDescription.currentIdx_].layers[idx].blendMode = blendMode;
+    auto& show = Status::instance().show();
+    if (show && show->getCurrentScene()->layers_[idx])
+        show->getCurrentScene()->layers_[idx]->setBlendMode(blendMode);
 }
 
 //--------------------------------------------------------------
 void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
 {
+    auto& show = Status::instance().show();
+    if (!show)
+        return;
     const auto idx = std::stoi(e.target->getName());
     const auto type = static_cast<EffectType>(e.child);
-    const auto note = show_->effects_[idx]->getNote();
-    const auto cc = show_->effects_[idx]->getCc();
-    const auto param = show_->effects_[idx]->param_;
-    showDescription_.effects_[idx].type = type;
-    if (show_)
-        show_->effects_[idx].reset(new Effect(idx, type, note, cc, param));
+    const auto note = show->effects_[idx]->getNote();
+    const auto cc = show->effects_[idx]->getCc();
+		const auto param = show->effects_[idx]->param_;
+		auto& showDescription = Status::instance().showDescription();
+    showDescription.effects_[idx].type = type;
+    show->effects_[idx].reset(new Effect(idx, type, note, cc, param));
 }
 
 //--------------------------------------------------------------
 void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
-    if (show_->getCurrentScene()) {
-        show_->getCurrentScene()->playPauseLayer(idx);
+    auto& show = Status::instance().show();
+    if (show && show->getCurrentScene()) {
+        show->getCurrentScene()->playPauseLayer(idx);
     }
 }
 
@@ -424,7 +439,9 @@ void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 void Gui::onEffectPlayToggle(ofxDatGuiToggleEvent e)
 {
     const auto idx = std::stoi(e.target->getName());
-    show_->playPauseEffect(idx);
+    auto& show = Status::instance().show();
+    if (show)
+        show->playPauseEffect(idx);
 }
 
 //--------------------------------------------------------------
@@ -432,8 +449,9 @@ void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 {
     const auto mute = e.checked;
     const auto idx = std::stoi(e.target->getName());
-    if (show_ && show_->getCurrentScene()->layers_[idx])
-        show_->getCurrentScene()->layers_[idx]->setMute(mute);
+    auto& show = Status::instance().show();
+    if (show && show->getCurrentScene()->layers_[idx])
+        show->getCurrentScene()->layers_[idx]->setMute(mute);
     if (mute)
         layerPlayToggles_[idx]->setChecked(false);
 }
@@ -443,7 +461,8 @@ void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 {
     const auto mute = e.checked;
     const auto idx = std::stoi(e.target->getName());
-    show_->effects_[idx]->setMute(mute);
+    auto& show = Status::instance().show();
+    show->effects_[idx]->setMute(mute);
     // TODO if (mute)
     //    effectPlayToggles_[idx]->setChecked(false);
 }
@@ -452,10 +471,12 @@ void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
 {
     const auto retrigger = e.checked;
-    const auto idx = std::stoi(e.target->getName());
-    showDescription_.scenes_[showDescription_.currentIdx_].layers[idx].retrigger = retrigger;
-    if (show_ && show_->getCurrentScene()->layers_[idx])
-        show_->getCurrentScene()->layers_[idx]->setRetrigger(retrigger);
+		const auto idx = std::stoi(e.target->getName());
+		auto& showDescription = Status::instance().showDescription();
+    showDescription.scenes_[showDescription.currentIdx_].layers[idx].retrigger = retrigger;
+    auto& show = Status::instance().show();
+    if (show && show->getCurrentScene()->layers_[idx])
+        show->getCurrentScene()->layers_[idx]->setRetrigger(retrigger);
 }
 
 //--------------------------------------------------------------
@@ -497,12 +518,14 @@ Gui::HeaderTheme::HeaderTheme() :
 //--------------------------------------------------------------
 void Gui::setupControlPanel(glm::ivec2& pos)
 {
+    auto& showDescription = Status::instance().showDescription();
     controlPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
     controlPanel_->setTheme(&headerTheme_);
     pos.x += controlPanel_->getWidth() + 2 * DELTA;
 
-    sceneNameInput_ = controlPanel_->addTextInput("Scene " + std::to_string(showDescription_.getSceneIndex() + 1));
-    sceneNameInput_->setText(show_ ? show_->getCurrentScene()->getName() : "Enter scene name");
+    sceneNameInput_ = controlPanel_->addTextInput("Scene " + std::to_string(showDescription.getSceneIndex() + 1));
+    auto& show = Status::instance().show();
+    sceneNameInput_->setText(show ? show->getCurrentScene()->getName() : "Enter scene name");
     sceneNameInput_->onTextInputEvent(this, &Gui::onSceneNameInput);
 
     controlButtons_.push_back(controlPanel_->addButton(Btn::NEXT));
@@ -531,7 +554,7 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     controlPanel_->addBreak();
     midiChannelInput_ = controlPanel_->addTextInput("Channel");
     midiChannelInput_->setInputType(ofxDatGuiInputType::NUMERIC);
-    midiChannelInput_->setText(std::to_string(showDescription_.getMidiChannel()));
+    midiChannelInput_->setText(std::to_string(showDescription.getMidiChannel()));
     midiChannelInput_->onTextInputEvent(this, &Gui::onMidiChannelInput);
 
     controlPanel_->addBreak();
