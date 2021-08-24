@@ -8,12 +8,12 @@
 
 namespace skinny {
 
-struct Serialiazable {
+struct Serializable {
     virtual bool fromXml(ofxXmlSettings& config) = 0;
     virtual void toXml(ofxXmlSettings& config) const = 0;
 };
 
-struct MappableDescription : public Serialiazable {
+struct MappableDescription : public Serializable {
     MappableDescription() = default;
     MappableDescription(midiNote note, midiNote cc);
 
@@ -58,7 +58,7 @@ struct EffectDescription : public MappableDescription {
     int param = 127;
 };
 
-struct SceneDescription : public Serialiazable {
+struct SceneDescription : public Serializable {
     SceneDescription() = default;
     SceneDescription(const std::string& name);
 
@@ -69,7 +69,7 @@ struct SceneDescription : public Serialiazable {
     std::array<LayerDescription, MAX_LAYERS> layers;
 };
 
-class ShowDescription : public Serialiazable {
+class ShowDescription : public Serializable {
 public:
     friend class Gui;
 
