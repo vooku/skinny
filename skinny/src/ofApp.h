@@ -4,7 +4,6 @@
 #include "ofxMidi.h"
 #include "ofxArgs.h"
 #include "meta.h"
-#include "Gui.h"
 
 namespace skinny {
 
@@ -43,7 +42,6 @@ private:
 
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
 
-    Gui gui_;
 };
 
 } // namespace skinny
