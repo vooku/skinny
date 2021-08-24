@@ -49,8 +49,8 @@ void ofApp::setup()
 
     setupMidi();
 
-    show_ = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
-    gui_.setShow(show_);
+    Status::instance().show() = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
+    gui_.setShow(Status::instance().show());
 
     Status::instance().loadDir = LoadDir::Current;
     reload();
@@ -76,7 +76,7 @@ void ofApp::update()
         reload();
     }
 
-    show_->update();
+    Status::instance().show()->update();
 
     if (ofGetFrameNum() % 300 == 0) {
         ofLog(OF_LOG_NOTICE, "fps: %f", ofGetFrameRate());
@@ -93,7 +93,7 @@ void ofApp::updateGui(ofEventArgs& args)
 void ofApp::draw()
 {
     ofBackground(ofColor::black);
-    show_->draw();
+    Status::instance().show()->draw();
 }
 
 //--------------------------------------------------------------
@@ -146,7 +146,7 @@ void ofApp::newMidiMessage(ofxMidiMessage & msg)
         Status::instance().loadDir = LoadDir::Forward;
     }
     else {
-        auto activeMappables = show_->newMidiMessage(msg);
+        auto activeMappables = Status::instance().show()->newMidiMessage(msg);
 
         for (const auto& layer : activeMappables.layers) {
             gui_.setActiveLayer(layer.first, layer.second);
@@ -223,7 +223,7 @@ bool ofApp::reload()
         return false;
     }
 
-    if (show_->reload(showDescription_)) {
+    if (Status::instance().show()->reload(showDescription_)) {
         ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription_.currentScene().name.c_str());
         gui_.reload();
     }

@@ -217,6 +217,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Show.cpp" />
+    <ClCompile Include="src\Status.cpp" />
     <ClCompile Include="src\VideoSelector.cpp" />
   </ItemGroup>
   <ItemGroup>

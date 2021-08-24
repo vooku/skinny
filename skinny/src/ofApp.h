@@ -3,7 +3,6 @@
 #include "ofMain.h"
 #include "ofxMidi.h"
 #include "ofxArgs.h"
-#include "Show.h"
 #include "meta.h"
 #include "Gui.h"
 
@@ -42,8 +41,7 @@ private:
 
     bool reload();
 
-    std::shared_ptr<Show> show_;
-    ShowDescription showDescription_;
+		ShowDescription showDescription_;
 
     std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
 

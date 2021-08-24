@@ -1,6 +1,7 @@
 #pragma once
 
 #include "base.h"
+#include "Show.h"
 
 namespace skinny {
 
@@ -10,11 +11,10 @@ public:
     Status(Status const&) = delete;
     void operator=(Status const&) = delete;
 
-    static Status& instance()
-    {
-        static Status status;
-        return status;
-    }
+    static Status& instance();
+
+    using ShowPtr = std::shared_ptr<Show>;
+    ShowPtr& show();
 
     bool exit = false;    //!< The app should exit.
     LoadDir loadDir = LoadDir::None;
@@ -22,6 +22,8 @@ public:
 
 private:
     Status() = default;
+
+    ShowPtr show_;
 
 };
 
