@@ -88,6 +88,9 @@
     <ClCompile Include="src\FileSelector.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\MidiController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -288,6 +291,9 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\FileSelector.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MidiController.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>

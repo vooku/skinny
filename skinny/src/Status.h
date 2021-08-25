@@ -4,6 +4,7 @@
 #include "Show.h"
 #include "Meta.h"
 #include "Gui.h"
+#include "MidiController.h"
 
 namespace skinny {
 
@@ -20,6 +21,7 @@ public:
     ShowPtr&          show();
     ShowDescription&  showDescription();
     Gui&              gui();
+    MidiController&   midi();
 
     bool exit = false;    //!< The app should exit.
     LoadDir loadDir = LoadDir::None;

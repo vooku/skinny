@@ -1,12 +1,15 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxMidi.h"
 #include "ofxArgs.h"
+#include "Show.h"
 #include "meta.h"
+#include "Gui.h"
 
 namespace skinny {
 
-class ofApp : public ofBaseApp {
+class ofApp : public ofBaseApp, public ofxMidiListener {
 public:
     explicit ofApp(ofxArgs* args);
 
@@ -21,9 +24,11 @@ public:
 
     void keyReleased(ofKeyEventArgs& key) override;
     void keyReleasedGui(ofKeyEventArgs& args);
+    void newMidiMessage(ofxMidiMessage& msg) override;
 
 private:
     struct {
+        std::vector<unsigned int> midiPorts;
         bool cancelSetup = false;
         bool verbose     = false;
         bool console     = false;
@@ -33,8 +38,16 @@ private:
     static void usage();
     [[deprecated("Console configuration is going to be removed soon.")]]
     void parseArgs(ofxArgs* args);
+    void setupMidi();
 
     bool reload();
+
+    std::shared_ptr<Show> show_;
+    ShowDescription showDescription_;
+
+    std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
+
+    Gui gui_;
 };
 
 } // namespace skinny

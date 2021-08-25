@@ -31,6 +31,13 @@ Gui& Status::gui()
 }
 
 //--------------------------------------------------------------
+MidiController& Status::midi()
+{
+  static MidiController midiController;
+  return midiController;
+}
+
+//--------------------------------------------------------------
 Status& getStatus()
 {
   return Status::instance();

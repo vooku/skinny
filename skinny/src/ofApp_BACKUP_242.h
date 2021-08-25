@@ -3,6 +3,11 @@
 #include "ofMain.h"
 #include "ofxArgs.h"
 #include "meta.h"
+<<<<<<< Updated upstream
+=======
+#include "Gui.h"
+#include "MidiController.h"
+>>>>>>> Stashed changes
 
 namespace skinny {
 
@@ -35,6 +40,17 @@ private:
     void parseArgs(ofxArgs* args);
 
     bool reload();
+
+<<<<<<< Updated upstream
+    std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
+
+=======
+    std::shared_ptr<Show> show_;
+    ShowDescription showDescription_;
+
+    Gui gui_;
+    MidiController midiController_;
+>>>>>>> Stashed changes
 };
 
 } // namespace skinny

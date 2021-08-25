@@ -198,6 +198,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Mappable.cpp" />
     <ClCompile Include="src\meta.cpp" />
+    <ClCompile Include="src\MidiController.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="..\..\..\addons\ofxArgs\src\ofxArgs.cpp" />
     <ClCompile Include="..\..\..\addons\ofxDatGui\src\core\ofxDatGuiComponent.cpp" />
@@ -228,6 +229,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\Mappable.h" />
     <ClInclude Include="src\meta.h" />
+    <ClInclude Include="src\MidiController.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="..\..\..\addons\ofxArgs\src\ofxArgs.h" />
     <ClInclude Include="..\..\..\addons\ofxDatGui\src\components\ofxDatGui2dPad.h" />

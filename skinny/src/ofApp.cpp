@@ -46,10 +46,10 @@ void ofApp::setup()
         return;
     }
 
-    setupMidi();
-
+    getStatus().midi().setup(settings_.verbose);
     getStatus().show() = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
     getStatus().loadDir = LoadDir::Current;
+
     reload();
 }
 
@@ -102,9 +102,7 @@ void ofApp::drawGui(ofEventArgs&) {
 //--------------------------------------------------------------
 void ofApp::exit()
 {
-    for (auto& midiInput : midiInputs_) {
-        midiInput->closePort();
-    }
+  getStatus().midi().exit();
 }
 
 //--------------------------------------------------------------
@@ -132,38 +130,13 @@ void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 }
 
 //--------------------------------------------------------------
-void ofApp::newMidiMessage(ofxMidiMessage & msg)
-{
-    const auto& showDescription = getStatus().showDescription();
-    if (msg.channel != showDescription.getMidiChannel()) {
-        ofLog(OF_LOG_WARNING, "Received a MIDI message on an incorrect channel: %d %d %d.", msg.channel, msg.status, msg.pitch);
-        return;
-    }
-
-    if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription.getSwitchNote()) {
-        getStatus().loadDir = LoadDir::Forward;
-    }
-    else {
-        auto activeMappables = getStatus().show()->newMidiMessage(msg);
-
-        for (const auto& layer : activeMappables.layers) {
-            getStatus().gui().setActiveLayer(layer.first, layer.second);
-        }
-        for (const auto& effect : activeMappables.effects) {
-            getStatus().gui().setActiveEffect(effect.first, effect.second);
-        }
-    }
-}
-
-//--------------------------------------------------------------
 void ofApp::usage()
 {
     std::cout <<
         "Usage:\n"
         "    -h, --help, --usage    Print this message.\n"
-        "    --midiport <number>    Try to open up a MIDI port <number> for input.\n"
         "    --console              Log to console instead to a file."
-        "    -v, --verbose Use verbose mode."
+        "    -v, --verbose          Use verbose mode."
         << std::endl;
 }
 
@@ -176,33 +149,8 @@ void ofApp::parseArgs(ofxArgs* args)
         return;
     }
 
-    if (args->contains("--midiport")) {
-        settings_.midiPorts.push_back(args->getInt("--midiport", 0));
-    }
-    else { // --midiports-all
-        ofxMidiIn tmpMidiIn;
-        for (auto i = 0; i < tmpMidiIn.getNumInPorts(); ++i)
-            settings_.midiPorts.push_back(i);
-    }
-
     settings_.verbose = args->contains("-v") || args->contains("--verbose");
     settings_.console = args->contains("--console");
-}
-
-//--------------------------------------------------------------
-void ofApp::setupMidi()
-{
-    if (settings_.verbose) {
-        ofxMidiIn tmpMidiIn;
-        tmpMidiIn.listInPorts();
-    }
-
-    for (auto portNumber : settings_.midiPorts) {
-        midiInputs_.push_back(std::make_unique<ofxMidiIn>());
-        midiInputs_.back()->openPort(portNumber);
-        midiInputs_.back()->addListener(this);
-        midiInputs_.back()->setVerbose(/*settings_.verbose*/false);
-    }
 }
 
 //--------------------------------------------------------------

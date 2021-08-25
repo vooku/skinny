@@ -2,7 +2,10 @@
 
 #include "ofMain.h"
 #include "ofxArgs.h"
+#include "Show.h"
 #include "meta.h"
+#include "Gui.h"
+#include "MidiController.h"
 
 namespace skinny {
 
@@ -35,6 +38,12 @@ private:
     void parseArgs(ofxArgs* args);
 
     bool reload();
+
+    std::shared_ptr<Show> show_;
+    ShowDescription showDescription_;
+
+    Gui gui_;
+    MidiController midiController_;
 };
 
 } // namespace skinny
