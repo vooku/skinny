@@ -7,6 +7,7 @@
 
 namespace skinny {
 
+//--------------------------------------------------------------
 class Status
 {
 public:
@@ -27,12 +28,9 @@ public:
 private:
     Status() = default;
 
-    ShowPtr show_;
-		ShowDescription showDescription_;
-    Gui gui_;
-
 };
 
+//--------------------------------------------------------------
 Status& getStatus();
 
 } // namespace skinny
