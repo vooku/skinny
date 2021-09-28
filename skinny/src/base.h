@@ -61,7 +61,7 @@ enum class LoadDir {
 
 //--------------------------------------------------------------
 struct ControlChange {
-  midiNote note;
+  midiNote control;
   int value;
 };
 

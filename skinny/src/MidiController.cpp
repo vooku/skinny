@@ -48,7 +48,7 @@ void MidiController::newMidiMessage(ofxMidiMessage& msg)
 
 	if (msg.status == MIDI_CONTROL_CHANGE)
 	{
-		auto cc = ControlChange{ static_cast<midiNote>(msg.pitch), msg.value };
+		auto cc = ControlChange{ static_cast<midiNote>(msg.control), msg.value };
 		ofNotifyEvent(controlChangeEvent, cc);
 	}
 }

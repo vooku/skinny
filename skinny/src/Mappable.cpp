@@ -62,7 +62,7 @@ void Mappable::onNoteOff(midiNote& note)
 //--------------------------------------------------------------
 void Mappable::onControlChange(ControlChange& change)
 {
-  if (change.note == cc_)
+  if (change.control == cc_)
     ccValue_ = change.value;
 }
 
