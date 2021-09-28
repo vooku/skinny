@@ -17,15 +17,15 @@ public:
 
     static Status& instance();
 
-    using ShowPtr = std::shared_ptr<Show>;
-    ShowPtr&          show();
-    ShowDescription&  showDescription();
-    Gui&              gui();
-    MidiController&   midi();
-
     bool exit = false;    //!< The app should exit.
     LoadDir loadDir = LoadDir::None;
     int jumpToIndex = 0;  //!< In the case of LoadDir::Jump
+
+    // shortcuts to objects from ofApp
+    std::shared_ptr<Show> show;
+    std::shared_ptr<ShowDescription> showDescription;
+    std::shared_ptr<MidiController> midi;
+    std::shared_ptr<Gui> gui;
 
 private:
     Status() = default;

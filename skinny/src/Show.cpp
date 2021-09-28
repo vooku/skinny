@@ -29,7 +29,7 @@ Show::Show(int width, int height) :
 //--------------------------------------------------------------
 void Show::init()
 {
-  ofAddListener(getStatus().midi().noteOnEvent, this, &Show::onNoteOn);
+  ofAddListener(getStatus().midi->noteOnEvent, this, &Show::onNoteOn);
 
   if (currentScene_)
     currentScene_->init();
@@ -38,7 +38,7 @@ void Show::init()
 //--------------------------------------------------------------
 void Show::done()
 {
-  ofRemoveListener(getStatus().midi().noteOnEvent, this, &Show::onNoteOn);
+  ofRemoveListener(getStatus().midi->noteOnEvent, this, &Show::onNoteOn);
 
   if (currentScene_)
     currentScene_->done();
@@ -109,7 +109,7 @@ void Show::update()
 //--------------------------------------------------------------
 void Show::onNoteOn(midiNote& note)
 {
-  if (note == getStatus().showDescription().getSwitchNote()) {
+  if (note == getStatus().showDescription->getSwitchNote()) {
     Status::instance().loadDir = LoadDir::Forward;
   }
 }

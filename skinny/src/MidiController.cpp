@@ -31,7 +31,7 @@ void MidiController::exit()
 //--------------------------------------------------------------
 void MidiController::newMidiMessage(ofxMidiMessage& msg)
 {
-	if (msg.channel != getStatus().showDescription().getMidiChannel()) {
+	if (msg.channel != getStatus().showDescription->getMidiChannel()) {
 		ofLog(OF_LOG_WARNING, "Received a MIDI message on an incorrect channel: %d %d %d.", msg.channel, msg.status, msg.pitch);
 		return;
 	}

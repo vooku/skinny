@@ -8,6 +8,10 @@ namespace skinny {
 ofApp::ofApp(ofxArgs* args)
 {
     parseArgs(args);
+
+    getStatus().showDescription = showDescription_ = make_shared<ShowDescription>();
+    getStatus().midi = midiController_ = make_shared<MidiController>();
+    getStatus().gui = gui_ = make_shared<Gui>();
 }
 
 //--------------------------------------------------------------
@@ -46,9 +50,11 @@ void ofApp::setup()
         return;
     }
 
-    getStatus().midi().setup(settings_.verbose);
-    getStatus().show() = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
-    getStatus().show()->init();
+    getStatus().show = show_ = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
+    show_->init();
+
+    midiController_->setup(settings_.verbose);
+
     getStatus().loadDir = LoadDir::Current;
 
     reload();
@@ -59,7 +65,7 @@ void ofApp::setupGui()
 {
     ofSetWindowTitle(NAME);
 
-    getStatus().gui().setup();
+    getStatus().gui->setup();
 }
 
 //--------------------------------------------------------------
@@ -74,7 +80,7 @@ void ofApp::update()
         reload();
     }
 
-    getStatus().show()->update();
+    getStatus().show->update();
 
     if (ofGetFrameNum() % 300 == 0) {
         ofLog(OF_LOG_NOTICE, "fps: %f", ofGetFrameRate());
@@ -84,27 +90,27 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::updateGui(ofEventArgs& args)
 {
-  getStatus().gui().update();
+  getStatus().gui->update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
     ofBackground(ofColor::black);
-    getStatus().show()->draw();
+    getStatus().show->draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::drawGui(ofEventArgs&) {
 
-    getStatus().gui().draw();
+    getStatus().gui->draw();
 }
 
 //--------------------------------------------------------------
 void ofApp::exit()
 {
-  getStatus().midi().exit();
-  getStatus().show()->done();
+  getStatus().midi->exit();
+  getStatus().show->done();
 }
 
 //--------------------------------------------------------------
@@ -158,23 +164,23 @@ void ofApp::parseArgs(ofxArgs* args)
 //--------------------------------------------------------------
 bool ofApp::reload()
 {
-    auto& showDescription = getStatus().showDescription();
+    auto& showDescription = *getStatus().showDescription;
     if (showDescription.getSize() < 1) {
         ofLog(OF_LOG_ERROR, "Cannot load a scene from and empty show.");
         return false;
     }
 
-    getStatus().gui().displayMessage("Loading...");
+    getStatus().gui->displayMessage("Loading...");
 
     const auto shifted = showDescription.shift(getStatus().loadDir, getStatus().jumpToIndex);
     if (!shifted && getStatus().loadDir != LoadDir::Current) {
-        getStatus().gui().resetJumpToIndex();
+        getStatus().gui->resetJumpToIndex();
         return false;
     }
 
-    if (getStatus().show()->reload(showDescription)) {
+    if (getStatus().show->reload(showDescription)) {
         ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription.currentScene().name.c_str());
-        getStatus().gui().reload();
+        getStatus().gui->reload();
     }
     else {
         // TODO display in gui

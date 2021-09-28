@@ -11,16 +11,16 @@ Mappable::Mappable(midiNote note, midiNote cc) :
 
 void Mappable::init()
 {
-  ofAddListener(getStatus().midi().noteOnEvent, this, &Mappable::onNoteOn);
-  ofAddListener(getStatus().midi().noteOffEvent, this, &Mappable::onNoteOff);
-  ofAddListener(getStatus().midi().controlChangeEvent, this, &Mappable::onControlChange);
+  ofAddListener(getStatus().midi->noteOnEvent, this, &Mappable::onNoteOn);
+  ofAddListener(getStatus().midi->noteOffEvent, this, &Mappable::onNoteOff);
+  ofAddListener(getStatus().midi->controlChangeEvent, this, &Mappable::onControlChange);
 }
 
 void Mappable::done()
 {
-  ofRemoveListener(getStatus().midi().noteOnEvent, this, &Mappable::onNoteOn);
-  ofRemoveListener(getStatus().midi().noteOffEvent, this, &Mappable::onNoteOff);
-  ofRemoveListener(getStatus().midi().controlChangeEvent, this, &Mappable::onControlChange);
+  ofRemoveListener(getStatus().midi->noteOnEvent, this, &Mappable::onNoteOn);
+  ofRemoveListener(getStatus().midi->noteOffEvent, this, &Mappable::onNoteOff);
+  ofRemoveListener(getStatus().midi->controlChangeEvent, this, &Mappable::onControlChange);
 }
 
 //--------------------------------------------------------------
