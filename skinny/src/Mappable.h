@@ -10,12 +10,17 @@ public:
     Mappable(midiNote note, midiNote cc);
     virtual ~Mappable() = default;
 
-    virtual void play() { active_ = !mute_; }
-    virtual void pause() { active_ = false; }
-    virtual void playPause() { active_ = !active_ && !mute_; }
+    virtual void init();
+    virtual void done();
+
+    virtual void play();
+    virtual void pause();
+    virtual void playPause();
     virtual bool isPlaying() const { return active_; }
 
-    // TODO virtual bool newMidiMessage(ofxMidiMessage& msg);
+    virtual void onNoteOn(midiNote& note);
+    virtual void onNoteOff(midiNote& note);
+    virtual void onControlChange(ControlChange& change);
 
     virtual midiNote getNote() const { return note_; }
     virtual midiNote getCc() const { return cc_; }
@@ -29,6 +34,7 @@ protected:
     bool mute_ = false;
     midiNote note_ = 0;
     midiNote cc_ = 0;
+    int ccValue_ = 0;
 
 };
 

@@ -48,6 +48,7 @@ void ofApp::setup()
 
     getStatus().midi().setup(settings_.verbose);
     getStatus().show() = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
+    getStatus().show()->init();
     getStatus().loadDir = LoadDir::Current;
 
     reload();
@@ -103,6 +104,7 @@ void ofApp::drawGui(ofEventArgs&) {
 void ofApp::exit()
 {
   getStatus().midi().exit();
+  getStatus().show()->done();
 }
 
 //--------------------------------------------------------------

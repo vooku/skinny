@@ -3,7 +3,7 @@
 
 namespace skinny {
 
-typedef uint8_t midiNote;
+using midiNote = int;
 
 static const int MAX_LAYERS = 8;
 static const int MAX_EFFECTS = 8;
@@ -57,6 +57,12 @@ const char* c_str(EffectType type);
 
 enum class LoadDir {
     Current, Forward, Backward, Jump, None
+};
+
+//--------------------------------------------------------------
+struct ControlChange {
+  midiNote note;
+  int value;
 };
 
 } // namespace skinny

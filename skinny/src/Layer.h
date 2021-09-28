@@ -32,11 +32,10 @@ public:
     const auto& getName() const { return name_; }
     auto getBlendMode() const { return blendMode_; }
     bool isValid() const { return valid_; }
-    float getAlpha() const { return alpha_; }
+    float getAlpha() const { return (ccValue_ < 0 ? 0 : ccValue_ > 127 ? 127 : ccValue_) / 127.0f; }
     auto getRetrigger() const { return retrigger_; }
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
-    void setAlpha(int alpha) { alpha_ = (alpha < 0 ? 0 : alpha > 127 ? 127 : alpha) / 127.0f; }
     void setRetrigger(bool value) { retrigger_ = value; }
 
 private:
@@ -46,7 +45,6 @@ private:
     bool valid_;
     bool retrigger_ = false;
     BlendMode blendMode_;
-    float alpha_;
 };
 
 } // namespace skinny

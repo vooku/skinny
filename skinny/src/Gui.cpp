@@ -112,7 +112,7 @@ void Gui::reload()
         effectDropdowns_[i]->select(static_cast<int>(effects[i]->type));
         effectMidiInputs_[i]->setText(std::to_string(effects[i]->getNote()));
         effectCCInputs_[i]->setText(std::to_string(effects[i]->getCc()));
-        effectParamLabels_[i]->setLabel(std::to_string(effects[i]->param_));
+        effectParamLabels_[i]->setLabel(std::to_string(effects[i]->ccValue_));
     }
 
     draw();
@@ -144,9 +144,9 @@ void Gui::update()
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         if (show->effects_[i]) {
-            effectParamLabels_[i]->setLabel(std::to_string(show->effects_[i]->param_));
+            effectParamLabels_[i]->setLabel(std::to_string(show->effects_[i]->ccValue_));
             // #TODO This is the wrong place for this!!!
-            showDescription.effects_[i].param = show->effects_[i]->param_;
+            showDescription.effects_[i].param = show->effects_[i]->ccValue_;
         }
     }
 
@@ -419,7 +419,7 @@ void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
     const auto type = static_cast<EffectType>(e.child);
     const auto note = show->effects_[idx]->getNote();
     const auto cc = show->effects_[idx]->getCc();
-		const auto param = show->effects_[idx]->param_;
+		const auto param = show->effects_[idx]->ccValue_;
 		auto& showDescription = Status::instance().showDescription();
     showDescription.effects_[idx].type = type;
     show->effects_[idx].reset(new Effect(idx, type, note, cc, param));

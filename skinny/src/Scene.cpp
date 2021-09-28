@@ -3,12 +3,31 @@
 namespace skinny {
 
 //--------------------------------------------------------------
+void Scene::init()
+{
+  // nothing, layer init in reload
+}
+
+//--------------------------------------------------------------
+void Scene::done()
+{
+  for (auto& layer : layers_)
+  {
+    if (layer)
+      layer->done();
+  }
+}
+
+//--------------------------------------------------------------
 void Scene::reload(const SceneDescription & description)
 {
     name_ = description.name;
     valid_ = true;
 
     for (auto i = 0; i < MAX_LAYERS; ++i) {
+        if (layers_[i])
+          layers_[i]->done();
+
         if (!description.layers[i].valid) {
             layers_[i].reset(/*new Layer(i, Layer::ErrorType::Invalid)*/);
         }
@@ -25,6 +44,7 @@ void Scene::reload(const SceneDescription & description)
                 layers_[i]->setBlendMode(description.layers[i].blendMode);
                 layers_[i]->setCc(description.layers[i].cc);
                 layers_[i]->setRetrigger(description.layers[i].retrigger);
+                layers_[i]->init();
             }
         }
     }
@@ -67,42 +87,6 @@ void Scene::update()
             layer->update();
         }
     }
-}
-
-//--------------------------------------------------------------
-ActiveMappables Scene::newMidiMessage(const ofxMidiMessage & msg) {
-    const auto noteOn = msg.status == MIDI_NOTE_ON;
-    const auto noteOff = msg.status == MIDI_NOTE_OFF;
-    const auto note = msg.pitch;
-    const auto isCc = msg.status == MIDI_CONTROL_CHANGE;
-    const auto cc = msg.control;
-    const auto value = msg.value;
-
-    if (!noteOn && !noteOff && !isCc) {
-        return {};
-    }
-
-    ActiveMappables result;
-    for (auto& layer : layers_) {
-        if (!layer)
-            continue;
-
-        if (layer->getNote() == note) {
-            if (noteOn) {
-                layer->play();
-                result.layers.emplace_back(layer->getId(), true);
-            } else if (noteOff) {
-                layer->pause();
-                result.layers.emplace_back(layer->getId(), false);
-            }
-        }
-
-        if (isCc && layer->getCc() == cc) {
-            layer->setAlpha(value);
-        }
-    }
-
-    return result;
 }
 
 //--------------------------------------------------------------

@@ -36,18 +36,20 @@ void MidiController::newMidiMessage(ofxMidiMessage& msg)
 		return;
 	}
 
-	if (msg.status == MIDI_NOTE_ON && msg.pitch == getStatus().showDescription().getSwitchNote()) {
-		Status::instance().loadDir = LoadDir::Forward;
+	if (msg.status == MIDI_NOTE_ON)
+	{
+		ofNotifyEvent(noteOnEvent, static_cast<midiNote>(msg.pitch));
 	}
-	else {
-		auto activeMappables = getStatus().show()->newMidiMessage(msg);
 
-		for (const auto& layer : activeMappables.layers) {
-			getStatus().gui().setActiveLayer(layer.first, layer.second);
-		}
-		for (const auto& effect : activeMappables.effects) {
-			getStatus().gui().setActiveEffect(effect.first, effect.second);
-		}
+	if (msg.status == MIDI_NOTE_OFF)
+	{
+		ofNotifyEvent(noteOffEvent, static_cast<midiNote>(msg.pitch));
+	}
+
+	if (msg.status == MIDI_CONTROL_CHANGE)
+	{
+		auto cc = ControlChange{ static_cast<midiNote>(msg.pitch), msg.value };
+		ofNotifyEvent(controlChangeEvent, cc);
 	}
 }
 
