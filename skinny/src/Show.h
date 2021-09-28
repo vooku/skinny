@@ -24,6 +24,7 @@ public:
     void update();
 
     void onNoteOn(midiNote& note);
+    void onControlChange(ControlChange& change);
 
     ScenePtr getCurrentScene() const;
     const Effects& getEffects() const;

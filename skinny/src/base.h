@@ -3,8 +3,10 @@
 
 namespace skinny {
 
+//--------------------------------------------------------------
 using midiNote = int;
 
+//--------------------------------------------------------------
 static const int MAX_LAYERS = 8;
 static const int MAX_EFFECTS = 8;
 static const float MAX_7BITF = 127.0f;
@@ -24,6 +26,7 @@ static constexpr const char* DEFAULT_EXTENSION = ".xml";
 
 // #TODO Create macros for enum strings
 
+//--------------------------------------------------------------
 enum class BlendMode {
     Invalid     = -1,
     Overlay      = 0, // s
@@ -41,6 +44,7 @@ const char* c_str(BlendMode blendMode);
 
 static const BlendMode DEFAULT_BLEND_MODE = BlendMode::LinearDodge;
 
+//--------------------------------------------------------------
 enum class EffectType {
     Invalid     = -1,
     Solarize    = 0,
@@ -55,6 +59,7 @@ enum class EffectType {
 
 const char* c_str(EffectType type);
 
+//--------------------------------------------------------------
 enum class LoadDir {
     Current, Forward, Backward, Jump, None
 };
@@ -64,5 +69,12 @@ struct ControlChange {
   midiNote control;
   int value;
 };
+
+//--------------------------------------------------------------
+// poor man's clamp, need c++17 >:(
+template<typename T>
+typename T clamp(T v, T lo, T hi) {
+  return std::min(std::max(v, lo), hi);
+}
 
 } // namespace skinny

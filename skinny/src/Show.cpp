@@ -30,6 +30,7 @@ Show::Show(int width, int height) :
 void Show::init()
 {
   ofAddListener(getStatus().midi->noteOnEvent, this, &Show::onNoteOn);
+  ofAddListener(getStatus().midi->controlChangeEvent, this, &Show::onControlChange);
 
   if (currentScene_)
     currentScene_->init();
@@ -39,6 +40,7 @@ void Show::init()
 void Show::done()
 {
   ofRemoveListener(getStatus().midi->noteOnEvent, this, &Show::onNoteOn);
+  ofRemoveListener(getStatus().midi->controlChangeEvent, this, &Show::onControlChange);
 
   if (currentScene_)
     currentScene_->done();
@@ -111,6 +113,14 @@ void Show::onNoteOn(midiNote& note)
 {
   if (note == getStatus().showDescription->getSwitchNote()) {
     Status::instance().loadDir = LoadDir::Forward;
+  }
+}
+
+//--------------------------------------------------------------
+void Show::onControlChange(ControlChange& change)
+{
+  if (change.control == masterAlphaControl_) {
+    uniforms_.masterAlpha_ = clamp(change.value, 0, 127) / 127.f;
   }
 }
 
