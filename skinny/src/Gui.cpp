@@ -135,18 +135,25 @@ void Gui::update()
     const auto& layers = show->getCurrentScene()->getLayers();
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (layers[i]) {
+            layerPlayToggles_[i]->setChecked(layers[i]->isPlaying());
             layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
         }
         else {
+            layerPlayToggles_[i]->setChecked(false);
             layerAlphaLabels_[i]->setLabel("");
         }
     }
 
+    const auto& effects = show->effects_;
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
-        if (show->effects_[i]) {
-            effectParamLabels_[i]->setLabel(std::to_string(show->effects_[i]->ccValue_));
+        if (effects[i]) {
+            effectPlayToggles_[i]->setChecked(effects[i]->isPlaying());
+            effectParamLabels_[i]->setLabel(std::to_string(effects[i]->ccValue_));
             // #TODO This is the wrong place for this!!!
-            showDescription.effects_[i].param = show->effects_[i]->ccValue_;
+            showDescription.effects_[i].param = effects[i]->ccValue_;
+        }
+        else {
+            effectPlayToggles_[i]->setChecked(false);
         }
     }
 
