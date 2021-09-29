@@ -37,7 +37,7 @@ void Gui::setup()
 }
 
 //--------------------------------------------------------------
-void Gui::draw() const
+void Gui::draw()
 {
     ofBackground(BACKGROUND_COLOR);
 
