@@ -13,7 +13,7 @@ Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote 
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
 
-    ccValue_ = 127;
+    ccValue_ = MAX_7BIT;
 
     valid_ = reload(path);
 

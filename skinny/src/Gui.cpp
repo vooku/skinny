@@ -106,7 +106,7 @@ void Gui::reload()
             layerButtons_[i]->setLabel(label);
             layerMidiInputs_[i]->setText(std::to_string(layers[i]->getNote()));
             layerCCInputs_[i]->setText(std::to_string(layers[i]->getCc()));
-            layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
+            layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * MAX_7BIT)));
             layerRetriggerToggles_[i]->setChecked(layers[i]->getRetrigger());
             blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
         }
@@ -155,13 +155,13 @@ void Gui::update()
       ofSetWindowTitle(configName_);
     }
     
-    masterAlphaInput_->setLabel(std::to_string(static_cast<int>(show->getAlpha() * 127)));
+    masterAlphaInput_->setLabel(std::to_string(static_cast<int>(show->getAlpha() * MAX_7BIT)));
 
     const auto& layers = show->getCurrentScene()->getLayers();
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (layers[i]) {
             layerPlayToggles_[i]->setChecked(layers[i]->isPlaying());
-            layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * 127)));
+            layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * MAX_7BIT)));
         }
         else {
             layerPlayToggles_[i]->setChecked(false);

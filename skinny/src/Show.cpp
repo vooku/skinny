@@ -120,7 +120,7 @@ void Show::onNoteOn(midiNote& note)
 void Show::onControlChange(ControlChange& change)
 {
   if (change.control == masterAlphaControl_) {
-    uniforms_.masterAlpha_ = clamp(change.value, 0, 127) / 127.f;
+    uniforms_.masterAlpha_ = clamp(change.value, 0, MAX_7BIT) / MAX_7BITF;
   }
 }
 

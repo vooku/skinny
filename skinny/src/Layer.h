@@ -32,7 +32,7 @@ public:
     const auto& getName() const { return name_; }
     auto getBlendMode() const { return blendMode_; }
     bool isValid() const { return valid_; }
-    float getAlpha() const { return clamp(ccValue_, 0, 127) / 127.0f; }
+    float getAlpha() const { return clamp(ccValue_, 0, MAX_7BIT) / MAX_7BITF; }
     auto getRetrigger() const { return retrigger_; }
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }

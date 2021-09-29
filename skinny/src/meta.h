@@ -55,7 +55,7 @@ struct EffectDescription : public MappableDescription {
 
     int id;
     EffectType type;
-    int param = 127;
+    int param = MAX_7BIT;
 };
 
 struct SceneDescription : public Serializable {

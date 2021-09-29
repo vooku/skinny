@@ -10,6 +10,7 @@ using midiNote = int;
 static const int MAX_LAYERS = 8;
 static const int MAX_EFFECTS = 8;
 static const int MIDI_DEVICES_REFRESH_PERIOD = 1000000000; // this is 1 second in nanoseconds
+static const int MAX_7BIT = 127;
 static const float MAX_7BITF = 127.0f;
 static constexpr const char* VERSION = "0.8.1-alpha";
 static constexpr const char* NAME = "Skinny Mixer";
