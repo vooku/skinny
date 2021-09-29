@@ -8,17 +8,21 @@
 #include <array>
 #include <filesystem>
 #include <chrono>
+#include <memory>
 
 namespace skinny {
 
-class Gui {
+class Gui : public ofBaseApp, public std::enable_shared_from_this<Gui> {
 public:
     static const ofColor BACKGROUND_COLOR;
 
-    void setup();
-    void draw() const;
+    void setup() override;
+    void draw() override;
+    void update() override;
+    void exit() override;
+    
     void reload();
-    void update();
+
     void setActiveLayer(int idx, bool active);
     void setActiveEffect(int idx, bool active);
 

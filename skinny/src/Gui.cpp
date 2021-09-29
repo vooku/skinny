@@ -16,6 +16,8 @@ const ofColor Gui::BACKGROUND_COLOR = { 45, 45, 48 };
 //--------------------------------------------------------------
 void Gui::setup()
 {
+    getStatus().gui = shared_from_this();
+
     fonts_.regular.load(FONT_REGULAR, fonts_.sizeRegular, true, false);
     fonts_.italic.load(FONT_ITALIC, fonts_.sizeItalic, true, false);
 
@@ -121,6 +123,10 @@ void Gui::reload()
 //--------------------------------------------------------------
 void Gui::update()
 {
+    if (getStatus().exit) {
+        ofExit();
+    }
+
     auto& showDescription = *Status::instance().showDescription;
     const auto& show = Status::instance().show;
     if (!show)
@@ -149,7 +155,7 @@ void Gui::update()
         if (effects[i]) {
             effectPlayToggles_[i]->setChecked(effects[i]->isPlaying());
             effectParamLabels_[i]->setLabel(std::to_string(effects[i]->ccValue_));
-            // #TODO This is the wrong place for this!!!
+            // #TODO #50 This is the wrong place for this!!!
             showDescription.effects_[i].param = effects[i]->ccValue_;
         }
         else {
@@ -202,6 +208,12 @@ void Gui::update()
 
         fileSelector_.release();
     }
+}
+
+//--------------------------------------------------------------
+void Gui::exit()
+{
+  getStatus().exit = true;
 }
 
 //--------------------------------------------------------------

@@ -11,7 +11,6 @@ ofApp::ofApp(ofxArgs* args)
 
     getStatus().showDescription = showDescription_ = make_shared<ShowDescription>();
     getStatus().midi = midiController_ = make_shared<MidiController>();
-    getStatus().gui = gui_ = make_shared<Gui>();
 }
 
 //--------------------------------------------------------------
@@ -61,19 +60,10 @@ void ofApp::setup()
 }
 
 //--------------------------------------------------------------
-void ofApp::setupGui()
-{
-    ofSetWindowTitle(NAME);
-
-    getStatus().gui->setup();
-}
-
-//--------------------------------------------------------------
 void ofApp::update()
 {
     if (getStatus().exit) {
         ofExit();
-        //return;
     }
 
     if (getStatus().loadDir != LoadDir::None) {
@@ -88,34 +78,19 @@ void ofApp::update()
 }
 
 //--------------------------------------------------------------
-void ofApp::updateGui(ofEventArgs& args)
-{
-  getStatus().gui->update();
-}
-
-//--------------------------------------------------------------
 void ofApp::draw()
 {
     ofBackground(ofColor::black);
     getStatus().show->draw();
 }
 
-//--------------------------------------------------------------
-void ofApp::drawGui(ofEventArgs&) {
-
-    getStatus().gui->draw();
-}
 
 //--------------------------------------------------------------
 void ofApp::exit()
 {
   getStatus().midi->exit();
   getStatus().show->done();
-}
-
-//--------------------------------------------------------------
-void ofApp::exitGui(ofEventArgs&) {
-    getStatus().exit = true;
+  getStatus().exit = true; 
 }
 
 //--------------------------------------------------------------

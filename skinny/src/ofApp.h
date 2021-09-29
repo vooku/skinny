@@ -13,13 +13,9 @@ public:
     explicit ofApp(ofxArgs* args);
 
     void setup() override;
-    void setupGui();
     void update() override;
-    void updateGui(ofEventArgs& args);
     void draw() override;
-    void drawGui(ofEventArgs& args);
     void exit() override;
-    void exitGui(ofEventArgs& args);
 
     void keyReleased(ofKeyEventArgs& key) override;
     void keyReleasedGui(ofKeyEventArgs& args);
@@ -41,7 +37,6 @@ private:
     std::shared_ptr<Show> show_;
     std::shared_ptr<ShowDescription> showDescription_;
     std::shared_ptr<MidiController> midiController_;
-    std::shared_ptr<Gui> gui_;
 };
 
 } // namespace skinny
