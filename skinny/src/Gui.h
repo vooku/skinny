@@ -12,7 +12,9 @@
 
 namespace skinny {
 
-class Gui : public ofBaseApp, public std::enable_shared_from_this<Gui> {
+class Gui : public ofBaseApp, 
+            public std::enable_shared_from_this<Gui>,
+            public ofThread {
 public:
     static const ofColor BACKGROUND_COLOR;
 
@@ -97,21 +99,29 @@ private:
     void setupAlphaPanel(glm::ivec2& pos);
     void setupRetriggerPanel(glm::ivec2& pos);
     void setupBlendModePanel(glm::ivec2& pos);
+    void setupMidiDevicePanel(glm::ivec2& pos = glm::ivec2{});
+
+    void threadedFunction() override;
 
     void addBlank(ofxDatGui* panel);
 
     void save(std::filesystem::path path);
 
+    ofTimer midiDevicesTimer_;
+    bool shouldUpdateDevices_ = false;
+
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
                                videoFxPanel_, midiPanel_, ccPanel_,
-                               alphaPanel_, retriggerPanel_, blendModePanel_;
-
+                               alphaPanel_, retriggerPanel_, blendModePanel_,
+                               midiDevicePanel_;
+    
     // This class does not own any of the following pointers, do not try to delete them.
     ofxDatGuiTextInput* sceneNameInput_;
     ofxDatGuiTextInput* masterAlphaInput_;
     ofxDatGuiTextInput* midiChannelInput_;
     ofxDatGuiTextInput* jumpToInput_;
     std::vector<ofxDatGuiButton*> controlButtons_;
+    //std::vector<ofxDatGuiToggle> midiDeviceToggles_;
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerCCInputs_;

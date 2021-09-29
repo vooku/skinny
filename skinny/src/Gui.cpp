@@ -32,26 +32,39 @@ void Gui::setup()
     setupMidiPanel(pos, midiInWidth);
     setupCcPanel(pos, midiInWidth);
     setupAlphaPanel(pos);
+
+    auto midiPos = pos;
+    
     setupRetriggerPanel(pos);
     setupBlendModePanel(pos);
+    setupMidiDevicePanel(midiPos);
+
+    midiDevicesTimer_.setPeriodicEvent(MIDI_DEVICES_REFRESH_PERIOD);
+    startThread();
 }
 
 //--------------------------------------------------------------
 void Gui::draw()
 {
     ofBackground(BACKGROUND_COLOR);
+    
+    //auto y = 0;
+    //const auto w = ofGetViewportWidth();
+    //const auto h = ofGetViewportHeight();
+    //while (y < h) {
+    //  ofDrawLine({ 0, y }, { w, y });
+    //  y += 26;
+    //}
 
     if (std::chrono::system_clock::now() - msg_.start < msg_.duration) {
         fonts_.italic.drawString(msg_.msg, 2 * DELTA, controlPanel_->getHeight() + 2 * DELTA);
     }
 
-    if (controlPanel_) controlPanel_->draw();
-    //if (playPanel_) playPanel_->draw();
-    //if (mutePanel_) mutePanel_->draw();
-    //if (videoFxPanel_) videoFxPanel_->draw();
-    //if (midiPanel_) midiPanel_->draw();
-    //if (midiCcPanel_) midiCcPanel_->draw();
-    //if (blendModePanel_) blendModePanel_->draw();
+    if (midiDevicePanel_) {
+      midiDevicePanel_->setTheme(&commonTheme_, true);
+      midiDevicePanel_->draw();
+    }
+    // other panels are drawn automatically
 }
 
 //--------------------------------------------------------------
@@ -125,6 +138,12 @@ void Gui::update()
 {
     if (getStatus().exit) {
         ofExit();
+    }
+
+    if (shouldUpdateDevices_)
+    {
+      setupMidiDevicePanel();
+      shouldUpdateDevices_ = false;
     }
 
     auto& showDescription = *Status::instance().showDescription;
@@ -213,6 +232,7 @@ void Gui::update()
 //--------------------------------------------------------------
 void Gui::exit()
 {
+  waitForThread();
   getStatus().exit = true;
 }
 
@@ -501,8 +521,7 @@ void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
 //--------------------------------------------------------------
 void Gui::addBlank(ofxDatGui * panel)
 {
-    auto blank = panel->addButton({});
-    blank->setEnabled(false);
+    auto blank = panel->addLabel("");
     blank->setBackgroundColor(BACKGROUND_COLOR);
     //blank->setStripeColor(bgColor);
 }
@@ -540,7 +559,7 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     auto& showDescription = *Status::instance().showDescription;
     controlPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
     controlPanel_->setTheme(&headerTheme_);
-    pos.x += controlPanel_->getWidth() + 2 * DELTA;
+    pos.x += controlPanel_->getWidth() + DELTA;
 
     sceneNameInput_ = controlPanel_->addTextInput("Scene " + std::to_string(showDescription.getSceneIndex() + 1));
     auto& show = Status::instance().show;
@@ -587,7 +606,8 @@ void Gui::setupPlayPanel(glm::ivec2& pos, int w)
     playPanel_->setTheme(&commonTheme_);
     playPanel_->setWidth(w);
     pos.x += playPanel_->getWidth();
-    playPanel_->addLabel("Play");
+    auto* header = playPanel_->addLabel("Play");
+    header->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     playPanel_->addBreak();
 
     for (auto i = 0; i < layerPlayToggles_.size(); ++i) {
@@ -616,7 +636,8 @@ void Gui::setupMutePanel(glm::ivec2& pos, int w)
     mutePanel_->setTheme(&commonTheme_);
     mutePanel_->setWidth(w);
     pos.x += mutePanel_->getWidth();
-    mutePanel_->addLabel("Mute");
+    auto* header = mutePanel_->addLabel("Mute");
+    header->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     mutePanel_->addBreak();
 
     for (auto i = 0; i < layerMuteToggles_.size(); ++i) {
@@ -646,7 +667,8 @@ void Gui::setupVideoFxPanel(glm::ivec2& pos)
     videoFxPanel_->setTheme(&commonTheme_);
     videoFxPanel_->setWidth(14 * DELTA);
     pos.x += videoFxPanel_->getWidth();
-    videoFxPanel_->addLabel("Video")->setTheme(&headerTheme_);
+    auto* videoHeader = videoFxPanel_->addLabel("Video");
+    videoHeader->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     videoFxPanel_->addBreak();
 
     for (auto i = 0; i < layerButtons_.size(); ++i) {
@@ -656,7 +678,8 @@ void Gui::setupVideoFxPanel(glm::ivec2& pos)
     }
 
     videoFxPanel_->addBreak();
-    videoFxPanel_->addLabel("Effect");
+    auto* effectHeader = videoFxPanel_->addLabel("Effect");
+    effectHeader->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     videoFxPanel_->addBreak();
 
     std::vector<string> options;
@@ -680,7 +703,8 @@ void Gui::setupMidiPanel(glm::ivec2& pos, int w)
     midiPanel_->setTheme(&commonTheme_);
     midiPanel_->setWidth(w);
     pos.x += midiPanel_->getWidth();
-    midiPanel_->addLabel("MIDI");
+    auto* header = midiPanel_->addLabel("MIDI");
+    header->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     midiPanel_->addBreak();
     for (auto i = 0; i < layerMidiInputs_.size(); ++i) {
         layerMidiInputs_[i] = midiPanel_->addTextInput({});
@@ -710,7 +734,8 @@ void Gui::setupCcPanel(glm::ivec2& pos, int w)
     ccPanel_->setTheme(&commonTheme_);
     ccPanel_->setWidth(w);
     pos.x += ccPanel_->getWidth();
-    ccPanel_->addLabel("CC");
+    auto* header = ccPanel_->addLabel("CC");
+    header->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     ccPanel_->addBreak();
     for (auto i = 0; i < layerCCInputs_.size(); ++i) {
         layerCCInputs_[i] = ccPanel_->addTextInput("");
@@ -740,14 +765,16 @@ void Gui::setupAlphaPanel(glm::ivec2& pos)
     alphaPanel_->setTheme(&commonTheme_);
     alphaPanel_->setWidth(2.5 * DELTA);
     pos.x += alphaPanel_->getWidth();
-    alphaPanel_->addLabel("Alpha");
+    auto* alphaHeader = alphaPanel_->addLabel("Alpha");
+    alphaHeader->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     alphaPanel_->addBreak();
     for (auto& label : layerAlphaLabels_) {
         label = alphaPanel_->addLabel("");
     }
 
     alphaPanel_->addBreak();
-    alphaPanel_->addLabel("Para");
+    auto* paraHeader = alphaPanel_->addLabel("Para");
+    paraHeader->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     alphaPanel_->addBreak();
 
     for (auto& label : effectParamLabels_) {
@@ -762,7 +789,8 @@ void Gui::setupRetriggerPanel(glm::ivec2 & pos)
     retriggerPanel_->setTheme(&commonTheme_);
     retriggerPanel_->setWidth(2.5 * DELTA);
     pos.x += retriggerPanel_->getWidth();
-    retriggerPanel_->addLabel("Re");
+    auto* header = retriggerPanel_->addLabel("Re");
+    header->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     retriggerPanel_->addBreak();
     for (auto i = 0; i < layerRetriggerToggles_.size(); ++i) {
         layerRetriggerToggles_[i] = retriggerPanel_->addToggle({});
@@ -780,7 +808,8 @@ void Gui::setupBlendModePanel(glm::ivec2& pos)
     blendModePanel_->setTheme(&commonTheme_);
     blendModePanel_->setWidth(6 * DELTA);
     pos.x += blendModePanel_->getWidth();
-    blendModePanel_->addLabel("Blending Mode");
+    auto* header = blendModePanel_->addLabel("Blending Mode");
+    header->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     blendModePanel_->addBreak();
 
     std::vector<string> options;
@@ -793,6 +822,36 @@ void Gui::setupBlendModePanel(glm::ivec2& pos)
         blendModeDropdowns_[i]->onDropdownEvent(this, &Gui::onBlendModeDropdown);
     }
     blendModePanel_->addBreak();
+}
+
+//--------------------------------------------------------------
+void Gui::setupMidiDevicePanel(glm::ivec2& pos /*= glm::ivec2{}*/)
+{
+  pos.x += DELTA;
+  pos.y += (MAX_LAYERS + 1) * (commonTheme_.layout.height + commonTheme_.layout.vMargin) + 2 * commonTheme_.layout.breakHeight + DELTA;
+  static const auto finalPos = pos; // "save" te pos calculated in first setup
+
+  midiDevicePanel_ = std::make_unique<ofxDatGui>(finalPos.x, finalPos.y);
+  midiDevicePanel_->setAutoDraw(false);
+
+  auto* header = midiDevicePanel_->addLabel("MIDI Input Devices");
+  header->setLabelAlignment(ofxDatGuiAlignment::CENTER);
+  midiDevicePanel_->addBreak();
+
+  const auto midiPorts = getStatus().midi->getPorts();
+  for (const auto& portName : midiPorts) {
+    auto* toggle = midiDevicePanel_->addToggle({ portName, false });
+    //toggle->onToggleEvent(this, &Gui::onMidiDeviceToggle);
+  }
+}
+
+//--------------------------------------------------------------
+void Gui::threadedFunction()
+{
+  while (isThreadRunning()) {
+    midiDevicesTimer_.waitNext();
+    shouldUpdateDevices_ = true;
+  }
 }
 
 } // namespace skinny

@@ -53,4 +53,11 @@ void MidiController::newMidiMessage(ofxMidiMessage& msg)
 	}
 }
 
+//--------------------------------------------------------------
+std::vector<std::string> MidiController::getPorts() const
+{
+	ofxMidiIn tmpMidiIn;
+	return tmpMidiIn.getInPortList();
+}
+
 }

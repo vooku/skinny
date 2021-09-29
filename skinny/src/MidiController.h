@@ -14,6 +14,8 @@ public:
 
 	void newMidiMessage(ofxMidiMessage& msg) override;
 
+	std::vector<std::string> getPorts() const;
+
 	ofEvent<midiNote> noteOnEvent;
 	ofEvent<midiNote> noteOffEvent;
 	ofEvent<ControlChange> controlChangeEvent;
