@@ -58,6 +58,7 @@ public:
     void onLayerMuteToggle(ofxDatGuiToggleEvent e);
     void onEffectMuteToggle(ofxDatGuiToggleEvent e);
     void onLayerRetriggerToggle(ofxDatGuiToggleEvent e);
+    void onMidiDeviceToggle(ofxDatGuiToggleEvent e);
 
 private:
     static const int MAX_CHARS = 20;

@@ -52,8 +52,6 @@ void ofApp::setup()
     getStatus().show = show_ = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
     show_->init();
 
-    midiController_->setup(settings_.verbose);
-
     getStatus().loadDir = LoadDir::Current;
 
     reload();

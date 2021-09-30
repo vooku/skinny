@@ -7,21 +7,32 @@
 namespace skinny {
 
 //--------------------------------------------------------------
+struct MidiDeviceInfo
+{
+	bool open;
+	string name;
+};
+
+using Devices = std::vector<MidiDeviceInfo>;
+
+//--------------------------------------------------------------
 class MidiController : public ofxMidiListener {
 public:
-	void setup(bool verbose);
 	void exit();
 
 	void newMidiMessage(ofxMidiMessage& msg) override;
 
-	std::vector<std::string> getPorts() const;
+	Devices getPorts() const;
+	bool connect(const std::string& deviceName);
+	void disconnect(const std::string& deviceName);
 
 	ofEvent<midiNote> noteOnEvent;
 	ofEvent<midiNote> noteOffEvent;
 	ofEvent<ControlChange> controlChangeEvent;
 
 private:
-	std::vector<std::unique_ptr<ofxMidiIn>> midiInputs_;
+	using MidiInputs = std::set<std::unique_ptr<ofxMidiIn>>;
+	MidiInputs midiInputs_;
 
 };
 

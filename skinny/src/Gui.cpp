@@ -62,6 +62,7 @@ void Gui::draw()
 
     if (midiDevicePanel_) {
       midiDevicePanel_->setTheme(&commonTheme_, true);
+			midiDevicePanel_->update();
       midiDevicePanel_->draw();
     }
     // other panels are drawn automatically
@@ -516,6 +517,22 @@ void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
 }
 
 //--------------------------------------------------------------
+void Gui::onMidiDeviceToggle(ofxDatGuiToggleEvent e)
+{
+  const auto deviceName = e.target->getName();
+  if (e.checked) {
+    const auto portOpen = getStatus().midi->connect(deviceName);
+    if (!portOpen) {
+      e.target->setChecked(false);
+      displayMessage(std::string("Failed to open ") + deviceName + std::string("."));
+    }
+  }
+  else {
+    getStatus().midi->disconnect(deviceName);
+  }
+}
+
+//--------------------------------------------------------------
 void Gui::addBlank(ofxDatGui * panel)
 {
     auto blank = panel->addLabel("");
@@ -826,7 +843,7 @@ void Gui::setupMidiDevicePanel(glm::ivec2& pos /*= glm::ivec2{}*/)
 {
   pos.x += DELTA;
   pos.y += (MAX_LAYERS + 1) * (commonTheme_.layout.height + commonTheme_.layout.vMargin) + 2 * commonTheme_.layout.breakHeight + DELTA;
-  static const auto finalPos = pos; // "save" te pos calculated in first setup
+  static const auto finalPos = pos; // "save" the pos calculated in first setup
 
   midiDevicePanel_ = std::make_unique<ofxDatGui>(finalPos.x, finalPos.y);
   midiDevicePanel_->setAutoDraw(false);
@@ -835,10 +852,11 @@ void Gui::setupMidiDevicePanel(glm::ivec2& pos /*= glm::ivec2{}*/)
   header->setLabelAlignment(ofxDatGuiAlignment::CENTER);
   midiDevicePanel_->addBreak();
 
-  const auto midiPorts = getStatus().midi->getPorts();
-  for (const auto& portName : midiPorts) {
-    auto* toggle = midiDevicePanel_->addToggle({ portName, false });
-    //toggle->onToggleEvent(this, &Gui::onMidiDeviceToggle);
+  const auto devices = getStatus().midi->getPorts();
+  for (const auto& device : devices) {
+    auto* toggle = midiDevicePanel_->addToggle({ device.name });
+    toggle->setChecked(device.open);
+    toggle->onToggleEvent(this, &Gui::onMidiDeviceToggle);
   }
 }
 
