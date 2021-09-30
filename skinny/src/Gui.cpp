@@ -456,12 +456,9 @@ void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
         return;
     const auto idx = std::stoi(e.target->getName());
     const auto type = static_cast<EffectType>(e.child);
-    const auto note = show->effects_[idx]->getNote();
-    const auto cc = show->effects_[idx]->getCc();
-		const auto param = show->effects_[idx]->ccValue_;
 		auto& showDescription = *Status::instance().showDescription;
     showDescription.effects_[idx].type = type;
-    show->effects_[idx].reset(new Effect(idx, type, note, cc, param));
+    getStatus().loadDir = LoadDir::Current;
 }
 
 //--------------------------------------------------------------

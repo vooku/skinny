@@ -12,7 +12,7 @@ Effect::Effect(int id) :
 //--------------------------------------------------------------
 Effect::Effect(int id, EffectType type, midiNote note, midiNote control, int param) :
     Mappable(note == -1 ? EFFECT_NOTE_OFFSET + id : note,
-             control == -1 ? EFFECT_CC_OFFSET + id : note),
+             control == -1 ? EFFECT_CC_OFFSET + id : control),
     id_(id),
     type(type)
 {
