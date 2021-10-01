@@ -1,5 +1,6 @@
 #include "ofMain.h"
 #include "ofApp.h"
+#include "Gui.h"
 
 extern "C" {
     _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
@@ -15,16 +16,14 @@ int main(int argc, char *argv[]) {
     settings.setSize(1920, 1080);
     auto mainWindow = ofCreateWindow(settings);
 
-    settings.setSize(1250, 700);
+    settings.setSize(1300, 700);
     auto guiWindow = ofCreateWindow(settings);
 
-    shared_ptr<skinny::ofApp> mainApp(new skinny::ofApp(args.get()));
-    mainApp->setupGui();
-    ofAddListener(guiWindow->events().draw, mainApp.get(), &skinny::ofApp::drawGui);
-    ofAddListener(guiWindow->events().update, mainApp.get(), &skinny::ofApp::updateGui);
-    ofAddListener(guiWindow->events().exit, mainApp.get(), &skinny::ofApp::exitGui);
-    ofAddListener(guiWindow->events().keyReleased, mainApp.get(), &skinny::ofApp::keyReleasedGui);
-
+    auto mainApp = std::make_shared<skinny::ofApp>(args.get());
+    auto guiApp = std::make_shared<skinny::Gui>();
+        
+    ofRunApp(guiWindow, guiApp); // run gui first so main can access it
     ofRunApp(mainWindow, mainApp);
+
     ofRunMainLoop();
 }

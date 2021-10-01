@@ -2,8 +2,9 @@
 
 #include "ofMain.h"
 #include "ofxArgs.h"
-#include "meta.h"
 #include "Show.h"
+#include "meta.h"
+#include "Gui.h"
 #include "MidiController.h"
 
 namespace skinny {
@@ -13,9 +14,13 @@ public:
     explicit ofApp(ofxArgs* args);
 
     void setup() override;
+    void setupGui();
     void update() override;
+    void updateGui(ofEventArgs& args);
     void draw() override;
+    void drawGui(ofEventArgs& args);
     void exit() override;
+    void exitGui(ofEventArgs& args);
 
     void keyReleased(ofKeyEventArgs& key) override;
     void keyReleasedGui(ofKeyEventArgs& args);
@@ -35,8 +40,10 @@ private:
     bool reload();
 
     std::shared_ptr<Show> show_;
-    std::shared_ptr<ShowDescription> showDescription_;
-    std::shared_ptr<MidiController> midiController_;
+    ShowDescription showDescription_;
+
+    Gui gui_;
+    MidiController midiController_;
 };
 
 } // namespace skinny

@@ -7,27 +7,19 @@ namespace skinny {
 
 class Gui;
 
-struct ActiveMappables {
-  std::vector<std::pair<int, bool>> layers;
-  std::vector<std::pair<int, bool>> effects;
-};
-
 class Scene {
 public:
     typedef std::array<std::unique_ptr<Layer>, MAX_LAYERS> Layers;
 
     friend class Gui;
 
+    void init();
+    void done();
     void reload(const SceneDescription& description);
     void bind();
     void unbind();
     bool isFrameNew();
     void update();
-
-    /**
-     * Return which layers / effects were (de)activated.
-     */
-    ActiveMappables newMidiMessage(const ofxMidiMessage & msg);
 
     void playPauseLayer(int idx);
 

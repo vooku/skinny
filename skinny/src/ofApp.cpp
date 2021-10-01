@@ -5,17 +5,19 @@
 namespace skinny {
 
 //--------------------------------------------------------------
-ofApp::ofApp(ofxArgs* args) :
-    gui_(showDescription_)
+ofApp::ofApp(ofxArgs* args)
 {
     parseArgs(args);
+
+    getStatus().showDescription = showDescription_ = make_shared<ShowDescription>();
+    getStatus().midi = midiController_ = make_shared<MidiController>();
 }
 
 //--------------------------------------------------------------
 void ofApp::setup()
 {
     if (settings_.cancelSetup) {
-        Status::instance().exit = true;
+        getStatus().exit = true;
         return;
     }
 
@@ -43,40 +45,30 @@ void ofApp::setup()
     ofLog(OF_LOG_NOTICE, "Using OpenGL v%d.%d, GPU: %s %s.", major, minor, vendor, renderer);
     if (major < 4 && minor < 3) {
         ofLog(OF_LOG_FATAL_ERROR, "OpenGL version too old!", major, minor);
-        Status::instance().exit = true;
+        getStatus().exit = true;
         return;
     }
 
-    setupMidi();
+    getStatus().show = show_ = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
+    show_->init();
 
-    show_ = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
-    gui_.setShow(show_);
+    getStatus().loadDir = LoadDir::Current;
 
-    Status::instance().loadDir = LoadDir::Current;
     reload();
-}
-
-//--------------------------------------------------------------
-void ofApp::setupGui()
-{
-    ofSetWindowTitle(NAME);
-
-    gui_.setup();
 }
 
 //--------------------------------------------------------------
 void ofApp::update()
 {
-    if (Status::instance().exit) {
+    if (getStatus().exit) {
         ofExit();
-        //return;
     }
 
-    if (Status::instance().loadDir != LoadDir::None) {
+    if (getStatus().loadDir != LoadDir::None) {
         reload();
     }
 
-    show_->update();
+    getStatus().show->update();
 
     if (ofGetFrameNum() % 300 == 0) {
         ofLog(OF_LOG_NOTICE, "fps: %f", ofGetFrameRate());
@@ -84,35 +76,19 @@ void ofApp::update()
 }
 
 //--------------------------------------------------------------
-void ofApp::updateGui(ofEventArgs& args)
-{
-  gui_.update();
-}
-
-//--------------------------------------------------------------
 void ofApp::draw()
 {
     ofBackground(ofColor::black);
-    show_->draw();
+    getStatus().show->draw();
 }
 
-//--------------------------------------------------------------
-void ofApp::drawGui(ofEventArgs&) {
-
-    gui_.draw();
-}
 
 //--------------------------------------------------------------
 void ofApp::exit()
 {
-    for (auto& midiInput : midiInputs_) {
-        midiInput->closePort();
-    }
-}
-
-//--------------------------------------------------------------
-void ofApp::exitGui(ofEventArgs&) {
-    Status::instance().exit = true;
+  getStatus().midi->exit();
+  getStatus().show->done();
+  getStatus().exit = true; 
 }
 
 //--------------------------------------------------------------
@@ -135,37 +111,13 @@ void ofApp::keyReleasedGui(ofKeyEventArgs & args)
 }
 
 //--------------------------------------------------------------
-void ofApp::newMidiMessage(ofxMidiMessage & msg)
-{
-    if (msg.channel != showDescription_.getMidiChannel()) {
-        ofLog(OF_LOG_WARNING, "Received a MIDI message on an incorrect channel: %d %d %d.", msg.channel, msg.status, msg.pitch);
-        return;
-    }
-
-    if (msg.status == MIDI_NOTE_ON && msg.pitch == showDescription_.getSwitchNote()) {
-        Status::instance().loadDir = LoadDir::Forward;
-    }
-    else {
-        auto activeMappables = show_->newMidiMessage(msg);
-
-        for (const auto& layer : activeMappables.layers) {
-            gui_.setActiveLayer(layer.first, layer.second);
-        }
-        for (const auto& effect : activeMappables.effects) {
-            gui_.setActiveEffect(effect.first, effect.second);
-        }
-    }
-}
-
-//--------------------------------------------------------------
 void ofApp::usage()
 {
     std::cout <<
         "Usage:\n"
         "    -h, --help, --usage    Print this message.\n"
-        "    --midiport <number>    Try to open up a MIDI port <number> for input.\n"
         "    --console              Log to console instead to a file."
-        "    -v, --verbose Use verbose mode."
+        "    -v, --verbose          Use verbose mode."
         << std::endl;
 }
 
@@ -178,61 +130,37 @@ void ofApp::parseArgs(ofxArgs* args)
         return;
     }
 
-    if (args->contains("--midiport")) {
-        settings_.midiPorts.push_back(args->getInt("--midiport", 0));
-    }
-    else { // --midiports-all
-        ofxMidiIn tmpMidiIn;
-        for (auto i = 0; i < tmpMidiIn.getNumInPorts(); ++i)
-            settings_.midiPorts.push_back(i);
-    }
-
     settings_.verbose = args->contains("-v") || args->contains("--verbose");
     settings_.console = args->contains("--console");
 }
 
 //--------------------------------------------------------------
-void ofApp::setupMidi()
-{
-    if (settings_.verbose) {
-        ofxMidiIn tmpMidiIn;
-        tmpMidiIn.listInPorts();
-    }
-
-    for (auto portNumber : settings_.midiPorts) {
-        midiInputs_.push_back(std::make_unique<ofxMidiIn>());
-        midiInputs_.back()->openPort(portNumber);
-        midiInputs_.back()->addListener(this);
-        midiInputs_.back()->setVerbose(/*settings_.verbose*/false);
-    }
-}
-
-//--------------------------------------------------------------
 bool ofApp::reload()
 {
-    if (showDescription_.getSize() < 1) {
+    auto& showDescription = *getStatus().showDescription;
+    if (showDescription.getSize() < 1) {
         ofLog(OF_LOG_ERROR, "Cannot load a scene from and empty show.");
         return false;
     }
 
-    gui_.displayMessage("Loading...");
+    getStatus().gui->displayMessage("Loading...");
 
-    const auto shifted = showDescription_.shift(Status::instance().loadDir, Status::instance().jumpToIndex);
-    if (!shifted && Status::instance().loadDir != LoadDir::Current) {
-        gui_.resetJumpToIndex();
+    const auto shifted = showDescription.shift(getStatus().loadDir, getStatus().jumpToIndex);
+    if (!shifted && getStatus().loadDir != LoadDir::Current) {
+        getStatus().gui->resetJumpToIndex();
         return false;
     }
 
-    if (show_->reload(showDescription_)) {
-        ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription_.currentScene().name.c_str());
-        gui_.reload();
+    if (getStatus().show->reload(showDescription)) {
+        ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription.currentScene().name.c_str());
+        getStatus().gui->reload();
     }
     else {
         // TODO display in gui
-        ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", showDescription_.currentScene().name.c_str());
+        ofLog(OF_LOG_WARNING, "Scene %s encountered loading problems.", showDescription.currentScene().name.c_str());
     }
 
-    Status::instance().loadDir = LoadDir::None;
+    getStatus().loadDir = LoadDir::None;
     return true;
 }
 

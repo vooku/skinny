@@ -27,6 +27,32 @@ Show::Show(int width, int height) :
 }
 
 //--------------------------------------------------------------
+void Show::init()
+{
+  ofAddListener(getStatus().midi->noteOnEvent, this, &Show::onNoteOn);
+  ofAddListener(getStatus().midi->controlChangeEvent, this, &Show::onControlChange);
+
+  if (currentScene_)
+    currentScene_->init();
+}
+
+//--------------------------------------------------------------
+void Show::done()
+{
+  ofRemoveListener(getStatus().midi->noteOnEvent, this, &Show::onNoteOn);
+  ofRemoveListener(getStatus().midi->controlChangeEvent, this, &Show::onControlChange);
+
+  if (currentScene_)
+    currentScene_->done();
+
+  for (auto& effect : effects_)
+  {
+    if (effect)
+      effect->done();
+  }
+}
+
+//--------------------------------------------------------------
 void Show::draw()
 {
     // Make sure the first frame is ready before we start drawing.
@@ -44,43 +70,6 @@ void Show::draw()
 }
 
 //--------------------------------------------------------------
-ActiveMappables Show::newMidiMessage(ofxMidiMessage& msg)
-{
-    auto result = currentScene_->newMidiMessage(msg);
-
-    const auto noteOn = msg.status == MIDI_NOTE_ON;
-    const auto noteOff = msg.status == MIDI_NOTE_OFF;
-    const auto note = msg.pitch;
-    const auto isCc = msg.status == MIDI_CONTROL_CHANGE;
-    const auto cc = msg.control;
-    const auto value = msg.value;
-
-    if (isCc && masterAlphaControl_ == cc) {
-        uniforms_.masterAlpha_ = value / MAX_7BITF;
-        return {};
-    }
-
-    for (auto i = 0; i < MAX_EFFECTS; ++i) {
-        if (effects_[i]->getNote() == note) {
-            if (noteOn) {
-                effects_[i]->play();
-                result.effects.emplace_back(i, true);
-            }
-            else if (noteOff) {
-                effects_[i]->pause();
-                result.effects.emplace_back(i, false);
-            }
-        }
-        else if (isCc && effects_[i]->getCc() == cc) {
-            effects_[i]->setParam(value);
-
-        }
-    }
-
-    return result;
-}
-
-//--------------------------------------------------------------
 bool Show::reload(const ShowDescription& description)
 {
     masterAlphaControl_ = description.getAlphaControl();
@@ -91,8 +80,12 @@ bool Show::reload(const ShowDescription& description)
     currentScene_->reload(description.currentScene());
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
+       if (effects_[i])
+          effects_[i]->done();
+
         const auto& effect = description.getEffects()[i];
         effects_[i].reset(new Effect(i, effect.type, effect.note, effect.cc, effect.param));
+        effects_[i]->init();
     }
 
     shader_.end();
@@ -113,6 +106,26 @@ void Show::update()
     if (currentScene_) {
         currentScene_->update();
     }
+}
+
+//--------------------------------------------------------------
+void Show::onNoteOn(NoteMessage& msg)
+{
+  if (Mappable::isCorrectChannel(msg.channel_) &&
+      msg.note_ == getStatus().showDescription->getSwitchNote())
+  {
+    Status::instance().loadDir = LoadDir::Forward;
+  }
+}
+
+//--------------------------------------------------------------
+void Show::onControlChange(ControlChangeMessage& msg)
+{
+	if (Mappable::isCorrectChannel(msg.channel_) &&
+			msg.control_ == masterAlphaControl_)
+  {
+    uniforms_.masterAlpha_ = clamp(msg.value_, 0, MAX_7BIT) / MAX_7BITF;
+  }
 }
 
 //--------------------------------------------------------------

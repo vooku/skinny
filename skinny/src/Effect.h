@@ -12,13 +12,11 @@ public:
     Effect(int id, EffectType type, midiNote note, midiNote control, int param);
 
     int getParam() const;
-    void setParam(int param);
 
     const EffectType type;
 
 private:
     const int id_;
-    int param_ = 127;
 
 };
 

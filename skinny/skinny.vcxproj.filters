@@ -82,7 +82,18 @@
     <ClCompile Include="src\VideoSelector.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileSelector.cpp" />
+    <ClCompile Include="src\Status.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileSelector.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MidiController.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MidiMonitor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -282,7 +293,15 @@
     <ClInclude Include="src\VideoSelector.h">
       <Filter>headers</Filter>
     </ClInclude>
-    <ClInclude Include="src\FileSelector.h" />
+    <ClInclude Include="src\FileSelector.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MidiController.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MidiMonitor.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />

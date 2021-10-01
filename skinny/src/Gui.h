@@ -5,24 +5,27 @@
 #include "Show.h"
 #include "VideoSelector.h"
 #include "FileSelector.h"
+#include "MidiMonitor.h"
 #include <array>
 #include <filesystem>
 #include <chrono>
+#include <memory>
 
 namespace skinny {
 
-class Gui {
+class Gui : public ofBaseApp, 
+            public std::enable_shared_from_this<Gui>,
+            public ofThread {
 public:
     static const ofColor BACKGROUND_COLOR;
 
-    Gui() = delete;
-    Gui(ShowDescription& showDescription);
-
-    void setup();
-    void draw() const;
+    void setup() override;
+    void draw() override;
+    void update() override;
+    void exit() override;
+    
     void reload();
-    void update();
-    void setShow(std::shared_ptr<Show> show);
+
     void setActiveLayer(int idx, bool active);
     void setActiveEffect(int idx, bool active);
 
@@ -56,6 +59,8 @@ public:
     void onLayerMuteToggle(ofxDatGuiToggleEvent e);
     void onEffectMuteToggle(ofxDatGuiToggleEvent e);
     void onLayerRetriggerToggle(ofxDatGuiToggleEvent e);
+    void onMidiDeviceToggle(ofxDatGuiToggleEvent e);
+    void onMidiMonitorToggle(ofxDatGuiToggleEvent e);
 
 private:
     static const int MAX_CHARS = 20;
@@ -97,15 +102,24 @@ private:
     void setupAlphaPanel(glm::ivec2& pos);
     void setupRetriggerPanel(glm::ivec2& pos);
     void setupBlendModePanel(glm::ivec2& pos);
+    void setupMidiDevicePanel(glm::ivec2& pos = glm::ivec2{});
+    void setupMidiMonitorLabel();
+
+    void threadedFunction() override;
 
     void addBlank(ofxDatGui* panel);
 
     void save(std::filesystem::path path);
 
+		MidiMonitor midiMonitor_;
+    ofTimer midiDevicesTimer_;
+    bool shouldUpdateDevices_ = false;
+
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
                                videoFxPanel_, midiPanel_, ccPanel_,
-                               alphaPanel_, retriggerPanel_, blendModePanel_;
-
+                               alphaPanel_, retriggerPanel_, blendModePanel_,
+                               midiDevicePanel_;
+    
     // This class does not own any of the following pointers, do not try to delete them.
     ofxDatGuiTextInput* sceneNameInput_;
     ofxDatGuiTextInput* masterAlphaInput_;
@@ -126,9 +140,7 @@ private:
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectMuteToggles_;
     std::array<ofxDatGuiLabel*,     MAX_EFFECTS> effectParamLabels_;
-
-    std::shared_ptr<Show> show_;
-    ShowDescription& showDescription_;
+    ofxDatGuiLabel* midiMonitorLabel_ = nullptr;
 
     std::filesystem::path configPath_;
     std::string configName_;

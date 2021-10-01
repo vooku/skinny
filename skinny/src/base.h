@@ -3,12 +3,17 @@
 
 namespace skinny {
 
-typedef uint8_t midiNote;
+//--------------------------------------------------------------
+using midiNote = int;
 
+//--------------------------------------------------------------
 static const int MAX_LAYERS = 8;
 static const int MAX_EFFECTS = 8;
+static const int MIDI_DEVICES_REFRESH_PERIOD = 1000000000; // this is 1 second in nanoseconds
+static const int MIDI_MSG_REFRESH_PERIOD = 1000000000; // this is 1 second in nanoseconds
+static const int MAX_7BIT = 127;
 static const float MAX_7BITF = 127.0f;
-static constexpr const char* VERSION = "0.8.1-alpha";
+static constexpr const char* VERSION = "0.9.0-alpha";
 static constexpr const char* NAME = "Skinny Mixer";
 static constexpr const char* AUTHOR = "Vadim Vooku Petrov";
 static const midiNote DEFAULT_MASTER_ALPHA_CONTROL = 16;
@@ -24,6 +29,7 @@ static constexpr const char* DEFAULT_EXTENSION = ".xml";
 
 // #TODO Create macros for enum strings
 
+//--------------------------------------------------------------
 enum class BlendMode {
     Invalid     = -1,
     Overlay      = 0, // s
@@ -41,6 +47,7 @@ const char* c_str(BlendMode blendMode);
 
 static const BlendMode DEFAULT_BLEND_MODE = BlendMode::LinearDodge;
 
+//--------------------------------------------------------------
 enum class EffectType {
     Invalid     = -1,
     Solarize    = 0,
@@ -55,8 +62,38 @@ enum class EffectType {
 
 const char* c_str(EffectType type);
 
+//--------------------------------------------------------------
 enum class LoadDir {
     Current, Forward, Backward, Jump, None
 };
+
+//--------------------------------------------------------------
+struct MidiMessage {
+  explicit MidiMessage(int channel);
+
+  int channel_;
+};
+
+//--------------------------------------------------------------
+struct NoteMessage : public MidiMessage {
+  NoteMessage(int channel, midiNote note);
+
+  midiNote note_;
+};
+
+//--------------------------------------------------------------
+struct ControlChangeMessage : public MidiMessage {
+  ControlChangeMessage(int channel, midiNote control, int value);
+
+  midiNote control_;
+  int value_;
+};
+
+//--------------------------------------------------------------
+// poor man's clamp, need c++17 >:(
+template<typename T>
+typename T clamp(T v, T lo, T hi) {
+  return std::min(std::max(v, lo), hi);
+}
 
 } // namespace skinny

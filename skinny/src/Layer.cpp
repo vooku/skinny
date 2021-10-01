@@ -8,11 +8,12 @@ Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote 
              control == -1 ? LAYER_CC_OFFSET + id : note),
     id_(id),
     name_(path.filename().string()),
-    valid_(false),
-    alpha_(1)
+    valid_(false)
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
     player_.setLoopState(OF_LOOP_NORMAL);
+
+    ccValue_ = MAX_7BIT;
 
     valid_ = reload(path);
 
@@ -29,8 +30,7 @@ Layer::Layer(int id, ErrorType error) :
     id_(id),
     name_(error == ErrorType::Invalid ? "Invalid description." : "Failed to load."),
     valid_(false),
-    blendMode_(DEFAULT_BLEND_MODE),
-    alpha_(0)
+    blendMode_(DEFAULT_BLEND_MODE)
 {
 }
 
@@ -67,23 +67,23 @@ void Layer::unbind()
 //--------------------------------------------------------------
 void Layer::play()
 {
-    active_ = !mute_;
+    Mappable::play();
     player_.setPaused(!active_);
 }
 
 //--------------------------------------------------------------
 void Layer::pause()
 {
-    active_ = false;
+    Mappable::pause();
     if (retrigger_)
         player_.setFrame(0);
-    player_.setPaused(!active_);
+    player_.setPaused(true);
 }
 
 //--------------------------------------------------------------
 void Layer::playPause()
 {
-    active_ = !active_ && !mute_;
+    Mappable::playPause();
     if (!active_ && retrigger_)
         player_.setFrame(0);
     player_.setPaused(!active_);

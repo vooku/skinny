@@ -16,11 +16,15 @@ public:
 
     Show(int width, int height);
 
+    void init();
+    void done();
     void draw();
-    ActiveMappables newMidiMessage(ofxMidiMessage & msg);
     bool reload(const ShowDescription& description);
     void playPauseEffect(int i);
     void update();
+
+    void onNoteOn(NoteMessage& msg);
+    void onControlChange(ControlChangeMessage& msg);
 
     ScenePtr getCurrentScene() const;
     const Effects& getEffects() const;
