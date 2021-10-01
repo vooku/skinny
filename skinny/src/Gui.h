@@ -49,6 +49,7 @@ public:
     void onMasterAlphaCcInput(ofxDatGuiTextInputEvent e);
     void onEffectMidiInput(ofxDatGuiTextInputEvent e);
     void onEffectCcInput(ofxDatGuiTextInputEvent e);
+    void onEffectParamInput(ofxDatGuiTextInputEvent e);
     void onSceneNameInput(ofxDatGuiTextInputEvent e);
     void onMidiChannelInput(ofxDatGuiTextInputEvent e);
 
@@ -140,7 +141,7 @@ private:
     std::array<ofxDatGuiTextInput*, MAX_EFFECTS> effectCCInputs_;
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectMuteToggles_;
-    std::array<ofxDatGuiLabel*,     MAX_EFFECTS> effectParamLabels_;
+    std::array<ofxDatGuiTextInput*, MAX_EFFECTS> effectParamInputs_;
     ofxDatGuiLabel* midiMonitorLabel_ = nullptr;
 
     std::filesystem::path configPath_;

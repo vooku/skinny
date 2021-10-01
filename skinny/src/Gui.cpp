@@ -130,7 +130,7 @@ void Gui::reload()
         effectDropdowns_[i]->select(static_cast<int>(effects[i]->type));
         effectMidiInputs_[i]->setText(std::to_string(effects[i]->getNote()));
         effectCCInputs_[i]->setText(std::to_string(effects[i]->getCc()));
-        effectParamLabels_[i]->setLabel(std::to_string(effects[i]->ccValue_));
+        effectParamInputs_[i]->setText(std::to_string(effects[i]->ccValue_));
     }
 
     draw();
@@ -181,9 +181,8 @@ void Gui::update()
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         if (effects[i]) {
             effectPlayToggles_[i]->setChecked(effects[i]->isPlaying());
-            effectParamLabels_[i]->setLabel(std::to_string(effects[i]->ccValue_));
-            // #TODO #50 This is the wrong place for this!!!
-            showDescription.effects_[i].param = effects[i]->ccValue_;
+            if (!effectParamInputs_[i]->getFocused())
+              effectParamInputs_[i]->setText(std::to_string(effects[i]->ccValue_));
         }
         else {
             effectPlayToggles_[i]->setChecked(false);
@@ -436,6 +435,18 @@ void Gui::onEffectCcInput(ofxDatGuiTextInputEvent e)
     auto& show = Status::instance().show;
     if (show)
         show->effects_[idx]->setCc(cc);
+}
+
+//--------------------------------------------------------------
+void Gui::onEffectParamInput(ofxDatGuiTextInputEvent e)
+{
+	const auto idx = std::stoi(e.target->getName());
+	const auto param = std::stoi(e.text);
+	auto& showDescription = *Status::instance().showDescription;
+	showDescription.effects_[idx].param = param;
+	auto& show = Status::instance().show;
+	if (show)
+		show->effects_[idx]->setParam(param);
 }
 
 //--------------------------------------------------------------
@@ -816,12 +827,14 @@ void Gui::setupAlphaPanel(glm::ivec2& pos, int w)
     }
 
     alphaPanel_->addBreak();
-    auto* paraHeader = alphaPanel_->addLabel("Para");
+    auto* paraHeader = alphaPanel_->addLabel("Param");
     paraHeader->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     alphaPanel_->addBreak();
 
-    for (auto& label : effectParamLabels_) {
-        label = alphaPanel_->addLabel("");
+    for (auto i = 0; i < effectParamInputs_.size(); ++i) {
+        effectParamInputs_[i] = alphaPanel_->addTextInput("");
+        effectParamInputs_[i]->onTextInputEvent(this, &Gui::onEffectParamInput);
+        effectParamInputs_[i]->setName(std::to_string(i));
     }
 }
 

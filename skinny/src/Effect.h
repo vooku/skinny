@@ -13,6 +13,8 @@ public:
 
     int getParam() const;
 
+    void setParam(int param);
+
     const EffectType type;
 
 private:

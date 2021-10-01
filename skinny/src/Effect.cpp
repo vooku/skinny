@@ -25,4 +25,10 @@ int Effect::getParam() const
     return ccValue_;
 }
 
+//--------------------------------------------------------------
+void Effect::setParam(int param)
+{
+  ccValue_ = param;
+}
+
 } // namespace skinny
