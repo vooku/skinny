@@ -33,7 +33,7 @@ struct LayerDescription : public MappableDescription {
                      const std::filesystem::path& path,
                      midiNote note = invalid_midi,
                      midiNote cc = invalid_midi,
-                     //float alpha = 1.0f,
+                     //int alpha = MAX_7BIT,
                      const BlendMode& blendMode = DEFAULT_BLEND_MODE);
 
     bool fromXml(ofxXmlSettings& config) override;
@@ -41,7 +41,7 @@ struct LayerDescription : public MappableDescription {
 
     unsigned int id;
     std::filesystem::path path;
-    //float alpha;
+    int alpha = MAX_7BIT; // #TODO save this
     bool retrigger = false;
     BlendMode blendMode;
 };

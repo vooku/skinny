@@ -45,6 +45,7 @@ public:
 
     void onLayerMidiInput(ofxDatGuiTextInputEvent e);
     void onLayerCcInput(ofxDatGuiTextInputEvent e);
+    void onLayerAlphaInput(ofxDatGuiTextInputEvent e);
     void onMasterAlphaCcInput(ofxDatGuiTextInputEvent e);
     void onEffectMidiInput(ofxDatGuiTextInputEvent e);
     void onEffectCcInput(ofxDatGuiTextInputEvent e);
@@ -99,7 +100,7 @@ private:
     void setupVideoFxPanel(glm::ivec2& pos);
     void setupMidiPanel(glm::ivec2& pos, int w);
     void setupCcPanel(glm::ivec2& pos, int w);
-    void setupAlphaPanel(glm::ivec2& pos);
+    void setupAlphaPanel(glm::ivec2& pos, int w);
     void setupRetriggerPanel(glm::ivec2& pos);
     void setupBlendModePanel(glm::ivec2& pos);
     void setupMidiDevicePanel(glm::ivec2& pos = glm::ivec2{});
@@ -129,7 +130,7 @@ private:
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerCCInputs_;
-    std::array<ofxDatGuiLabel*,     MAX_LAYERS> layerAlphaLabels_;
+    std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerAlphaInputs_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerMuteToggles_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerRetriggerToggles_;

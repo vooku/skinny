@@ -37,6 +37,7 @@ public:
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
     void setRetrigger(bool value) { retrigger_ = value; }
+    void setAlpha(int alpha) { ccValue_ = alpha; }
 
 private:
     ofVideoPlayer player_;

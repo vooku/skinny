@@ -31,7 +31,7 @@ void Gui::setup()
     setupVideoFxPanel(pos);
     setupMidiPanel(pos, midiInWidth);
     setupCcPanel(pos, midiInWidth);
-    setupAlphaPanel(pos);
+    setupAlphaPanel(pos, midiInWidth);
 
     auto midiPos = pos;
     
@@ -109,7 +109,7 @@ void Gui::reload()
             layerButtons_[i]->setLabel(label);
             layerMidiInputs_[i]->setText(std::to_string(layers[i]->getNote()));
             layerCCInputs_[i]->setText(std::to_string(layers[i]->getCc()));
-            layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * MAX_7BIT)));
+            layerAlphaInputs_[i]->setText(std::to_string(static_cast<int>(layers[i]->getAlpha() * MAX_7BIT)));
             layerRetriggerToggles_[i]->setChecked(layers[i]->getRetrigger());
             blendModeDropdowns_[i]->select(static_cast<int>(layers[i]->getBlendMode()));
         }
@@ -168,11 +168,12 @@ void Gui::update()
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (layers[i]) {
             layerPlayToggles_[i]->setChecked(layers[i]->isPlaying());
-            layerAlphaLabels_[i]->setLabel(std::to_string(static_cast<int>(layers[i]->getAlpha() * MAX_7BIT)));
+            if (!layerAlphaInputs_[i]->getFocused())
+              layerAlphaInputs_[i]->setText(std::to_string(static_cast<int>(layers[i]->getAlpha() * MAX_7BIT)));
         }
         else {
             layerPlayToggles_[i]->setChecked(false);
-            layerAlphaLabels_[i]->setLabel("");
+            layerAlphaInputs_[i]->setText("");
         }
     }
 
@@ -389,6 +390,18 @@ void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
     auto& show = Status::instance().show;
     if (show && show->getCurrentScene()->layers_[idx])
         show->getCurrentScene()->layers_[idx]->setCc(control);
+}
+
+//--------------------------------------------------------------
+void Gui::onLayerAlphaInput(ofxDatGuiTextInputEvent e)
+{
+  const auto idx = std::stoi(e.target->getName());
+  const auto alpha = std::stoi(e.text);
+	auto& showDescription = *Status::instance().showDescription;
+	showDescription.scenes_[showDescription.currentIdx_].layers[idx].alpha = alpha;
+	auto& show = Status::instance().show;
+	if (show && show->getCurrentScene()->layers_[idx])
+		show->getCurrentScene()->layers_[idx]->setAlpha(alpha);
 }
 
 //--------------------------------------------------------------
@@ -787,17 +800,19 @@ void Gui::setupCcPanel(glm::ivec2& pos, int w)
 }
 
 //--------------------------------------------------------------
-void Gui::setupAlphaPanel(glm::ivec2& pos)
+void Gui::setupAlphaPanel(glm::ivec2& pos, int w)
 {
     alphaPanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
     alphaPanel_->setTheme(&commonTheme_);
-    alphaPanel_->setWidth(2.5 * DELTA);
+    alphaPanel_->setWidth(w);
     pos.x += alphaPanel_->getWidth();
     auto* alphaHeader = alphaPanel_->addLabel("Alpha");
     alphaHeader->setLabelAlignment(ofxDatGuiAlignment::CENTER);
     alphaPanel_->addBreak();
-    for (auto& label : layerAlphaLabels_) {
-        label = alphaPanel_->addLabel("");
+    for (auto i = 0; i < layerAlphaInputs_.size(); ++i) {
+        layerAlphaInputs_[i] = alphaPanel_->addTextInput("");
+        layerAlphaInputs_[i]->onTextInputEvent(this, &Gui::onLayerAlphaInput);
+        layerAlphaInputs_[i]->setName(std::to_string(i));
     }
 
     alphaPanel_->addBreak();
