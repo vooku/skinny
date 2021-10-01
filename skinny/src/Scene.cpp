@@ -43,6 +43,7 @@ void Scene::reload(const SceneDescription & description)
             if (layers_[i]) {
                 layers_[i]->setBlendMode(description.layers[i].blendMode);
                 layers_[i]->setCc(description.layers[i].cc);
+                layers_[i]->setAlpha(description.layers[i].alpha);
                 layers_[i]->setRetrigger(description.layers[i].retrigger);
                 layers_[i]->init();
             }
