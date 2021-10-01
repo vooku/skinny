@@ -4,7 +4,7 @@ namespace skinny {
 
 //--------------------------------------------------------------
 Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote control) :
-    Mappable(note == -1 ? LAYER_NOTE_OFFSET + id : note,
+    Playable(note == -1 ? LAYER_NOTE_OFFSET + id : note,
              control == -1 ? LAYER_CC_OFFSET + id : note),
     id_(id),
     name_(path.filename().string()),
@@ -26,7 +26,7 @@ Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote 
 
 //--------------------------------------------------------------
 Layer::Layer(int id, ErrorType error) :
-    Mappable(LAYER_NOTE_OFFSET + id, LAYER_CC_OFFSET + id),
+    Playable(LAYER_NOTE_OFFSET + id, LAYER_CC_OFFSET + id),
     id_(id),
     name_(error == ErrorType::Invalid ? "Invalid description." : "Failed to load."),
     valid_(false),
@@ -67,14 +67,14 @@ void Layer::unbind()
 //--------------------------------------------------------------
 void Layer::play()
 {
-    Mappable::play();
-    player_.setPaused(!active_);
+    Playable::play();
+    player_.setPaused(!isPlaying());
 }
 
 //--------------------------------------------------------------
 void Layer::pause()
 {
-    Mappable::pause();
+    Playable::pause();
     if (retrigger_)
         player_.setFrame(0);
     player_.setPaused(true);
@@ -83,10 +83,10 @@ void Layer::pause()
 //--------------------------------------------------------------
 void Layer::playPause()
 {
-    Mappable::playPause();
-    if (!active_ && retrigger_)
+    Playable::playPause();
+    if (!isPlaying() && retrigger_)
         player_.setFrame(0);
-    player_.setPaused(!active_);
+    player_.setPaused(!isPlaying());
 }
 
 //--------------------------------------------------------------

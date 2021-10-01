@@ -1,30 +1,28 @@
 #pragma once
 
-#include "ofMain.h"
-#include "base.h"
 #include "Mappable.h"
 
 namespace skinny {
 
 //--------------------------------------------------------------
-class MidiMonitor : public ofThread, public Mappable {
+class Playable : public Mappable {
 public:
-	virtual void init() override;
-	virtual void done() override;
+	Playable() = default;
+	Playable(midiNote note, midiNote cc);
 
 	virtual void onNoteOn(NoteMessage& msg) override;
 	virtual void onNoteOff(NoteMessage& msg) override;
 	virtual void onControlChange(ControlChangeMessage& msg) override;
 
-	std::string getCurrentMsg() const;
-
-	bool on_ = false;
+	virtual void play();
+	virtual void pause();
+	virtual void playPause();
+	bool isPlaying() const;
+	void setMute(bool mute);
 
 private:
-	void threadedFunction() override;
-
-	std::string currentMsg;
-	ofTimer timer_;
+	bool playing_ = false;
+	bool mute_ = false;
 
 };
 

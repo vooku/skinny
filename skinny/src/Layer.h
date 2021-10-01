@@ -1,11 +1,11 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Mappable.h"
+#include "Playable.h"
 
 namespace skinny {
 
-class Layer : public Mappable {
+class Layer : public Playable {
 public:
     enum class ErrorType {
         Invalid, Failed

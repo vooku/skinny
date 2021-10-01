@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Mappable.h"
+#include "Playable.h"
 
 namespace skinny {
 
-class Effect : public Mappable {
+class Effect : public Playable {
     friend class Gui;
 
 public:

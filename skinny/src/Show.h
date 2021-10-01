@@ -1,5 +1,7 @@
 #pragma once
+
 #include "Scene.h"
+#include "Mappable.h"
 
 namespace skinny {
 
@@ -7,7 +9,7 @@ class Gui;
 
 typedef std::shared_ptr<Scene> ScenePtr;
 
-class Show
+class Show : public Mappable
 {
 public:
     typedef std::array<std::unique_ptr<Effect>, MAX_EFFECTS> Effects;
@@ -16,15 +18,15 @@ public:
 
     Show(int width, int height);
 
-    void init();
-    void done();
+    virtual void init() override;
+    virtual void done() override;
     void draw();
     bool reload(const ShowDescription& description);
     void playPauseEffect(int i);
     void update();
 
-    void onNoteOn(NoteMessage& msg);
-    void onControlChange(ControlChangeMessage& msg);
+    virtual void onNoteOn(NoteMessage& msg) override;
+    virtual void onControlChange(ControlChangeMessage& msg) override;
 
     ScenePtr getCurrentScene() const;
     const Effects& getEffects() const;

@@ -29,8 +29,7 @@ Show::Show(int width, int height) :
 //--------------------------------------------------------------
 void Show::init()
 {
-  ofAddListener(getStatus().midi->noteOnEvent, this, &Show::onNoteOn);
-  ofAddListener(getStatus().midi->controlChangeEvent, this, &Show::onControlChange);
+  Mappable::init();
 
   if (currentScene_)
     currentScene_->init();
@@ -39,8 +38,7 @@ void Show::init()
 //--------------------------------------------------------------
 void Show::done()
 {
-  ofRemoveListener(getStatus().midi->noteOnEvent, this, &Show::onNoteOn);
-  ofRemoveListener(getStatus().midi->controlChangeEvent, this, &Show::onControlChange);
+  Mappable::done();
 
   if (currentScene_)
     currentScene_->done();

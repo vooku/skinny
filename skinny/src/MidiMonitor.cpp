@@ -9,9 +9,7 @@ void MidiMonitor::init()
 	timer_.setPeriodicEvent(MIDI_MSG_REFRESH_PERIOD);
 	startThread();
 
-	ofAddListener(getStatus().midi->noteOnEvent, this, &MidiMonitor::onNoteOn);
-	ofAddListener(getStatus().midi->noteOffEvent, this, &MidiMonitor::onNoteOff);
-	ofAddListener(getStatus().midi->controlChangeEvent, this, &MidiMonitor::onControlChange);
+	Mappable::init();
 }
 
 //--------------------------------------------------------------
@@ -19,9 +17,7 @@ void MidiMonitor::done()
 {
 	waitForThread();
 
-	ofRemoveListener(getStatus().midi->noteOnEvent, this, &MidiMonitor::onNoteOn);
-	ofRemoveListener(getStatus().midi->noteOffEvent, this, &MidiMonitor::onNoteOff);
-	ofRemoveListener(getStatus().midi->controlChangeEvent, this, &MidiMonitor::onControlChange);
+	Mappable::done();
 }
 
 //--------------------------------------------------------------

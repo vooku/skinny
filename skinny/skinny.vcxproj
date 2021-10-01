@@ -217,6 +217,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlerror.cpp" />
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
+    <ClCompile Include="src\Playable.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Show.cpp" />
     <ClCompile Include="src\Status.cpp" />
@@ -267,6 +268,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClInclude Include="..\..\..\addons\ofxMidi\libs\rtmidi\RtMidi.h" />
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\src\ofxXmlSettings.h" />
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h" />
+    <ClInclude Include="src\Playable.h" />
     <ClInclude Include="src\Scene.h" />
     <ClInclude Include="src\Show.h" />
     <ClInclude Include="src\Status.h" />
