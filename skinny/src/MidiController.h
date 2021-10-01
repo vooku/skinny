@@ -26,9 +26,9 @@ public:
 	bool connect(const std::string& deviceName);
 	void disconnect(const std::string& deviceName);
 
-	ofEvent<midiNote> noteOnEvent;
-	ofEvent<midiNote> noteOffEvent;
-	ofEvent<ControlChange> controlChangeEvent;
+	ofEvent<NoteMessage> noteOnEvent;
+	ofEvent<NoteMessage> noteOffEvent;
+	ofEvent<ControlChangeMessage> controlChangeEvent;
 
 private:
 	using MidiInputs = std::set<std::unique_ptr<ofxMidiIn>>;

@@ -5,6 +5,7 @@
 #include "Show.h"
 #include "VideoSelector.h"
 #include "FileSelector.h"
+#include "MidiMonitor.h"
 #include <array>
 #include <filesystem>
 #include <chrono>
@@ -59,6 +60,7 @@ public:
     void onEffectMuteToggle(ofxDatGuiToggleEvent e);
     void onLayerRetriggerToggle(ofxDatGuiToggleEvent e);
     void onMidiDeviceToggle(ofxDatGuiToggleEvent e);
+    void onMidiMonitorToggle(ofxDatGuiToggleEvent e);
 
 private:
     static const int MAX_CHARS = 20;
@@ -101,6 +103,7 @@ private:
     void setupRetriggerPanel(glm::ivec2& pos);
     void setupBlendModePanel(glm::ivec2& pos);
     void setupMidiDevicePanel(glm::ivec2& pos = glm::ivec2{});
+    void setupMidiMonitorLabel();
 
     void threadedFunction() override;
 
@@ -108,6 +111,7 @@ private:
 
     void save(std::filesystem::path path);
 
+		MidiMonitor midiMonitor_;
     ofTimer midiDevicesTimer_;
     bool shouldUpdateDevices_ = false;
 
@@ -122,7 +126,6 @@ private:
     ofxDatGuiTextInput* midiChannelInput_;
     ofxDatGuiTextInput* jumpToInput_;
     std::vector<ofxDatGuiButton*> controlButtons_;
-    //std::vector<ofxDatGuiToggle> midiDeviceToggles_;
     std::array<ofxDatGuiButton*,    MAX_LAYERS> layerButtons_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerMidiInputs_;
     std::array<ofxDatGuiTextInput*, MAX_LAYERS> layerCCInputs_;
@@ -137,6 +140,7 @@ private:
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectMuteToggles_;
     std::array<ofxDatGuiLabel*,     MAX_EFFECTS> effectParamLabels_;
+    ofxDatGuiLabel* midiMonitorLabel_ = nullptr;
 
     std::filesystem::path configPath_;
     std::string configName_;

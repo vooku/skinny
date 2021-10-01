@@ -48,24 +48,30 @@ void Mappable::playPause()
 }
 
 //--------------------------------------------------------------
-void Mappable::onNoteOn(midiNote& note)
+bool Mappable::isCorrectChannel(int channel)
 {
-  if (note == note_)
+  return channel == getStatus().showDescription->getMidiChannel();
+}
+
+//--------------------------------------------------------------
+void Mappable::onNoteOn(NoteMessage& msg)
+{
+  if (isCorrectChannel(msg.channel_) && msg.note_ == note_)
     play();
 }
 
 //--------------------------------------------------------------
-void Mappable::onNoteOff(midiNote& note)
+void Mappable::onNoteOff(NoteMessage& msg)
 {
-  if (note == note_)
+  if (isCorrectChannel(msg.channel_) && msg.note_ == note_)
     pause();
 }
 
 //--------------------------------------------------------------
-void Mappable::onControlChange(ControlChange& change)
+void Mappable::onControlChange(ControlChangeMessage& msg)
 {
-  if (change.control == cc_)
-    ccValue_ = change.value;
+  if (isCorrectChannel(msg.channel_) &&  msg.control_ == cc_)
+    ccValue_ = msg.value_;
 }
 
 //--------------------------------------------------------------

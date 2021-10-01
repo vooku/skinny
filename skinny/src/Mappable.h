@@ -18,9 +18,10 @@ public:
     virtual void playPause();
     virtual bool isPlaying() const { return active_; }
 
-    virtual void onNoteOn(midiNote& note);
-    virtual void onNoteOff(midiNote& note);
-    virtual void onControlChange(ControlChange& change);
+    static bool isCorrectChannel(int channel);
+    virtual void onNoteOn(NoteMessage& msg);
+    virtual void onNoteOff(NoteMessage& msg);
+    virtual void onControlChange(ControlChangeMessage& msg);
 
     virtual midiNote getNote() const { return note_; }
     virtual midiNote getCc() const { return cc_; }

@@ -109,18 +109,22 @@ void Show::update()
 }
 
 //--------------------------------------------------------------
-void Show::onNoteOn(midiNote& note)
+void Show::onNoteOn(NoteMessage& msg)
 {
-  if (note == getStatus().showDescription->getSwitchNote()) {
+  if (Mappable::isCorrectChannel(msg.channel_) &&
+      msg.note_ == getStatus().showDescription->getSwitchNote())
+  {
     Status::instance().loadDir = LoadDir::Forward;
   }
 }
 
 //--------------------------------------------------------------
-void Show::onControlChange(ControlChange& change)
+void Show::onControlChange(ControlChangeMessage& msg)
 {
-  if (change.control == masterAlphaControl_) {
-    uniforms_.masterAlpha_ = clamp(change.value, 0, MAX_7BIT) / MAX_7BITF;
+	if (Mappable::isCorrectChannel(msg.channel_) &&
+			msg.control_ == masterAlphaControl_)
+  {
+    uniforms_.masterAlpha_ = clamp(msg.value_, 0, MAX_7BIT) / MAX_7BITF;
   }
 }
 

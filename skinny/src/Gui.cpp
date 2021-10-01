@@ -41,6 +41,8 @@ void Gui::setup()
 
     midiDevicesTimer_.setPeriodicEvent(MIDI_DEVICES_REFRESH_PERIOD);
     startThread();
+
+    midiMonitor_.init();
 }
 
 //--------------------------------------------------------------
@@ -145,6 +147,10 @@ void Gui::update()
     {
       setupMidiDevicePanel();
       shouldUpdateDevices_ = false;
+		}
+
+    if (midiMonitorLabel_ != nullptr) {
+      midiMonitorLabel_->setLabel(midiMonitor_.getCurrentMsg());
     }
 
     auto& showDescription = *Status::instance().showDescription;
@@ -233,6 +239,7 @@ void Gui::update()
 //--------------------------------------------------------------
 void Gui::exit()
 {
+	midiMonitor_.done();
   waitForThread();
   getStatus().exit = true;
 }
@@ -530,6 +537,13 @@ void Gui::onMidiDeviceToggle(ofxDatGuiToggleEvent e)
   else {
     getStatus().midi->disconnect(deviceName);
   }
+}
+
+//--------------------------------------------------------------
+void Gui::onMidiMonitorToggle(ofxDatGuiToggleEvent e)
+{
+  midiMonitor_.on_ = e.checked;
+  setupMidiMonitorLabel();
 }
 
 //--------------------------------------------------------------
@@ -854,10 +868,34 @@ void Gui::setupMidiDevicePanel(glm::ivec2& pos /*= glm::ivec2{}*/)
 
   const auto devices = getStatus().midi->getPorts();
   for (const auto& device : devices) {
-    auto* toggle = midiDevicePanel_->addToggle({ device.name });
+    auto* toggle = midiDevicePanel_->addToggle(device.name);
     toggle->setChecked(device.open);
     toggle->onToggleEvent(this, &Gui::onMidiDeviceToggle);
   }
+
+  midiDevicePanel_->addBreak();
+  auto* monitorToggle = midiDevicePanel_->addToggle("Monitor");
+  monitorToggle->onToggleEvent(this, &Gui::onMidiMonitorToggle);
+  monitorToggle->setChecked(midiMonitor_.on_);
+  monitorToggle->setLabelAlignment(ofxDatGuiAlignment::CENTER);
+  setupMidiMonitorLabel();
+}
+
+//--------------------------------------------------------------
+void Gui::setupMidiMonitorLabel()
+{
+	if (midiMonitor_.on_)
+	{
+		midiMonitorLabel_ = midiDevicePanel_->addLabel("");
+		midiMonitorLabel_->setLabelAlignment(ofxDatGuiAlignment::CENTER);
+	}
+	else
+	{
+    // ofxDatGui does not provide removing components
+    if (midiMonitorLabel_ != nullptr)
+      midiMonitorLabel_->setLabel("");
+		midiMonitorLabel_ = nullptr;
+	}
 }
 
 //--------------------------------------------------------------

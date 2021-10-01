@@ -23,8 +23,8 @@ public:
     void playPauseEffect(int i);
     void update();
 
-    void onNoteOn(midiNote& note);
-    void onControlChange(ControlChange& change);
+    void onNoteOn(NoteMessage& msg);
+    void onControlChange(ControlChangeMessage& msg);
 
     ScenePtr getCurrentScene() const;
     const Effects& getEffects() const;

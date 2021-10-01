@@ -54,4 +54,25 @@ const char* c_str(EffectType type) {
     }
 }
 
+//--------------------------------------------------------------
+MidiMessage::MidiMessage(int channel)
+  : channel_(channel)
+{
+}
+
+//--------------------------------------------------------------
+NoteMessage::NoteMessage(int channel, midiNote note)
+  : MidiMessage(channel),
+    note_(note)
+{
+}
+
+//--------------------------------------------------------------
+ControlChangeMessage::ControlChangeMessage(int channel, midiNote control, int value)
+  : MidiMessage(channel),
+    control_(control),
+    value_(value)
+{
+}
+
 } // namespace skinny

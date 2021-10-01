@@ -91,6 +91,9 @@
     <ClCompile Include="src\MidiController.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\MidiMonitor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -294,6 +297,9 @@
       <Filter>headers</Filter>
     </ClInclude>
     <ClInclude Include="src\MidiController.h">
+      <Filter>headers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MidiMonitor.h">
       <Filter>headers</Filter>
     </ClInclude>
   </ItemGroup>

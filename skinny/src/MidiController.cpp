@@ -17,25 +17,22 @@ void MidiController::exit()
 //--------------------------------------------------------------
 void MidiController::newMidiMessage(ofxMidiMessage& msg)
 {
-	if (msg.channel != getStatus().showDescription->getMidiChannel()) {
-		ofLog(OF_LOG_WARNING, "Received a MIDI message on an incorrect channel: %d %d %d.", msg.channel, msg.status, msg.pitch);
-		return;
-	}
-
 	if (msg.status == MIDI_NOTE_ON)
 	{
-		ofNotifyEvent(noteOnEvent, static_cast<midiNote>(msg.pitch));
+		auto noteMsg = NoteMessage{ msg.channel, static_cast<midiNote>(msg.pitch) };
+		ofNotifyEvent(noteOnEvent, noteMsg);
 	}
 
 	if (msg.status == MIDI_NOTE_OFF)
 	{
-		ofNotifyEvent(noteOffEvent, static_cast<midiNote>(msg.pitch));
+		auto noteMsg = NoteMessage{ msg.channel, static_cast<midiNote>(msg.pitch) };
+		ofNotifyEvent(noteOffEvent, noteMsg);
 	}
 
 	if (msg.status == MIDI_CONTROL_CHANGE)
 	{
-		auto cc = ControlChange{ static_cast<midiNote>(msg.control), msg.value };
-		ofNotifyEvent(controlChangeEvent, cc);
+		auto ccMsg = ControlChangeMessage{ msg.channel, static_cast<midiNote>(msg.control), msg.value };
+		ofNotifyEvent(controlChangeEvent, ccMsg);
 	}
 }
 
