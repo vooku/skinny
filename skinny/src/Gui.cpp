@@ -16,6 +16,8 @@ const ofColor Gui::BACKGROUND_COLOR = { 45, 45, 48 };
 //--------------------------------------------------------------
 void Gui::setup()
 {
+    ofSetWindowTitle(NAME);
+
     getStatus().gui = shared_from_this();
 
     fonts_.regular.load(FONT_REGULAR, fonts_.sizeRegular, true, false);
