@@ -111,7 +111,16 @@ bool MidiController::connect(const std::string& deviceName)
 //--------------------------------------------------------------
 void MidiController::disconnect(const std::string& deviceName)
 {
-	// #TODO
+	const auto connectedPort = std::find_if(midiInputs_.begin(), midiInputs_.end(), [&deviceName](const MidiInputs::value_type& input)
+	{
+		return stripFollowingNumbers(input->getName()) == deviceName;
+	});
+
+	if (connectedPort != midiInputs_.end())
+	{
+		(*connectedPort)->closePort();
+		midiInputs_.erase(connectedPort);
+	}
 }
 
 }
