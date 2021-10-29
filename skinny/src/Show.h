@@ -43,10 +43,16 @@ private:
         float masterAlpha_ = 1.0f;
     } mutable uniforms_;
 
-    void setupUniforms() const;
+    bool loadShaders();
+
+    void setupFirstPassUniforms() const;
+    void setupSecondPassUniforms() const;
     bool hasActiveFX() const;
 
-    mutable ofShader shader_;
+    mutable ofShader firstPassShader_;
+    mutable ofShader secondPassShader_;
+    ofFbo firstPassFbo_;
+
     const int width_, height_;
     ScenePtr currentScene_;
 

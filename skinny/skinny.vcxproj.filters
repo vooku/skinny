@@ -313,12 +313,18 @@
     <ResourceCompile Include="icon.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\shaders\shader.frag">
+    <None Include="src\shaders\firstPassShader.frag">
       <Filter>src</Filter>
     </None>
-    <None Include="src\shaders\shader.vert">
+    <None Include="src\shaders\firstPassShader.vert">
       <Filter>src</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
+    <None Include="src\shaders\secondPassShader.frag">
+      <Filter>src</Filter>
+    </None>
+    <None Include="src\shaders\secondPassShader.vert">
+      <Filter>src</Filter>
+    </None>
   </ItemGroup>
 </Project>

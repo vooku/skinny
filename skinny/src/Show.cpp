@@ -12,24 +12,46 @@ Show::Show(int width, int height) :
     height_(height),
     currentScene_(std::make_shared<Scene>())
 {
+	if (!loadShaders()) {
+		ofLog(OF_LOG_FATAL_ERROR, "Could not load shaders.");
+		Status::instance().exit = true;
+		return;
+	}
+}
+
+//--------------------------------------------------------------
+bool Show::loadShaders()
+{
+  std::string shaderPathPrefix;
+
 #ifndef NDEBUG
-    const auto shaderFile = "../../src/shaders/shader";
+  shaderPathPrefix = "../../src/shaders/";
 #else
-    const auto shaderFile = "shaders/shader";
+  shaderPathPrefix = "shaders/";
 #endif
 
-    shader_.load(shaderFile);
-    if (!shader_.isLoaded()) {
-        ofLog(OF_LOG_FATAL_ERROR, "Could not load shaders.");
-        Status::instance().exit = true;
-        return;
-    }
+	firstPassShader_.load(shaderPathPrefix + "firstPassShader");
+  secondPassShader_.load(shaderPathPrefix + "secondPassShader");
+	
+  return firstPassShader_.isLoaded() && secondPassShader_.isLoaded();
 }
 
 //--------------------------------------------------------------
 void Show::setup()
 {
   Mappable::setup();
+
+	ofFboSettings s;
+	s.width = width_;
+	s.height = height_;
+	s.internalformat = GL_RGBA;
+	s.useDepth = false;
+
+  firstPassFbo_.allocate(s);
+
+  firstPassFbo_.begin();
+	ofClear(255, 255, 255, 0);
+	firstPassFbo_.end();
 
   if (currentScene_)
     currentScene_->init();
@@ -54,17 +76,28 @@ void Show::exit()
 void Show::draw()
 {
     // Make sure the first frame is ready before we start drawing.
-    static bool firstFrame = false;
-    firstFrame = firstFrame || currentScene_->isFrameNew();
+    static bool firstFrameReady = false;
+    firstFrameReady = firstFrameReady || currentScene_->isFrameNew();
 
-    if (firstFrame) {
-        shader_.begin();
-        setupUniforms();
-        currentScene_->bind();
-        ofDrawRectangle(0, 0, width_, height_);
-        currentScene_->unbind();
-        shader_.end();
-    }
+    if (!firstFrameReady)
+        return;
+
+    // first pass
+    firstPassFbo_.begin();
+    ofClear(0.0f, 0.0f, 0.0f, 0.0f);
+    firstPassShader_.begin();
+    setupFirstPassUniforms();
+    currentScene_->bind();
+    ofDrawRectangle(0, 0, width_, height_);
+    currentScene_->unbind();
+    firstPassShader_.end();
+    firstPassFbo_.end();
+
+    // second pass
+		secondPassShader_.begin();
+		setupSecondPassUniforms();
+		ofDrawRectangle(0, 0, width_, height_);
+		secondPassShader_.end();
 }
 
 //--------------------------------------------------------------
@@ -74,7 +107,7 @@ bool Show::reload(const ShowDescription& description)
 
     currentScene_->bind();
 
-    shader_.begin();
+    firstPassShader_.begin();
     currentScene_->reload(description.currentScene());
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
@@ -86,7 +119,7 @@ bool Show::reload(const ShowDescription& description)
         effects_[i]->setup();
     }
 
-    shader_.end();
+    firstPassShader_.end();
     currentScene_->unbind();
 
     return currentScene_->isValid();
@@ -163,9 +196,9 @@ float getTimeshift()
 }
 
 //--------------------------------------------------------------
-void Show::setupUniforms() const
+void Show::setupFirstPassUniforms() const
 {
-    currentScene_->setupUniforms(shader_);
+    currentScene_->setupUniforms(firstPassShader_);
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
         uniforms_.fxTypes[i] = static_cast<int>(effects_[i]->type);
@@ -173,13 +206,23 @@ void Show::setupUniforms() const
         uniforms_.fxParam[i] = effects_[i]->getParam() / MAX_7BITF;
     }
 
-    shader_.setUniform1f("masterAlpha", uniforms_.masterAlpha_);
-    shader_.setUniform1f("timeShift", getTimeshift());
-    shader_.setUniform2iv("screenSize", reinterpret_cast<int*>(&glm::ivec2{ width_, height_ }));
+    firstPassShader_.setUniform1f("masterAlpha", uniforms_.masterAlpha_);
+    firstPassShader_.setUniform1f("timeShift", getTimeshift());
+    firstPassShader_.setUniform2iv("screenSize", reinterpret_cast<int*>(&glm::ivec2{ width_, height_ }));
 
-    shader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
-    shader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
-    shader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
+    firstPassShader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
+    firstPassShader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
+    firstPassShader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
+}
+
+//--------------------------------------------------------------
+void Show::setupSecondPassUniforms() const
+{
+	// keep effect uniforms from first pass
+	secondPassShader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
+	secondPassShader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
+	secondPassShader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
+	secondPassShader_.setUniformTexture("firstPass", firstPassFbo_.getTextureReference(), 1);
 }
 
 //--------------------------------------------------------------

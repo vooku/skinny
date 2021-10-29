@@ -57,7 +57,8 @@ enum class EffectType {
     HOffset     = 4,
     VOffset     = 5,
     Desaturate  = 6,
-    Count       = 7,
+    Blur        = 7,
+    Count       = 8,
 };
 
 const char* c_str(EffectType type);

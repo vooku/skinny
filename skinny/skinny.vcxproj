@@ -288,8 +288,10 @@ copy src\shaders\* bin\data\shaders</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram.cd" />
-    <None Include="src\shaders\shader.frag" />
-    <None Include="src\shaders\shader.vert" />
+    <None Include="src\shaders\firstPassShader.frag" />
+    <None Include="src\shaders\firstPassShader.vert" />
+    <None Include="src\shaders\secondPassShader.frag" />
+    <None Include="src\shaders\secondPassShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>

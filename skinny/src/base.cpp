@@ -31,7 +31,7 @@ const char * c_str(BlendMode blendMode)
 
 //--------------------------------------------------------------
 const char* c_str(EffectType type) {
-    static_assert(static_cast<int>(EffectType::Count) == 7, "Do not forget to add new values here.");
+    static_assert(static_cast<int>(EffectType::Count) == 8, "Do not forget to add new values here.");
 
     switch (type)
     {
@@ -49,6 +49,8 @@ const char* c_str(EffectType type) {
         return "Vertical Offset";
     case EffectType::Desaturate:
         return "Desaturate";
+    case EffectType::Blur:
+        return "Blur";
     default:
         return "Invalid";
     }
