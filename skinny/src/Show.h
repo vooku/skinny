@@ -46,12 +46,13 @@ private:
     bool loadShaders();
 
     void setupFirstPassUniforms() const;
-    void setupSecondPassUniforms() const;
+    void setupPingPongPassUniforms(bool horizontal, const ofTexture& img) const;
     bool hasActiveFX() const;
 
     mutable ofShader firstPassShader_;
-    mutable ofShader secondPassShader_;
+    mutable ofShader pingPongPassShader_;
     ofFbo firstPassFbo_;
+    ofFbo secondPassFbo_;
 
     const int width_, height_;
     ScenePtr currentScene_;

@@ -320,10 +320,10 @@
       <Filter>src</Filter>
     </None>
     <None Include="ClassDiagram.cd" />
-    <None Include="src\shaders\secondPassShader.frag">
+    <None Include="src\shaders\pingPongPassShader.frag">
       <Filter>src</Filter>
     </None>
-    <None Include="src\shaders\secondPassShader.vert">
+    <None Include="src\shaders\pingPongPassShader.vert">
       <Filter>src</Filter>
     </None>
   </ItemGroup>

@@ -31,9 +31,9 @@ bool Show::loadShaders()
 #endif
 
 	firstPassShader_.load(shaderPathPrefix + "firstPassShader");
-  secondPassShader_.load(shaderPathPrefix + "secondPassShader");
+  pingPongPassShader_.load(shaderPathPrefix + "pingPongPassShader");
 	
-  return firstPassShader_.isLoaded() && secondPassShader_.isLoaded();
+  return firstPassShader_.isLoaded() && pingPongPassShader_.isLoaded();
 }
 
 //--------------------------------------------------------------
@@ -48,10 +48,15 @@ void Show::setup()
 	s.useDepth = false;
 
   firstPassFbo_.allocate(s);
+  secondPassFbo_.allocate(s);
 
   firstPassFbo_.begin();
 	ofClear(255, 255, 255, 0);
 	firstPassFbo_.end();
+
+  secondPassFbo_.begin();
+	ofClear(255, 255, 255, 0);
+  secondPassFbo_.end();
 
   if (currentScene_)
     currentScene_->init();
@@ -93,11 +98,19 @@ void Show::draw()
     firstPassShader_.end();
     firstPassFbo_.end();
 
-    // second pass
-		secondPassShader_.begin();
-		setupSecondPassUniforms();
+		// second pass
+		secondPassFbo_.begin();
+		pingPongPassShader_.begin();
+		setupPingPongPassUniforms(true, firstPassFbo_.getTextureReference());
 		ofDrawRectangle(0, 0, width_, height_);
-		secondPassShader_.end();
+		pingPongPassShader_.end();
+		secondPassFbo_.end();
+
+    // third pass
+		pingPongPassShader_.begin();
+		setupPingPongPassUniforms(false, secondPassFbo_.getTextureReference());
+		ofDrawRectangle(0, 0, width_, height_);
+		pingPongPassShader_.end();
 }
 
 //--------------------------------------------------------------
@@ -216,13 +229,14 @@ void Show::setupFirstPassUniforms() const
 }
 
 //--------------------------------------------------------------
-void Show::setupSecondPassUniforms() const
+void Show::setupPingPongPassUniforms(bool horizontal, const ofTexture& img) const
 {
 	// keep effect uniforms from first pass
-	secondPassShader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
-	secondPassShader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
-	secondPassShader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
-	secondPassShader_.setUniformTexture("firstPass", firstPassFbo_.getTextureReference(), 1);
+	pingPongPassShader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
+	pingPongPassShader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
+	pingPongPassShader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
+	pingPongPassShader_.setUniform1i("horizontal", horizontal);
+	pingPongPassShader_.setUniformTexture("previousPass", img, 1);
 }
 
 //--------------------------------------------------------------
