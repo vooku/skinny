@@ -47,7 +47,50 @@ vec2 verticalOffset(vec2 uv, float p, vec2 dimensions)
 }
 
 //--------------------------------------------------------------
-vec2 distort(vec2 uv, vec2 dimensions) // <0,1> coords
+// inspired by www.github.com/FitzwilliamMuseum/fitz-kaleidoscope
+vec2 kaleidoscope(vec2 uv, float p, vec2 dimensions)
+{
+    const float segments = p * 127.0f;
+    uv /= dimensions;
+
+    if (segments < 2.0f)
+    {
+        // mirror
+//        if (uv.x > 0.5f)
+//            uv.x = 1.0f - uv.x;
+        if (uv.x < 0.5f)
+            uv.x = 1.0f - uv.x;
+    }
+    else
+    {
+        // proper kaleidoscope
+        uv = uv * 2.0f - 1.0f;
+
+        float r = length(uv);
+        float theta = atan(uv.y, uv.x);
+        theta /= pi;
+        theta *= segments;
+    
+//        if (mod(theta, 2.0f) >= 1.0f)
+              theta = fract(theta);
+//        else
+//            theta = 1.0f - fract(theta);
+
+        theta /= segments;
+        theta *= pi * 2.0f;
+        uv.x = r * cos(theta);
+        uv.y = r * sin(theta);
+
+        uv = fract(uv);
+    }
+
+    uv *= dimensions;
+
+    return uv;
+}
+
+//--------------------------------------------------------------
+vec2 distort(vec2 uv, vec2 dimensions)
 {
     for (int i = 0; i < nFx; i++) {
         if (!fxPlaying[i])
@@ -59,6 +102,9 @@ vec2 distort(vec2 uv, vec2 dimensions) // <0,1> coords
                 break;
             case 5: // Vertical Offset
                 uv = verticalOffset(uv, fxParam[i], dimensions);
+                break;
+            case 10: // Kaleidoscope
+                uv = kaleidoscope(uv, fxParam[i], dimensions);
                 break;
         }
     }
@@ -113,6 +159,7 @@ void main()
             continue;
 
         vec2 uvDist = distort(uvs[i], dimensions[i]);
+//        blended.xy = uvDist / dimensions[i]; break;
         vec3 color = texture(layers[i], uvDist).rgb; // texture pixel coords
         anyPlaying = true;
 

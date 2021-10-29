@@ -31,16 +31,16 @@ static constexpr const char* DEFAULT_EXTENSION = ".xml";
 
 //--------------------------------------------------------------
 enum class BlendMode {
-    Invalid     = -1,
-    Overlay      = 0, // s
-    Multiply    = 1, // b * s
-    Screen      = 2, // 1 - ((1 - b) * (1 - s))
-    Darken      = 3, // min(b, s)
-    Lighten     = 4, // max(b, s)
-    LinearDodge = 5, // s + b
-    Difference  = 6, // |b - s|
-    Exclusion   = 7, // b + s - 2 * b * s
-    Count       = 8  // Used for iteration
+    Invalid = -1,
+    Overlay,     // s
+    Multiply,    // b * s
+    Screen,      // 1 - ((1 - b) * (1 - s))
+    Darken,      // min(b, s)
+    Lighten,     // max(b, s)
+    LinearDodge, // s + b
+    Difference,  // |b - s|
+    Exclusion,   // b + s - 2 * b * s
+    Count        // Used for iteration
 };
 
 const char* c_str(BlendMode blendMode);
@@ -51,16 +51,17 @@ static const BlendMode DEFAULT_BLEND_MODE = BlendMode::LinearDodge;
 enum class EffectType {
     Invalid     = -1,
     Solarize    = 0,
-    Posterize   = 1,
-    ColorShift  = 2,
-    Overdrive   = 3,
-    HOffset     = 4,
-    VOffset     = 5,
-    Desaturate  = 6,
-    Blur        = 7,
-    HBlur       = 8,
-    VBlur       = 9,
-    Count       = 10,
+    Posterize,
+    ColorShift,
+		Overdrive,
+    HOffset,
+    VOffset,
+    Desaturate,
+    Blur,
+    HBlur,
+    VBlur,
+    Kaleidoscope,
+    Count,
 };
 
 const char* c_str(EffectType type);

@@ -31,7 +31,7 @@ const char * c_str(BlendMode blendMode)
 
 //--------------------------------------------------------------
 const char* c_str(EffectType type) {
-    static_assert(static_cast<int>(EffectType::Count) == 10, "Do not forget to add new values here.");
+    static_assert(static_cast<int>(EffectType::Count) == 11, "Do not forget to add new values here.");
 
     switch (type)
     {
@@ -55,6 +55,8 @@ const char* c_str(EffectType type) {
         return "Blur Horizontally";
     case EffectType::VBlur:
         return "Blur Vertically";
+    case EffectType::Kaleidoscope:
+        return "Kaleidoscope";
     default:
         return "Invalid";
     }
