@@ -14,7 +14,7 @@ void Scene::done()
   for (auto& layer : layers_)
   {
     if (layer)
-      layer->done();
+      layer->exit();
   }
 }
 
@@ -26,7 +26,7 @@ void Scene::reload(const SceneDescription & description)
 
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (layers_[i])
-          layers_[i]->done();
+          layers_[i]->exit();
 
         if (!description.layers[i].valid) {
             layers_[i].reset(/*new Layer(i, Layer::ErrorType::Invalid)*/);
@@ -45,7 +45,7 @@ void Scene::reload(const SceneDescription & description)
                 layers_[i]->setCc(description.layers[i].cc);
                 layers_[i]->setAlpha(description.layers[i].alpha);
                 layers_[i]->setRetrigger(description.layers[i].retrigger);
-                layers_[i]->init();
+                layers_[i]->setup();
             }
         }
     }

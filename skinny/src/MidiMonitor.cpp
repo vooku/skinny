@@ -4,20 +4,20 @@
 namespace skinny {
 
 //--------------------------------------------------------------
-void MidiMonitor::init()
+void MidiMonitor::setup()
 {
 	timer_.setPeriodicEvent(MIDI_MSG_REFRESH_PERIOD);
 	startThread();
 
-	Mappable::init();
+	Mappable::setup();
 }
 
 //--------------------------------------------------------------
-void MidiMonitor::done()
+void MidiMonitor::exit()
 {
 	waitForThread();
 
-	Mappable::done();
+	Mappable::exit();
 }
 
 //--------------------------------------------------------------

@@ -27,18 +27,18 @@ Show::Show(int width, int height) :
 }
 
 //--------------------------------------------------------------
-void Show::init()
+void Show::setup()
 {
-  Mappable::init();
+  Mappable::setup();
 
   if (currentScene_)
     currentScene_->init();
 }
 
 //--------------------------------------------------------------
-void Show::done()
+void Show::exit()
 {
-  Mappable::done();
+  Mappable::exit();
 
   if (currentScene_)
     currentScene_->done();
@@ -46,7 +46,7 @@ void Show::done()
   for (auto& effect : effects_)
   {
     if (effect)
-      effect->done();
+      effect->exit();
   }
 }
 
@@ -79,11 +79,11 @@ bool Show::reload(const ShowDescription& description)
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
        if (effects_[i])
-          effects_[i]->done();
+          effects_[i]->exit();
 
         const auto& effect = description.getEffects()[i];
         effects_[i].reset(new Effect(i, effect.type, effect.note, effect.cc, effect.param));
-        effects_[i]->init();
+        effects_[i]->setup();
     }
 
     shader_.end();

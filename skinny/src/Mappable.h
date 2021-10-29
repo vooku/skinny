@@ -13,8 +13,8 @@ public:
 
     static bool isCorrectChannel(int channel);
 
-    virtual void init();
-    virtual void done();
+    virtual void setup();
+    virtual void exit();
 
     // dummy implementation so there's no need to implement everything
     virtual void onNoteOn(NoteMessage& msg) {};

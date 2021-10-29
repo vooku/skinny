@@ -9,8 +9,8 @@ namespace skinny {
 //--------------------------------------------------------------
 class MidiMonitor : public ofThread, public Mappable {
 public:
-	virtual void init() override;
-	virtual void done() override;
+	virtual void setup() override;
+	virtual void exit() override;
 
 	virtual void onNoteOn(NoteMessage& msg) override;
 	virtual void onNoteOff(NoteMessage& msg) override;

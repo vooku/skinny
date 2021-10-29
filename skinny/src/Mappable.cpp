@@ -10,7 +10,7 @@ Mappable::Mappable(midiNote note, midiNote cc) :
 {}
 
 //--------------------------------------------------------------
-void Mappable::init()
+void Mappable::setup()
 {
   ofAddListener(getStatus().midi->noteOnEvent, this, &Mappable::onNoteOn);
   ofAddListener(getStatus().midi->noteOffEvent, this, &Mappable::onNoteOff);
@@ -18,7 +18,7 @@ void Mappable::init()
 }
 
 //--------------------------------------------------------------
-void Mappable::done()
+void Mappable::exit()
 {
   ofRemoveListener(getStatus().midi->noteOnEvent, this, &Mappable::onNoteOn);
   ofRemoveListener(getStatus().midi->noteOffEvent, this, &Mappable::onNoteOff);

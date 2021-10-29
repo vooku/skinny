@@ -44,7 +44,7 @@ void Gui::setup()
     midiDevicesTimer_.setPeriodicEvent(MIDI_DEVICES_REFRESH_PERIOD);
     startThread();
 
-    midiMonitor_.init();
+    midiMonitor_.setup();
 }
 
 //--------------------------------------------------------------
@@ -241,7 +241,7 @@ void Gui::update()
 //--------------------------------------------------------------
 void Gui::exit()
 {
-	midiMonitor_.done();
+	midiMonitor_.exit();
   waitForThread();
   getStatus().exit = true;
 }

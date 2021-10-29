@@ -18,8 +18,8 @@ public:
 
     Show(int width, int height);
 
-    virtual void init() override;
-    virtual void done() override;
+    virtual void setup() override;
+    virtual void exit() override;
     void draw();
     bool reload(const ShowDescription& description);
     void playPauseEffect(int i);
