@@ -13,7 +13,7 @@ in vec2 texCoordVarying;
 uniform int[nFx] fxTypes;
 uniform bool[nFx] fxPlaying;
 uniform float[nFx] fxParam; 
-uniform int horizontal;
+uniform bool horizontal;
 
 out vec4 outputColor;
 
@@ -26,7 +26,7 @@ vec3 blur(float p)
     vec3 c = vec3(0.0f);
     for (int i = l; i < r; i++)
     {
-        vec2 offset = mix(vec2(i, 0.0f), vec2(0.0f, i), horizontal);
+        vec2 offset = mix(vec2(0.0f, i), vec2(i, 0.0f), horizontal);
         c += texture(previousPass, texCoordVarying + offset).rgb;
     }
 
@@ -45,6 +45,14 @@ void main()
         switch (fxTypes[i]) {
             case 7: // Blur
                 blended = blur(fxParam[i]);
+                break;
+            case 8: // Horizontal Blur
+                if (horizontal)
+                    blended = blur(fxParam[i]);
+                break;
+            case 9: // Vertical Blur
+                if (!horizontal)
+                    blended = blur(fxParam[i]);
                 break;
             default:
                 // do nothing
