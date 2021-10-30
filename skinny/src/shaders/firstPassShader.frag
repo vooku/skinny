@@ -203,7 +203,6 @@ void main()
                 blended = mix(blended, color, alphas[i]);
                 break;
         }
-        blended = masterAlpha * clamp(blended, vec3(0.0), vec3(1.0));
     }
 
     for (int i = 0; i < nFx; i++) {
@@ -235,5 +234,6 @@ void main()
         }
     }
 
+   blended = masterAlpha * clamp(blended, vec3(0.0), vec3(1.0));
    outputColor = vec4(blended, 1.0);
 }
