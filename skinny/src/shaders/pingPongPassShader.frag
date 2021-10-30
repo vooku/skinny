@@ -6,6 +6,8 @@ const int nFx = 12;
 const float eps = 0.0001f;
 const float pi = 3.14159;
 
+const float max_kernel_size = 500.f;
+
 layout(binding = 0) uniform sampler2DRect previousPass;
 
 in vec2 texCoordVarying;
@@ -20,7 +22,7 @@ out vec4 outputColor;
 //--------------------------------------------------------------
 vec3 blur(float p)
 {
-    const float width = max(ceil(p * 127.0f), 1);
+    const float width = max(ceil(p * max_kernel_size), 1);
     const int l = -int(floor(width * 0.5f));
     const int r = int(ceil(width * 0.5f));
     vec3 c = vec3(0.0f);
