@@ -1,7 +1,7 @@
 #version 440
 
 const int n = 8;
-const int nFx = 8;
+const int nFx = 12;
 
 const float eps = 0.0001f;
 const float pi = 3.14159;

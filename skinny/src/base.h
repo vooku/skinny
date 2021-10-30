@@ -8,7 +8,7 @@ using midiNote = int;
 
 //--------------------------------------------------------------
 static const int MAX_LAYERS = 8;
-static const int MAX_EFFECTS = 8;
+static const int MAX_EFFECTS = 12;
 static const int MIDI_DEVICES_REFRESH_PERIOD = 1000000000; // this is 1 second in nanoseconds
 static const int MIDI_MSG_REFRESH_PERIOD = 1000000000; // this is 1 second in nanoseconds
 static const int MAX_7BIT = 127;
