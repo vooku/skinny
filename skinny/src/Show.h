@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ofxSpout.h"
 #include "Scene.h"
 #include "Mappable.h"
 
@@ -61,6 +62,7 @@ private:
 
     Effects effects_;
 
+    ofxSpout::Sender spoutSender_;
 };
 
 } // namespace skinny

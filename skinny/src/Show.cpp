@@ -60,6 +60,8 @@ void Show::setup()
 
   if (currentScene_)
     currentScene_->init();
+
+  spoutSender_.init(NAME, secondPassFbo_.getTexture());
 }
 
 //--------------------------------------------------------------
@@ -101,14 +103,14 @@ void Show::draw()
 		// second pass
 		secondPassFbo_.begin();
 		pingPongPassShader_.begin();
-		setupPingPongPassUniforms(true, firstPassFbo_.getTextureReference());
+		setupPingPongPassUniforms(true, firstPassFbo_.getTexture());
 		ofDrawRectangle(0, 0, width_, height_);
 		pingPongPassShader_.end();
 		secondPassFbo_.end();
 
     // third pass
 		pingPongPassShader_.begin();
-		setupPingPongPassUniforms(false, secondPassFbo_.getTextureReference());
+		setupPingPongPassUniforms(false, secondPassFbo_.getTexture());
 		ofDrawRectangle(0, 0, width_, height_);
 		pingPongPassShader_.end();
 }
@@ -150,6 +152,8 @@ void Show::update()
     if (currentScene_) {
         currentScene_->update();
     }
+
+    spoutSender_.send(secondPassFbo_.getTexture());
 }
 
 //--------------------------------------------------------------
