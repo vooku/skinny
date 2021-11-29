@@ -52,8 +52,7 @@ private:
 
     mutable ofShader firstPassShader_;
     mutable ofShader pingPongPassShader_;
-    ofFbo firstPassFbo_;
-    ofFbo secondPassFbo_;
+    std::array<ofFbo, 3> fbos_;
 
     const int width_, height_;
     ScenePtr currentScene_;

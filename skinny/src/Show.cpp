@@ -47,21 +47,19 @@ void Show::setup()
 	s.internalformat = GL_RGBA;
 	s.useDepth = false;
 
-  firstPassFbo_.allocate(s);
-  secondPassFbo_.allocate(s);
+  for (auto& fbo : fbos_)
+  {
+    fbo.allocate(s);
 
-  firstPassFbo_.begin();
-	ofClear(255, 255, 255, 0);
-	firstPassFbo_.end();
-
-  secondPassFbo_.begin();
-	ofClear(255, 255, 255, 0);
-  secondPassFbo_.end();
+    fbo.begin();
+    ofClear(255, 255, 255, 0);
+    fbo.end();
+  }
 
   if (currentScene_)
     currentScene_->init();
 
-  spoutSender_.init(NAME, secondPassFbo_.getTexture());
+  spoutSender_.init(NAME, fbos_[2].getTexture());
 }
 
 //--------------------------------------------------------------
@@ -90,7 +88,7 @@ void Show::draw()
         return;
 
     // first pass
-    firstPassFbo_.begin();
+    fbos_[0].begin();
     ofClear(0.0f, 0.0f, 0.0f, 0.0f);
     firstPassShader_.begin();
     setupFirstPassUniforms();
@@ -98,21 +96,26 @@ void Show::draw()
     ofDrawRectangle(0, 0, width_, height_);
     currentScene_->unbind();
     firstPassShader_.end();
-    firstPassFbo_.end();
+    fbos_[0].end();
 
 		// second pass
-		secondPassFbo_.begin();
+		fbos_[1].begin();
 		pingPongPassShader_.begin();
-		setupPingPongPassUniforms(true, firstPassFbo_.getTexture());
+		setupPingPongPassUniforms(true, fbos_[0].getTexture());
 		ofDrawRectangle(0, 0, width_, height_);
 		pingPongPassShader_.end();
-		secondPassFbo_.end();
+		fbos_[1].end();
 
     // third pass
+    fbos_[2].begin();
 		pingPongPassShader_.begin();
-		setupPingPongPassUniforms(false, secondPassFbo_.getTexture());
+		setupPingPongPassUniforms(false, fbos_[1].getTexture());
 		ofDrawRectangle(0, 0, width_, height_);
 		pingPongPassShader_.end();
+    fbos_[2].end();
+
+    // draw
+    fbos_[2].getTexture().draw(0.f, 0.f);
 }
 
 //--------------------------------------------------------------
@@ -153,7 +156,7 @@ void Show::update()
         currentScene_->update();
     }
 
-    spoutSender_.send(secondPassFbo_.getTexture());
+    spoutSender_.send(fbos_[2].getTexture());
 }
 
 //--------------------------------------------------------------
