@@ -59,7 +59,9 @@ void Show::setup()
   if (currentScene_)
     currentScene_->init();
 
+#ifdef TARGET_WIN32
   spoutSender_.init(NAME, fbos_[2].getTexture());
+#endif
 }
 
 //--------------------------------------------------------------
@@ -156,7 +158,9 @@ void Show::update()
         currentScene_->update();
     }
 
+#ifdef TARGET_WIN32
     spoutSender_.send(fbos_[2].getTexture());
+#endif
 }
 
 //--------------------------------------------------------------
@@ -228,7 +232,9 @@ void Show::setupFirstPassUniforms() const
 
     firstPassShader_.setUniform1f("masterAlpha", uniforms_.masterAlpha_);
     firstPassShader_.setUniform1f("timeShift", getTimeshift());
-    firstPassShader_.setUniform2iv("screenSize", reinterpret_cast<int*>(&glm::ivec2{ width_, height_ }));
+    const auto screenSize = glm::ivec2{ width_, height_ };
+    const auto* screenSizeArr = reinterpret_cast<const int*>(&screenSize);
+    firstPassShader_.setUniform2iv("screenSize", screenSizeArr);
 
     firstPassShader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
     firstPassShader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);

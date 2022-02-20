@@ -1,5 +1,3 @@
-#pragma once
-
 #include "VideoSelector.h"
 
 namespace skinny {

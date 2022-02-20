@@ -104,7 +104,7 @@ private:
     void setupAlphaPanel(glm::ivec2& pos, int w);
     void setupRetriggerPanel(glm::ivec2& pos);
     void setupBlendModePanel(glm::ivec2& pos);
-    void setupMidiDevicePanel(glm::ivec2& pos = glm::ivec2{});
+    void setupMidiDevicePanel(glm::ivec2& pos);
     void setupMidiMonitorLabel();
 
     void threadedFunction() override;

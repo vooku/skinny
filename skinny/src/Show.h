@@ -1,6 +1,9 @@
 #pragma once
 
+#ifdef TARGET_WIN32
 #include "ofxSpout.h"
+#endif
+
 #include "Scene.h"
 #include "Mappable.h"
 
@@ -61,7 +64,9 @@ private:
 
     Effects effects_;
 
+#ifdef TARGET_WIN32
     ofxSpout::Sender spoutSender_;
+#endif
 };
 
 } // namespace skinny

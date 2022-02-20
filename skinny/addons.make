@@ -1,5 +1,4 @@
 ofxArgs
 ofxDatGui
 ofxMidi
-ofxSpout
 ofxXmlSettings

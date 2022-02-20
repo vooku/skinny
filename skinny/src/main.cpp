@@ -2,9 +2,11 @@
 #include "ofApp.h"
 #include "Gui.h"
 
+#ifdef TARGET_WIN32
 extern "C" {
     _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 }
+#endif
 
 //--------------------------------------------------------------
 int main(int argc, char *argv[]) {
@@ -12,7 +14,7 @@ int main(int argc, char *argv[]) {
 
     ofGLWindowSettings settings;
 
-    settings.setGLVersion(4, 3);
+    settings.setGLVersion(4, 1);
     settings.setSize(1920, 1080);
     auto mainWindow = ofCreateWindow(settings);
 

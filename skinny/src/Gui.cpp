@@ -147,7 +147,8 @@ void Gui::update()
 
     if (shouldUpdateDevices_)
     {
-      setupMidiDevicePanel();
+        auto midiDevicePos = glm::ivec2{};
+        setupMidiDevicePanel(midiDevicePos);
       shouldUpdateDevices_ = false;
 		}
 
@@ -882,7 +883,7 @@ void Gui::setupBlendModePanel(glm::ivec2& pos)
 }
 
 //--------------------------------------------------------------
-void Gui::setupMidiDevicePanel(glm::ivec2& pos /*= glm::ivec2{}*/)
+void Gui::setupMidiDevicePanel(glm::ivec2& pos)
 {
   pos.x += DELTA;
   pos.y += (MAX_LAYERS + 1) * (commonTheme_.layout.height + commonTheme_.layout.vMargin) + 2 * commonTheme_.layout.breakHeight + DELTA;

@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <algorithm>
 
 namespace skinny {
 
@@ -96,7 +97,7 @@ struct ControlChangeMessage : public MidiMessage {
 //--------------------------------------------------------------
 // poor man's clamp, need c++17 >:(
 template<typename T>
-typename T clamp(T v, T lo, T hi) {
+T clamp(T v, T lo, T hi) {
   return std::min(std::max(v, lo), hi);
 }
 
