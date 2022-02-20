@@ -44,7 +44,7 @@ void ofApp::setup()
     const auto renderer = glGetString(GL_RENDERER);
     ofLog(OF_LOG_NOTICE, "Using OpenGL v%d.%d, GPU: %s %s.", major, minor, vendor, renderer);
     if (major < 4 && minor < 3) {
-        ofLog(OF_LOG_FATAL_ERROR, "OpenGL version too old!", major, minor);
+        ofLog(OF_LOG_FATAL_ERROR, "OpenGL version too old!");
         getStatus().exit = true;
         return;
     }
