@@ -34,12 +34,9 @@ void Gui::setup()
     setupMidiPanel(pos, midiInWidth);
     setupCcPanel(pos, midiInWidth);
     setupAlphaPanel(pos, midiInWidth);
-
-    auto midiPos = pos;
-    
     setupRetriggerPanel(pos);
     setupBlendModePanel(pos);
-    setupMidiDevicePanel(midiPos);
+    setupMidiDevicePanel(pos);
 
     midiDevicesTimer_.setPeriodicEvent(MIDI_DEVICES_REFRESH_PERIOD);
     startThread();
@@ -885,8 +882,6 @@ void Gui::setupBlendModePanel(glm::ivec2& pos)
 //--------------------------------------------------------------
 void Gui::setupMidiDevicePanel(glm::ivec2& pos)
 {
-  pos.x += DELTA;
-  pos.y += (MAX_LAYERS + 1) * (commonTheme_.layout.height + commonTheme_.layout.vMargin) + 2 * commonTheme_.layout.breakHeight + DELTA;
   static const auto finalPos = pos; // "save" the pos calculated in first setup
 
   midiDevicePanel_ = std::make_unique<ofxDatGui>(finalPos.x, finalPos.y);

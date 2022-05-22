@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     settings.setSize(1920, 1080);
     auto mainWindow = ofCreateWindow(settings);
 
-    settings.setSize(1312, 800);
+    settings.setSize(1500, 800);
     auto guiWindow = ofCreateWindow(settings);
 
     auto mainApp = std::make_shared<skinny::ofApp>(args.get());
