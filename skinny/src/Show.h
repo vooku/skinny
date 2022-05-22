@@ -1,5 +1,8 @@
 #pragma once
 
+// required for TARGET_WIN32
+#include "ofConstants.h"
+
 #ifdef TARGET_WIN32
 #include "ofxSpout.h"
 #endif
