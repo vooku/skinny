@@ -35,7 +35,8 @@ void Gui::setup()
     setupCcPanel(pos, midiInWidth);
     setupAlphaPanel(pos, midiInWidth);
     setupRetriggerPanel(pos);
-    setupBlendModePanel(pos);
+		setupPalindromePanel(pos);
+		setupBlendModePanel(pos);
     setupMidiDevicePanel(pos);
 
     midiDevicesTimer_.setPeriodicEvent(MIDI_DEVICES_REFRESH_PERIOD);
@@ -548,6 +549,18 @@ void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
 }
 
 //--------------------------------------------------------------
+void Gui::onLayerPalindromeToggle(ofxDatGuiToggleEvent e)
+{
+	const auto activate = e.checked;
+	const auto idx = std::stoi(e.target->getName());
+	//auto& showDescription = *Status::instance().showDescription;
+	//showDescription.scenes_[showDescription.currentIdx_].layers[idx].retrigger = activate;
+	auto& show = Status::instance().show;
+	if (show && show->getCurrentScene()->layers_[idx])
+		show->getCurrentScene()->layers_[idx]->setPalindrome(activate);
+}
+
+//--------------------------------------------------------------
 void Gui::onMidiDeviceToggle(ofxDatGuiToggleEvent e)
 {
   const auto deviceName = e.target->getName();
@@ -854,6 +867,25 @@ void Gui::setupRetriggerPanel(glm::ivec2 & pos)
     }
 
     retriggerPanel_->addBreak();
+}
+
+//--------------------------------------------------------------
+void Gui::setupPalindromePanel(glm::ivec2& pos)
+{
+	palindromePanel_ = std::make_unique<ofxDatGui>(pos.x, pos.y);
+	palindromePanel_->setTheme(&commonTheme_);
+	palindromePanel_->setWidth(2.5 * DELTA);
+	pos.x += palindromePanel_->getWidth();
+	auto* header = palindromePanel_->addLabel("Pal");
+	header->setLabelAlignment(ofxDatGuiAlignment::CENTER);
+	palindromePanel_->addBreak();
+	for (auto i = 0; i < layerPalindromeToggles_.size(); ++i) {
+		layerPalindromeToggles_[i] = palindromePanel_->addToggle({});
+		layerPalindromeToggles_[i]->onToggleEvent(this, &Gui::onLayerPalindromeToggle);
+		layerPalindromeToggles_[i]->setName(std::to_string(i));
+	}
+
+	palindromePanel_->addBreak();
 }
 
 //--------------------------------------------------------------

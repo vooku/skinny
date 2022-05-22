@@ -61,6 +61,7 @@ public:
     void onLayerMuteToggle(ofxDatGuiToggleEvent e);
     void onEffectMuteToggle(ofxDatGuiToggleEvent e);
     void onLayerRetriggerToggle(ofxDatGuiToggleEvent e);
+    void onLayerPalindromeToggle(ofxDatGuiToggleEvent e);
     void onMidiDeviceToggle(ofxDatGuiToggleEvent e);
     void onMidiMonitorToggle(ofxDatGuiToggleEvent e);
 
@@ -103,6 +104,7 @@ private:
     void setupCcPanel(glm::ivec2& pos, int w);
     void setupAlphaPanel(glm::ivec2& pos, int w);
     void setupRetriggerPanel(glm::ivec2& pos);
+    void setupPalindromePanel(glm::ivec2& pos);
     void setupBlendModePanel(glm::ivec2& pos);
     void setupMidiDevicePanel(glm::ivec2& pos);
     void setupMidiMonitorLabel();
@@ -119,8 +121,8 @@ private:
 
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
                                videoFxPanel_, midiPanel_, ccPanel_,
-                               alphaPanel_, retriggerPanel_, blendModePanel_,
-                               midiDevicePanel_;
+                               alphaPanel_, retriggerPanel_, palindromePanel_,
+                               blendModePanel_, midiDevicePanel_;
     
     // This class does not own any of the following pointers, do not try to delete them.
     ofxDatGuiTextInput* sceneNameInput_;
@@ -135,6 +137,7 @@ private:
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerPlayToggles_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerMuteToggles_;
     std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerRetriggerToggles_;
+    std::array<ofxDatGuiToggle*,    MAX_LAYERS> layerPalindromeToggles_;
     std::array<ofxDatGuiDropdown*,  MAX_LAYERS> blendModeDropdowns_;
     std::array<ofxDatGuiDropdown*,  MAX_EFFECTS> effectDropdowns_;
     std::array<ofxDatGuiTextInput*, MAX_EFFECTS> effectMidiInputs_;

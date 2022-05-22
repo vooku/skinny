@@ -11,7 +11,7 @@ Layer::Layer(int id, const std::filesystem::path& path, midiNote note, midiNote 
     valid_(false)
 {
     player_.setPixelFormat(OF_PIXELS_BGRA);
-    player_.setLoopState(OF_LOOP_NORMAL);
+    player_.setLoopState(getLoopState());
 
     ccValue_ = MAX_7BIT;
 
@@ -87,6 +87,19 @@ void Layer::playPause()
     if (!isPlaying() && retrigger_)
         player_.setFrame(0);
     player_.setPaused(!isPlaying());
+}
+
+//--------------------------------------------------------------
+void Layer::setPalindrome(bool value)
+{
+  palindrome_ = value;
+  player_.setLoopState(getLoopState());
+}
+
+//--------------------------------------------------------------
+ofLoopType Layer::getLoopState() const
+{
+  return palindrome_ ? OF_LOOP_PALINDROME : OF_LOOP_NORMAL;
 }
 
 //--------------------------------------------------------------

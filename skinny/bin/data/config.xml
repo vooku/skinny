@@ -1,17 +1,104 @@
 <head>
-    <version>0.3.1-alpha</version>
+    <version>0.9.3-alpha</version>
     <switchNote>255</switchNote>
     <channel>2</channel>
+    <masterAlphaControl>16</masterAlphaControl>
 </head>
 <show>
+    <effects>
+        <effect>
+            <id>0</id>
+            <type>0</type>
+            <midi>8</midi>
+            <cc>8</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>1</id>
+            <type>1</type>
+            <midi>9</midi>
+            <cc>9</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>2</id>
+            <type>2</type>
+            <midi>10</midi>
+            <cc>10</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>3</id>
+            <type>3</type>
+            <midi>11</midi>
+            <cc>11</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>4</id>
+            <type>4</type>
+            <midi>12</midi>
+            <cc>12</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>5</id>
+            <type>5</type>
+            <midi>13</midi>
+            <cc>13</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>6</id>
+            <type>6</type>
+            <midi>14</midi>
+            <cc>14</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>7</id>
+            <type>7</type>
+            <midi>15</midi>
+            <cc>15</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>8</id>
+            <type>8</type>
+            <midi>16</midi>
+            <cc>16</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>9</id>
+            <type>9</type>
+            <midi>17</midi>
+            <cc>17</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>10</id>
+            <type>10</type>
+            <midi>18</midi>
+            <cc>18</cc>
+            <param>127</param>
+        </effect>
+        <effect>
+            <id>11</id>
+            <type>11</type>
+            <midi>19</midi>
+            <cc>19</cc>
+            <param>127</param>
+        </effect>
+    </effects>
     <scene>
         <name>Test Scene 0</name>
-        <masterAlphaControl>8</masterAlphaControl>
         <layer>
             <id>0</id>
             <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>0</blendMode>
             <alphaControl>1</alphaControl>
+            <alpha>127</alpha>
             <midi>0</midi>
             <retrigger>1</retrigger>
         </layer>
@@ -20,6 +107,7 @@
             <path>../../../videos/White Half Strobes.mp4</path>
             <blendMode>4</blendMode>
             <alphaControl>2</alphaControl>
+            <alpha>127</alpha>
             <midi>1</midi>
             <retrigger>0</retrigger>
         </layer>
@@ -28,7 +116,17 @@
             <path>../../../videos/simpleRGB.mp4</path>
             <blendMode>6</blendMode>
             <alphaControl>3</alphaControl>
+            <alpha>127</alpha>
             <midi>2</midi>
+            <retrigger>0</retrigger>
+        </layer>
+        <layer>
+            <id>3</id>
+            <path>C:\Users\vadim\Dropbox\dev\skinny\videos\indimenticabile\katarzia spinks.mp4</path>
+            <blendMode>5</blendMode>
+            <alphaControl>3</alphaControl>
+            <alpha>127</alpha>
+            <midi>3</midi>
             <retrigger>0</retrigger>
         </layer>
         <layer>
@@ -36,18 +134,19 @@
             <path>../../../videos/circles.mp4</path>
             <blendMode>1</blendMode>
             <alphaControl>4</alphaControl>
+            <alpha>127</alpha>
             <midi>3</midi>
             <retrigger>0</retrigger>
         </layer>
     </scene>
     <scene>
         <name>Test Scene 1</name>
-        <masterAlphaControl>7</masterAlphaControl>
         <layer>
             <id>1</id>
             <path>../../../videos/Noise Diagonals 1.mp4</path>
             <blendMode>5</blendMode>
             <alphaControl>1</alphaControl>
+            <alpha>127</alpha>
             <midi>0</midi>
             <retrigger>0</retrigger>
         </layer>
@@ -56,6 +155,7 @@
             <path>../../../videos/Noise Diagonals 2.mp4</path>
             <blendMode>5</blendMode>
             <alphaControl>2</alphaControl>
+            <alpha>127</alpha>
             <midi>1</midi>
             <retrigger>0</retrigger>
         </layer>
@@ -64,18 +164,19 @@
             <path>../../../videos/White Broken Shards.mp4</path>
             <blendMode>1</blendMode>
             <alphaControl>3</alphaControl>
+            <alpha>127</alpha>
             <midi>2</midi>
             <retrigger>0</retrigger>
         </layer>
     </scene>
     <scene>
         <name>Test Scene 2</name>
-        <masterAlphaControl>7</masterAlphaControl>
         <layer>
             <id>0</id>
             <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>0</blendMode>
             <alphaControl>1</alphaControl>
+            <alpha>127</alpha>
             <midi>0</midi>
             <retrigger>0</retrigger>
         </layer>
@@ -84,6 +185,7 @@
             <path>../../../videos/Britney_Spears_-_Toxic_Official_video.mp4</path>
             <blendMode>2</blendMode>
             <alphaControl>2</alphaControl>
+            <alpha>127</alpha>
             <midi>1</midi>
             <retrigger>0</retrigger>
         </layer>
@@ -92,6 +194,7 @@
             <path>../../../videos/circle-slow.mov</path>
             <blendMode>1</blendMode>
             <alphaControl>3</alphaControl>
+            <alpha>127</alpha>
             <midi>2</midi>
             <retrigger>0</retrigger>
         </layer>
@@ -100,6 +203,7 @@
             <path>../../../videos/circle-fast.mov</path>
             <blendMode>1</blendMode>
             <alphaControl>4</alphaControl>
+            <alpha>127</alpha>
             <midi>3</midi>
             <retrigger>0</retrigger>
         </layer>

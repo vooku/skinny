@@ -37,14 +37,18 @@ public:
 
     void setBlendMode(BlendMode newMode) { blendMode_ = newMode; }
     void setRetrigger(bool value) { retrigger_ = value; }
+    void setPalindrome(bool value);
     void setAlpha(int alpha) { ccValue_ = alpha; }
 
 private:
+    ofLoopType getLoopState() const;
+
     ofVideoPlayer player_;
     const int id_;
     std::string name_;
     bool valid_;
     bool retrigger_ = false;
+    bool palindrome_ = false;
     BlendMode blendMode_;
 };
 
