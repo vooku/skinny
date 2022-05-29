@@ -37,7 +37,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -49,7 +49,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <CharacterSet>Unicode</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
@@ -190,13 +190,14 @@ copy src\shaders\* bin\data\shaders</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Layer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\base.cpp" />
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSelector.cpp" />
     <ClCompile Include="src\Gui.cpp" />
-    <ClCompile Include="src\Layer.cpp" />
+    <ClCompile Include="src\VideoLayer.cpp" />
     <ClCompile Include="src\Mappable.cpp" />
     <ClCompile Include="src\meta.cpp" />
     <ClCompile Include="src\MidiController.cpp" />
@@ -241,12 +242,13 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\base.h" />
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSelector.h" />
     <ClInclude Include="src\Gui.h" />
-    <ClInclude Include="src\Layer.h" />
+    <ClInclude Include="src\VideoLayer.h" />
     <ClInclude Include="src\Mappable.h" />
     <ClInclude Include="src\meta.h" />
     <ClInclude Include="src\MidiController.h" />

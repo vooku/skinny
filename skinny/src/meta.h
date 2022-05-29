@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "ofxXmlSettings.h"
-#include "Layer.h"
+#include "VideoLayer.h"
 #include "Effect.h"
 #include "base.h"
 

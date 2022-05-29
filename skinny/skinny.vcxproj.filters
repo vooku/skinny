@@ -19,9 +19,6 @@
     <ClCompile Include="src\Gui.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Layer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -154,6 +151,12 @@
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClCompile>
+    <ClCompile Include="src\VideoLayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -249,9 +252,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Gui.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Layer.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Mappable.h">
@@ -445,6 +445,12 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
       <Filter>addons\ofxXmlSettings\libs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\VideoLayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Layer.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -33,11 +33,11 @@ void Scene::reload(const SceneDescription & description)
         }
         else {
             if (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName()) {
-                auto newLayer = std::make_unique<Layer>(i, description.layers[i].path, description.layers[i].note);
+                auto newLayer = std::make_unique<VideoLayer>(i, description.layers[i].path, description.layers[i].note);
                 if (newLayer->isValid())
                     layers_[i].reset(newLayer.release());
                 else
-                    layers_[i].reset(new Layer(i, Layer::ErrorType::Failed));
+                    layers_[i].reset(new VideoLayer(i, VideoLayer::ErrorType::Failed));
             }
 
             if (layers_[i]) {
