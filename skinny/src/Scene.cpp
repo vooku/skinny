@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "ImageLayer.h"
 
 namespace skinny {
 
@@ -33,11 +34,17 @@ void Scene::reload(const SceneDescription & description)
         }
         else {
             if (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName()) {
-                auto newLayer = std::make_unique<VideoLayer>(i, description.layers[i].path, description.layers[i].note);
-                if (newLayer->isValid())
-                    layers_[i].reset(newLayer.release());
+                auto imageLayer = std::make_unique<ImageLayer>(i, description.layers[i].path, description.layers[i].note);
+                if (imageLayer->isValid())
+                  layers_[i].reset(imageLayer.release());
                 else
+                {
+                  auto videoLayer = std::make_unique<VideoLayer>(i, description.layers[i].path, description.layers[i].note);
+                  if (videoLayer->isValid())
+                    layers_[i].reset(videoLayer.release());
+                  else
                     layers_[i].reset(new VideoLayer(i, VideoLayer::ErrorType::Failed));
+                }
             }
 
             if (layers_[i]) {

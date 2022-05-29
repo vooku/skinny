@@ -190,6 +190,7 @@ copy src\shaders\* bin\data\shaders</Command>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ImageLayer.cpp" />
     <ClCompile Include="src\Layer.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
@@ -242,6 +243,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ImageLayer.h" />
     <ClInclude Include="src\Layer.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\base.h" />

@@ -20,7 +20,7 @@ public:
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 	virtual bool isFrameNew() = 0;
-	virtual void update() = 0;
+	virtual void update() { };
 
 	virtual float getWidth() const = 0;
 	virtual float getHeight() const = 0;
