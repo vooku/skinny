@@ -153,7 +153,6 @@ void Gui::update()
       midiMonitorLabel_->setLabel(midiMonitor_.getCurrentMsg());
     }
 
-    auto& showDescription = *Status::instance().showDescription;
     const auto& show = Status::instance().show;
     if (!show)
         return;
@@ -188,6 +187,8 @@ void Gui::update()
             effectPlayToggles_[i]->setChecked(false);
         }
     }
+
+		auto& showDescription = *Status::instance().showDescription;
 
     // load video
     if (videoSelector_ != nullptr && !videoSelector_->isThreadRunning()) {
@@ -307,8 +308,7 @@ void Gui::save(std::filesystem::path path)
     }
 
 		ofxXmlSettings config;
-		auto& showDescription = *Status::instance().showDescription;
-    showDescription.toXml(config);
+		Status::instance().showDescription->toXml(config);
     if (!config.saveFile(path.string())) {
         ofLog(OF_LOG_WARNING, "Cannot save config file to %s.", path.c_str());
         displayMessage("Cannot save config file to " + path.string(), 1000);

@@ -1,4 +1,5 @@
 #include "meta.h"
+#include "Status.h"
 
 namespace skinny {
 
@@ -223,6 +224,41 @@ void ShowDescription::toXml(ofxXmlSettings& config) const {
     }
 
     config.popTag(); // show
+}
+
+//--------------------------------------------------------------
+void ShowDescription::setup()
+{
+	ofAddListener(getStatus().midi->controlChangeEvent, this, &ShowDescription::onControlChange);
+}
+
+//--------------------------------------------------------------
+void ShowDescription::exit()
+{
+  ofRemoveListener(getStatus().midi->controlChangeEvent, this, &ShowDescription::onControlChange);
+}
+
+//--------------------------------------------------------------
+void ShowDescription::onControlChange(ControlChangeMessage& msg)
+{
+  if (msg.channel_ != midiChannel_)
+    return;
+
+  for (auto& layer : scenes_[currentIdx_].layers)
+  {
+    if (layer.cc == msg.control_)
+    {
+      layer.alpha = msg.value_;
+    }
+	}
+
+	for (auto& effect : effects_)
+	{
+		if (effect.cc == msg.control_)
+		{
+			effect.param = msg.value_;
+		}
+	}
 }
 
 //--------------------------------------------------------------

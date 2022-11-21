@@ -78,6 +78,11 @@ public:
     bool fromXml(ofxXmlSettings& config) override;
     void toXml(ofxXmlSettings& config) const override;
 
+    // assign CC to layers / effects on the fly
+		void setup();
+		void exit();
+		void onControlChange(ControlChangeMessage& msg);
+
     /**
      * @return True if the current scene index was changed.
      */

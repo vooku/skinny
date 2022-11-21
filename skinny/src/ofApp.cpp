@@ -50,8 +50,9 @@ void ofApp::setup()
     }
 
     getStatus().show = show_ = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
-    show_->setup();
-
+ 
+    getStatus().show->setup();
+    getStatus().showDescription->setup();
     getStatus().loadDir = LoadDir::Current;
 
     reload();
@@ -86,6 +87,7 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::exit()
 {
+  getStatus().showDescription->exit();
   getStatus().midi->exit();
   getStatus().show->exit();
   getStatus().exit = true; 
