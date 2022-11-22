@@ -1,11 +1,11 @@
 #include "Gui.h"
 #include "Status.h"
+#include "utils.h"
 
 namespace skinny {
 
 const std::string Gui::Btn::NEXT = "Next scene";
 const std::string Gui::Btn::PREV = "Previous scene";
-const std::string Gui::Btn::JUMP = "Jump to scene";
 const std::string Gui::Btn::NEW = "New scene";
 const std::string Gui::Btn::SAVE = "Save";
 const std::string Gui::Btn::SAVE_AS = "Save as";
@@ -268,12 +268,6 @@ void Gui::setActiveEffect(int idx, bool active)
 }
 
 //--------------------------------------------------------------
-int Gui::getJumpToIndex() const
-{
-    return std::stoi(jumpToInput_->getText()) - 1;
-}
-
-//--------------------------------------------------------------
 void Gui::resetJumpToIndex()
 {
     auto& showDescription = *Status::instance().showDescription;
@@ -295,9 +289,11 @@ void Gui::onLayerButton(ofxDatGuiButtonEvent e)
         return;
     }        
 
-    const auto index = std::stoi(e.target->getName());
-    videoSelector_ = std::make_unique<VideoSelector>(index);
-    videoSelector_->startThread();
+    if (const auto index = sstoi(e.target->getName()))
+    {
+      videoSelector_ = std::make_unique<VideoSelector>(*index);
+      videoSelector_->startThread();
+    }
 }
 
 //--------------------------------------------------------------
@@ -337,9 +333,6 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
         Status::instance().loadDir = LoadDir::Forward;
     } else if (name == Btn::PREV) {
         Status::instance().loadDir = LoadDir::Backward;
-    } else if (name == Btn::JUMP) {
-        Status::instance().loadDir = LoadDir::Jump;
-        Status::instance().jumpToIndex = getJumpToIndex();
     }
 		else if (name == Btn::NEW) {
 		    auto& showDescription = *Status::instance().showDescription;
@@ -368,85 +361,167 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
 }
 
 //--------------------------------------------------------------
+void Gui::onJumpToInput(ofxDatGuiTextInputEvent e)
+{
+	auto& showDescription = *Status::instance().showDescription;
+
+	if (const auto index = sstoi(jumpToInput_->getText()))
+	{
+		Status::instance().loadDir = LoadDir::Jump;
+    const int lo = 0;
+    const int hi = showDescription.scenes_.size();
+		Status::instance().jumpToIndex = clamp(*index, 1, hi) - 1;
+	}
+	else
+	{
+    const auto text = std::to_string(showDescription.currentIdx_ + 1);
+    jumpToInput_->setText(text);
+	}
+}
+
+//--------------------------------------------------------------
 void Gui::onLayerMidiInput(ofxDatGuiTextInputEvent e)
 {
-    const auto idx = std::stoi(e.target->getName());
-		const auto note = static_cast<midiNote>(std::stoi(e.text));
-		auto& showDescription = *Status::instance().showDescription;
-    showDescription.scenes_[showDescription.currentIdx_].layers[idx].note = note;
-    auto& show = Status::instance().show;
-    if (show && show->getCurrentScene()->layers_[idx])
-        show->getCurrentScene()->layers_[idx]->setNote(note);
+    auto& showDescription = *Status::instance().showDescription;
+
+    const auto idx = sstoi(e.target->getName());
+    assert(idx);
+    if (const auto input = sstoi(e.text))
+    {
+      const auto note = static_cast<midiNote>(*input);
+      showDescription.scenes_[showDescription.currentIdx_].layers[*idx].note = note;
+      auto& show = Status::instance().show;
+      if (show && show->getCurrentScene()->layers_[*idx])
+        show->getCurrentScene()->layers_[*idx]->setNote(note);
+    }
+    else
+    {
+      const auto text = std::to_string(showDescription.scenes_[showDescription.currentIdx_].layers[*idx].note);
+      layerMidiInputs_[*idx]->setText(text);
+    }
 }
 
 //--------------------------------------------------------------
 void Gui::onLayerCcInput(ofxDatGuiTextInputEvent e)
 {
-    const auto idx = std::stoi(e.target->getName());
-		const auto control = static_cast<midiNote>(std::stoi(e.text));
-		auto& showDescription = *Status::instance().showDescription;
-    showDescription.scenes_[showDescription.currentIdx_].layers[idx].cc = control;
-    auto& show = Status::instance().show;
-    if (show && show->getCurrentScene()->layers_[idx])
-        show->getCurrentScene()->layers_[idx]->setCc(control);
+	  auto& showDescription = *Status::instance().showDescription;
+
+    const auto idx = sstoi(e.target->getName());
+    assert(idx);
+    if (const auto input = sstoi(e.text))
+    {
+      const auto control = static_cast<midiNote>(*input);
+      showDescription.scenes_[showDescription.currentIdx_].layers[*idx].cc = control;
+      auto& show = Status::instance().show;
+      if (show && show->getCurrentScene()->layers_[*idx])
+        show->getCurrentScene()->layers_[*idx]->setCc(control);
+		}
+		else
+		{
+			const auto text = std::to_string(showDescription.scenes_[showDescription.currentIdx_].layers[*idx].cc);
+			layerCCInputs_[*idx]->setText(text);
+		}
 }
 
 //--------------------------------------------------------------
 void Gui::onLayerAlphaInput(ofxDatGuiTextInputEvent e)
 {
-  const auto idx = std::stoi(e.target->getName());
-  const auto alpha = std::stoi(e.text);
-	auto& showDescription = *Status::instance().showDescription;
-	showDescription.scenes_[showDescription.currentIdx_].layers[idx].alpha = alpha;
-	auto& show = Status::instance().show;
-	if (show && show->getCurrentScene()->layers_[idx])
-		show->getCurrentScene()->layers_[idx]->setAlpha(alpha);
+	const auto idx = sstoi(e.target->getName());
+	assert(idx);
+  if (const auto alpha = sstoi(e.text))
+  {
+    auto& showDescription = *Status::instance().showDescription;
+    showDescription.scenes_[showDescription.currentIdx_].layers[*idx].alpha = *alpha;
+    auto& show = Status::instance().show;
+    if (show && show->getCurrentScene()->layers_[*idx])
+      show->getCurrentScene()->layers_[*idx]->setAlpha(*alpha);
+  }
+  else
+  {
+    // nothing, this changes in update
+  }
 }
 
 //--------------------------------------------------------------
 void Gui::onMasterAlphaCcInput(ofxDatGuiTextInputEvent e)
 {
-    const auto control = static_cast<midiNote>(std::stoi(e.text));
-    auto& showDescription = *Status::instance().showDescription;
+	auto& showDescription = *Status::instance().showDescription;
+
+  if (const auto input = sstoi(e.text))
+  {
+    const auto control = static_cast<midiNote>(*input);
     showDescription.alphaControl_ = control;
     auto& show = Status::instance().show;
     if (show)
-        show->setAlphaControl(control);
+      show->setAlphaControl(control);
+  }
+	else
+	{
+		const auto text = std::to_string(showDescription.alphaControl_);
+		masterAlphaInput_->setText(text);
+	}
 }
 
 //--------------------------------------------------------------
 void Gui::onEffectMidiInput(ofxDatGuiTextInputEvent e)
 {
-    auto idx = std::stoi(e.target->getName());
-		auto note = static_cast<midiNote>(std::stoi(e.text));
-		auto& showDescription = *Status::instance().showDescription;
-    showDescription.effects_[idx].note = note;
-    auto& show = Status::instance().show;
-    show->effects_[idx]->setNote(note);
+	  auto& showDescription = *Status::instance().showDescription;
+
+    auto idx = sstoi(e.target->getName());
+    assert(idx);
+    if (const auto input = sstoi(e.text))
+    {
+      const auto note = static_cast<midiNote>(*input);
+      showDescription.effects_[*idx].note = note;
+      auto& show = Status::instance().show;
+      show->effects_[*idx]->setNote(note);
+		}
+		else
+		{
+			const auto text = std::to_string(showDescription.effects_[*idx].note);
+			effectMidiInputs_[*idx]->setText(text);
+		}
 }
 
 //--------------------------------------------------------------
 void Gui::onEffectCcInput(ofxDatGuiTextInputEvent e)
 {
-    const auto idx = std::stoi(e.target->getName());
-		const auto cc = static_cast<midiNote>(std::stoi(e.text));
-		auto& showDescription = *Status::instance().showDescription;
-    showDescription.effects_[idx].cc = cc;
-    auto& show = Status::instance().show;
-    if (show)
-        show->effects_[idx]->setCc(cc);
+	  auto& showDescription = *Status::instance().showDescription;
+
+    const auto idx = sstoi(e.target->getName());
+    assert(idx);
+    if (const auto input = sstoi(e.text))
+    {
+      const auto cc = static_cast<midiNote>(*input);
+      showDescription.effects_[*idx].cc = cc;
+      auto& show = Status::instance().show;
+      if (show)
+        show->effects_[*idx]->setCc(cc);
+		}
+		else
+		{
+			const auto text = std::to_string(showDescription.effects_[*idx].cc);
+			effectCCInputs_[*idx]->setText(text);
+		}
 }
 
 //--------------------------------------------------------------
 void Gui::onEffectParamInput(ofxDatGuiTextInputEvent e)
 {
-	const auto idx = std::stoi(e.target->getName());
-	const auto param = std::stoi(e.text);
-	auto& showDescription = *Status::instance().showDescription;
-	showDescription.effects_[idx].param = param;
-	auto& show = Status::instance().show;
-	if (show)
-		show->effects_[idx]->setParam(param);
+	const auto idx = sstoi(e.target->getName());
+	assert(idx);
+  if (const auto param = sstoi(e.text))
+  {
+    auto& showDescription = *Status::instance().showDescription;
+    showDescription.effects_[*idx].param = *param;
+    auto& show = Status::instance().show;
+    if (show)
+      show->effects_[*idx]->setParam(*param);
+  }
+  else
+  {
+    // nothing, this changes in update
+  }
 }
 
 //--------------------------------------------------------------
@@ -462,22 +537,32 @@ void Gui::onSceneNameInput(ofxDatGuiTextInputEvent e)
 //--------------------------------------------------------------
 void Gui::onMidiChannelInput(ofxDatGuiTextInputEvent e)
 {
-    auto channel = std::min(std::max(std::stoi(e.text), 1), 16);
-    auto& showDescription = *Status::instance().showDescription;
+	auto& showDescription = *Status::instance().showDescription;
+
+  if (const auto input = sstoi(e.text))
+  {
+    auto channel = std::min(std::max(*input, 1), 16);
     showDescription.setMidiChannel(channel);
     midiChannelInput_->setText(std::to_string(channel));
+  }
+	else
+	{
+		const auto text = std::to_string(showDescription.getMidiChannel());
+		midiChannelInput_->setText(text);
+	}
 }
 
 //--------------------------------------------------------------
 void Gui::onBlendModeDropdown(ofxDatGuiDropdownEvent e)
 {
-    const auto idx = std::stoi(e.target->getName());
+    const auto idx = sstoi(e.target->getName());
+    assert(idx);
 		const auto blendMode = static_cast<BlendMode>(e.child);
 		auto& showDescription = *Status::instance().showDescription;
-    showDescription.scenes_[showDescription.currentIdx_].layers[idx].blendMode = blendMode;
+    showDescription.scenes_[showDescription.currentIdx_].layers[*idx].blendMode = blendMode;
     auto& show = Status::instance().show;
-    if (show && show->getCurrentScene()->layers_[idx])
-        show->getCurrentScene()->layers_[idx]->setBlendMode(blendMode);
+    if (show && show->getCurrentScene()->layers_[*idx])
+        show->getCurrentScene()->layers_[*idx]->setBlendMode(blendMode);
 }
 
 //--------------------------------------------------------------
@@ -486,65 +571,69 @@ void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
     auto& show = Status::instance().show;
     if (!show)
         return;
-    const auto idx = std::stoi(e.target->getName());
+    const auto idx = sstoi(e.target->getName());
     const auto type = static_cast<EffectType>(e.child);
 		auto& showDescription = *Status::instance().showDescription;
-    showDescription.effects_[idx].type = type;
+    showDescription.effects_[*idx].type = type;
     getStatus().loadDir = LoadDir::Current;
 }
 
 //--------------------------------------------------------------
 void Gui::onLayerPlayToggle(ofxDatGuiToggleEvent e)
 {
-    const auto idx = std::stoi(e.target->getName());
+    const auto idx = sstoi(e.target->getName());
     auto& show = Status::instance().show;
     if (show && show->getCurrentScene()) {
-        show->getCurrentScene()->playPauseLayer(idx);
+        show->getCurrentScene()->playPauseLayer(*idx);
     }
 }
 
 //--------------------------------------------------------------
 void Gui::onEffectPlayToggle(ofxDatGuiToggleEvent e)
 {
-    const auto idx = std::stoi(e.target->getName());
+    const auto idx = sstoi(e.target->getName());
+    assert(idx);
     auto& show = Status::instance().show;
     if (show)
-        show->playPauseEffect(idx);
+        show->playPauseEffect(*idx);
 }
 
 //--------------------------------------------------------------
 void Gui::onLayerMuteToggle(ofxDatGuiToggleEvent e)
 {
     const auto mute = e.checked;
-    const auto idx = std::stoi(e.target->getName());
+		const auto idx = sstoi(e.target->getName());
+		assert(idx);
     auto& show = Status::instance().show;
-    if (show && show->getCurrentScene()->layers_[idx])
-        show->getCurrentScene()->layers_[idx]->setMute(mute);
+    if (show && show->getCurrentScene()->layers_[*idx])
+        show->getCurrentScene()->layers_[*idx]->setMute(mute);
     if (mute)
-        layerPlayToggles_[idx]->setChecked(false);
+        layerPlayToggles_[*idx]->setChecked(false);
 }
 
 //--------------------------------------------------------------
 void Gui::onEffectMuteToggle(ofxDatGuiToggleEvent e)
 {
     const auto mute = e.checked;
-    const auto idx = std::stoi(e.target->getName());
+		const auto idx = sstoi(e.target->getName());
+		assert(idx);
     auto& show = Status::instance().show;
-    show->effects_[idx]->setMute(mute);
+    show->effects_[*idx]->setMute(mute);
     // TODO if (mute)
-    //    effectPlayToggles_[idx]->setChecked(false);
+    //    effectPlayToggles_[*idx]->setChecked(false);
 }
 
 //--------------------------------------------------------------
 void Gui::onLayerRetriggerToggle(ofxDatGuiToggleEvent e)
 {
     const auto retrigger = e.checked;
-		const auto idx = std::stoi(e.target->getName());
+		const auto idx = sstoi(e.target->getName());
+		assert(idx);
 		auto& showDescription = *Status::instance().showDescription;
-    showDescription.scenes_[showDescription.currentIdx_].layers[idx].retrigger = retrigger;
+    showDescription.scenes_[showDescription.currentIdx_].layers[*idx].retrigger = retrigger;
     auto& show = Status::instance().show;
-    if (show && show->getCurrentScene()->layers_[idx])
-        show->getCurrentScene()->layers_[idx]->setRetrigger(retrigger);
+    if (show && show->getCurrentScene()->layers_[*idx])
+        show->getCurrentScene()->layers_[*idx]->setRetrigger(retrigger);
 }
 
 //--------------------------------------------------------------
@@ -620,12 +709,12 @@ void Gui::setupControlPanel(glm::ivec2& pos)
 
     controlButtons_.push_back(controlPanel_->addButton(Btn::NEXT));
     controlButtons_.push_back(controlPanel_->addButton(Btn::PREV));
+		controlButtons_.push_back(controlPanel_->addButton(Btn::NEW));
     jumpToInput_ = controlPanel_->addTextInput("");
     jumpToInput_->setInputType(ofxDatGuiInputType::NUMERIC);
     jumpToInput_->setLabel(buildJumpToLabel(0, 0));
     jumpToInput_->setText("0");
-    controlButtons_.push_back(controlPanel_->addButton(Btn::JUMP));
-    controlButtons_.push_back(controlPanel_->addButton(Btn::NEW));
+    jumpToInput_->onTextInputEvent(this, &Gui::onJumpToInput);
     controlPanel_->addBreak();
     controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE));
     controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE_AS));

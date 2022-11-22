@@ -2,6 +2,7 @@
 
 #include "ofMain.h"
 #include "Playable.h"
+#include "utils.h"
 
 namespace skinny {
 

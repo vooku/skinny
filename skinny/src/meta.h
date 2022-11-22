@@ -21,7 +21,8 @@ struct MappableDescription : public Serializable {
     void toXml(ofxXmlSettings& config) const override = 0;
 
     static const uint8_t invalid_midi;
-    midiNote note, cc;
+    midiNote note = invalid_midi;
+    midiNote cc = invalid_midi;
     bool valid = false;
 };
 
@@ -39,11 +40,11 @@ struct LayerDescription : public MappableDescription {
     bool fromXml(ofxXmlSettings& config) override;
     void toXml(ofxXmlSettings& config) const override;
 
-    unsigned int id;
+    unsigned int id = 0;
     std::filesystem::path path;
     int alpha = MAX_7BIT;
     bool retrigger = false;
-    BlendMode blendMode;
+    BlendMode blendMode = BlendMode::Invalid;
 };
 
 struct EffectDescription : public MappableDescription {
@@ -53,8 +54,8 @@ struct EffectDescription : public MappableDescription {
     bool fromXml(ofxXmlSettings& config) override;
     void toXml(ofxXmlSettings& config) const override;
 
-    int id;
-    EffectType type;
+    int id = 0;
+    EffectType type = EffectType::Invalid;
     int param = MAX_7BIT;
 };
 

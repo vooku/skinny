@@ -160,6 +160,9 @@
     <ClCompile Include="src\ImageLayer.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\utils.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -456,6 +459,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\ImageLayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

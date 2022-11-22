@@ -198,6 +198,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClCompile Include="src\Effect.cpp" />
     <ClCompile Include="src\FileSelector.cpp" />
     <ClCompile Include="src\Gui.cpp" />
+    <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\VideoLayer.cpp" />
     <ClCompile Include="src\Mappable.cpp" />
     <ClCompile Include="src\meta.cpp" />
@@ -250,6 +251,7 @@ copy src\shaders\* bin\data\shaders</Command>
     <ClInclude Include="src\Effect.h" />
     <ClInclude Include="src\FileSelector.h" />
     <ClInclude Include="src\Gui.h" />
+    <ClInclude Include="src\utils.h" />
     <ClInclude Include="src\VideoLayer.h" />
     <ClInclude Include="src\Mappable.h" />
     <ClInclude Include="src\meta.h" />
