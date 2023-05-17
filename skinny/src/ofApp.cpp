@@ -53,7 +53,7 @@ void ofApp::setup()
  
     getStatus().show->setup();
     getStatus().showDescription->setup();
-    getStatus().loadDir = LoadDir::Current;
+    getStatus().loadDir = LoadDir::CurrentAll;
 
     reload();
 }
@@ -148,12 +148,31 @@ bool ofApp::reload()
     getStatus().gui->displayMessage("Loading...");
 
     const auto shifted = showDescription.shift(getStatus().loadDir, getStatus().jumpToIndex);
-    if (!shifted && getStatus().loadDir != LoadDir::Current) {
+    if (!shifted) {
         getStatus().gui->resetJumpToIndex();
         return false;
     }
 
-    if (getStatus().show->reload(showDescription)) {
+    bool reloaded = false;
+    switch (getStatus().loadDir)
+    {
+      case LoadDir::CurrentAll:
+        reloaded = getStatus().show->reload(showDescription);
+        break;
+			case LoadDir::CurrentLayers:
+			case LoadDir::Forward:
+			case LoadDir::Backward:
+			case LoadDir::Jump:
+				reloaded = getStatus().show->reloadLayers(showDescription);
+				break;
+			case LoadDir::CurrentEffects:
+				reloaded = getStatus().show->reloadEffects(showDescription);
+				break;
+      default:
+        ofLog(ofLogLevel::OF_LOG_ERROR, "Tried to reload with invalid enum.");
+    }
+
+    if (reloaded) {
         ofLog(OF_LOG_NOTICE, "Successfully loaded scene %s.", showDescription.currentScene().name.c_str());
         getStatus().gui->reload();
     }

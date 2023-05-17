@@ -267,9 +267,10 @@ bool ShowDescription::shift(LoadDir dir, int idx)
     const auto prevIdx = currentIdx_;
     switch (dir)
     {
-    case LoadDir::Current:
-        // nothing
-        break;
+    case LoadDir::CurrentLayers:
+    case LoadDir::CurrentEffects:
+    case LoadDir::CurrentAll:
+        return true;
     case LoadDir::Forward:
         currentIdx_ = ++currentIdx_ % scenes_.size();
         break;
@@ -282,8 +283,7 @@ bool ShowDescription::shift(LoadDir dir, int idx)
         break;
     case LoadDir::Jump:
         if (idx >= 0 && idx < scenes_.size()) {
-            currentIdx_ = idx;
-            return true;
+					currentIdx_ = idx;
         }
         break;
     default:

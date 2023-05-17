@@ -29,6 +29,8 @@ public:
     virtual void exit() override;
     void draw();
     bool reload(const ShowDescription& description);
+		bool reloadLayers(const ShowDescription& description);
+		bool reloadEffects(const ShowDescription& description);
     void playPauseEffect(int i);
     void update();
 

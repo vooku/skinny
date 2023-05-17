@@ -125,24 +125,47 @@ bool Show::reload(const ShowDescription& description)
 {
     masterAlphaControl_ = description.getAlphaControl();
 
-    currentScene_->bind();
+    return reloadLayers(description) && reloadEffects(description);
+}
 
-    firstPassShader_.begin();
-    currentScene_->reload(description.currentScene());
+//--------------------------------------------------------------
+bool Show::reloadLayers(const ShowDescription& description)
+{
+	currentScene_->bind();
+	firstPassShader_.begin();
 
-    for (auto i = 0; i < MAX_EFFECTS; ++i) {
-       if (effects_[i])
-          effects_[i]->exit();
+  currentScene_->reload(description.currentScene());
 
-        const auto& effect = description.getEffects()[i];
-        effects_[i].reset(new Effect(i, effect.type, effect.note, effect.cc, effect.param));
-        effects_[i]->setup();
+	firstPassShader_.end();
+	currentScene_->unbind();
+
+	return currentScene_->isValid();
+}
+
+//--------------------------------------------------------------
+bool Show::reloadEffects(const ShowDescription& description)
+{
+	for (auto i = 0; i < MAX_EFFECTS; ++i)
+  {
+		const auto& effect = description.getEffects()[i];
+
+    if (effects_[i])
+    {
+      if (effects_[i]->type == effect.type)
+      {
+        continue;
+      }
+      else
+      {
+        effects_[i]->exit();
+      }
     }
 
-    firstPassShader_.end();
-    currentScene_->unbind();
+    effects_[i].reset(new Effect(i, effect.type, effect.note, effect.cc, effect.param));
+    effects_[i]->setup();
+	}
 
-    return currentScene_->isValid();
+  return true;
 }
 
 //--------------------------------------------------------------

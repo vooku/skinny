@@ -203,7 +203,7 @@ void Gui::update()
               layerDescription = { ctx.index, ctx.path };
             }
 
-            Status::instance().loadDir = LoadDir::Current;
+            Status::instance().loadDir = LoadDir::CurrentLayers;
         }
 
         videoSelector_.release();
@@ -226,7 +226,7 @@ void Gui::update()
                     showDescription = {};
                 }
 
-                Status::instance().loadDir = LoadDir::Current;
+                Status::instance().loadDir = LoadDir::CurrentAll;
             }
             else {
                 save(path);
@@ -575,7 +575,7 @@ void Gui::onEffectDropdown(ofxDatGuiDropdownEvent e)
     const auto type = static_cast<EffectType>(e.child);
 		auto& showDescription = *Status::instance().showDescription;
     showDescription.effects_[*idx].type = type;
-    getStatus().loadDir = LoadDir::Current;
+    getStatus().loadDir = LoadDir::CurrentEffects;
 }
 
 //--------------------------------------------------------------

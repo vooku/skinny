@@ -13,8 +13,9 @@ static const int MIDI_DEVICES_REFRESH_PERIOD = 1000000000; // this is 1 second i
 static const int MIDI_MSG_REFRESH_PERIOD = 1000000000; // this is 1 second in nanoseconds
 static const int MAX_7BIT = 127;
 static const float MAX_7BITF = 127.0f;
-static constexpr const char* VERSION = "0.9.5-alpha";
+static constexpr const char* VERSION = "0.9.6-alpha";
 static constexpr const char* NAME = "Skinny Mixer";
+// TODO TITLE VERSION + NAME
 static constexpr const char* AUTHOR = "Vadim Vooku Petrov";
 static const midiNote DEFAULT_MASTER_ALPHA_CONTROL = 16;
 static const midiNote LAYER_NOTE_OFFSET = 0;
@@ -68,7 +69,13 @@ const char* c_str(EffectType type);
 
 //--------------------------------------------------------------
 enum class LoadDir {
-    Current, Forward, Backward, Jump, None
+    CurrentLayers,
+    CurrentEffects,
+    CurrentAll,
+    Forward,
+    Backward,
+    Jump,
+    None,
 };
 
 //--------------------------------------------------------------

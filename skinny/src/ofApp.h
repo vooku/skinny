@@ -34,6 +34,7 @@ private:
 
     bool reload();
 
+
     std::shared_ptr<Show> show_;
     std::shared_ptr<ShowDescription> showDescription_;
     std::shared_ptr<MidiController> midiController_;
