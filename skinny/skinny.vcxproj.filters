@@ -481,5 +481,11 @@
     <None Include="src\shaders\pingPongPassShader.vert">
       <Filter>src\shaders</Filter>
     </None>
+    <None Include="src\shaders\subsamplePassShader.frag">
+      <Filter>src\shaders</Filter>
+    </None>
+    <None Include="src\shaders\subsamplePassShader.vert">
+      <Filter>src\shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

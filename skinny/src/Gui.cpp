@@ -42,6 +42,8 @@ void Gui::setup()
     startThread();
 
     midiMonitor_.setup();
+
+		subsampledTexture_.allocate(GUI_WINDOW_WIDTH / GUI_MONITOR_SUBSAMPLE, GUI_WINDOW_HEIGHT / GUI_MONITOR_SUBSAMPLE, GL_RGBA);
 }
 
 //--------------------------------------------------------------
@@ -49,13 +51,25 @@ void Gui::draw()
 {
     ofBackground(BACKGROUND_COLOR);
     
-    //auto y = 0;
-    //const auto w = ofGetViewportWidth();
-    //const auto h = ofGetViewportHeight();
-    //while (y < h) {
-    //  ofDrawLine({ 0, y }, { w, y });
-    //  y += 26;
-    //}
+		//auto x = 0;
+		//auto y = 0;
+		//const auto w = ofGetViewportWidth();
+		//const auto h = ofGetViewportHeight();
+		//while (x < w) {
+		//	ofDrawLine({ x, 0 }, { x, h });
+		//	x += DELTA;
+		//}
+		//while (y < h) {
+		//	ofDrawLine({ 0, y }, { w, y });
+		//	y += DELTA;
+		//}
+
+    if (const auto& show = Status::instance().show)
+    {
+      subsampledTexture_.loadData(show->getSubsampledTexture());
+      const auto scale = 1.1f;
+      subsampledTexture_.draw(41 * DELTA, 14 * DELTA, 16 * scale * DELTA, 9 * scale * DELTA);
+    }
 
     if (std::chrono::system_clock::now() - msg_.start < msg_.duration) {
         fonts_.italic.drawString(msg_.msg, 2 * DELTA, controlPanel_->getHeight() + 2 * DELTA);

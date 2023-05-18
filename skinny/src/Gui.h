@@ -154,6 +154,8 @@ private:
 
     std::unique_ptr<VideoSelector> videoSelector_;
     std::unique_ptr<FileSelector> fileSelector_;
+
+		ofTexture subsampledTexture_;
 };
 
 } // namespace skinny

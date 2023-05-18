@@ -1,5 +1,6 @@
 #include "ofMain.h"
 #include "ofApp.h"
+#include "Base.h"
 #include "Gui.h"
 
 #ifdef TARGET_WIN32
@@ -15,10 +16,10 @@ int main(int argc, char *argv[]) {
     ofGLWindowSettings settings;
 
     settings.setGLVersion(4, 1);
-    settings.setSize(1920, 1080);
+    settings.setSize(skinny::MAIN_WINDOW_WIDTH, skinny::MAIN_WINDOW_HEIGHT);
     auto mainWindow = ofCreateWindow(settings);
 
-    settings.setSize(1500, 800);
+    settings.setSize(skinny::GUI_WINDOW_WIDTH, skinny::GUI_WINDOW_HEIGHT);
     auto guiWindow = ofCreateWindow(settings);
 
     auto mainApp = std::make_shared<skinny::ofApp>(args.get());

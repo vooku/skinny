@@ -32,8 +32,11 @@ bool Show::loadShaders()
 
 	firstPassShader_.load(shaderPathPrefix + "firstPassShader");
   pingPongPassShader_.load(shaderPathPrefix + "pingPongPassShader");
+  subsamplePassShader_.load(shaderPathPrefix + "subsamplePassShader");
 	
-  return firstPassShader_.isLoaded() && pingPongPassShader_.isLoaded();
+  return firstPassShader_.isLoaded() &&
+         pingPongPassShader_.isLoaded() &&
+         subsamplePassShader_.isLoaded();
 }
 
 //--------------------------------------------------------------
@@ -46,21 +49,28 @@ void Show::setup()
 	s.height = height_;
 	s.internalformat = GL_RGBA;
 	s.useDepth = false;
+	s.useStencil = false;
+
+	fbos_[0].allocate(s);
+	fbos_[1].allocate(s);
+	fbos_[2].allocate(s);
+
+  s.width /= GUI_MONITOR_SUBSAMPLE;
+  s.height /= GUI_MONITOR_SUBSAMPLE;
+	fbos_[3].allocate(s);
 
   for (auto& fbo : fbos_)
   {
-    fbo.allocate(s);
-
-    fbo.begin();
-    ofClear(255, 255, 255, 0);
-    fbo.end();
+		fbo.begin();
+		ofClear(255, 255, 255, 0);
+		fbo.end();
   }
 
   if (currentScene_)
     currentScene_->init();
 
 #ifdef TARGET_WIN32
-  spoutSender_.init(NAME, fbos_[2].getTexture());
+  spoutSender_.init(NAME, getFinalTexture());
 #endif
 }
 
@@ -116,8 +126,17 @@ void Show::draw()
 		pingPongPassShader_.end();
     fbos_[2].end();
 
+    // fourth pass
+		fbos_[3].begin();
+		subsamplePassShader_.begin();
+		setupSubsamplePassUniforms(fbos_[2].getTexture());
+		ofDrawRectangle(0, 0, width_ / GUI_MONITOR_SUBSAMPLE, height_ / GUI_MONITOR_SUBSAMPLE);
+		subsamplePassShader_.end();
+		fbos_[3].end();
+
     // draw
     fbos_[2].getTexture().draw(0.f, 0.f);
+    fbos_[3].getTexture().readToPixels(subsampledTexture_);
 }
 
 //--------------------------------------------------------------
@@ -182,7 +201,7 @@ void Show::update()
     }
 
 #ifdef TARGET_WIN32
-    spoutSender_.send(fbos_[2].getTexture());
+    spoutSender_.send(getFinalTexture());
 #endif
 }
 
@@ -235,6 +254,19 @@ void Show::setAlphaControl(const midiNote & control)
 {
     masterAlphaControl_ = control;
 }
+
+//--------------------------------------------------------------
+const ofTexture& Show::getFinalTexture() const
+{
+  return fbos_[2].getTexture();
+}
+
+//--------------------------------------------------------------
+const ofPixels& Show::getSubsampledTexture() const
+{
+  return subsampledTexture_;
+}
+
 //--------------------------------------------------------------
 float getTimeshift()
 {
@@ -272,7 +304,14 @@ void Show::setupPingPongPassUniforms(bool horizontal, const ofTexture& img) cons
 	pingPongPassShader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
 	pingPongPassShader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
 	pingPongPassShader_.setUniform1i("horizontal", horizontal);
-	pingPongPassShader_.setUniformTexture("previousPass", img, 1);
+	pingPongPassShader_.setUniformTexture("previousPass", img, 0);
+}
+
+//--------------------------------------------------------------
+void Show::setupSubsamplePassUniforms(const ofTexture& img) const
+{
+	subsamplePassShader_.setUniform1f("subsamplingFactor", static_cast<float>(GUI_MONITOR_SUBSAMPLE));
+  subsamplePassShader_.setUniformTexture("previousPass", img, 0);
 }
 
 //--------------------------------------------------------------

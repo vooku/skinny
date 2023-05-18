@@ -334,6 +334,8 @@ copy src\shaders\* bin\data\shaders</Command>
     <None Include="src\shaders\firstPassShader.vert" />
     <None Include="src\shaders\pingPongPassShader.frag" />
     <None Include="src\shaders\pingPongPassShader.vert" />
+    <None Include="src\shaders\subsamplePassShader.frag" />
+    <None Include="src\shaders\subsamplePassShader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ProjectExtensions>

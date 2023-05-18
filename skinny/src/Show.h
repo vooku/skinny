@@ -44,6 +44,8 @@ public:
 
     void setAlphaControl(const midiNote& control);
 
+    const ofPixels& getSubsampledTexture() const;
+
 private:
     struct Uniforms {
         int fxTypes[MAX_EFFECTS];
@@ -56,11 +58,17 @@ private:
 
     void setupFirstPassUniforms() const;
     void setupPingPongPassUniforms(bool horizontal, const ofTexture& img) const;
+    void setupSubsamplePassUniforms(const ofTexture& img) const;
     bool hasActiveFX() const;
+
+		const ofTexture& getFinalTexture() const;
 
     mutable ofShader firstPassShader_;
     mutable ofShader pingPongPassShader_;
-    std::array<ofFbo, 3> fbos_;
+    mutable ofShader subsamplePassShader_;
+    std::array<ofFbo, 4> fbos_;
+
+    ofPixels subsampledTexture_;
 
     const int width_, height_;
     ScenePtr currentScene_;
