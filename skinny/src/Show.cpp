@@ -126,17 +126,20 @@ void Show::draw()
 		pingPongPassShader_.end();
     fbos_[2].end();
 
-    // fourth pass
-		fbos_[3].begin();
-		subsamplePassShader_.begin();
-		setupSubsamplePassUniforms(fbos_[2].getTexture());
-		ofDrawRectangle(0, 0, width_ / GUI_MONITOR_SUBSAMPLE, height_ / GUI_MONITOR_SUBSAMPLE);
-		subsamplePassShader_.end();
-		fbos_[3].end();
-
-    // draw
     fbos_[2].getTexture().draw(0.f, 0.f);
-    fbos_[3].getTexture().readToPixels(subsampledTexture_);
+
+    // fourth pass
+    if (getStatus().gui && getStatus().gui->requiresVisualMonitor())
+    {
+      fbos_[3].begin();
+      subsamplePassShader_.begin();
+      setupSubsamplePassUniforms(fbos_[2].getTexture());
+      ofDrawRectangle(0, 0, width_ / GUI_MONITOR_SUBSAMPLE, height_ / GUI_MONITOR_SUBSAMPLE);
+      subsamplePassShader_.end();
+      fbos_[3].end();
+
+      fbos_[3].getTexture().readToPixels(subsampledTexture_);
+    }
 }
 
 //--------------------------------------------------------------

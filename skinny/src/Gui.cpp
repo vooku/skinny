@@ -64,7 +64,8 @@ void Gui::draw()
 		//	y += DELTA;
 		//}
 
-    if (const auto& show = Status::instance().show)
+    const auto& show = Status::instance().show;
+    if (shouldDrawVisualMonitor_ && show)
     {
       subsampledTexture_.loadData(show->getSubsampledTexture());
       const auto scale = 1.1f;
@@ -286,6 +287,12 @@ void Gui::resetJumpToIndex()
 {
     auto& showDescription = *Status::instance().showDescription;
     jumpToInput_->setText(std::to_string(showDescription.currentIdx_ + 1));
+}
+
+//--------------------------------------------------------------
+bool Gui::requiresVisualMonitor() const
+{
+  return shouldDrawVisualMonitor_;
 }
 
 //--------------------------------------------------------------
@@ -674,6 +681,12 @@ void Gui::onMidiMonitorToggle(ofxDatGuiToggleEvent e)
 }
 
 //--------------------------------------------------------------
+void Gui::onVisualMonitorToggle(ofxDatGuiToggleEvent e)
+{
+  shouldDrawVisualMonitor_ = e.checked;
+}
+
+//--------------------------------------------------------------
 void Gui::addBlank(ofxDatGui * panel)
 {
     auto blank = panel->addLabel("");
@@ -752,6 +765,12 @@ void Gui::setupControlPanel(glm::ivec2& pos)
 
     controlPanel_->addBreak();
     controlPanel_->addFRM()->setLabel("fps");
+
+		controlPanel_->addBreak();
+		auto* monitorToggle = controlPanel_->addToggle("Monitor");
+		monitorToggle->onToggleEvent(this, &Gui::onVisualMonitorToggle);
+		monitorToggle->setChecked(shouldDrawVisualMonitor_);
+		monitorToggle->setLabelAlignment(ofxDatGuiAlignment::LEFT);
 }
 
 //--------------------------------------------------------------
@@ -1002,7 +1021,7 @@ void Gui::setupMidiDevicePanel(glm::ivec2& pos)
   }
 
   midiDevicePanel_->addBreak();
-  auto* monitorToggle = midiDevicePanel_->addToggle("Monitor");
+  auto* monitorToggle = midiDevicePanel_->addToggle("Monitor MIDI");
   monitorToggle->onToggleEvent(this, &Gui::onMidiMonitorToggle);
   monitorToggle->setChecked(midiMonitor_.on_);
   monitorToggle->setLabelAlignment(ofxDatGuiAlignment::CENTER);

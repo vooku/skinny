@@ -31,6 +31,8 @@ public:
 
     void resetJumpToIndex();
 
+    bool requiresVisualMonitor() const;
+
     /**
      * @brief Display a single line message in the GUI.
      *
@@ -63,6 +65,7 @@ public:
     void onLayerRetriggerToggle(ofxDatGuiToggleEvent e);
     void onMidiDeviceToggle(ofxDatGuiToggleEvent e);
     void onMidiMonitorToggle(ofxDatGuiToggleEvent e);
+    void onVisualMonitorToggle(ofxDatGuiToggleEvent e);
 
 private:
     static const int MAX_CHARS = 20;
@@ -115,6 +118,7 @@ private:
 		MidiMonitor midiMonitor_;
     ofTimer midiDevicesTimer_;
     bool shouldUpdateDevices_ = false;
+    bool shouldDrawVisualMonitor_ = true;
 
     std::unique_ptr<ofxDatGui> controlPanel_, playPanel_, mutePanel_,
                                videoFxPanel_, midiPanel_, ccPanel_,
