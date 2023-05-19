@@ -138,7 +138,7 @@ void Show::draw()
       subsamplePassShader_.end();
       fbos_[3].end();
 
-      fbos_[3].getTexture().readToPixels(subsampledTexture_);
+      fbos_[3].getTexture().readToPixels(subsampledPixels_);
     }
 }
 
@@ -267,7 +267,7 @@ const ofTexture& Show::getFinalTexture() const
 //--------------------------------------------------------------
 const ofPixels& Show::getSubsampledTexture() const
 {
-  return subsampledTexture_;
+  return subsampledPixels_;
 }
 
 //--------------------------------------------------------------

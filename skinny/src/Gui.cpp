@@ -64,18 +64,21 @@ void Gui::draw()
 		//	y += DELTA;
 		//}
 
+    // draw monitor
     const auto& show = Status::instance().show;
     if (shouldDrawVisualMonitor_ && show)
     {
-      subsampledTexture_.loadData(show->getSubsampledTexture());
+      subsampledTexture_.loadData(show->getSubsampledTexture(), GL_RGBA);
       const auto scale = 1.1f;
       subsampledTexture_.draw(41 * DELTA, 14 * DELTA, 16 * scale * DELTA, 9 * scale * DELTA);
     }
 
+    // draw message
     if (std::chrono::system_clock::now() - msg_.start < msg_.duration) {
         fonts_.italic.drawString(msg_.msg, 2 * DELTA, controlPanel_->getHeight() + 2 * DELTA);
     }
 
+    // draw panels
     if (midiDevicePanel_) {
       midiDevicePanel_->setTheme(&commonTheme_, true);
 			midiDevicePanel_->update();

@@ -68,7 +68,7 @@ private:
     mutable ofShader subsamplePassShader_;
     std::array<ofFbo, 4> fbos_;
 
-    ofPixels subsampledTexture_;
+    ofPixels subsampledPixels_;
 
     const int width_, height_;
     ScenePtr currentScene_;
