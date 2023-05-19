@@ -10,7 +10,6 @@ VideoLayer::VideoLayer(int id, const std::filesystem::path& path, midiNote note,
 
 		if (valid_) {
 			  ofLog(OF_LOG_VERBOSE, "Loaded %s.", name_.c_str());
-        player_.setPixelFormat(OF_PIXELS_BGRA);
         player_.setLoopState(OF_LOOP_NORMAL);
     }
     else {
