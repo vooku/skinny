@@ -12,7 +12,7 @@ ImageLayer::ImageLayer(int id, const std::filesystem::path& path, midiNote note,
 		ofLog(OF_LOG_VERBOSE, "Loaded %s.", name_.c_str());
 	}
 	else {
-		ofLog(OF_LOG_ERROR, "Cannot load %s at %s", name_.c_str(), path.c_str());
+		ofLog(OF_LOG_ERROR, "Cannot load %s at %s", name_.c_str(), path.string().c_str());
 	}
 }
 

@@ -13,7 +13,7 @@ VideoLayer::VideoLayer(int id, const std::filesystem::path& path, midiNote note,
         player_.setLoopState(OF_LOOP_NORMAL);
     }
     else {
-        ofLog(OF_LOG_ERROR, "Cannot load %s at %s", name_.c_str(), path.c_str());
+        ofLog(OF_LOG_ERROR, "Cannot load %s at %s", name_.c_str(), path.string().c_str());
     }
 }
 
