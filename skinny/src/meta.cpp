@@ -154,6 +154,7 @@ bool ShowDescription::fromXml(ofxXmlSettings& config) {
     switchNote_ = config.getValue("switchNote", MappableDescription::invalid_midi);
     midiChannel_ = config.getValue("channel", default_channel);
     alphaControl_ = config.getValue("masterAlphaControl", DEFAULT_MASTER_ALPHA_CONTROL);
+    spoutOut_ = config.getValue("spoutOut", false);
     config.popTag(); // head
 
     config.pushTag("show");
@@ -198,6 +199,7 @@ void ShowDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("switchNote", switchNote_);
     config.setValue("channel", midiChannel_);
     config.addValue("masterAlphaControl", alphaControl_);
+    config.addValue("spoutOut", spoutOut_);
     config.popTag(); // head
 
     config.addTag("show");

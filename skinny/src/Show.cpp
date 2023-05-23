@@ -204,7 +204,11 @@ void Show::update()
     }
 
 #ifdef TARGET_WIN32
-    spoutSender_.send(getFinalTexture());
+    const auto showDesc = getStatus().showDescription;
+    if (showDesc != nullptr && showDesc->getSpoutOut())
+    {
+      spoutSender_.send(getFinalTexture());
+    }
 #endif
 }
 

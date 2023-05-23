@@ -97,6 +97,7 @@ public:
     auto getMidiChannel() const { return midiChannel_; }
     const auto& getEffects() const { return effects_; }
     auto getAlphaControl() const { return alphaControl_; }
+    auto getSpoutOut() const { return spoutOut_; }
 
     void setMidiChannel(int channel) { midiChannel_ = channel; }
 
@@ -107,9 +108,11 @@ private:
     std::array<EffectDescription, MAX_EFFECTS> effects_;
 
     int currentIdx_ = 0;
-    midiNote switchNote_ = MappableDescription::invalid_midi;
-    int midiChannel_ = default_channel;
-    midiNote alphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
+
+    midiNote  switchNote_ = MappableDescription::invalid_midi;
+    int       midiChannel_ = default_channel;
+    midiNote  alphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
+    bool      spoutOut_ = false;
 
 };
 

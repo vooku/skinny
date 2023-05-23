@@ -108,6 +108,7 @@ void Gui::reload()
     jumpToInput_->setText(std::to_string(showDesc.currentIdx_ + 1));
     masterAlphaInput_->setText(std::to_string(show->getAlphaControl()));
     midiChannelInput_->setText(std::to_string(showDesc.getMidiChannel()));
+    spoutToggle_->setChecked(showDesc.spoutOut_);
 
     // layers
     const auto& layers = show->getCurrentScene()->getLayers();
@@ -690,6 +691,12 @@ void Gui::onVisualMonitorToggle(ofxDatGuiToggleEvent e)
 }
 
 //--------------------------------------------------------------
+void Gui::onSpoutToggle(ofxDatGuiToggleEvent e)
+{
+  getStatus().showDescription->spoutOut_ = e.checked;
+}
+
+//--------------------------------------------------------------
 void Gui::addBlank(ofxDatGui * panel)
 {
     auto blank = panel->addLabel("");
@@ -774,6 +781,11 @@ void Gui::setupControlPanel(glm::ivec2& pos)
 		monitorToggle->onToggleEvent(this, &Gui::onVisualMonitorToggle);
 		monitorToggle->setChecked(shouldDrawVisualMonitor_);
 		monitorToggle->setLabelAlignment(ofxDatGuiAlignment::LEFT);
+
+		spoutToggle_ = controlPanel_->addToggle("Spout Out");
+		spoutToggle_->onToggleEvent(this, &Gui::onSpoutToggle);
+		spoutToggle_->setChecked(false);
+		spoutToggle_->setLabelAlignment(ofxDatGuiAlignment::LEFT);
 }
 
 //--------------------------------------------------------------

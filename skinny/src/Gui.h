@@ -66,6 +66,7 @@ public:
     void onMidiDeviceToggle(ofxDatGuiToggleEvent e);
     void onMidiMonitorToggle(ofxDatGuiToggleEvent e);
     void onVisualMonitorToggle(ofxDatGuiToggleEvent e);
+    void onSpoutToggle(ofxDatGuiToggleEvent e);
 
 private:
     static const int MAX_CHARS = 20;
@@ -146,6 +147,7 @@ private:
     std::array<ofxDatGuiToggle*,    MAX_EFFECTS> effectMuteToggles_;
     std::array<ofxDatGuiTextInput*, MAX_EFFECTS> effectParamInputs_;
     ofxDatGuiLabel* midiMonitorLabel_ = nullptr;
+    ofxDatGuiToggle* spoutToggle_ = nullptr;
 
     std::filesystem::path configPath_;
     std::string configName_;
