@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     ofGLWindowSettings settings;
 
     settings.setGLVersion(4, 1);
-    settings.setSize(skinny::MAIN_WINDOW_WIDTH, skinny::MAIN_WINDOW_HEIGHT);
+    settings.setSize(skinny::MAIN_WINDOW_NATIVE_WIDTH, skinny::MAIN_WINDOW_NATIVE_HEIGHT);
     auto mainWindow = ofCreateWindow(settings);
 
     settings.setSize(skinny::GUI_WINDOW_WIDTH, skinny::GUI_WINDOW_HEIGHT);

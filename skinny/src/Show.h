@@ -23,16 +23,16 @@ public:
 
     friend class Gui;
 
-    Show(int width, int height);
+    Show();
 
-    virtual void setup() override;
+    void setup(int width, int height);
     virtual void exit() override;
     void draw();
     bool reload(const ShowDescription& description);
 		bool reloadLayers(const ShowDescription& description);
 		bool reloadEffects(const ShowDescription& description);
     void playPauseEffect(int i);
-    void update();
+    void update(int newWidth, int newHeight);
 
     virtual void onNoteOn(NoteMessage& msg) override;
     virtual void onControlChange(ControlChangeMessage& msg) override;
@@ -58,19 +58,19 @@ private:
 
     void setupFirstPassUniforms() const;
     void setupPingPongPassUniforms(bool horizontal, const ofTexture& img) const;
-    void setupSubsamplePassUniforms(const ofTexture& img) const;
+    void setupSubsamplePassUniforms(float samplingRateX, float samplingRateY, const ofTexture& img) const;
     bool hasActiveFX() const;
 
-		const ofTexture& getFinalTexture() const;
+		const ofTexture& getNativeTexture() const;
 
     mutable ofShader firstPassShader_;
     mutable ofShader pingPongPassShader_;
     mutable ofShader subsamplePassShader_;
-    std::array<ofFbo, 4> fbos_;
+    std::array<ofFbo, 5> fbos_;
 
     ofPixels subsampledPixels_;
 
-    const int width_, height_;
+    int width_, height_;
     ScenePtr currentScene_;
 
     midiNote masterAlphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;

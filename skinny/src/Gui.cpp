@@ -69,7 +69,7 @@ void Gui::draw()
     if (shouldDrawVisualMonitor_ && show)
     {
       subsampledTexture_.loadData(show->getSubsampledTexture(), GL_RGBA);
-      const auto scale = 1.1f;
+      const auto scale = 1.3f;
       subsampledTexture_.draw(41 * DELTA, 14 * DELTA, 16 * scale * DELTA, 9 * scale * DELTA);
     }
 

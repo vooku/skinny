@@ -49,9 +49,9 @@ void ofApp::setup()
         return;
     }
 
-    getStatus().show = show_ = make_shared<Show>(ofGetCurrentWindow()->getWidth(), ofGetCurrentWindow()->getHeight());
+    getStatus().show = show_ = make_shared<Show>();
  
-    getStatus().show->setup();
+    getStatus().show->setup(ofGetWindowWidth(), ofGetWindowHeight());
     getStatus().showDescription->setup();
     getStatus().loadDir = LoadDir::CurrentAll;
 
@@ -69,7 +69,9 @@ void ofApp::update()
         reload();
     }
 
-    getStatus().show->update();
+    const auto newWidth = ofGetWindowWidth();
+    const auto newHeight = ofGetWindowHeight();
+    getStatus().show->update(newWidth, newHeight);
 
     if (ofGetFrameNum() % 300 == 0) {
         ofLog(OF_LOG_NOTICE, "fps: %f", ofGetFrameRate());

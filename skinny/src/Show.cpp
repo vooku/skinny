@@ -7,9 +7,7 @@
 namespace skinny {
 
 //--------------------------------------------------------------
-Show::Show(int width, int height) :
-    width_(width),
-    height_(height),
+Show::Show() :
     currentScene_(std::make_shared<Scene>())
 {
 	if (!loadShaders()) {
@@ -40,13 +38,16 @@ bool Show::loadShaders()
 }
 
 //--------------------------------------------------------------
-void Show::setup()
+void Show::setup(int width, int height)
 {
+  width_ = width;
+  height_ = height;
+
   Mappable::setup();
 
 	ofFboSettings s;
-	s.width = width_;
-	s.height = height_;
+	s.width = MAIN_WINDOW_NATIVE_WIDTH;
+	s.height = MAIN_WINDOW_NATIVE_HEIGHT;
 	s.internalformat = GL_RGBA;
 	s.useDepth = false;
 	s.useStencil = false;
@@ -55,9 +56,13 @@ void Show::setup()
 	fbos_[1].allocate(s);
 	fbos_[2].allocate(s);
 
-  s.width /= GUI_MONITOR_SUBSAMPLE;
-  s.height /= GUI_MONITOR_SUBSAMPLE;
+  s.width = width_;
+  s.height = width_;
 	fbos_[3].allocate(s);
+
+	s.width = MAIN_WINDOW_NATIVE_WIDTH / GUI_MONITOR_SUBSAMPLE;
+	s.height = MAIN_WINDOW_NATIVE_HEIGHT / GUI_MONITOR_SUBSAMPLE;
+	fbos_[4].allocate(s);
 
   for (auto& fbo : fbos_)
   {
@@ -70,7 +75,7 @@ void Show::setup()
     currentScene_->init();
 
 #ifdef TARGET_WIN32
-  spoutSender_.init(NAME, getFinalTexture());
+  spoutSender_.init(NAME, getNativeTexture());
 #endif
 }
 
@@ -99,7 +104,7 @@ void Show::draw()
     if (!firstFrameReady)
         return;
 
-    // first pass
+    // first pass - videos
     fbos_[0].begin();
     ofClear(0.0f, 0.0f, 0.0f, 0.0f);
     firstPassShader_.begin();
@@ -110,7 +115,7 @@ void Show::draw()
     firstPassShader_.end();
     fbos_[0].end();
 
-		// second pass
+		// second pass - ping pong 1
 		fbos_[1].begin();
 		pingPongPassShader_.begin();
 		setupPingPongPassUniforms(true, fbos_[0].getTexture());
@@ -118,7 +123,7 @@ void Show::draw()
 		pingPongPassShader_.end();
 		fbos_[1].end();
 
-    // third pass
+    // third pass - ping pong 2
     fbos_[2].begin();
 		pingPongPassShader_.begin();
 		setupPingPongPassUniforms(false, fbos_[1].getTexture());
@@ -126,19 +131,52 @@ void Show::draw()
 		pingPongPassShader_.end();
     fbos_[2].end();
 
-    fbos_[2].getTexture().draw(0.f, 0.f);
-
-    // fourth pass
-    if (getStatus().gui && getStatus().gui->requiresVisualMonitor())
+		// fourth pass - resize to fit window
+    if (width_ > MAIN_WINDOW_NATIVE_WIDTH || height_ > MAIN_WINDOW_NATIVE_HEIGHT)
     {
+      const int fboWidth = fbos_[3].getWidth();
+      const int fboHeight = fbos_[3].getHeight();
+
+      if (fboWidth != width_ || fboHeight != height_)
+      {
+        fbos_[3].clear();
+        fbos_[3].allocate(width_, height_);
+      }
+
+      const auto rateX = MAIN_WINDOW_NATIVE_WIDTH < width_ ?
+                         MAIN_WINDOW_NATIVE_WIDTH / static_cast<float>(width_) :
+                         1.f;
+
+      const auto rateY = MAIN_WINDOW_NATIVE_HEIGHT < height_ ?
+                         MAIN_WINDOW_NATIVE_HEIGHT / static_cast<float>(height_) :
+                         1.f;
+
       fbos_[3].begin();
       subsamplePassShader_.begin();
-      setupSubsamplePassUniforms(fbos_[2].getTexture());
-      ofDrawRectangle(0, 0, width_ / GUI_MONITOR_SUBSAMPLE, height_ / GUI_MONITOR_SUBSAMPLE);
+      setupSubsamplePassUniforms(rateX, rateY, getNativeTexture());
+      ofDrawRectangle(0, 0, width_, height_);
       subsamplePassShader_.end();
       fbos_[3].end();
 
-      fbos_[3].getTexture().readToPixels(subsampledPixels_);
+      fbos_[3].getTexture().draw(0.f, 0.f);
+    }
+    else
+    {
+      getNativeTexture().draw(0.f, 0.f);
+    }
+
+    // fifth pass - resize to fit monitor in gui
+    if (getStatus().gui && getStatus().gui->requiresVisualMonitor())
+    {
+      fbos_[4].begin();
+      subsamplePassShader_.begin();
+      const auto rate = static_cast<float>(GUI_MONITOR_SUBSAMPLE);
+      setupSubsamplePassUniforms(rate, rate, getNativeTexture());
+      ofDrawRectangle(0, 0, width_ / GUI_MONITOR_SUBSAMPLE, height_ / GUI_MONITOR_SUBSAMPLE);
+      subsamplePassShader_.end();
+      fbos_[4].end();
+
+      fbos_[4].getTexture().readToPixels(subsampledPixels_);
     }
 }
 
@@ -197,14 +235,17 @@ void Show::playPauseEffect(int i)
 }
 
 //--------------------------------------------------------------
-void Show::update()
+void Show::update(int newWidth, int newHeight)
 {
+  width_ = newWidth;
+  height_ = newHeight;
+
     if (currentScene_) {
         currentScene_->update();
     }
 
 #ifdef TARGET_WIN32
-    spoutSender_.send(getFinalTexture());
+    spoutSender_.send(getNativeTexture());
 #endif
 }
 
@@ -259,7 +300,7 @@ void Show::setAlphaControl(const midiNote & control)
 }
 
 //--------------------------------------------------------------
-const ofTexture& Show::getFinalTexture() const
+const ofTexture& Show::getNativeTexture() const
 {
   return fbos_[2].getTexture();
 }
@@ -311,9 +352,10 @@ void Show::setupPingPongPassUniforms(bool horizontal, const ofTexture& img) cons
 }
 
 //--------------------------------------------------------------
-void Show::setupSubsamplePassUniforms(const ofTexture& img) const
+void Show::setupSubsamplePassUniforms(float samplingRateX, float samplingRateY, const ofTexture& img) const
 {
-	subsamplePassShader_.setUniform1f("subsamplingFactor", static_cast<float>(GUI_MONITOR_SUBSAMPLE));
+	subsamplePassShader_.setUniform1f("subsamplingRateX", samplingRateX);
+	subsamplePassShader_.setUniform1f("subsamplingRateY", samplingRateY);
   subsamplePassShader_.setUniformTexture("previousPass", img, 0);
 }
 
