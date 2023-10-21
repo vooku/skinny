@@ -96,8 +96,10 @@ public:
     const auto& getEffects() const { return effects_; }
     auto getAlphaControl() const { return alphaControl_; }
     auto getSpoutOut() const { return spoutOut_; }
+
     const auto& getLoadingScreensPath() const { return loadingScreensPath_; }
     auto getLoadingScreensNote() const { return loadingScreensNote_; }
+    auto getLoadingScreensCc() const { return loadingScreensCc_; }
 
     void setMidiChannel(int channel) { midiChannel_ = channel; }
 
@@ -113,8 +115,10 @@ private:
     int       midiChannel_ = default_channel;
     midiNote  alphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
     bool      spoutOut_ = false;
+
     std::filesystem::path loadingScreensPath_;
     midiNote loadingScreensNote_ = MappableDescription::invalid_midi;
+    midiNote loadingScreensCc_ = MappableDescription::invalid_midi;
 
 };
 

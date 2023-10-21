@@ -159,6 +159,7 @@ bool ShowDescription::fromXml(ofxXmlSettings& config) {
     config.pushTag("loadingScreens");
     loadingScreensPath_ = config.getValue("path", invalid_path.string());
     loadingScreensNote_ = config.getValue("midi", MappableDescription::invalid_midi);
+    loadingScreensCc_ = config.getValue("cc", MappableDescription::invalid_midi);
     config.popTag(); // loadingScreens
     config.popTag(); // head
 
@@ -210,6 +211,7 @@ void ShowDescription::toXml(ofxXmlSettings& config) const {
     config.pushTag("loadingScreens");
     config.setValue("path", loadingScreensPath_.string());
     config.setValue("midi", loadingScreensNote_);
+    config.setValue("cc", loadingScreensCc_);
     config.popTag(); // loadingScreens
     config.popTag(); // head
 

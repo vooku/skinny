@@ -5,19 +5,27 @@
 
 #include "ofImage.h"
 
+#include <queue>
+#include <filesystem>
+
 namespace skinny {
 
 class LoadingScreen : public Playable {
 public:
 	bool	reload(const ShowDescription& description);
+	void	advance();
 
-	const ofTexture&	getNext() const;
+	const ofTexture&	getLoadingScreen() const;
+	float							getAlpha() const;
+
+	virtual void onNoteOn(NoteMessage& msg) override;
+	virtual void onNoteOff(NoteMessage& msg) override;
 
 private:
-	// #TODO more img
-	// ##TODO timing
+	bool	loadImg(const std::filesystem::path& path);
 
-	ofImage img_;
+	using T_Images = std::queue<std::shared_ptr<ofImage>>;
+	T_Images images_;
 
 };
 

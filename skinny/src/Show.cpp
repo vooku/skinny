@@ -332,9 +332,9 @@ void Show::setupPingPongPassUniforms(bool horizontal, const ofTexture& img) cons
 //--------------------------------------------------------------
 void Show::setupLoadingScreenPassUniforms(const ofTexture& img) const
 {
-	loadingScreenPassShader_.setUniform1i("playing", loadingScreen_.isPlaying()); // #TODO
+	loadingScreenPassShader_.setUniform1f("alpha", loadingScreen_.getAlpha());
 	loadingScreenPassShader_.setUniformTexture("previousPass", img, 0);
-	loadingScreenPassShader_.setUniformTexture("loadingScreen", loadingScreen_.getNext(), 1);
+	loadingScreenPassShader_.setUniformTexture("loadingScreen", loadingScreen_.getLoadingScreen(), 1);
 }
 
 //--------------------------------------------------------------
