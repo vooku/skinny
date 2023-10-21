@@ -29,7 +29,7 @@ void ofApp::setup()
     if (settings_.console)
         ofLogToConsole();
     else
-        ofLogToFile("skinny.log", true);
+        ofLogToFile("skinny.log", false);
     ofSetLogLevel(settings_.verbose ? OF_LOG_VERBOSE : OF_LOG_NOTICE);
     ofSetFrameRate(30);
     ofBackground(ofColor::black);
