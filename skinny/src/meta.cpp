@@ -3,8 +3,8 @@
 
 namespace skinny {
 
+static const std::filesystem::path invalid_path = {};
 const uint8_t MappableDescription::invalid_midi = 255;
-const std::filesystem::path LayerDescription::invalid_path = {};
 
 //--------------------------------------------------------------
 MappableDescription::MappableDescription(midiNote note, midiNote cc) :
@@ -155,6 +155,11 @@ bool ShowDescription::fromXml(ofxXmlSettings& config) {
     midiChannel_ = config.getValue("channel", default_channel);
     alphaControl_ = config.getValue("masterAlphaControl", DEFAULT_MASTER_ALPHA_CONTROL);
     spoutOut_ = config.getValue("spoutOut", false);
+
+    config.pushTag("loadingScreens");
+    loadingScreensPath_ = config.getValue("path", invalid_path.string());
+    loadingScreensNote_ = config.getValue("midi", MappableDescription::invalid_midi);
+    config.popTag(); // loadingScreens
     config.popTag(); // head
 
     config.pushTag("show");
@@ -200,6 +205,12 @@ void ShowDescription::toXml(ofxXmlSettings& config) const {
     config.setValue("channel", midiChannel_);
     config.addValue("masterAlphaControl", alphaControl_);
     config.addValue("spoutOut", spoutOut_);
+
+    config.addTag("loadingScreens");
+    config.pushTag("loadingScreens");
+    config.setValue("path", loadingScreensPath_.string());
+    config.setValue("midi", loadingScreensNote_);
+    config.popTag(); // loadingScreens
     config.popTag(); // head
 
     config.addTag("show");

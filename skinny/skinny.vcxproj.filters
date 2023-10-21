@@ -163,6 +163,9 @@
     <ClCompile Include="src\utils.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\LoadingScreen.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
@@ -464,6 +467,9 @@
     <ClInclude Include="src\utils.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\LoadingScreen.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
@@ -485,6 +491,12 @@
       <Filter>src\shaders</Filter>
     </None>
     <None Include="src\shaders\subsamplePassShader.vert">
+      <Filter>src\shaders</Filter>
+    </None>
+    <None Include="src\shaders\loadingScreenPassShader.frag">
+      <Filter>src\shaders</Filter>
+    </None>
+    <None Include="src\shaders\loadingScreenPassShader.vert">
       <Filter>src\shaders</Filter>
     </None>
   </ItemGroup>

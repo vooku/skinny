@@ -33,16 +33,19 @@ bool Show::loadShaders()
 	firstPassShader_.load(shaderPathPrefix + "firstPassShader");
   pingPongPassShader_.load(shaderPathPrefix + "pingPongPassShader");
   subsamplePassShader_.load(shaderPathPrefix + "subsamplePassShader");
+  loadingScreenPassShader_.load(shaderPathPrefix + "loadingScreenPassShader");
 	
   return firstPassShader_.isLoaded() &&
          pingPongPassShader_.isLoaded() &&
          subsamplePassShader_.isLoaded();
+         loadingScreenPassShader_.isLoaded();
 }
 
 //--------------------------------------------------------------
 void Show::setup()
 {
   Mappable::setup();
+  loadingScreen_.setup();
 
 	ofFboSettings s;
 	s.width = width_;
@@ -54,10 +57,11 @@ void Show::setup()
 	fbos_[0].allocate(s);
 	fbos_[1].allocate(s);
 	fbos_[2].allocate(s);
+	fbos_[3].allocate(s);
 
   s.width /= GUI_MONITOR_SUBSAMPLE;
   s.height /= GUI_MONITOR_SUBSAMPLE;
-	fbos_[3].allocate(s);
+	fbos_[4].allocate(s);
 
   for (auto& fbo : fbos_)
   {
@@ -78,6 +82,7 @@ void Show::setup()
 void Show::exit()
 {
   Mappable::exit();
+  loadingScreen_.exit();
 
   if (currentScene_)
     currentScene_->done();
@@ -110,7 +115,7 @@ void Show::draw()
     firstPassShader_.end();
     fbos_[0].end();
 
-		// second pass
+		// pingpong pass 1
 		fbos_[1].begin();
 		pingPongPassShader_.begin();
 		setupPingPongPassUniforms(true, fbos_[0].getTexture());
@@ -118,7 +123,7 @@ void Show::draw()
 		pingPongPassShader_.end();
 		fbos_[1].end();
 
-    // third pass
+    // pingpong pass 2
     fbos_[2].begin();
 		pingPongPassShader_.begin();
 		setupPingPongPassUniforms(false, fbos_[1].getTexture());
@@ -126,19 +131,28 @@ void Show::draw()
 		pingPongPassShader_.end();
     fbos_[2].end();
 
-    fbos_[2].getTexture().draw(0.f, 0.f);
+    // loading screen pass
+		fbos_[3].begin();
+		loadingScreenPassShader_.begin();
+		setupLoadingScreenPassUniforms(fbos_[2].getTexture());
+		ofDrawRectangle(0, 0, width_, height_);
+		loadingScreenPassShader_.end();
+		fbos_[3].end();
 
-    // fourth pass
+    // draw main window
+    fbos_[3].getTexture().draw(0.f, 0.f);
+
+    // monitor pass
     if (getStatus().gui && getStatus().gui->requiresVisualMonitor())
     {
-      fbos_[3].begin();
+      fbos_[4].begin();
       subsamplePassShader_.begin();
-      setupSubsamplePassUniforms(fbos_[2].getTexture());
+      setupSubsamplePassUniforms(fbos_[3].getTexture());
       ofDrawRectangle(0, 0, width_ / GUI_MONITOR_SUBSAMPLE, height_ / GUI_MONITOR_SUBSAMPLE);
       subsamplePassShader_.end();
-      fbos_[3].end();
+      fbos_[4].end();
 
-      fbos_[3].getTexture().readToPixels(subsampledPixels_);
+      fbos_[4].getTexture().readToPixels(subsampledPixels_);
     }
 }
 
@@ -147,7 +161,9 @@ bool Show::reload(const ShowDescription& description)
 {
     masterAlphaControl_ = description.getAlphaControl();
 
-    return reloadLayers(description) && reloadEffects(description);
+    return loadingScreen_.reload(description) &&
+           reloadLayers(description) &&
+           reloadEffects(description);
 }
 
 //--------------------------------------------------------------
@@ -306,12 +322,19 @@ void Show::setupFirstPassUniforms() const
 //--------------------------------------------------------------
 void Show::setupPingPongPassUniforms(bool horizontal, const ofTexture& img) const
 {
-	// keep effect uniforms from first pass
 	pingPongPassShader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
 	pingPongPassShader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
 	pingPongPassShader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
 	pingPongPassShader_.setUniform1i("horizontal", horizontal);
 	pingPongPassShader_.setUniformTexture("previousPass", img, 0);
+}
+
+//--------------------------------------------------------------
+void Show::setupLoadingScreenPassUniforms(const ofTexture& img) const
+{
+	loadingScreenPassShader_.setUniform1i("playing", loadingScreen_.isPlaying()); // #TODO
+	loadingScreenPassShader_.setUniformTexture("previousPass", img, 0);
+	loadingScreenPassShader_.setUniformTexture("loadingScreen", loadingScreen_.getNext(), 1);
 }
 
 //--------------------------------------------------------------

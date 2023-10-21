@@ -9,6 +9,7 @@
 
 #include "Scene.h"
 #include "Mappable.h"
+#include "LoadingScreen.h"
 
 namespace skinny {
 
@@ -29,6 +30,7 @@ public:
     virtual void exit() override;
     void draw();
     bool reload(const ShowDescription& description);
+		bool reloadLoadingScreen(const ShowDescription& description);
 		bool reloadLayers(const ShowDescription& description);
 		bool reloadEffects(const ShowDescription& description);
     void playPauseEffect(int i);
@@ -58,6 +60,7 @@ private:
 
     void setupFirstPassUniforms() const;
     void setupPingPongPassUniforms(bool horizontal, const ofTexture& img) const;
+    void setupLoadingScreenPassUniforms(const ofTexture& img) const;
     void setupSubsamplePassUniforms(const ofTexture& img) const;
     bool hasActiveFX() const;
 
@@ -66,9 +69,11 @@ private:
     mutable ofShader firstPassShader_;
     mutable ofShader pingPongPassShader_;
     mutable ofShader subsamplePassShader_;
-    std::array<ofFbo, 4> fbos_;
+    mutable ofShader loadingScreenPassShader_;
+    std::array<ofFbo, 5> fbos_;
 
     ofPixels subsampledPixels_;
+    LoadingScreen loadingScreen_;
 
     const int width_, height_;
     ScenePtr currentScene_;

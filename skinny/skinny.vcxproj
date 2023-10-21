@@ -192,6 +192,7 @@ copy src\shaders\* bin\data\shaders</Command>
   <ItemGroup>
     <ClCompile Include="src\ImageLayer.cpp" />
     <ClCompile Include="src\Layer.cpp" />
+    <ClCompile Include="src\LoadingScreen.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\ofApp.cpp" />
     <ClCompile Include="src\base.cpp" />
@@ -246,6 +247,7 @@ copy src\shaders\* bin\data\shaders</Command>
   <ItemGroup>
     <ClInclude Include="src\ImageLayer.h" />
     <ClInclude Include="src\Layer.h" />
+    <ClInclude Include="src\LoadingScreen.h" />
     <ClInclude Include="src\ofApp.h" />
     <ClInclude Include="src\base.h" />
     <ClInclude Include="src\Effect.h" />
@@ -332,6 +334,8 @@ copy src\shaders\* bin\data\shaders</Command>
   <ItemGroup>
     <None Include="src\shaders\firstPassShader.frag" />
     <None Include="src\shaders\firstPassShader.vert" />
+    <None Include="src\shaders\loadingScreenPassShader.frag" />
+    <None Include="src\shaders\loadingScreenPassShader.vert" />
     <None Include="src\shaders\pingPongPassShader.frag" />
     <None Include="src\shaders\pingPongPassShader.vert" />
     <None Include="src\shaders\subsamplePassShader.frag" />
