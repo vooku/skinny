@@ -25,6 +25,42 @@ uniform float[nFx] fxParam;
 out vec4 outputColor;
 
 //--------------------------------------------------------------
+#ifndef saturate
+#define saturate(v) clamp(v,0.,1.)
+#endif
+//--------------------------------------------------------------
+//HSV (hue, saturation, value) to RGB.
+//Sources: https://gist.github.com/yiwenl/745bfea7f04c456e0101, https://gist.github.com/sugi-cho/6a01cae436acddd72bdf
+vec3 hsv2rgb(vec3 c)
+{
+	vec4 K=vec4(1.,2./3.,1./3.,3.);
+	return c.z*mix(K.xxx,saturate(abs(fract(c.x+K.xyz)*6.-K.w)-K.x),c.y);
+}
+
+//--------------------------------------------------------------
+//RGB to HSV.
+//Source: https://gist.github.com/yiwenl/745bfea7f04c456e0101
+vec3 rgb2hsv(vec3 c)
+{
+	float cMax=max(max(c.r,c.g),c.b),
+	      cMin=min(min(c.r,c.g),c.b),
+	      delta=cMax-cMin;
+	vec3 hsv=vec3(0.,0.,cMax);
+	if(cMax>cMin){
+		hsv.y=delta/cMax;
+		if(c.r==cMax){
+			hsv.x=(c.g-c.b)/delta;
+		}else if(c.g==cMax){
+			hsv.x=2.+(c.b-c.r)/delta;
+		}else{
+			hsv.x=4.+(c.r-c.g)/delta;
+		}
+		hsv.x=fract(hsv.x/6.);
+	}
+	return hsv;
+}
+
+//--------------------------------------------------------------
 vec2 horizontalOffset(vec2 uv, float p, vec2 dimensions)
 {
     const float A = 0.075 * p * dimensions.x;
@@ -148,6 +184,14 @@ vec3 desaturate(vec3 c, float p)
 }
 
 //--------------------------------------------------------------
+vec3 saturation(vec3 c, float p)
+{
+    vec3 hsv = rgb2hsv(c);
+    hsv.y = hsv.y * 2 * p;
+    return hsv2rgb(hsv);
+}
+
+//--------------------------------------------------------------
 void main()
 {
     vec3 blended = vec3(0.0);
@@ -227,6 +271,9 @@ void main()
                 break;
             case 6: // Desaturate
                 blended = desaturate(blended,  fxParam[i]);
+                break;
+            case 11: // Saturation
+                blended = saturation(blended,  fxParam[i]);
                 break;
             default:
                 // do nothing
