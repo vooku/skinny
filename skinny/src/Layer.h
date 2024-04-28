@@ -18,6 +18,7 @@ public:
 	virtual ~Layer() override = default;
 
 	virtual bool reload(const std::filesystem::path& path) = 0;
+	virtual bool isLoaded() const = 0;
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 	virtual bool isFrameNew() = 0;

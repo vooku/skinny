@@ -30,6 +30,12 @@ bool ImageLayer::reload(const std::filesystem::path& path)
 }
 
 //--------------------------------------------------------------
+bool ImageLayer::isLoaded() const
+{
+	return true; // sync loading
+}
+
+//--------------------------------------------------------------
 void ImageLayer::bind() {
 	if (!valid_)
 		return;

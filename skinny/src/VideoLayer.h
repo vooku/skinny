@@ -11,7 +11,8 @@ public:
     VideoLayer(int id, ErrorType error);
     virtual ~VideoLayer() override;
 
-    virtual bool reload(const std::filesystem::path& path) override;
+		virtual bool reload(const std::filesystem::path& path) override;
+		virtual bool isLoaded() const;
     virtual void bind() override;
     virtual void unbind() override;
     virtual bool isFrameNew() override;

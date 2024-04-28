@@ -11,6 +11,7 @@ public:
 	virtual ~ImageLayer() override = default;
 
 	virtual bool reload(const std::filesystem::path& path) override;
+	virtual bool isLoaded() const;
 	virtual void bind() override;
 	virtual void unbind() override;
 	virtual bool isFrameNew() override;

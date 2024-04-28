@@ -119,12 +119,6 @@ void Gui::reload()
         layerMuteToggles_[i]->setChecked(false);
 
         if (layers[i]) {
-            const auto name = layers[i]->getName();
-            const auto label =
-                name.length() > MAX_LABEL_LENGTH ?
-                name.substr(0, MAX_LABEL_LENGTH - 3) + "..." :
-                name;
-            layerButtons_[i]->setLabel(label);
             layerMidiInputs_[i]->setText(std::to_string(layers[i]->getNote()));
             layerCCInputs_[i]->setText(std::to_string(layers[i]->getCc()));
             layerAlphaInputs_[i]->setText(std::to_string(static_cast<int>(layers[i]->getAlpha() * MAX_7BIT)));
@@ -186,6 +180,19 @@ void Gui::update()
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (layers[i]) {
             layerPlayToggles_[i]->setChecked(layers[i]->isPlaying());
+            if (layers[i]->isLoaded())
+            {
+              const auto name = layers[i]->getName();
+              const auto label =
+                name.length() > MAX_LABEL_LENGTH ?
+                name.substr(0, MAX_LABEL_LENGTH - 3) + "..." :
+                name;
+              layerButtons_[i]->setLabel(label);
+            }
+            else
+            {
+              layerButtons_[i]->setLabel("Loading...");
+            }
             if (!layerAlphaInputs_[i]->getFocused())
               layerAlphaInputs_[i]->setText(std::to_string(static_cast<int>(layers[i]->getAlpha() * MAX_7BIT)));
         }
