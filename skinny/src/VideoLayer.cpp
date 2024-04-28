@@ -40,15 +40,17 @@ bool VideoLayer::isLoaded() const
 
 //--------------------------------------------------------------
 void VideoLayer::bind() {
-    if (player_.isLoaded())
-      player_.getTexture().bind(id_);
+  // if using text then planes must be nonzero size
+  if (player_.isLoaded() && (!player_.isUsingTexture() || player_.getTexturePlanes().size() > 0))
+    player_.getTexture().bind(id_);
 }
 
 //--------------------------------------------------------------
 void VideoLayer::unbind()
 {
-    if (player_.isLoaded())
-      player_.getTexture().unbind(id_);
+  // if using text then planes must be nonzero size
+  if (player_.isLoaded() && (!player_.isUsingTexture() || player_.getTexturePlanes().size() > 0))
+    player_.getTexture().unbind(id_);
 }
 
 //--------------------------------------------------------------
