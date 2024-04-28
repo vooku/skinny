@@ -184,10 +184,18 @@ vec3 desaturate(vec3 c, float p)
 }
 
 //--------------------------------------------------------------
+vec3 hue(vec3 c, float p)
+{
+    vec3 hsv = rgb2hsv(c);
+    hsv.x = mod(hsv.x + p, 1.f);
+    return hsv2rgb(hsv);
+}
+
+//--------------------------------------------------------------
 vec3 saturation(vec3 c, float p)
 {
     vec3 hsv = rgb2hsv(c);
-    hsv.y = hsv.y * 2 * p;
+    hsv.y *= 2 * p;
     return hsv2rgb(hsv);
 }
 
@@ -272,7 +280,10 @@ void main()
             case 6: // Desaturate
                 blended = desaturate(blended,  fxParam[i]);
                 break;
-            case 11: // Saturation
+            case 11: // Hue
+                blended = hue(blended,  fxParam[i]);
+                break;
+            case 12: // Saturation
                 blended = saturation(blended,  fxParam[i]);
                 break;
             default:

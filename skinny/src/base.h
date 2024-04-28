@@ -67,6 +67,7 @@ enum class EffectType {
     HBlur,
     VBlur,
     Kaleidoscope,
+    Hue,
     Saturation,
     Count,
 };
