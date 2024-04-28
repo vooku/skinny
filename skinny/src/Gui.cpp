@@ -127,6 +127,7 @@ void Gui::reload()
         }
         else {
             layerButtons_[i]->setLabel("Click to load a video");
+            layerButtons_[i]->setLabelColor(ofColor::white);
             layerMidiInputs_[i]->setText("");
             layerCCInputs_[i]->setText("");
             layerRetriggerToggles_[i]->setChecked(false);
@@ -180,19 +181,20 @@ void Gui::update()
     for (auto i = 0; i < MAX_LAYERS; ++i) {
         if (layers[i]) {
             layerPlayToggles_[i]->setChecked(layers[i]->isPlaying());
-            if (layers[i]->isLoaded())
+
+            std::string label;
+            ofColor color = ofColor::white;
+            if (!layers[i]->isLoaded())
             {
-              const auto name = layers[i]->getName();
-              const auto label =
-                name.length() > MAX_LABEL_LENGTH ?
-                name.substr(0, MAX_LABEL_LENGTH - 3) + "..." :
-                name;
-              layerButtons_[i]->setLabel(label);
+              label += "Loading ";
+              color = ofColor::orangeRed;
             }
-            else
-            {
-              layerButtons_[i]->setLabel("Loading...");
-            }
+            label += layers[i]->getName();
+            if (label.length() > MAX_LABEL_LENGTH)
+              label = label.substr(0, MAX_LABEL_LENGTH - 3) + "...";
+            layerButtons_[i]->setLabel(label);
+            layerButtons_[i]->setLabelColor(color);
+
             if (!layerAlphaInputs_[i]->getFocused())
               layerAlphaInputs_[i]->setText(std::to_string(static_cast<int>(layers[i]->getAlpha() * MAX_7BIT)));
         }
