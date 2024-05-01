@@ -231,11 +231,19 @@ void Show::update()
 //--------------------------------------------------------------
 void Show::onNoteOn(NoteMessage& msg)
 {
-  if (Mappable::isCorrectChannel(msg.channel_) &&
-      msg.note_ == getStatus().showDescription->getSwitchNote())
+  if (!Mappable::isCorrectChannel(msg.channel_))
+  {
+    return;
+  }
+   
+  if (msg.note_ == getStatus().showDescription->getSwitchNoteForward())
   {
     Status::instance().loadDir = LoadDir::Forward;
   }
+	else if (msg.note_ == getStatus().showDescription->getSwitchNoteBackward())
+	{
+		Status::instance().loadDir = LoadDir::Backward;
+	}
 }
 
 //--------------------------------------------------------------

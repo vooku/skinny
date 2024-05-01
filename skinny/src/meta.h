@@ -91,7 +91,8 @@ public:
     const SceneDescription& currentScene() const { return scenes_[currentIdx_]; }
     auto getSceneIndex() const { return currentIdx_; }
     auto getSize() const { return scenes_.size(); }
-    auto getSwitchNote() const { return switchNote_; }
+    auto getSwitchNoteForward() const { return switchNoteForward_; }
+    auto getSwitchNoteBackward() const { return switchNoteBackward_; }
     auto getMidiChannel() const { return midiChannel_; }
     const auto& getEffects() const { return effects_; }
     auto getAlphaControl() const { return alphaControl_; }
@@ -111,7 +112,8 @@ private:
 
     int currentIdx_ = 0;
 
-    midiNote  switchNote_ = MappableDescription::invalid_midi;
+    midiNote  switchNoteForward_ = MappableDescription::invalid_midi;
+    midiNote  switchNoteBackward_ = MappableDescription::invalid_midi;
     int       midiChannel_ = default_channel;
     midiNote  alphaControl_ = DEFAULT_MASTER_ALPHA_CONTROL;
     bool      spoutOut_ = false;
