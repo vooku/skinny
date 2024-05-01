@@ -36,7 +36,7 @@ void Scene::reload(const SceneDescription & description)
         else {
             if (!layers_[i] || description.layers[i].path.filename() != layers_[i]->getName())
             {
-              const auto fif = FreeImage_GetFileType(description.layers[i].path.filename().string().c_str());
+              const auto fif = FreeImage_GetFileType(description.layers[i].path.string().c_str());
               if (fif != FIF_UNKNOWN)
               {
                 auto imageLayer = std::make_unique<ImageLayer>(i, description.layers[i].path, description.layers[i].note);
