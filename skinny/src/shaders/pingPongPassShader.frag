@@ -28,7 +28,7 @@ vec3 blur(float p)
     vec3 c = vec3(0.0f);
     for (int i = l; i < r; i++)
     {
-        vec2 offset = mix(vec2(0.0f, i), vec2(i, 0.0f), horizontal);
+        vec2 offset = mix(vec2(0.0f, i), vec2(i, 0.0f), vec2(horizontal, horizontal));
         c += texture(previousPass, texCoordVarying + offset).rgb;
     }
 
