@@ -31,7 +31,7 @@ const char * c_str(BlendMode blendMode)
 
 //--------------------------------------------------------------
 const char* c_str(EffectType type) {
-    static_assert(static_cast<int>(EffectType::Count) == 13, "Do not forget to add new values here.");
+    static_assert(static_cast<int>(EffectType::Count) == 14, "Do not forget to add new values here.");
 
     switch (type)
     {
@@ -61,6 +61,8 @@ const char* c_str(EffectType type) {
         return "Hue";
     case EffectType::Saturation:
         return "Saturation";
+    case EffectType::GradientMap:
+        return "GradientMap";
     default:
         return "Invalid";
     }

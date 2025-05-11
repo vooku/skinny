@@ -69,6 +69,7 @@ enum class EffectType {
     Kaleidoscope,
     Hue,
     Saturation,
+    GradientMap,
     Count,
 };
 

@@ -200,6 +200,16 @@ vec3 saturation(vec3 c, float p)
 }
 
 //--------------------------------------------------------------
+vec3 gradientMap(vec3 c, float p)
+{
+    vec3 gray = desaturate(c, 1.0);
+    vec3 left = vec3(1.0, 0.0, 0.0);
+    vec3 right = vec3(0.0, 0.0, 1.0);
+    vec3 mapped = mix(left, right, gray.x);
+    return mapped;
+}
+
+//--------------------------------------------------------------
 void main()
 {
     vec3 blended = vec3(0.0);
@@ -285,6 +295,9 @@ void main()
                 break;
             case 12: // Saturation
                 blended = saturation(blended,  fxParam[i]);
+                break;
+            case 13: // Gradient map
+                blended = gradientMap(blended,  fxParam[i]);
                 break;
             default:
                 // do nothing
