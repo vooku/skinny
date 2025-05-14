@@ -189,7 +189,7 @@ bool Show::reloadEffects(const ShowDescription& description)
 
     if (effects_[i])
     {
-      if (effects_[i]->type == effect.type)
+      if (effects_[i]->getType() == effect.type)
       {
         continue;
       }
@@ -311,7 +311,7 @@ void Show::setupFirstPassUniforms() const
     currentScene_->setupUniforms(firstPassShader_);
 
     for (auto i = 0; i < MAX_EFFECTS; ++i) {
-        uniforms_.fxTypes[i] = static_cast<int>(effects_[i]->type);
+        uniforms_.fxTypes[i] = static_cast<int>(effects_[i]->getType());
         uniforms_.fxPlaying[i] = effects_[i]->isPlaying();
         uniforms_.fxParam[i] = effects_[i]->getParam() / MAX_7BITF;
     }
@@ -325,6 +325,20 @@ void Show::setupFirstPassUniforms() const
     firstPassShader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
     firstPassShader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
     firstPassShader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
+
+    uniforms_.gradientMapValues_[0] = { 1.f, 0.f, 0.f };
+    uniforms_.gradientMapValues_[1] = { 1.f, 1.f, 0.f };
+    uniforms_.gradientMapValues_[2] = { 0.f, 1.f, 0.f };
+    uniforms_.gradientMapValues_[3] = { 0.f, 1.f, 1.f };
+    uniforms_.gradientMapValues_[4] = { 0.f, 0.f, 1.f };
+
+    uniforms_.gradientMapPositions_[0] = 0.0f;
+    uniforms_.gradientMapPositions_[1] = 0.25f;
+    uniforms_.gradientMapPositions_[2] = 0.5f;
+    uniforms_.gradientMapPositions_[3] = 0.75f;
+    uniforms_.gradientMapPositions_[4] = 1.0f;
+    firstPassShader_.setUniform3fv("gradientMapValues", reinterpret_cast<const float*>(uniforms_.gradientMapValues_), GRADIENT_MAP_SIZE);
+    firstPassShader_.setUniform1fv("gradientMapPositions", uniforms_.gradientMapPositions_, GRADIENT_MAP_SIZE);
 }
 
 //--------------------------------------------------------------
