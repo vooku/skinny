@@ -54,8 +54,8 @@ private:
         int fxPlaying[MAX_EFFECTS];
         float fxParam[MAX_EFFECTS];
         float masterAlpha_ = 1.0f;
-				glm::vec3 gradientMapValues_[GRADIENT_MAP_SIZE];
-				float gradientMapPositions_[GRADIENT_MAP_SIZE];
+				std::array<glm::vec3, GRADIENT_MAP_SIZE> gradientMapValues_;
+				std::array<float, GRADIENT_MAP_SIZE> gradientMapPositions_;
     } mutable uniforms_;
 
     bool loadShaders();

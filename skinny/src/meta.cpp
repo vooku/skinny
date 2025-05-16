@@ -191,8 +191,22 @@ bool ShowDescription::fromXml(ofxXmlSettings& config) {
             config.popTag(); // effect
         }
     }
-    config.popTag(); // effects
 
+		config.pushTag("gradientMap");
+		for (auto i = 0; i < GRADIENT_MAP_SIZE; i++)
+		{
+			config.addTag("color");
+			config.pushTag("color", i);
+
+			gradientMapValues_[i].r = config.getValue("r", 0) / 255.f;
+			gradientMapValues_[i].g = config.getValue("g", 0) / 255.f;
+			gradientMapValues_[i].b = config.getValue("b", 0) / 255.f;
+			gradientMapPositions_[i] = config.getValue("position", (i + 1) / static_cast<float>(GRADIENT_MAP_SIZE));
+
+			config.popTag(); // color
+		}
+		config.popTag(); // gradientMap
+    config.popTag(); // effects
     config.popTag(); // show
 
     return true;
@@ -231,6 +245,22 @@ void ShowDescription::toXml(ofxXmlSettings& config) const {
             config.popTag(); // effect
         }
     }
+
+		config.addTag("gradientMap");
+		config.pushTag("gradientMap");
+		for (auto i = 0; i < GRADIENT_MAP_SIZE; i++)
+		{
+			config.addTag("color");
+			config.pushTag("color", i);
+
+			config.setValue("r", static_cast<int>(std::floor(gradientMapValues_[i].r * 255)));
+			config.setValue("g", static_cast<int>(std::floor(gradientMapValues_[i].g * 255)));
+			config.setValue("b", static_cast<int>(std::floor(gradientMapValues_[i].b * 255)));
+			config.setValue("position", gradientMapPositions_[i]);
+
+			config.popTag(); // color
+		}
+		config.popTag(); // gradientMap
     config.popTag(); // effects
 
     for (auto i = 0; i < scenes_.size(); i++) {

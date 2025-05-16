@@ -217,7 +217,7 @@ vec3 gradientMap(vec3 c, float p)
             mapped = mix(left, right, w);
         }
     }
-    return mapped;
+    return mix(c, mapped, p);
 }
 
 //--------------------------------------------------------------
