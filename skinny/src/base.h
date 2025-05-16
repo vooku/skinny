@@ -9,6 +9,7 @@ using midiNote = int;
 //--------------------------------------------------------------
 static const int MAX_LAYERS = 8;
 static const int MAX_EFFECTS = 12;
+static const int GRADIENT_MAP_SIZE = 5;
 static const int MIDI_DEVICES_REFRESH_PERIOD = 1000000000; // this is 1 second in nanoseconds
 static const int MIDI_MSG_REFRESH_PERIOD = 1000000000; // this is 1 second in nanoseconds
 static const int MAX_7BIT = 127;
@@ -18,7 +19,7 @@ static const int MAIN_WINDOW_HEIGHT = 1080;
 static const int GUI_WINDOW_WIDTH = 1500;
 static const int GUI_WINDOW_HEIGHT = 800;
 static const int GUI_MONITOR_SUBSAMPLE = 8;
-static constexpr const char* VERSION = "0.11.2";
+static constexpr const char* VERSION = "0.12.0";
 static constexpr const char* NAME = "Skinny Mixer";
 // TODO TITLE VERSION + NAME
 static constexpr const char* AUTHOR = "Vadim Vooku Petrov";
@@ -69,6 +70,7 @@ enum class EffectType {
     Kaleidoscope,
     Hue,
     Saturation,
+    GradientMap,
     Count,
 };
 

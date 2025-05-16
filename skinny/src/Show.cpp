@@ -160,6 +160,8 @@ void Show::draw()
 bool Show::reload(const ShowDescription& description)
 {
     masterAlphaControl_ = description.getAlphaControl();
+    uniforms_.gradientMapValues_ = description.getGradientMapValues();
+    uniforms_.gradientMapPositions_ = description.getGradientMapPositions();
 
     return loadingScreen_.reload(description) &&
            reloadLayers(description) &&
@@ -325,6 +327,9 @@ void Show::setupFirstPassUniforms() const
     firstPassShader_.setUniform1iv("fxTypes", uniforms_.fxTypes, MAX_EFFECTS);
     firstPassShader_.setUniform1iv("fxPlaying", uniforms_.fxPlaying, MAX_EFFECTS);
     firstPassShader_.setUniform1fv("fxParam", uniforms_.fxParam, MAX_EFFECTS);
+
+    firstPassShader_.setUniform3fv("gradientMapValues", reinterpret_cast<const float*>(uniforms_.gradientMapValues_.data()), GRADIENT_MAP_SIZE);
+    firstPassShader_.setUniform1fv("gradientMapPositions", uniforms_.gradientMapPositions_.data(), GRADIENT_MAP_SIZE);
 }
 
 //--------------------------------------------------------------

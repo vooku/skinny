@@ -104,6 +104,9 @@ public:
 
     void setMidiChannel(int channel) { midiChannel_ = channel; }
 
+    const auto& getGradientMapValues() const { return gradientMapValues_; }
+    const auto& getGradientMapPositions() const { return gradientMapPositions_; }
+
 private:
     static const int default_channel = 2;
 
@@ -122,6 +125,8 @@ private:
     midiNote loadingScreensNote_ = MappableDescription::invalid_midi;
     midiNote loadingScreensCc_ = MappableDescription::invalid_midi;
 
+		std::array<glm::vec3, GRADIENT_MAP_SIZE>  gradientMapValues_;
+		std::array<float, GRADIENT_MAP_SIZE>      gradientMapPositions_;
 };
 
 } // namespace skinny

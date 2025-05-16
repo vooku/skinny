@@ -2,6 +2,7 @@
 
 const int n = 8;
 const int nFx = 12;
+const int nGradientMap = 5;
 
 const float eps = 0.0001f;
 const float pi = 3.14159;
@@ -21,6 +22,8 @@ uniform float timeShift;
 uniform int[nFx] fxTypes;
 uniform bool[nFx] fxPlaying;
 uniform float[nFx] fxParam; 
+uniform vec3[nGradientMap] gradientMapValues;
+uniform float[nGradientMap] gradientMapPositions;
 
 out vec4 outputColor;
 
@@ -200,6 +203,24 @@ vec3 saturation(vec3 c, float p)
 }
 
 //--------------------------------------------------------------
+vec3 gradientMap(vec3 c, float p)
+{
+    float gray = desaturate(c, 1.0).x;
+    vec3 mapped = c;
+    for (int i = 0; i < nGradientMap - 1; i++)
+    {
+        if (gray >= gradientMapPositions[i])
+        {
+            vec3 left = gradientMapValues[i];
+            vec3 right = gradientMapValues[i + 1];
+            float w = (gray - gradientMapPositions[i]) / (gradientMapPositions[i + 1] - gradientMapPositions[i]);
+            mapped = mix(left, right, w);
+        }
+    }
+    return mix(c, mapped, p);
+}
+
+//--------------------------------------------------------------
 void main()
 {
     vec3 blended = vec3(0.0);
@@ -285,6 +306,9 @@ void main()
                 break;
             case 12: // Saturation
                 blended = saturation(blended,  fxParam[i]);
+                break;
+            case 13: // Gradient map
+                blended = gradientMap(blended,  fxParam[i]);
                 break;
             default:
                 // do nothing
