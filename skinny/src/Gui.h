@@ -80,6 +80,7 @@ private:
         static const std::string SAVE;
         static const std::string SAVE_AS;
         static const std::string LOAD;
+        static const std::string RELOAD;
     };
 
     class CommonTheme : public ofxDatGuiTheme {
