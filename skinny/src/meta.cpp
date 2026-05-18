@@ -142,6 +142,13 @@ ShowDescription::ShowDescription()
         // #TODO revise default effects
         effects_[i] = EffectDescription(i, static_cast<EffectType>(i));
     }
+
+    for (auto i = 0; i < GRADIENT_MAP_SIZE; i++) {
+			gradientMapValues_[i].r = (i % 2) * (i + 1) / static_cast<float>(GRADIENT_MAP_SIZE);
+			gradientMapValues_[i].g = ((i + 1) % 2) * (i + 1) / static_cast<float>(GRADIENT_MAP_SIZE);
+			gradientMapValues_[i].b = 1.f - gradientMapValues_[i].r;
+      gradientMapPositions_[i] = (i + 1) / static_cast<float>(GRADIENT_MAP_SIZE);
+    }
 }
 
 //--------------------------------------------------------------

@@ -10,6 +10,7 @@ const std::string Gui::Btn::NEW = "New scene";
 const std::string Gui::Btn::SAVE = "Save";
 const std::string Gui::Btn::SAVE_AS = "Save as";
 const std::string Gui::Btn::LOAD = "Load";
+const std::string Gui::Btn::RELOAD = "Reload";
 
 const ofColor Gui::BACKGROUND_COLOR = { 45, 45, 48 };
 
@@ -381,6 +382,19 @@ void Gui::onControlButton(ofxDatGuiButtonEvent e)
 
         fileSelector_ = std::make_unique<FileSelector>("Select config file");
         fileSelector_->startThread();
+    } else if (name == Btn::RELOAD) {
+			ofxXmlSettings config;
+			auto& showDescription = *Status::instance().showDescription;
+
+			if (config.loadFile(configPath_.string()) && showDescription.fromXml(config)) {
+        // nothing
+			}
+			else {
+				ofLog(OF_LOG_WARNING, "Cannot reload config file %s, creating default scene instead.", configPath_.c_str());
+				showDescription = {};
+			}
+
+			Status::instance().loadDir = LoadDir::CurrentAll;
     } else if (name == Btn::SAVE) {
         if (!configPath_.empty()) {
             save(configPath_);
@@ -765,6 +779,7 @@ void Gui::setupControlPanel(glm::ivec2& pos)
     controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE));
     controlButtons_.push_back(controlPanel_->addButton(Btn::SAVE_AS));
     controlButtons_.push_back(controlPanel_->addButton(Btn::LOAD));
+    controlButtons_.push_back(controlPanel_->addButton(Btn::RELOAD));
     for (auto& btn : controlButtons_)
         btn->onButtonEvent(this, &Gui::onControlButton);
 
