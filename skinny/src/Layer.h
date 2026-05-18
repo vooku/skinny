@@ -1,16 +1,16 @@
 #pragma once
 
-#include "ofMain.h"
 #include "Playable.h"
+#include "ofMain.h"
 #include "utils.h"
 
 namespace skinny {
 
-class Layer : public Playable {
+class Layer : public Playable
+{
 public:
-	enum class ErrorType {
-		Invalid, Failed
-	};
+	enum class ErrorType { Invalid,
+												 Failed };
 
 	// #TODO use layer description?
 	Layer(int id, const std::filesystem::path& path, midiNote note = -1, midiNote control = -1);
@@ -22,7 +22,7 @@ public:
 	virtual void bind() = 0;
 	virtual void unbind() = 0;
 	virtual bool isFrameNew() = 0;
-	virtual void update() { };
+	virtual void update() {};
 
 	virtual float getWidth() const = 0;
 	virtual float getHeight() const = 0;

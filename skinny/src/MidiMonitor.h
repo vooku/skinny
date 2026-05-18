@@ -1,13 +1,14 @@
 #pragma once
 
-#include "ofMain.h"
-#include "base.h"
 #include "Mappable.h"
+#include "base.h"
+#include "ofMain.h"
 
 namespace skinny {
 
 //--------------------------------------------------------------
-class MidiMonitor : public ofThread, public Mappable {
+class MidiMonitor : public ofThread, public Mappable
+{
 public:
 	virtual void setup() override;
 	virtual void exit() override;
@@ -25,7 +26,6 @@ private:
 
 	std::string currentMsg;
 	ofTimer timer_;
-
 };
 
-}
+} // namespace skinny

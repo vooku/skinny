@@ -5,33 +5,33 @@
 namespace skinny {
 
 //--------------------------------------------------------------
-class Mappable {
+class Mappable
+{
 public:
-    Mappable() = default;
-    Mappable(midiNote note, midiNote cc);
-    virtual ~Mappable() = default;
+	Mappable() = default;
+	Mappable(midiNote note, midiNote cc);
+	virtual ~Mappable() = default;
 
-    static bool isCorrectChannel(int channel);
+	static bool isCorrectChannel(int channel);
 
-    virtual void setup();
-    virtual void exit();
+	virtual void setup();
+	virtual void exit();
 
-    // dummy implementation so there's no need to implement everything
-    virtual void onNoteOn(NoteMessage& msg) {};
-    virtual void onNoteOff(NoteMessage& msg) {};
-    virtual void onControlChange(ControlChangeMessage& msg) {};
+	// dummy implementation so there's no need to implement everything
+	virtual void onNoteOn(NoteMessage& msg) {};
+	virtual void onNoteOff(NoteMessage& msg) {};
+	virtual void onControlChange(ControlChangeMessage& msg) {};
 
-    virtual midiNote getNote() const { return note_; }
-    virtual midiNote getCc() const { return cc_; }
+	virtual midiNote getNote() const { return note_; }
+	virtual midiNote getCc() const { return cc_; }
 
-    void setNote(midiNote note) { note_ = note; }
-    void setCc(midiNote cc) { cc_ = cc; }
+	void setNote(midiNote note) { note_ = note; }
+	void setCc(midiNote cc) { cc_ = cc; }
 
 protected:
-    midiNote note_ = 0;
-    midiNote cc_ = 0;
-    int ccValue_ = 0;
-
+	midiNote note_ = 0;
+	midiNote cc_ = 0;
+	int ccValue_ = 0;
 };
 
 } // namespace skinny

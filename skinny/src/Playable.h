@@ -5,7 +5,8 @@
 namespace skinny {
 
 //--------------------------------------------------------------
-class Playable : public Mappable {
+class Playable : public Mappable
+{
 public:
 	Playable() = default;
 	Playable(midiNote note, midiNote cc);
@@ -23,7 +24,6 @@ public:
 private:
 	bool playing_ = false;
 	bool mute_ = false;
-
 };
 
-}
+} // namespace skinny

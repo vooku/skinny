@@ -5,14 +5,14 @@ namespace skinny {
 //--------------------------------------------------------------
 Status& Status::instance()
 {
-    static Status status;
-    return status;
+	static Status status;
+	return status;
 }
 
 //--------------------------------------------------------------
 Status& getStatus()
 {
-  return Status::instance();
+	return Status::instance();
 }
 
-}
+} // namespace skinny

@@ -1,14 +1,13 @@
-#pragma  once
+#pragma once
 
+#include "base.h"
 #include "ofMain.h"
 #include "ofxMidi.h"
-#include "base.h"
 
 namespace skinny {
 
 //--------------------------------------------------------------
-struct MidiDeviceInfo
-{
+struct MidiDeviceInfo {
 	bool open;
 	string name;
 };
@@ -16,7 +15,8 @@ struct MidiDeviceInfo
 using Devices = std::vector<MidiDeviceInfo>;
 
 //--------------------------------------------------------------
-class MidiController : public ofxMidiListener {
+class MidiController : public ofxMidiListener
+{
 public:
 	void exit();
 
@@ -33,7 +33,6 @@ public:
 private:
 	using MidiInputs = std::set<std::unique_ptr<ofxMidiIn>>;
 	MidiInputs midiInputs_;
-
 };
 
-}
+} // namespace skinny

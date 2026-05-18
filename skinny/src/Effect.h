@@ -4,22 +4,22 @@
 
 namespace skinny {
 
-class Effect : public Playable {
-    friend class Gui;
+class Effect : public Playable
+{
+	friend class Gui;
 
 public:
-    explicit Effect(int id);
-    Effect(int id, EffectType type, midiNote note, midiNote control, int param);
+	explicit Effect(int id);
+	Effect(int id, EffectType type, midiNote note, midiNote control, int param);
 
-    int getParam() const;
+	int getParam() const;
 
-    void setParam(int param);
+	void setParam(int param);
 
-    const EffectType type;
+	const EffectType type;
 
 private:
-    const int id_;
-
+	const int id_;
 };
 
 } // namespace skinny

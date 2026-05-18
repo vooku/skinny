@@ -4,7 +4,7 @@ namespace skinny {
 
 //--------------------------------------------------------------
 Playable::Playable(midiNote note, midiNote cc)
-	: Mappable(note, cc)
+		: Mappable(note, cc)
 {
 }
 
@@ -64,4 +64,4 @@ void Playable::setMute(bool mute)
 	playing_ = playing_ && !mute_;
 }
 
-}
+} // namespace skinny

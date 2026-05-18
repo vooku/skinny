@@ -1,15 +1,18 @@
 #include "MidiController.h"
-#include "Status.h"
+
 #include <algorithm>
 #include <cctype>
 #include <string>
+
+#include "Status.h"
 
 namespace skinny {
 
 //--------------------------------------------------------------
 void MidiController::exit()
 {
-	for (auto& midiInput : midiInputs_) {
+	for (auto& midiInput : midiInputs_)
+	{
 		midiInput->closePort();
 	}
 }
@@ -60,11 +63,12 @@ Devices MidiController::getPorts() const
 	{
 		// multiple identical devices not supported, sorry
 		const auto name = stripFollowingNumbers(tmpMidiIn.getInPortName(i));
-		const auto open = 0 < std::count_if(midiInputs_.begin(), midiInputs_.end(), [&name](const MidiInputs::value_type& input)
+
+		const auto openValidPorts = std::count_if(midiInputs_.begin(), midiInputs_.end(), [&name](const MidiInputs::value_type& input)
 		{
 			return stripFollowingNumbers(input->getName()) == name;
 		});
-
+		const auto open = 0 < openValidPorts;
 		devices.push_back({ open, name });
 	}
 
@@ -108,7 +112,8 @@ bool MidiController::connect(const std::string& deviceName)
 //--------------------------------------------------------------
 void MidiController::disconnect(const std::string& deviceName)
 {
-	const auto connectedPort = std::find_if(midiInputs_.begin(), midiInputs_.end(), [&deviceName](const MidiInputs::value_type& input)
+	const auto connectedPort =
+			std::find_if(midiInputs_.begin(), midiInputs_.end(), [&deviceName](const MidiInputs::value_type& input)
 	{
 		return stripFollowingNumbers(input->getName()) == deviceName;
 	});
@@ -120,4 +125,4 @@ void MidiController::disconnect(const std::string& deviceName)
 	}
 }
 
-}
+} // namespace skinny

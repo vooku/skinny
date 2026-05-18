@@ -1,4 +1,5 @@
 #include "MidiMonitor.h"
+
 #include "Status.h"
 
 namespace skinny {
@@ -63,4 +64,4 @@ void MidiMonitor::threadedFunction()
 	}
 }
 
-}
+} // namespace skinny

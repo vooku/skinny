@@ -4,7 +4,8 @@
 
 namespace skinny {
 
-class ImageLayer : public Layer {
+class ImageLayer : public Layer
+{
 public:
 	ImageLayer(int id, const std::filesystem::path& path, midiNote note = -1, midiNote control = -1);
 	ImageLayer(int id, ErrorType error);
@@ -21,7 +22,6 @@ public:
 
 private:
 	ofImage image_;
-
 };
 
 } // namespace skinny

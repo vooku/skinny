@@ -1,6 +1,6 @@
-#include <algorithm>
-
 #include "utils.h"
+
+#include <algorithm>
 
 namespace skinny {
 
@@ -11,11 +11,10 @@ boost::optional<int> sstoi(const std::string& str)
 	{
 		const auto i = std::stoi(str);
 		return i;
-	}
-	catch (...)
+	} catch (...)
 	{
 		return boost::none;
 	}
 }
 
-}
+} // namespace skinny

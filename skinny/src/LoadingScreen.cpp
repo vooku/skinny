@@ -44,8 +44,7 @@ bool LoadingScreen::loadImg(const std::filesystem::path& path)
 	}
 	else
 	{
-		ofLog(OF_LOG_ERROR, "Cannot load %s at %s",
-					path.filename().string().c_str(), path.parent_path().string().c_str());
+		ofLog(OF_LOG_ERROR, "Cannot load %s at %s", path.filename().string().c_str(), path.parent_path().string().c_str());
 	}
 
 	return loaded;
@@ -92,4 +91,4 @@ void LoadingScreen::onNoteOff(NoteMessage& msg)
 	// nothing
 }
 
-}
+} // namespace skinny

@@ -18,7 +18,6 @@ private:
 	const std::string message_;
 	const bool load_;
 	std::filesystem::path path_;
-
 };
 
 } // namespace skinny
