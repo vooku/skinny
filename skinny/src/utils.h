@@ -10,7 +10,7 @@ namespace skinny {
 template <typename T>
 T clamp(T v, T lo, T hi)
 {
-	return std::min(std::max(v, lo), hi);
+  return std::min(std::max(v, lo), hi);
 }
 
 //--------------------------------------------------------------

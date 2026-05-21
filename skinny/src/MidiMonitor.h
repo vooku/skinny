@@ -10,22 +10,22 @@ namespace skinny {
 class MidiMonitor : public ofThread, public Mappable
 {
 public:
-	virtual void setup() override;
-	virtual void exit() override;
+  virtual void setup() override;
+  virtual void exit() override;
 
-	virtual void onNoteOn(NoteMessage& msg) override;
-	virtual void onNoteOff(NoteMessage& msg) override;
-	virtual void onControlChange(ControlChangeMessage& msg) override;
+  virtual void onNoteOn(NoteMessage& msg) override;
+  virtual void onNoteOff(NoteMessage& msg) override;
+  virtual void onControlChange(ControlChangeMessage& msg) override;
 
-	std::string getCurrentMsg() const;
+  std::string getCurrentMsg() const;
 
-	bool on_ = false;
+  bool on_ = false;
 
 private:
-	void threadedFunction() override;
+  void threadedFunction() override;
 
-	std::string currentMsg;
-	ofTimer timer_;
+  std::string currentMsg;
+  ofTimer timer_;
 };
 
 } // namespace skinny

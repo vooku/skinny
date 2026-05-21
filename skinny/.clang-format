@@ -3,7 +3,7 @@ Cpp11BracedListStyle: false
 SpacesBeforeTrailingComments: 1
 IndentWidth: 2
 TabWidth: 2
-UseTab: Always
+UseTab: Never
 ColumnLimit: 0
 AccessModifierOffset: -2
 AlignAfterOpenBracket: Align

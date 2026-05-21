@@ -7,23 +7,24 @@ namespace skinny {
 class VideoSelector : public ofThread
 {
 public:
-	using IndexType = unsigned int;
+  using IndexType = unsigned int;
 
-	struct Context {
-		explicit Context(IndexType index);
+  struct Context
+  {
+    explicit Context(IndexType index);
 
-		const IndexType index;
-		std::filesystem::path path;
-	};
+    const IndexType index;
+    std::filesystem::path path;
+  };
 
-	explicit VideoSelector(IndexType index);
+  explicit VideoSelector(IndexType index);
 
-	const Context& getContext() const;
+  const Context& getContext() const;
 
 private:
-	virtual void threadedFunction() override;
+  virtual void threadedFunction() override;
 
-	Context ctx_;
+  Context ctx_;
 };
 
 } // namespace skinny

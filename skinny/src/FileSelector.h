@@ -7,17 +7,17 @@ namespace skinny {
 class FileSelector : public ofThread
 {
 public:
-	explicit FileSelector(const std::string& message, bool load = true);
+  explicit FileSelector(const std::string& message, bool load = true);
 
-	const std::filesystem::path& getPath() const;
-	bool isLoading() const;
+  const std::filesystem::path& getPath() const;
+  bool isLoading() const;
 
 private:
-	virtual void threadedFunction() override;
+  virtual void threadedFunction() override;
 
-	const std::string message_;
-	const bool load_;
-	std::filesystem::path path_;
+  const std::string message_;
+  const bool load_;
+  std::filesystem::path path_;
 };
 
 } // namespace skinny
