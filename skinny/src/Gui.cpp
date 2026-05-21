@@ -472,9 +472,9 @@ void Gui::onJumpToInput(ofxDatGuiTextInputEvent e)
   if (const auto index = sstoi(jumpToInput_->getText()))
   {
     Status::instance().loadDir = LoadDir::Jump;
-    const int lo = 0;
+    const int lo = 1;
     const int hi = showDescription.scenes_.size();
-    Status::instance().jumpToIndex = clamp(*index, 1, hi) - 1;
+    Status::instance().jumpToIndex = std::clamp(*index, lo, hi) - 1;
   }
   else
   {

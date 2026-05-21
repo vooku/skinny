@@ -75,7 +75,7 @@ const ofTexture& LoadingScreen::getLoadingScreen() const
 //--------------------------------------------------------------
 float LoadingScreen::getAlpha() const
 {
-  return clamp(ccValue_, 0, MAX_7BIT) / MAX_7BITF;
+  return std::clamp(ccValue_, 0, MAX_7BIT) / MAX_7BITF;
 }
 
 //--------------------------------------------------------------

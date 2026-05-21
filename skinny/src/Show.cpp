@@ -255,7 +255,7 @@ void Show::onControlChange(ControlChangeMessage& msg)
 {
   if (Mappable::isCorrectChannel(msg.channel_) && msg.control_ == masterAlphaControl_)
   {
-    uniforms_.masterAlpha_ = clamp(msg.value_, 0, MAX_7BIT) / MAX_7BITF;
+    uniforms_.masterAlpha_ = std::clamp(msg.value_, 0, MAX_7BIT) / MAX_7BITF;
   }
 }
 
