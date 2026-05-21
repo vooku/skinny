@@ -2,6 +2,7 @@
 #include "Gui.h"
 #include "ofApp.h"
 #include "ofMain.h"
+#include "../resource.h"
 
 #ifdef TARGET_WIN32
 extern "C" {
@@ -21,8 +22,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
   settings.setSize(skinny::GUI_WINDOW_WIDTH, skinny::GUI_WINDOW_HEIGHT);
   auto guiWindow = ofCreateWindow(settings);
 
+  const auto mainWindowHwnd = mainWindow->getWin32Window();
+  const auto guiWindowHwnd = guiWindow->getWin32Window();
+  const auto icon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+  SendMessage(mainWindowHwnd, WM_SETICON, ICON_BIG, (LPARAM)icon);
+  SendMessage(guiWindowHwnd, WM_SETICON, ICON_BIG, (LPARAM)icon);
+
   auto mainApp = std::make_shared<skinny::ofApp>();
   auto guiApp = std::make_shared<skinny::Gui>();
+
 
   ofRunApp(guiWindow, guiApp); // run gui first so main can access it
   ofRunApp(mainWindow, mainApp);
