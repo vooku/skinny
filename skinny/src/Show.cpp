@@ -37,8 +37,11 @@ bool Show::loadShaders()
   subsamplePassShader_.load(shaderPathPrefix + "subsamplePassShader");
   loadingScreenPassShader_.load(shaderPathPrefix + "loadingScreenPassShader");
 
-  return firstPassShader_.isLoaded() && pingPongPassShader_.isLoaded() && subsamplePassShader_.isLoaded();
-  loadingScreenPassShader_.isLoaded(); // todo fix
+  return
+    firstPassShader_.isLoaded() &&
+    pingPongPassShader_.isLoaded() &&
+    subsamplePassShader_.isLoaded() &&
+    loadingScreenPassShader_.isLoaded();
 }
 
 //--------------------------------------------------------------
