@@ -10,10 +10,8 @@ _declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 #endif
 
 //--------------------------------------------------------------
-int main(int argc, char *argv[])
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
-  auto args = std::make_unique<ofxArgs>(argc, argv);
-
   ofGLWindowSettings settings;
 
   settings.setGLVersion(4, 1);
@@ -23,7 +21,7 @@ int main(int argc, char *argv[])
   settings.setSize(skinny::GUI_WINDOW_WIDTH, skinny::GUI_WINDOW_HEIGHT);
   auto guiWindow = ofCreateWindow(settings);
 
-  auto mainApp = std::make_shared<skinny::ofApp>(args.get());
+  auto mainApp = std::make_shared<skinny::ofApp>();
   auto guiApp = std::make_shared<skinny::Gui>();
 
   ofRunApp(guiWindow, guiApp); // run gui first so main can access it

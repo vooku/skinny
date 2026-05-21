@@ -7,10 +7,8 @@
 namespace skinny {
 
 //--------------------------------------------------------------
-ofApp::ofApp(ofxArgs* args)
+ofApp::ofApp()
 {
-  parseArgs(args);
-
   getStatus().showDescription = showDescription_ = make_shared<ShowDescription>();
   getStatus().midi = midiController_ = make_shared<MidiController>();
 }
@@ -18,22 +16,13 @@ ofApp::ofApp(ofxArgs* args)
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-  if (settings_.cancelSetup)
-  {
-    getStatus().exit = true;
-    return;
-  }
-
   ofSetWindowTitle(NAME);
 #ifdef NDEBUG
   ofSetEscapeQuitsApp(false);
 #endif
 
-  if (settings_.console)
-    ofLogToConsole();
-  else
-    ofLogToFile("skinny.log", false);
-  ofSetLogLevel(settings_.verbose ? OF_LOG_VERBOSE : OF_LOG_NOTICE);
+  ofLogToFile("skinny.log", false);
+  ofSetLogLevel(OF_LOG_NOTICE);
   ofSetFrameRate(30);
   ofBackground(ofColor::black);
   ofSetVerticalSync(true);
@@ -117,30 +106,6 @@ void ofApp::keyReleased(ofKeyEventArgs& key)
 void ofApp::keyReleasedGui(ofKeyEventArgs& args)
 {
   keyReleased(args);
-}
-
-//--------------------------------------------------------------
-void ofApp::usage()
-{
-  std::cout << "Usage:\n"
-               "    -h, --help, --usage    Print this message.\n"
-               "    --console              Log to console instead to a file."
-               "    -v, --verbose          Use verbose mode."
-            << std::endl;
-}
-
-//--------------------------------------------------------------
-void ofApp::parseArgs(ofxArgs* args)
-{
-  if (args->contains("-h") || args->contains("--help") || args->contains("--usage"))
-  {
-    usage();
-    settings_.cancelSetup = true;
-    return;
-  }
-
-  settings_.verbose = args->contains("-v") || args->contains("--verbose");
-  settings_.console = args->contains("--console");
 }
 
 //--------------------------------------------------------------

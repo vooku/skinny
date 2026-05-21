@@ -1,4 +1,3 @@
-ofxArgs
 ofxDatGui
 ofxMidi
 ofxSpout

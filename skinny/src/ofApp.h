@@ -4,14 +4,13 @@
 #include "Show.h"
 #include "meta.h"
 #include "ofMain.h"
-#include "ofxArgs.h"
 
 namespace skinny {
 
 class ofApp : public ofBaseApp
 {
 public:
-  explicit ofApp(ofxArgs* args);
+  explicit ofApp();
 
   void setup() override;
   void update() override;
@@ -22,18 +21,6 @@ public:
   void keyReleasedGui(ofKeyEventArgs& args);
 
 private:
-  struct
-  {
-    bool cancelSetup = false;
-    bool verbose = false;
-    bool console = false;
-  } settings_;
-
-  [[deprecated("Console configuration is going to be removed soon.")]]
-  static void usage();
-  [[deprecated("Console configuration is going to be removed soon.")]]
-  void parseArgs(ofxArgs* args);
-
   bool reload();
 
   std::shared_ptr<Show> show_;
