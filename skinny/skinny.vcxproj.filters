@@ -7,9 +7,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\base.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Effect.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -19,22 +16,22 @@
     <ClCompile Include="src\Gui.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
+    <ClCompile Include="src\ImageLayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LoadingScreen.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Mappable.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\meta.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\MidiController.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\MidiMonitor.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ofApp.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="src\Playable.cpp">
@@ -49,7 +46,25 @@
     <ClCompile Include="src\Status.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="src\VideoLayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\VideoSelector.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\base.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\meta.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ofApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils.cpp">
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxArgs\src\ofxArgs.cpp">
@@ -151,107 +166,89 @@
     <ClCompile Include="..\..\..\addons\ofxXmlSettings\libs\tinyxmlparser.cpp">
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClCompile>
-    <ClCompile Include="src\VideoLayer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Layer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ImageLayer.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\utils.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\LoadingScreen.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="src">
       <UniqueIdentifier>{d8376475-7454-4a24-b08a-aac121d3ad6f}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\shaders">
-      <UniqueIdentifier>{7C68484A-4B37-2A46-58BD-2D4A}</UniqueIdentifier>
+      <UniqueIdentifier>{7137D744--9AA-0-40-7A-A-610-FC662EEFFCB5}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons">
-      <UniqueIdentifier>{71834F65-F3A9-211E-73B8-DC85}</UniqueIdentifier>
+      <UniqueIdentifier>{4899FAF7--31C-4-45-7A-A-66C-75459581032D}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxArgs">
-      <UniqueIdentifier>{B4C6ECF0-53A2-CE5D-D585-23B4}</UniqueIdentifier>
+      <UniqueIdentifier>{5FFC8069--0AE-7-4F-DB-9-9FD-D6D88384B407}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxArgs\src">
-      <UniqueIdentifier>{4E7CF9DB-07AE-7836-4EB4-F236}</UniqueIdentifier>
+      <UniqueIdentifier>{9E674B7C--EC6-6-44-F8-B-4E1-1A2CE991D6C5}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxDatGui">
-      <UniqueIdentifier>{B36B06DF-1AA4-00D4-5A1B-6893}</UniqueIdentifier>
+      <UniqueIdentifier>{067804A9--F94-2-48-66-9-A65-93AAED2C3A91}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxDatGui\src">
-      <UniqueIdentifier>{CAA2E9BA-611F-99B2-780A-B8BA}</UniqueIdentifier>
+      <UniqueIdentifier>{D3A8ADA5--E80-7-4F-18-A-BE8-5140C4635E9D}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxDatGui\src\components">
-      <UniqueIdentifier>{8EFE15E2-401E-A657-3818-AD66}</UniqueIdentifier>
+      <UniqueIdentifier>{B426C2B0--131-F-4E-3A-8-22A-637A1A00F5BE}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxDatGui\src\core">
-      <UniqueIdentifier>{6835CAB6-404A-D3AD-148B-CD60}</UniqueIdentifier>
+      <UniqueIdentifier>{659D6B4E--C0A-F-4B-EA-8-231-9761053EAB44}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxDatGui\src\libs">
-      <UniqueIdentifier>{ABAEF2A2-DCDC-DB83-4614-EB2B}</UniqueIdentifier>
+      <UniqueIdentifier>{66DDE4A4--261-D-4A-EB-9-1D5-1789F7B8AB87}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxDatGui\src\libs\ofxSmartFont">
-      <UniqueIdentifier>{A694AB8C-4705-277A-3AC8-2B8E}</UniqueIdentifier>
+      <UniqueIdentifier>{749EB458--527-4-47-52-B-2BE-CA56E40ED7A8}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxDatGui\src\themes">
-      <UniqueIdentifier>{2646318C-49AB-44C5-70D8-23E6}</UniqueIdentifier>
+      <UniqueIdentifier>{A884EF9B--A80-9-47-76-B-FCA-4A0F6238E709}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxMidi">
-      <UniqueIdentifier>{4DF4D977-A753-531B-5057-9AC1}</UniqueIdentifier>
+      <UniqueIdentifier>{9681E565--467-E-4C-0D-9-6C5-1564973C5C4E}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxMidi\src">
-      <UniqueIdentifier>{7EED8620-FDD5-520C-3F5D-2677}</UniqueIdentifier>
+      <UniqueIdentifier>{B9EC761D--2E9-5-43-66-B-07E-C902BF92ED2A}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxMidi\src\desktop">
-      <UniqueIdentifier>{03CA45A4-AB22-A57E-895E-C6BC}</UniqueIdentifier>
+      <UniqueIdentifier>{3632113D--40F-4-42-26-B-C84-A90B22FA0B53}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxMidi\libs">
-      <UniqueIdentifier>{B8086AD6-372B-1A12-88A6-74F9}</UniqueIdentifier>
+      <UniqueIdentifier>{B3C63493--DF6-2-47-B7-B-939-8939E0CE9C24}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxMidi\libs\rtmidi">
-      <UniqueIdentifier>{8E6C5628-3502-6F01-4B1D-AEAE}</UniqueIdentifier>
+      <UniqueIdentifier>{053DC022--729-0-48-0D-B-2AA-D2CD7BBB47D1}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxSpout">
-      <UniqueIdentifier>{F4DD1F4F-E479-F60E-B010-30BD}</UniqueIdentifier>
+      <UniqueIdentifier>{E3D96A7A--350-7-47-25-9-D38-FBD9E6B6E0B4}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxSpout\src">
-      <UniqueIdentifier>{836FBDC0-375C-97EA-F6ED-9730}</UniqueIdentifier>
+      <UniqueIdentifier>{7F84E74C--F04-D-41-4F-A-1F5-17F458BBE283}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxSpout\src\ofxSpout">
-      <UniqueIdentifier>{E7ABD4B0-4F90-69C0-118F-5894}</UniqueIdentifier>
+      <UniqueIdentifier>{A48B91E2--6BC-1-46-77-B-E90-2656C9502A97}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxSpout\libs">
-      <UniqueIdentifier>{7070A9E6-A71C-4358-F0E4-3D28}</UniqueIdentifier>
+      <UniqueIdentifier>{6D08569A--086-9-46-13-8-CF5-38A3A1C04BCF}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxSpout\libs\SpoutSDK">
-      <UniqueIdentifier>{DBA8F4A5-5C4B-6BC3-C55A-E264}</UniqueIdentifier>
+      <UniqueIdentifier>{43734920--2AA-6-42-87-9-0A5-0C1E41FA74A8}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxSpout\libs\SpoutSDK\src">
-      <UniqueIdentifier>{CC43A1EC-9F74-499A-D230-67A8}</UniqueIdentifier>
+      <UniqueIdentifier>{F4D1D247--623-D-46-CA-B-5CB-5250920E4A38}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxXmlSettings">
-      <UniqueIdentifier>{877F005D-13E6-0592-1D97-F2E3}</UniqueIdentifier>
+      <UniqueIdentifier>{FD0DCBF0--46F-E-42-13-B-3E3-3BB9CD5C8A2A}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxXmlSettings\src">
-      <UniqueIdentifier>{CCB2AC63-49D2-977C-CFE8-AEAD}</UniqueIdentifier>
+      <UniqueIdentifier>{B6BCDE0E--B4E-D-48-18-8-BCB-A3B6AF4A2388}</UniqueIdentifier>
     </Filter>
     <Filter Include="addons\ofxXmlSettings\libs">
-      <UniqueIdentifier>{687714A8-1662-FA1C-261F-50F0}</UniqueIdentifier>
+      <UniqueIdentifier>{3BCEC465--096-A-45-05-9-92C-1911B66828B0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ofApp.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\base.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Effect.h">
@@ -263,19 +260,22 @@
     <ClInclude Include="src\Gui.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Mappable.h">
+    <ClInclude Include="src\ImageLayer.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\meta.h">
+    <ClInclude Include="src\Layer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LoadingScreen.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Mappable.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MidiController.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\MidiMonitor.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ofApp.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="src\Playable.h">
@@ -290,7 +290,22 @@
     <ClInclude Include="src\Status.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="src\VideoLayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\VideoSelector.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\base.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\meta.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ofApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxArgs\src\ofxArgs.h">
@@ -455,21 +470,6 @@
     <ClInclude Include="..\..\..\addons\ofxXmlSettings\libs\tinyxml.h">
       <Filter>addons\ofxXmlSettings\libs</Filter>
     </ClInclude>
-    <ClInclude Include="src\VideoLayer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Layer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ImageLayer.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\utils.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="src\LoadingScreen.h">
-      <Filter>src</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="icon.rc" />
@@ -479,6 +479,12 @@
       <Filter>src\shaders</Filter>
     </None>
     <None Include="src\shaders\firstPassShader.vert">
+      <Filter>src\shaders</Filter>
+    </None>
+    <None Include="src\shaders\loadingScreenPassShader.frag">
+      <Filter>src\shaders</Filter>
+    </None>
+    <None Include="src\shaders\loadingScreenPassShader.vert">
       <Filter>src\shaders</Filter>
     </None>
     <None Include="src\shaders\pingPongPassShader.frag">
@@ -491,12 +497,6 @@
       <Filter>src\shaders</Filter>
     </None>
     <None Include="src\shaders\subsamplePassShader.vert">
-      <Filter>src\shaders</Filter>
-    </None>
-    <None Include="src\shaders\loadingScreenPassShader.frag">
-      <Filter>src\shaders</Filter>
-    </None>
-    <None Include="src\shaders\loadingScreenPassShader.vert">
       <Filter>src\shaders</Filter>
     </None>
   </ItemGroup>
